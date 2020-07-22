@@ -10,6 +10,27 @@ if (!checkPermission($edit, 'add_customer', 'edit_customer')) {
 
 $pre_data = array();
 
+if ($edit) {
+    $pre_data = $this->get_customers(array('customer_id' => $edit, 'single' => true));
+    $migration_medias = json_decode($pre_data['migration_medias']);
+    $migration_reasons = explode(',', $pre_data['migration_reasons']);
+
+    $leave_reasons = explode(',', $pre_data['destination_country_leave_reason']);
+    $have_skills = explode(',', $pre_data['have_skills']);
+    $disease_types = explode(',', $pre_data['disease_type']);
+    
+//    echo '<pre>';
+//    print_r($disease_types);
+//    exit();
+    
+
+    if (!$pre_data) {
+        add_notification('Invalid participant, no data found.', 'error');
+        header('Location:' . build_url(NULL, array('action', 'edit')));
+        exit();
+    }
+}
+
 if ($_POST['ajax_type']) {
     if ($_POST['ajax_type'] == 'uniqueNID') {
         $sql = "SELECT pk_customer_id FROM dev_customers WHERE nid_number = '" . $_POST['valueToCheck'] . "'";
@@ -40,6 +61,7 @@ if ($_POST['ajax_type']) {
 }
 
 if ($_POST) {
+
     $data = array(
         'required' => array(
             'full_name' => 'Full Name'
@@ -99,26 +121,6 @@ if ($_POST) {
         print_errors($ret['error']);
     }
 }
-
-//$all_natural_disasters = $this->get_lookups('natural_disaster');
-//$all_economic_impacts = $this->get_lookups('economic_impacts');
-//$all_social_impacts = $this->get_lookups('social_impacts');
-//$all_countries = getWorldCountry();
-//$all_countries_json = json_encode($all_countries);
-//$all_transports = $this->get_lookups('transport_modes');
-//$all_visas = $this->get_lookups('visa_type');
-//$all_migration_medias = $this->get_lookups('migration_medias');
-//$all_reasons_for_leave_destination_country = $this->get_lookups('destination_country_leave_reason');
-//$all_spent_types = $this->get_lookups('spent_types');
-//$all_immediate_supports = $this->get_lookups('immediate_support');
-//$all_cooperations = $this->get_lookups('cooperation_type');
-//$all_chronic_diseases = $this->get_lookups('disease_type');
-//$all_loan_sources = $this->get_lookups('loan_sources');
-//$all_residence_ownership_types = $this->get_lookups('current_residence_ownership');
-//$all_residence_types = $this->get_lookups('current_residence_type');
-//$all_technical_skills = $this->get_lookups('technical_skills');
-//$all_non_technical_skills = $this->get_lookups('non_technical_skills');
-//$all_soft_skills = $this->get_lookups('soft_skills');
 
 doAction('render_start');
 ?>
@@ -183,7 +185,7 @@ doAction('render_start');
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Full Name (*)</label>
-                                        <input class="form-control" type="text" name="fullName" value="<?php echo $pre_data['fullName'] ? $pre_data['fullName'] : ''; ?>">
+                                        <input class="form-control" type="text" name="full_name" value="<?php echo $pre_data['full_name'] ? $pre_data['full_name'] : ''; ?>">
                                     </div>
                                     <div class="form-group">
                                         <label>Father's Name (*)</label>
@@ -206,7 +208,7 @@ doAction('render_start');
                                     </div>
                                     <div class="form-group">
                                         <label>Mobile Number (*)</label>
-                                        <input class="form-control" type="text" name="mobile" value="<?php echo $pre_data['mobile'] ? $pre_data['mobile'] : ''; ?>">
+                                        <input class="form-control" type="text" name="customer_mobile" value="<?php echo $pre_data['customer_mobile'] ? $pre_data['customer_mobile'] : ''; ?>">
                                     </div>
                                     <fieldset class="scheduler-border">
                                         <legend class="scheduler-border">Emergency</legend>
@@ -227,17 +229,17 @@ doAction('render_start');
                                         <label>Educational Qualification</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                             <div class="options_holder radio">
-                                                <label><input class="px educations" type="radio" name="educational_qualification" value="illiterate"><span class="lbl">Illiterate</span></label>
-                                                <label><input class="px educations" type="radio" name="educational_qualification" value="sign"><span class="lbl">Can Sign only</span></label>
-                                                <label><input class="px educations" type="radio" name="educational_qualification" value="psc"><span class="lbl">Primary education (Passed Grade 5)</span></label>
-                                                <label><input class="px educations" type="radio" name="educational_qualification" value="not_psc"><span class="lbl">Did not complete primary education</span></label>
-                                                <label><input class="px educations" type="radio" name="educational_qualification" value="jsc"><span class="lbl">Completed JSC (Passed Grade 8)</span></label>
-                                                <label><input class="px educations" type="radio" name="educational_qualification" value="ssc"><span class="lbl">Completed School Secondary Certificate</span></label>
-                                                <label><input class="px educations" type="radio" name="educational_qualification" value="hsc"><span class="lbl">Higher Secondary Certificate/Diploma/ equivalent</span></label>
-                                                <label><input class="px educations" type="radio" name="educational_qualification" value="bachelor"><span class="lbl">Bachelor’s degree or equivalent</span></label>
-                                                <label><input class="px educations" type="radio" name="educational_qualification" value="master"><span class="lbl">Masters or Equivalent</span></label>
-                                                <label><input class="px educations" type="radio" name="educational_qualification" value="professional_education"><span class="lbl">Completed Professional education</span></label>
-                                                <label><input class="px educations" type="radio" name="educational_qualification" value="general_education"><span class="lbl">Completed general Education</span></label>
+                                                <label><input class="px educations" type="radio" name="educational_qualification" value="illiterate" <?php echo $pre_data && $pre_data['educational_qualification'] == 'illiterate' ? 'checked' : '' ?>><span class="lbl">Illiterate</span></label>
+                                                <label><input class="px educations" type="radio" name="educational_qualification" value="sign" <?php echo $pre_data && $pre_data['educational_qualification'] == 'sign' ? 'checked' : '' ?>><span class="lbl">Can Sign only</span></label>
+                                                <label><input class="px educations" type="radio" name="educational_qualification" value="psc" <?php echo $pre_data && $pre_data['educational_qualification'] == 'psc' ? 'checked' : '' ?>><span class="lbl">Primary education (Passed Grade 5)</span></label>
+                                                <label><input class="px educations" type="radio" name="educational_qualification" value="not_psc" <?php echo $pre_data && $pre_data['educational_qualification'] == 'not_psc' ? 'checked' : '' ?>><span class="lbl">Did not complete primary education</span></label>
+                                                <label><input class="px educations" type="radio" name="educational_qualification" value="jsc" <?php echo $pre_data && $pre_data['educational_qualification'] == 'jsc' ? 'checked' : '' ?>><span class="lbl">Completed JSC (Passed Grade 8)</span></label>
+                                                <label><input class="px educations" type="radio" name="educational_qualification" value="ssc" <?php echo $pre_data && $pre_data['educational_qualification'] == 'ssc' ? 'checked' : '' ?>><span class="lbl">Completed School Secondary Certificate</span></label>
+                                                <label><input class="px educations" type="radio" name="educational_qualification" value="hsc" <?php echo $pre_data && $pre_data['educational_qualification'] == 'hsc' ? 'checked' : '' ?>><span class="lbl">Higher Secondary Certificate/Diploma/ equivalent</span></label>
+                                                <label><input class="px educations" type="radio" name="educational_qualification" value="bachelor" <?php echo $pre_data && $pre_data['educational_qualification'] == 'bachelor' ? 'checked' : '' ?>><span class="lbl">Bachelor’s degree or equivalent</span></label>
+                                                <label><input class="px educations" type="radio" name="educational_qualification" value="master" <?php echo $pre_data && $pre_data['educational_qualification'] == 'master' ? 'checked' : '' ?>><span class="lbl">Masters or Equivalent</span></label>
+                                                <label><input class="px educations" type="radio" name="educational_qualification" value="professional_education" <?php echo $pre_data && $pre_data['educational_qualification'] == 'professional_education' ? 'checked' : '' ?>><span class="lbl">Completed Professional education</span></label>
+                                                <label><input class="px educations" type="radio" name="educational_qualification" value="general_education" <?php echo $pre_data && $pre_data['educational_qualification'] == 'general_education' ? 'checked' : '' ?>><span class="lbl">Completed general Education</span></label>
                                                 <label><input class="px" type="radio" name="educational_qualification" id="newQualification"><span class="lbl">Others, Please specify…</span></label>
                                             </div>
                                         </div>
@@ -278,8 +280,8 @@ doAction('render_start');
                                         <label>Gender</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                             <div class="options_holder radio">
-                                                <label><input class="px" type="radio" name="customer_gender" value="male" <?php echo $pre_data && $pre_data['customer_gender'] == 'male' ? 'checked' : '' ?>><span class="lbl">Male</span></label>
-                                                <label><input class="px" type="radio" name="customer_gender" value="female" <?php echo $pre_data && $pre_data['customer_gender'] == 'female' ? 'checked' : '' ?>><span class="lbl">Female</span></label>
+                                                <label><input class="px oldGender" type="radio" name="customer_gender" value="male" <?php echo $pre_data && $pre_data['customer_gender'] == 'male' ? 'checked' : '' ?>><span class="lbl">Male</span></label>
+                                                <label><input class="px oldGender" type="radio" name="customer_gender" value="female" <?php echo $pre_data && $pre_data['customer_gender'] == 'female' ? 'checked' : '' ?>><span class="lbl">Female</span></label>
                                                 <label><input class="px" type="radio" name="customer_gender" id="newGender"><span class="lbl">Other</span></label>
                                             </div>
                                         </div>
@@ -334,11 +336,11 @@ doAction('render_start');
                                         <div class="col-sm-6">   
                                             <label class="control-label input-label">Village</label>
                                             <div class="form-group">
-                                                <input class="form-control" type="text" name="village" value="<?php echo $pre_data['village'] ? $pre_data['village'] : ''; ?>">
+                                                <input class="form-control" type="text" name="permanent_village" value="<?php echo $pre_data['permanent_village'] ? $pre_data['permanent_village'] : ''; ?>">
                                             </div>
                                             <label class="control-label input-label">Ward No</label>
                                             <div class="form-group">
-                                                <input class="form-control" type="text" name="ward" value="<?php echo $pre_data['ward'] ? $pre_data['ward'] : ''; ?>">
+                                                <input class="form-control" type="text" name="permanent_ward" value="<?php echo $pre_data['permanent_ward'] ? $pre_data['permanent_ward'] : ''; ?>">
                                             </div>
                                             <div class="form-group">
                                                 <label>Division</label>
@@ -348,25 +350,25 @@ doAction('render_start');
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
-                                            <label class="control-label input-label">Union</label>
+                                            <label class="control-label input-label">Union/Pourashava</label>
                                             <div class="form-group">
-                                                <input class="form-control" type="text" name="union" value="<?php echo $pre_data['union'] ? $pre_data['union'] : ''; ?>">
+                                                <input class="form-control" type="text" name="permanent_union" value="<?php echo $pre_data['permanent_union'] ? $pre_data['permanent_union'] : ''; ?>">
                                             </div>
                                             <label class="control-label input-label">Upazila</label>
                                             <div class="form-group">
-                                                <input class="form-control" type="text" name="sub_district" value="<?php echo $pre_data['sub_district'] ? $pre_data['sub_district'] : ''; ?>">
+                                                <input class="form-control" type="text" name="permanent_sub_district" value="<?php echo $pre_data['permanent_sub_district'] ? $pre_data['permanent_sub_district'] : ''; ?>">
                                             </div>
                                             <div class="form-group">
                                                 <label>District</label>
                                                 <div class="select2-success">
-                                                    <select class="form-control" id="permanent_district" name="district" data-selected="<?php echo $pre_data['district'] ? $pre_data['district'] : ''; ?>"></select>
+                                                    <select class="form-control" id="permanent_district" name="permanent_district" data-selected="<?php echo $pre_data['permanent_district'] ? $pre_data['permanent_district'] : ''; ?>"></select>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-sm-12">  
                                             <label class="control-label input-label">Address</label>
                                             <div class="form-group">
-                                                <textarea type="text" class="form-control" name="address" value="<?php echo $pre_data['address'] ? $pre_data['address'] : ''; ?>" /></textarea>
+                                                <textarea type="text" class="form-control" name="permanent_house" /><?php echo $pre_data['permanent_house'] ? $pre_data['permanent_house'] : ''; ?></textarea>
                                             </div>
                                         </div>
                                     </fieldset>
@@ -376,19 +378,19 @@ doAction('render_start');
                                     <div class="col-sm-4">   
                                         <label class="control-label input-label">Male:</label>
                                         <div class="form-group">
-                                            <input type="text" class="form-control" id="maleMember" name="male_member" value="<?php echo $pre_data['male_member'] ? $pre_data['male_member'] : ''; ?>" />
+                                            <input type="text" class="form-control" id="maleMember" name="male_household_member" value="<?php echo $pre_data['male_household_member'] ? $pre_data['male_household_member'] : ''; ?>" />
                                         </div>
                                     </div>
                                     <div class="col-sm-4">   
                                         <label class="control-label input-label">Female</label>
                                         <div class="form-group">
-                                            <input class="form-control" id="femaleMember" type="text" name="female_member" value="<?php echo $pre_data['female_member'] ? $pre_data['female_member'] : ''; ?>">
+                                            <input class="form-control" id="femaleMember" type="text" name="female_household_member" value="<?php echo $pre_data['female_household_member'] ? $pre_data['female_household_member'] : ''; ?>">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">   
                                         <label class="control-label input-label">Total</label>
                                         <div class="form-group">
-                                            <input class="form-control" id="totalMember" type="text" value="<?php echo $pre_data['male_member'] + $pre_data['female_member'] ?>">
+                                            <input class="form-control" id="totalMember" type="text" value="<?php echo $pre_data['male_household_member'] + $pre_data['female_household_member'] ?>">
                                         </div>
                                     </div>
                                 </fieldset>
@@ -418,11 +420,11 @@ doAction('render_start');
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Port of exit from Bangladesh (*)</label>
-                                    <input class="form-control" type="text" name="exit_port" value="<?php echo $pre_data['exit_port'] ? $pre_data['exit_port'] : ''; ?>">
+                                    <input class="form-control" type="text" name="left_port" value="<?php echo $pre_data['left_port'] ? $pre_data['left_port'] : ''; ?>">
                                 </div>
                                 <div class="form-group">
                                     <label>Desired destination(*)</label>
-                                    <input class="form-control" type="text" name="desired_destination" value="<?php echo $pre_data['desired_destination'] ? $pre_data['desired_destination'] : ''; ?>">
+                                    <input class="form-control" type="text" name="preferred_country" value="<?php echo $pre_data['preferred_country'] ? $pre_data['preferred_country'] : ''; ?>">
                                 </div>
                                 <div class="form-group">
                                     <label>Final destination(*)</label>
@@ -434,9 +436,9 @@ doAction('render_start');
                                     <label>Type of Channels</label>
                                     <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                         <div class="options_holder radio">
-                                            <label><input class="px educations" type="radio" name="channel" value="regular"><span class="lbl">Regular</span></label>
-                                            <label><input class="px educations" type="radio" name="channel" value="irregular"><span class="lbl">Irregular</span></label>
-                                            <label><input class="px educations" type="radio" name="channel" value="both"><span class="lbl">Both</span></label>
+                                            <label><input class="px educations" type="radio" name="migration_type" value="regular" <?php echo $pre_data && $pre_data['migration_type'] == 'regular' ? 'checked' : '' ?>><span class="lbl">Regular</span></label>
+                                            <label><input class="px educations" type="radio" name="migration_type" value="irregular" <?php echo $pre_data && $pre_data['migration_type'] == 'irregular' ? 'checked' : '' ?>><span class="lbl">Irregular</span></label>
+                                            <label><input class="px educations" type="radio" name="migration_type" value="both" <?php echo $pre_data && $pre_data['migration_type'] == 'both' ? 'checked' : '' ?>><span class="lbl">Both</span></label>
                                         </div>
                                     </div>
                                 </div>
@@ -444,15 +446,15 @@ doAction('render_start');
                                     <label>Type of visa</label>
                                     <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                         <div class="options_holder radio">
-                                            <label><input class="px visa" type="radio" name="visa_type" value="tourist"><span class="lbl">Tourist</span></label>
-                                            <label><input class="px visa" type="radio" name="visa_type" value="student"><span class="lbl">Student</span></label>
-                                            <label><input class="px visa" type="radio" name="visa_type" value="work"><span class="lbl">Work</span></label>
+                                            <label><input class="px visa" type="radio" name="visa_type" value="tourist" <?php echo $pre_data && $pre_data['visa_type'] == 'tourist' ? 'checked' : '' ?>><span class="lbl">Tourist</span></label>
+                                            <label><input class="px visa" type="radio" name="visa_type" value="student" <?php echo $pre_data && $pre_data['visa_type'] == 'student' ? 'checked' : '' ?>><span class="lbl">Student</span></label>
+                                            <label><input class="px visa" type="radio" name="visa_type" value="work" <?php echo $pre_data && $pre_data['visa_type'] == 'work' ? 'checked' : '' ?>><span class="lbl">Work</span></label>
                                             <label><input class="px" type="radio" name="visa_type" id="newvisa"><span class="lbl">Others. Please specify…</span></label>
                                         </div>
                                     </div>
                                 </div>
                                 <div id="newvisaType" style="display: none; margin-bottom: 1em;">
-                                    <input class="form-control" placeholder="Please Specity" type="text" name="new_qualification" value="">
+                                    <input class="form-control" placeholder="Please Specity" type="text" name="new_visa" value="">
                                 </div>
                                 <script>
                                     init.push(function () {
@@ -471,19 +473,19 @@ doAction('render_start');
                                 <div class="col-sm-4">
                                     <label class="control-label input-label">Name(*)</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" name="departure_media" value="<?php echo $pre_data['departure_media'] ? $pre_data['departure_media'] : ''; ?>" />
+                                        <input type="text" class="form-control" name="departure_media" value="<?php echo $migration_medias->departure_media ? $migration_medias->departure_media : ''; ?>" />
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <label class="control-label input-label">Relation</label>
                                     <div class="form-group">
-                                        <input class="form-control" type="text" name="media_relation" value="<?php echo $pre_data['relation'] ? $pre_data['relation'] : ''; ?>">
+                                        <input class="form-control" type="text" name="media_relation" value="<?php echo $migration_medias->media_relation ? $migration_medias->media_relation : ''; ?>">
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <label class="control-label input-label">Address</label>
                                     <div class="form-group">
-                                        <input class="form-control" type="text" name="media_address" value="<?php echo $pre_data['media_address'] ? $pre_data['media_address'] : ''; ?>">
+                                        <input class="form-control" type="text" name="media_address" value="<?php echo $migration_medias->media_address ? $migration_medias->media_address : ''; ?>">
                                     </div>
                                 </div>
                             </fieldset>  
@@ -492,27 +494,68 @@ doAction('render_start');
                                 <div class="col-sm-6">
                                     <label class="control-label input-label">Passport No</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" name="passport" value="<?php echo $pre_data['passport'] ? $pre_data['passport'] : ''; ?>" />
+                                        <input type="text" class="form-control" name="passport_number" value="<?php echo $pre_data['passport_number'] ? $pre_data['passport_number'] : ''; ?>" />
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <a href="" class="btn btn-success"><i class="btn-label fa fa-plus-circle"></i> Add More Document</a>
+                                        <a href="javascript:;" id="addMoreDocument" class="btn btn-success"><i class="btn-label fa fa-plus-circle"></i> Add More Document</a>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label class="control-label input-label">Document Name</label>
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" name="passport" value="<?php echo $pre_data['passport'] ? $pre_data['passport'] : ''; ?>" />
+                                    <div id="documentUploads" style="display: none">
+                                        <div class="col-md-6">
+                                            <label class="control-label input-label">Document Name</label>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="document_name[]" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="control-label input-label">Upload Document</label>
-                                        <div class="form-group">
-                                            <input type="file" class="form-control" name="migration_document" value="<?php echo $pre_data['migration_document'] ? $pre_data['migration_document'] : ''; ?>" />
+                                        <div class="col-md-5">
+                                            <label class="control-label input-label">Upload Document</label>
+                                            <div class="form-group">
+                                                <input type="file" class="form-control" name="customer_photo[]" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1" style="margin-top:5%;">
+                                            <div class="form-group">
+                                                <a href="javascript:" class="btn btn-danger remove_row">X</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </fieldset>  
+                            <script>
+                                init.push(function () {
+                                    var upload = '\
+                                        <aside>\
+                                            <div class="col-md-6">\
+                                                <label class="control-label input-label">Document Name</label>\
+                                                <div class="form-group">\
+                                                    <input type="text" class="form-control" name="document_name[]" />\
+                                                </div>\
+                                            </div>\
+                                            <div class="col-md-5">\
+                                                <label class="control-label input-label">Upload Document</label>\
+                                                <div class="form-group">\
+                                                    <input type="file" class="form-control" name="customer_photo[]" />\
+                                                </div>\
+                                            </div>\
+                                            <div class="col-md-1" style="margin-top:5%;">\
+                                                <div class="form-group">\
+                                                    <a href="javascript:" class="btn btn-danger remove_row">X</a>\
+                                                </div>\
+                                            </div>\
+                                        </aside>';
+
+                                    $("#documentUploads").show();
+
+                                    $("#addMoreDocument").on("click", function () {
+                                        $("#documentUploads").append(upload);
+                                    });
+
+                                    $(document).on('click', '.remove_row', function () {
+                                        $(this).closest('aside').remove();
+                                    });
+                                });
+                            </script>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Date of Departure from Bangladesh (*)</label>
@@ -521,7 +564,7 @@ doAction('render_start');
                                     </div>
                                     <script type="text/javascript">
                                         init.push(function () {
-                                            _datepicker('departure_date');
+                                            _datepicker('date_of_depature');
                                         });
                                     </script>
                                 </div>
@@ -532,21 +575,23 @@ doAction('render_start');
                                     </div>
                                     <script type="text/javascript">
                                         init.push(function () {
-                                            _datepicker('return_date');
+                                            _datepicker('date_of_return');
                                         });
                                     </script>
                                 </div>
-                                <div class="form-group">
-                                    <label>Duration of Stay Abroad (Months)</label>
-                                    <input class="form-control" type="text" name="duration_of_stay" value="<?php echo $pre_data['duration_of_stay'] ? $pre_data['duration_of_stay'] : ''; ?>">
-                                </div>
+                                <?php if ($edit): ?>
+                                    <div class="form-group">
+                                        <label>Duration of Stay Abroad (Months)</label>
+                                        <input class="form-control" type="text" value="<?php echo $pre_data['migration_duration'] ? $pre_data['migration_duration'] : ''; ?>">
+                                    </div>
+                                <?php endif ?>
                                 <div class="form-group">
                                     <label>Occupation in overseas country (*) </label>
-                                    <input class="form-control" type="text" name="overseas_occupation" value="<?php echo $pre_data['overseas_occupation'] ? $pre_data['overseas_occupation'] : ''; ?>">
+                                    <input class="form-control" type="text" name="migration_occupation" value="<?php echo $pre_data['migration_occupation'] ? $pre_data['migration_occupation'] : ''; ?>">
                                 </div>
                                 <div class="form-group">
                                     <label>Income: (If applicable)</label>
-                                    <input class="form-control" type="text" name="overseas_income" value="<?php echo $pre_data['overseas_income'] ? $pre_data['overseas_income'] : ''; ?>">
+                                    <input class="form-control" type="text" name="earned_money" value="<?php echo $pre_data['earned_money'] ? $pre_data['earned_money'] : ''; ?>">
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -554,20 +599,52 @@ doAction('render_start');
                                     <label>Reasons for Migration (*)</label>
                                     <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                         <div class="options_holder radio">
-                                            <label><input class="px" type="checkbox" name="migration_reason[]" value="underemployed"><span class="lbl">Under employed</span></label>
-                                            <label><input class="px" type="checkbox" name="migration_reason[]" value="unemployed"><span class="lbl">Unemployed</span></label>
-                                            <label><input class="px" type="checkbox" name="migration_reason[]" value="higher_income"><span class="lbl">Higher income</span></label>
-                                            <label><input class="px" type="checkbox" name="migration_reason[]" value="family_abroad"><span class="lbl">Join friends or family abroad</span></label>
-                                            <label><input class="px" type="checkbox" name="migration_reason[]" value="leave_home"><span class="lbl">Want to leave home</span></label>
-                                            <label><input class="px" type="checkbox" name="migration_reason[]" value="pay_debts"><span class="lbl">Pay back debts</span></label>
-                                            <label><input class="px" type="checkbox" name="migration_reason[]" value="political_reason"><span class="lbl">Political reason</span></label>
-                                            <label><input class="px" type="checkbox" name="migration_reason[]" value="education"><span class="lbl">Education</span></label>
+                                            <label><input class="px" type="checkbox" name="migration_reasons[]" value="underemployed" <?php
+                                                if (in_array('underemployed', $migration_reasons)) {
+                                                    echo 'checked';
+                                                }
+                                                ?>><span class="lbl">Under employed</span></label>
+                                            <label><input class="px" type="checkbox" name="migration_reasons[]" value="unemployed" <?php
+                                                if (in_array('unemployed', $migration_reasons)) {
+                                                    echo 'checked';
+                                                }
+                                                ?>><span class="lbl">Unemployed</span></label>
+                                            <label><input class="px" type="checkbox" name="migration_reasons[]" value="higher_income" <?php
+                                                if (in_array('higher_income', $migration_reasons)) {
+                                                    echo 'checked';
+                                                }
+                                                ?>><span class="lbl">Higher income</span></label>
+                                            <label><input class="px" type="checkbox" name="migration_reasons[]" value="family_abroad" <?php
+                                                if (in_array('family_abroad', $migration_reasons)) {
+                                                    echo 'checked';
+                                                }
+                                                ?>><span class="lbl">Join friends or family abroad</span></label>
+                                            <label><input class="px" type="checkbox" name="migration_reasons[]" value="leave_home" <?php
+                                                if (in_array('leave_home', $migration_reasons)) {
+                                                    echo 'checked';
+                                                }
+                                                ?>><span class="lbl">Want to leave home</span></label>
+                                            <label><input class="px" type="checkbox" name="migration_reasons[]" value="pay_debts" <?php
+                                                if (in_array('pay_debts', $migration_reasons)) {
+                                                    echo 'checked';
+                                                }
+                                                ?>><span class="lbl">Pay back debts</span></label>
+                                            <label><input class="px" type="checkbox" name="migration_reasons[]" value="political_reason" <?php
+                                                if (in_array('political_reason', $migration_reasons)) {
+                                                    echo 'checked';
+                                                }
+                                                ?>><span class="lbl">Political reason</span></label>
+                                            <label><input class="px" type="checkbox" name="migration_reasons[]" value="education" <?php
+                                                if (in_array('education', $migration_reasons)) {
+                                                    echo 'checked';
+                                                }
+                                                ?>><span class="lbl">Education</span></label>
                                             <label><input class="px" type="checkbox" id="newReasonsMigration"><span class="lbl">Others</span></label>
                                         </div>
                                     </div>
                                 </div>
                                 <div id="newReasonsMigrationType" style="display: none; margin-bottom: 1em;">
-                                    <input class="form-control" placeholder="Please Specity" type="text" name="new_transport" value="">
+                                    <input class="form-control" placeholder="Please Specity" type="text" name="new_migration_reason" value="">
                                 </div>
                                 <script>
                                     init.push(function () {
@@ -580,19 +657,47 @@ doAction('render_start');
                                     <label>Reasons for returning to Bangladesh (*) </label>
                                     <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                         <div class="options_holder radio">
-                                            <label><input class="px" type="checkbox" name="return_reason[]" value="no_legal"><span class="lbl">No legal documents to stay </span></label>
-                                            <label><input class="px" type="checkbox" name="return_reason[]" value="experienced_violence"><span class="lbl">Experienced violence/abuse</span></label>
-                                            <label><input class="px" type="checkbox" name="return_reason[]" value="no_job"><span class="lbl">Unable to find a job</span></label>
-                                            <label><input class="px" type="checkbox" name="return_reason[]" value="low_salary"><span class="lbl">Salary was too low</span></label>
-                                            <label><input class="px" type="checkbox" name="return_reason[]" value="no_accommodation"><span class="lbl">No accommodation (lived in the streets)</span></label>
-                                            <label><input class="px" type="checkbox" name="return_reason[]" value="sickness"><span class="lbl">Sickness</span></label>
-                                            <label><input class="px" type="checkbox" name="return_reason[]" value="family_needs"><span class="lbl">Family needs</span></label>
+                                            <label><input class="px" type="checkbox" name="destination_country_leave_reason[]" value="no_legal" <?php
+                                                if (in_array('no_legal', $leave_reasons)) {
+                                                    echo 'checked';
+                                                }
+                                                ?>><span class="lbl">No legal documents to stay </span></label>
+                                            <label><input class="px" type="checkbox" name="destination_country_leave_reason[]" value="experienced_violence" <?php
+                                                if (in_array('experienced_violence', $leave_reasons)) {
+                                                    echo 'checked';
+                                                }
+                                                ?>><span class="lbl">Experienced violence/abuse</span></label>
+                                            <label><input class="px" type="checkbox" name="destination_country_leave_reason[]" value="no_job" <?php
+                                                if (in_array('no_job', $leave_reasons)) {
+                                                    echo 'checked';
+                                                }
+                                                ?>><span class="lbl">Unable to find a job</span></label>
+                                            <label><input class="px" type="checkbox" name="destination_country_leave_reason[]" value="low_salary" <?php
+                                                if (in_array('low_salary', $leave_reasons)) {
+                                                    echo 'checked';
+                                                }
+                                                ?>><span class="lbl">Salary was too low</span></label>
+                                            <label><input class="px" type="checkbox" name="destination_country_leave_reason[]" value="no_accommodation" <?php
+                                                if (in_array('no_accommodation', $leave_reasons)) {
+                                                    echo 'checked';
+                                                }
+                                                ?>><span class="lbl">No accommodation (lived in the streets)</span></label>
+                                            <label><input class="px" type="checkbox" name="destination_country_leave_reason[]" value="sickness" <?php
+                                                if (in_array('sickness', $leave_reasons)) {
+                                                    echo 'checked';
+                                                }
+                                                ?>><span class="lbl">Sickness</span></label>
+                                            <label><input class="px" type="checkbox" name="destination_country_leave_reason[]" value="family_needs" <?php
+                                                if (in_array('family_needs', $leave_reasons)) {
+                                                    echo 'checked';
+                                                }
+                                                ?>><span class="lbl">Family needs</span></label>
                                             <label><input class="px" type="checkbox" id="newreturningBangladesh"><span class="lbl">Others</span></label>
                                         </div>
                                     </div>
                                 </div>
                                 <div id="newreturningBangladeshType" style="display: none; margin-bottom: 1em;">
-                                    <input class="form-control" placeholder="Please Specity" type="text" name="new_transport" value="">
+                                    <input class="form-control" placeholder="Please Specity" type="text" name="new_return_reason" value="">
                                 </div>
                                 <script>
                                     init.push(function () {
@@ -610,8 +715,8 @@ doAction('render_start');
                                             <label>False promises about a job prior to arrival at workplace abroad</label>
                                             <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                                 <div class="options_holder radio">
-                                                    <label><input class="px" type="radio" name="false_promises" value="yes"><span class="lbl">Yes</span></label>
-                                                    <label><input class="px" type="radio" name="false_promises" value="no"><span class="lbl">No</span></label>
+                                                    <label><input class="px" type="radio" name="is_cheated" value="yes" <?php echo $pre_data && $pre_data['is_cheated'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
+                                                    <label><input class="px" type="radio" name="is_cheated" value="no" <?php echo $pre_data && $pre_data['is_cheated'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
                                                 </div>
                                             </div>
                                         </div>
@@ -619,8 +724,8 @@ doAction('render_start');
                                             <label>Forced to perform work or other activities against your will, after the departure from Bangladesh?</label>
                                             <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                                 <div class="options_holder radio">
-                                                    <label><input class="px" type="radio" name="forced_work" value="yes"><span class="lbl">Yes</span></label>
-                                                    <label><input class="px" type="radio" name="forced_work" value="no"><span class="lbl">No</span></label>
+                                                    <label><input class="px" type="radio" name="forced_work" value="yes" <?php echo $pre_data && $pre_data['forced_work'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
+                                                    <label><input class="px" type="radio" name="forced_work" value="no" <?php echo $pre_data && $pre_data['forced_work'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
                                                 </div>
                                             </div>
                                         </div>
@@ -628,8 +733,8 @@ doAction('render_start');
                                             <label>Experienced excessive working hours (more than 40 hours a week)</label>
                                             <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                                 <div class="options_holder radio">
-                                                    <label><input class="px" type="radio" name="excessive_work" value="yes"><span class="lbl">Yes</span></label>
-                                                    <label><input class="px" type="radio" name="excessive_work" value="no"><span class="lbl">No</span></label>
+                                                    <label><input class="px" type="radio" name="excessive_work" value="yes" <?php echo $pre_data && $pre_data['excessive_work'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
+                                                    <label><input class="px" type="radio" name="excessive_work" value="no" <?php echo $pre_data && $pre_data['excessive_work'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
                                                 </div>
                                             </div>
                                         </div>
@@ -639,8 +744,8 @@ doAction('render_start');
                                             <label>Deductions from salary for recruitment fees at workplace</label>
                                             <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                                 <div class="options_holder radio">
-                                                    <label><input class="px" type="radio" name="salary_deduction" value="yes"><span class="lbl">Yes</span></label>
-                                                    <label><input class="px" type="radio" name="salary_deduction" value="no"><span class="lbl">No</span></label>
+                                                    <label><input class="px" type="radio" name="is_money_deducted" value="yes" <?php echo $pre_data && $pre_data['is_money_deducted'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
+                                                    <label><input class="px" type="radio" name="is_money_deducted" value="no" <?php echo $pre_data && $pre_data['is_money_deducted'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
                                                 </div>
                                             </div>
                                         </div>
@@ -648,8 +753,8 @@ doAction('render_start');
                                             <label>Denied freedom of movement during or between work shifts after your departure from Bangladesh? </label>
                                             <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                                 <div class="options_holder radio">
-                                                    <label><input class="px" type="radio" name="movement_restriction" value="yes"><span class="lbl">Yes</span></label>
-                                                    <label><input class="px" type="radio" name="movement_restriction" value="no"><span class="lbl">No</span></label>
+                                                    <label><input class="px" type="radio" name="is_movement_limitation" value="yes" <?php echo $pre_data && $pre_data['is_movement_limitation'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
+                                                    <label><input class="px" type="radio" name="is_movement_limitation" value="no" <?php echo $pre_data && $pre_data['is_movement_limitation'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
                                                 </div>
                                             </div>
                                         </div>
@@ -657,8 +762,8 @@ doAction('render_start');
                                             <label>Threatened by employer or someone acting on their behalf, or the broker with violence or action by law enforcement/deportation?</label>
                                             <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                                 <div class="options_holder radio">
-                                                    <label><input class="px" type="radio" name="employer_threatened" value="yes"><span class="lbl">Yes</span></label>
-                                                    <label><input class="px" type="radio" name="employer_threatened" value="no"><span class="lbl">No</span></label>
+                                                    <label><input class="px" type="radio" name="employer_threatened" value="yes" <?php echo $pre_data && $pre_data['employer_threatened'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
+                                                    <label><input class="px" type="radio" name="employer_threatened" value="no" <?php echo $pre_data && $pre_data['employer_threatened'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
                                                 </div>
                                             </div>
                                         </div>
@@ -667,8 +772,8 @@ doAction('render_start');
                                         <label>Have you ever had identity or travel documents (passport) withheld by an employer or broker after your departure from Bangladesh?</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                             <div class="options_holder radio">
-                                                <label><input class="px" type="radio" name="withheld_documents" value="yes"><span class="lbl">Yes</span></label>
-                                                <label><input class="px" type="radio" name="withheld_documents" value="no"><span class="lbl">No</span></label>
+                                                <label><input class="px" type="radio" name="is_kept_document" value="yes" <?php echo $pre_data && $pre_data['is_kept_document'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
+                                                <label><input class="px" type="radio" name="is_kept_document" value="no" <?php echo $pre_data && $pre_data['is_kept_document'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
                                             </div>
                                         </div>
                                     </div>
@@ -683,23 +788,23 @@ doAction('render_start');
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Main occupation (before trafficking)</label>
-                                        <input type="text" class="form-control" name="main_occupation" value="<?php echo $pre_data['main_occupation'] ? $pre_data['main_occupation'] : ''; ?>" />
+                                        <input type="text" class="form-control" name="pre_occupation" value="<?php echo $pre_data['pre_occupation'] ? $pre_data['pre_occupation'] : ''; ?>" />
                                     </div>
                                     <div class="form-group">
                                         <label>Main occupation (after return)</label>
-                                        <input type="text" class="form-control" name="return_occupation" value="<?php echo $pre_data['return_occupation'] ? $pre_data['return_occupation'] : ''; ?>" />
+                                        <input type="text" class="form-control" name="present_occupation" value="<?php echo $pre_data['present_occupation'] ? $pre_data['present_occupation'] : ''; ?>" />
                                     </div>
                                     <div class="form-group">
                                         <label>Monthly income of returnee after return(in BDT)</label>
-                                        <input type="text" class="form-control" name="monthly_income" value="<?php echo $pre_data['monthly_income'] ? $pre_data['monthly_income'] : ''; ?>" />
+                                        <input type="text" class="form-control" name="present_income" value="<?php echo $pre_data['present_income'] ? $pre_data['present_income'] : ''; ?>" />
                                     </div>
                                     <div class="form-group">
                                         <label>Savings (BDT)</label>
-                                        <input type="text" class="form-control" name="total_saving" value="<?php echo $pre_data['total_saving'] ? $pre_data['total_saving'] : ''; ?>" />
+                                        <input type="text" class="form-control" name="personal_savings" value="<?php echo $pre_data['personal_savings'] ? $pre_data['personal_savings'] : ''; ?>" />
                                     </div>
                                     <div class="form-group">
                                         <label>Loan Amount (BDT)</label>
-                                        <input type="text" class="form-control" name="loan_amount" value="<?php echo $pre_data['loan_amount'] ? $pre_data['loan_amount'] : ''; ?>" />
+                                        <input type="text" class="form-control" name="personal_debt" value="<?php echo $pre_data['personal_debt'] ? $pre_data['personal_debt'] : ''; ?>" />
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
@@ -707,16 +812,16 @@ doAction('render_start');
                                         <label>Ownership of House</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                             <div class="options_holder radio">
-                                                <label><input class="px house_ownership" type="radio" name="house_ownership" value="own"><span class="lbl">Own</span></label>
-                                                <label><input class="px house_ownership" type="radio" name="house_ownership" value="rental"><span class="lbl">Rental</span></label>
-                                                <label><input class="px house_ownership" type="radio" name="house_ownership" value="without_paying"><span class="lbl">Live without paying</span></label>
-                                                <label><input class="px house_ownership" type="radio" name="house_ownership" value="khas_land"><span class="lbl">Khas land</span></label>
+                                                <label><input class="px house_ownership" type="radio" name="current_residence_ownership" value="own" <?php echo $pre_data && $pre_data['current_residence_ownership'] == 'own' ? 'checked' : '' ?>><span class="lbl">Own</span></label>
+                                                <label><input class="px house_ownership" type="radio" name="current_residence_ownership" value="rental" <?php echo $pre_data && $pre_data['current_residence_ownership'] == 'rental' ? 'checked' : '' ?>><span class="lbl">Rental</span></label>
+                                                <label><input class="px house_ownership" type="radio" name="current_residence_ownership" value="without_paying" <?php echo $pre_data && $pre_data['current_residence_ownership'] == 'without_paying' ? 'checked' : '' ?>><span class="lbl">Live without paying</span></label>
+                                                <label><input class="px house_ownership" type="radio" name="current_residence_ownership" value="khas_land" <?php echo $pre_data && $pre_data['current_residence_ownership'] == 'khas_land' ? 'checked' : '' ?>><span class="lbl">Khas land</span></label>
                                                 <label><input class="px" type="radio" name="house_ownership" id="newHouseOwnership"><span class="lbl">Others. Please specify…</span></label>
                                             </div>
                                         </div>
                                     </div>
                                     <div id="newHouseOwnershipType" style="display: none; margin-bottom: 1em;">
-                                        <input class="form-control" placeholder="Please Specity" type="text" name="new_qualification" value="">
+                                        <input class="form-control" placeholder="Please Specity" type="text" name="new_ownership" value="">
                                     </div>
                                     <script>
                                         init.push(function () {
@@ -733,16 +838,16 @@ doAction('render_start');
                                         <label>Type of house</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                             <div class="options_holder radio">
-                                                <label><input class="px house" type="radio" name="house_type" value="raw_house"><span class="lbl">Raw house (wall made of mud/straw, roof made of tin jute stick/ pampas grass/ khar/ leaves)</span></label>
-                                                <label><input class="px house" type="radio" name="house_type" value="pucca"><span class="lbl">Pucca (wall, floor and roof of the house made of concrete)</span></label>
-                                                <label><input class="px house" type="radio" name="house_type" value="live"><span class="lbl">Live Semi-pucca (roof made of tin, wall or floor made of concrete)</span></label>
-                                                <label><input class="px house" type="radio" name="house_type" value="tin"><span class="lbl">Tin (wall, and roof of the house made of tin)</span></label>
-                                                <label><input class="px" type="radio" name="house_type" id="newHouse"><span class="lbl">Others. Please specify…</span></label>
+                                                <label><input class="px house" type="radio" name="current_residence_type" value="raw_house" <?php echo $pre_data && $pre_data['current_residence_type'] == 'raw_house' ? 'checked' : '' ?>><span class="lbl">Raw house (wall made of mud/straw, roof made of tin jute stick/ pampas grass/ khar/ leaves)</span></label>
+                                                <label><input class="px house" type="radio" name="current_residence_type" value="pucca" <?php echo $pre_data && $pre_data['current_residence_type'] == 'pucca' ? 'checked' : '' ?>><span class="lbl">Pucca (wall, floor and roof of the house made of concrete)</span></label>
+                                                <label><input class="px house" type="radio" name="current_residence_type" value="live" <?php echo $pre_data && $pre_data['current_residence_type'] == 'live' ? 'checked' : '' ?>><span class="lbl">Live Semi-pucca (roof made of tin, wall or floor made of concrete)</span></label>
+                                                <label><input class="px house" type="radio" name="current_residence_type" value="tin" <?php echo $pre_data && $pre_data['current_residence_type'] == 'tin' ? 'checked' : '' ?>><span class="lbl">Tin (wall, and roof of the house made of tin)</span></label>
+                                                <label><input class="px" type="radio" name="current_residence_type" id="newHouse"><span class="lbl">Others. Please specify…</span></label>
                                             </div>
                                         </div>
                                     </div>
                                     <div id="newHouseType" style="display: none; margin-bottom: 1em;">
-                                        <input class="form-control" placeholder="Please Specity" type="text" name="new_qualification" value="">
+                                        <input class="form-control" placeholder="Please Specity" type="text" name="new_residence" value="">
                                     </div>
                                     <script>
                                         init.push(function () {
@@ -759,7 +864,7 @@ doAction('render_start');
                             </div>
                         </fieldset>
                     </div>
-                    <div class="tab-pane fade " id="IgaSkills">
+                    <div class="tab-pane fade" id="IgaSkills">
                         <fieldset>
                             <legend>Section 4: Information on Income Generating Activities(IGA) Skills</legend>
                             <div class="row">
@@ -768,8 +873,8 @@ doAction('render_start');
                                         <label>IGA Skills ?</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                             <div class="options_holder radio">
-                                                <label><input class="px" type="radio" id="iga_skillYes" name="iga_skill" value="yes" <?php echo $pre_data && $pre_data['iga_skill'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
-                                                <label><input class="px" type="radio" id="iga_skillNo" name="iga_skill" value="no" <?php echo $pre_data && $pre_data['iga_skill'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
+                                                <label><input class="px" type="radio" id="iga_skillYes" name="have_earner_skill" value="yes" <?php echo $pre_data && $pre_data['have_earner_skill'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
+                                                <label><input class="px" type="radio" id="iga_skillNo" name="have_earner_skill" value="no" <?php echo $pre_data && $pre_data['have_earner_skill'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
                                             </div>
                                         </div>
                                     </div>
@@ -791,43 +896,74 @@ doAction('render_start');
                                             });
                                         });
                                     </script>
-
-
                                     <fieldset class="scheduler-border iga_skill">
                                         <legend class="scheduler-border">IGA Skills</legend>
                                         <div class="form-group ">
                                             <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                                 <div class="options_holder radio">
-                                                    <label class="col-sm-3"><input class="px" type="checkbox" name="natural_disaster[]" value=""><span class="lbl">Vocational</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" value="vocational" <?php
+                                                        if (in_array('vocational', $have_skills)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Vocational</span></label>
                                                     <div class="form-group col-sm-9">
-                                                        <input type="text" class="form-control" placeholder="specify....." name="emergency_mobile" value="<?php echo $pre_data['emergency_mobile'] ? $pre_data['emergency_mobile'] : ''; ?>" />
+                                                        <input type="text" class="form-control" placeholder="Specify....." name="new_vocational" value="" />
                                                     </div>
-                                                    <label class="col-sm-3"><input class="px" type="checkbox" name="natural_disaster[]" value=""><span class="lbl">Handicrafts</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" value=""><span class="lbl">Handicrafts</span></label>
                                                     <div class="form-group col-sm-9">
-                                                        <input type="text" class="form-control" placeholder="specify....." name="emergency_mobile" value="<?php echo $pre_data['emergency_mobile'] ? $pre_data['emergency_mobile'] : ''; ?>" />
+                                                        <input type="text" class="form-control" placeholder="Specify....." name="new_handicrafts" value="" />
                                                     </div>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="natural_disaster[]" value=""><span class="lbl">Cultivating bees/crab fattening</span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="natural_disaster[]" value=""><span class="lbl">Livestock Rearing</span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="natural_disaster[]" value=""><span class="lbl">Poultry Rearing  </span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="natural_disaster[]" value=""><span class="lbl">Cooking</span></label>
-
-                                                    <label class="col-sm-12"><input class="px col-sm-12" type="checkbox" id="newDisaster"><span class="lbl">Others</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" value="beauty_parlour" <?php
+                                                        if (in_array('beauty_parlour', $have_skills)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?><span class="lbl">Beauty Parlour</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" value="tailor_work" <?php
+                                                        if (in_array('tailor_work', $have_skills)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Tailor Work</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" value="block_batiks" <?php
+                                                        if (in_array('block_batiks', $have_skills)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Block batik's</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" value="cultivation" <?php
+                                                        if (in_array('cultivation', $have_skills)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Cultivating bees/crab fattening</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" value="livestock" <?php
+                                                        if (in_array('livestock', $have_skills)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Livestock Rearing</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" value="poultry" <?php
+                                                        if (in_array('poultry', $have_skills)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Poultry Rearing</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" value="cooking" <?php
+                                                        if (in_array('cooking', $have_skills)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Cooking</span></label>
+                                                    <label class="col-sm-12"><input class="px col-sm-12" type="checkbox" id="newSkill"><span class="lbl">Others</span></label>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div id="newDisasterType" style="display: none; margin-bottom: 1em;">
-                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_disaster" value="">
+                                        <div id="newSkillType" style="display: none; margin-bottom: 1em;">
+                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_have_technical" value="">
                                         </div>
                                         <script>
                                             init.push(function () {
-                                                $("#newDisaster").on("click", function () {
-                                                    $('#newDisasterType').toggle();
+                                                $("#newSkill").on("click", function () {
+                                                    $('#newSkillType').toggle();
                                                 });
                                             });
                                         </script>
                                     </fieldset >
                                 </div>
-
                             </div>
                         </fieldset>
                     </div>
@@ -840,16 +976,15 @@ doAction('render_start');
                                         <label>Do you have any disability?</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                             <div class="options_holder radio">
-                                                <label><input class="px" type="radio" id="yesdisability" name="is_disability" value="yes" <?php echo $pre_data && $pre_data['is_cooperated'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
-                                                <label><input class="px" type="radio" id="nodisability" name="is_disability" value="no" <?php echo $pre_data && $pre_data['is_cooperated'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
+                                                <label><input class="px" type="radio" id="yesdisability" name="is_physically_challenged" value="yes" <?php echo $pre_data && $pre_data['is_physically_challenged'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
+                                                <label><input class="px" type="radio" id="nodisability" name="is_physically_challenged" value="no" <?php echo $pre_data && $pre_data['is_physically_challenged'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group disability" style="display:none">
-                                        <label>Type of  disability</label>
-                                        <input class="form-control" type="text" name="organization_name" value="<?php echo $pre_data['disability_name'] ? $pre_data['disability_name'] : ''; ?>">
+                                        <label>Type of disability</label>
+                                        <input class="form-control" type="text" name="disability_type" value="<?php echo $pre_data['disability_type'] ? $pre_data['disability_type'] : ''; ?>">
                                     </div>
-
                                     <script>
                                         init.push(function () {
                                             var isChecked = $('#yesCooperated').is(':checked');
@@ -871,8 +1006,8 @@ doAction('render_start');
                                         <label>Any Chronic Disease?</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                             <div class="options_holder radio">
-                                                <label><input class="px" type="radio" id="yeChronicDisease" name="is_disability" value="yes" <?php echo $pre_data && $pre_data['is_cooperated'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
-                                                <label><input class="px" type="radio" id="noChronicDisease" name="is_disability" value="no" <?php echo $pre_data && $pre_data['is_cooperated'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
+                                                <label><input class="px" type="radio" id="yeChronicDisease" name="having_chronic_disease" value="yes" <?php echo $pre_data && $pre_data['having_chronic_disease'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
+                                                <label><input class="px" type="radio" id="noChronicDisease" name="having_chronic_disease" value="no" <?php echo $pre_data && $pre_data['having_chronic_disease'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
                                             </div>
                                         </div>
                                     </div>
@@ -898,20 +1033,47 @@ doAction('render_start');
                                         <div class="form-group ">
                                             <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                                 <div class="options_holder radio">
-
-                                                    <label><input class="px" type="checkbox" name="" value=""><span class="lbl">Cancer </span></label>
-                                                    <label><input class="px" type="checkbox" name="" value=""><span class="lbl">Diabetes </span></label>
-                                                    <label><input class="px" type="checkbox" name="" value=""><span class="lbl">Arthritis  </span></label>
-                                                    <label><input class="px" type="checkbox" name="" value=""><span class="lbl">Asthmatic </span></label>
-                                                    <label><input class="px" type="checkbox" name="" value=""><span class="lbl">Kidney disease </span></label>
-                                                    <label><input class="px" type="checkbox" name="" value=""><span class="lbl">Heart diseases  </span></label>
-                                                    <label><input class="px" type="checkbox" name="" value=""><span class="lbl">Bronchitis   </span></label>
+                                                    <label><input class="px" type="checkbox" name="disease_type[]" value="cancer" <?php
+                                                        if (in_array('cancer', $disease_types)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Cancer</span></label>
+                                                    <label><input class="px" type="checkbox" name="disease_type[]" value="diabetes" <?php
+                                                        if (in_array('diabetes', $disease_types)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Diabetes</span></label>
+                                                    <label><input class="px" type="checkbox" name="disease_type[]" value="arthritis" <?php
+                                                        if (in_array('arthritis', $disease_types)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Arthritis</span></label>
+                                                    <label><input class="px" type="checkbox" name="disease_type[]" value="asthmatic" <?php
+                                                        if (in_array('asthmatic', $disease_types)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Asthmatic</span></label>
+                                                    <label><input class="px" type="checkbox" name="disease_type[]" value="kidney_disease" <?php
+                                                        if (in_array('kidney_disease', $disease_types)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Kidney Disease</span></label>
+                                                    <label><input class="px" type="checkbox" name="disease_type[]" value="heart_diseases" <?php
+                                                        if (in_array('heart_diseases', $disease_types)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Heart Diseases</span></label>
+                                                    <label><input class="px" type="checkbox" name="disease_type[]" value="bronchitis" <?php
+                                                        if (in_array('bronchitis', $disease_types)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Bronchitis</span></label>
                                                     <label><input class="px col-sm-12" type="checkbox" id="newDisease"><span class="lbl">Others</span></label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div id="newDiseaseTypes" style="display: none; margin-bottom: 1em;">
-                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_disaster" value="">
+                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_disease_type" value="">
                                         </div>
                                         <script>
                                             init.push(function () {
@@ -925,12 +1087,11 @@ doAction('render_start');
                             </div>
                         </fieldset>
                     </div>
-
                 </div>
             </div>
         </div>
         <div class="panel-footer tar">
-            <a href="<?php echo url('admin/dev_customer_management/manage_returnee_migrants') ?>" class="btn btn-flat btn-labeled btn-danger"><span class="btn-label icon fa fa-times"></span>Cancel</a>
+            <a href="<?php echo url('admin/dev_customer_management/manage_customers') ?>" class="btn btn-flat btn-labeled btn-danger"><span class="btn-label icon fa fa-times"></span>Cancel</a>
             <?php
             echo submitButtonGenerator(array(
                 'action' => $edit ? 'update' : 'update',
