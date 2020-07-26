@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 24, 2020 at 05:00 AM
+-- Generation Time: Jul 26, 2020 at 02:28 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.3
 
@@ -575,7 +575,7 @@ CREATE TABLE `dev_customer_health` (
 --
 
 INSERT INTO `dev_customer_health` (`pk_customer_health_id`, `fk_customer_id`, `is_physically_challenged`, `disability_type`, `having_chronic_disease`, `disease_type`, `need_psychosocial_support`) VALUES
-(1, 1, 'yes', '', 'yes', 'arthritis,asthmatic', NULL);
+(1, 1, '', '', '', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -619,7 +619,7 @@ CREATE TABLE `dev_customer_skills` (
 --
 
 INSERT INTO `dev_customer_skills` (`pk_customer_skills_id`, `fk_customer_id`, `is_certification_required`, `required_certification`, `have_earner_skill`, `have_skills`, `need_skills`) VALUES
-(1, 1, NULL, '', 'yes', 'tailor_work,block_batiks,cultivation', NULL);
+(1, 1, NULL, '', '', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -780,7 +780,7 @@ CREATE TABLE `dev_economic_profile` (
 --
 
 INSERT INTO `dev_economic_profile` (`pk_economic_profile_id`, `fk_customer_id`, `pre_occupation`, `present_occupation`, `present_income`, `total_member`, `male_household_member`, `female_household_member`, `total_dependent_member`, `male_earning_member`, `female_earning_member`, `total_earner`, `household_income`, `household_expenditure`, `personal_savings`, `personal_debt`, `loan_sources`, `have_mortgages`, `mortgage_name`, `mortgage_value`, `current_residence_ownership`, `current_residence_type`) VALUES
-(1, 1, 'Engi', '5000', 6000, 110, 50, 60, NULL, NULL, NULL, NULL, NULL, NULL, 1000, 6000, NULL, NULL, NULL, NULL, 'rental', 'live');
+(1, 1, '', '', 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, '', '');
 
 -- --------------------------------------------------------
 
@@ -908,7 +908,7 @@ CREATE TABLE `dev_immediate_supports` (
 --
 
 INSERT INTO `dev_immediate_supports` (`pk_immediate_support_id`, `fk_customer_id`, `immediate_support`) VALUES
-(1, 99, 'Food');
+(1, 1, 'meet');
 
 -- --------------------------------------------------------
 
@@ -1112,7 +1112,7 @@ CREATE TABLE `dev_migrations` (
 
 INSERT INTO `dev_migrations` (`pk_migration_id`, `fk_customer_id`, `is_cheated`, `is_money_deducted`, `is_movement_limitation`, `is_kept_document`, `migration_experience`, `left_port`, `preferred_country`, `departure_date`, `access_path`, `transport_modes`, `migration_type`, `visa_type`, `return_date`, `migration_duration`, `migration_medias`, `migration_cost`, `agency_payment`, `migration_occupation`, `destination_country_leave_reason`, `earned_money`, `sent_money`, `spent_types`, `forced_work`, `excessive_work`, `employer_threatened`, `final_destination`, `migration_reasons`) VALUES
 (1, 99, '', '', '', '', '', 'airport', '', '1970-01-01', '', '', '', '', '1970-01-01', '0', '', 0, 0, '', '', 0, 0, '', NULL, NULL, NULL, NULL, NULL),
-(2, 1, 'yes', 'yes', 'yes', 'yes', NULL, 'Dhaka', 'Khulna', '2020-07-21', NULL, NULL, 'regular', 'tourist', '2020-07-21', 'Year: 0, Month: 0, Days: 0', '{\"departure_media\":\"Name\",\"media_relation\":\"Relation\",\"media_address\":\"Address\"}', NULL, NULL, 'Carpentar', 'no_accommodation,sickness', 5000, NULL, NULL, 'no', 'yes', 'yes', 'Norayel ', 'underemployed,unemployed'),
+(2, 1, '', '', '', '', NULL, '', '', '1970-01-01', NULL, NULL, '', '', '1970-01-01', 'Year: 0, Month: 0, Days: 0', '{\"departure_media\":null,\"media_relation\":null,\"media_address\":null}', NULL, NULL, '', '', 0, NULL, NULL, '', '', '', '', ''),
 (4, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (5, 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (6, 5, 'yes', 'yes', 'yes', 'yes', NULL, '1', '3', '20-07-2020', NULL, NULL, 'regular', 'student', '0000-00-00', NULL, '{\"departure_media\":\"6\",\"media_relation\":\"7\",\"media_address\":\"8\"}', NULL, NULL, '13', '', 14, NULL, NULL, 'yes', 'yes', 'yes', '5', 'unemployed'),
@@ -1142,7 +1142,7 @@ INSERT INTO `dev_migrations` (`pk_migration_id`, `fk_customer_id`, `is_cheated`,
 (30, 29, '', '', '', '', NULL, '', '', '2020-07-21', NULL, NULL, '', '', '2020-07-21', 'Year: 0, Month: 0, Days: 0', '{\"departure_media\":\"\",\"media_relation\":\"\",\"media_address\":\"\"}', NULL, NULL, '', '', 0, NULL, NULL, '', '', '', '', ''),
 (31, 30, '', '', '', '', NULL, '', '', '2020-07-21', NULL, NULL, '', '', '2020-07-21', 'Year: 0, Month: 0, Days: 0', '{\"departure_media\":\"\",\"media_relation\":\"\",\"media_address\":\"\"}', NULL, NULL, '', '', 0, NULL, NULL, '', '', '', '', ''),
 (32, 31, '', '', '', '', NULL, '', '', '2020-07-21', NULL, NULL, '', '', '2020-07-21', 'Year: 0, Month: 0, Days: 0', '{\"departure_media\":\"\",\"media_relation\":\"\",\"media_address\":\"\"}', NULL, NULL, '', '', 0, NULL, NULL, '', '', '', '', ''),
-(38, 1, 'yes', 'yes', 'yes', 'yes', NULL, 'Dhaka', 'Khulna', '2020-07-21', NULL, NULL, 'regular', 'tourist', '2020-07-21', 'Year: 0, Month: 0, Days: 0', '{\"departure_media\":\"Name\",\"media_relation\":\"Relation\",\"media_address\":\"Address\"}', NULL, NULL, 'Carpentar', 'no_accommodation,sickness', 5000, NULL, NULL, 'no', 'yes', 'yes', 'Norayel ', 'underemployed,unemployed');
+(38, 1, '', '', '', '', NULL, '', '', '1970-01-01', NULL, NULL, '', '', '1970-01-01', 'Year: 0, Month: 0, Days: 0', '{\"departure_media\":null,\"media_relation\":null,\"media_address\":null}', NULL, NULL, '', '', 0, NULL, NULL, '', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -2856,7 +2856,10 @@ INSERT INTO `dev_user_activities` (`pk_activity_log`, `activity_msg`, `activity_
 (1008, 'Basic information of participant profile Name (ID: C-20-07-000011) has been updated.', '', 'update', 'success', '2020-07-22 09:56:45', 1),
 (1009, 'Basic information of participant profile Name (ID: C-20-07-000011) has been updated.', '', 'update', 'success', '2020-07-22 10:00:27', 1),
 (1010, 'Basic information of participant profile Name (ID: C-20-07-000011) has been updated.', '', 'update', 'success', '2020-07-22 10:04:00', 1),
-(1011, 'Basic information of participant profile Name (ID: C-20-07-000011) has been updated.', '', 'update', 'success', '2020-07-22 10:07:27', 1);
+(1011, 'Basic information of participant profile Name (ID: C-20-07-000011) has been updated.', '', 'update', 'success', '2020-07-22 10:07:27', 1),
+(1012, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-07-24 09:07:44', 1),
+(1013, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-07-26 10:05:28', 1),
+(1014, 'Jack (ID: dev_errin) has been turned off', '', 'update', 'success', '2020-07-26 17:51:12', 1);
 
 -- --------------------------------------------------------
 
@@ -3552,7 +3555,7 @@ ALTER TABLE `dev_users_roles_relation`
 -- AUTO_INCREMENT for table `dev_user_activities`
 --
 ALTER TABLE `dev_user_activities`
-  MODIFY `pk_activity_log` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1012;
+  MODIFY `pk_activity_log` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1015;
 
 --
 -- AUTO_INCREMENT for table `dev_user_login_logout`
