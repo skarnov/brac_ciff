@@ -12,10 +12,15 @@ class dev_customer_management {
         $permissions = array(
             'group_name' => 'Beneficiaries',
             'permissions' => array(
-                'manage_returnees' => array(
+                'manage_customers' => array(
                     'add_customer' => 'Add Customer',
                     'edit_customer' => 'Edit Customer',
                     'delete_customer' => 'Delete Customer',
+                ),
+                'manage_cases' => array(
+                    'add_case' => 'Add Case',
+                    'edit_case' => 'Edit Case',
+                    'delete_case' => 'Delete Case',
                 ),
             ),
         );
@@ -43,6 +48,18 @@ class dev_customer_management {
         );
         if (has_permission('manage_customers'))
             admenu_register($params);
+
+        $params = array(
+            'label' => 'Cases Management',
+            'description' => 'Manage All Beneficiary Case Management',
+            'menu_group' => 'Beneficiaries',
+            'position' => 'default',
+            'action' => 'manage_cases',
+            'iconClass' => 'fa-binoculars',
+            'jack' => $this->thsClass,
+        );
+        if (has_permission('manage_cases'))
+            admenu_register($params);
     }
 
     function manage_customers() {
@@ -59,6 +76,20 @@ class dev_customer_management {
             include('pages/deleteProfileCase.php');
         else
             include('pages/list_customers.php');
+    }
+
+    function manage_cases() {
+        if (!has_permission('manage_cases'))
+            return true;
+        global $devdb, $_config;
+        $myUrl = jack_url($this->thsClass, 'manage_cases');
+
+        if ($_GET['action'] == 'add_edit_case')
+            include('pages/add_edit_case.php');
+        elseif ($_GET['action'] == 'deleteCase')
+            include('pages/deleteCase.php');
+        else
+            include('pages/list_cases.php');
     }
 
     function get_lookups($lookup_group) {
@@ -214,6 +245,10 @@ class dev_customer_management {
                 $customer_health_data = array();
                 $customer_health_data['fk_customer_id'] = $ret['customer_insert']['success'];
                 $ret['health_insert'] = $devdb->insert_update('dev_customer_health', $customer_health_data);
+
+                $case_data = array();
+                $case_data['fk_customer_id'] = $ret['customer_insert']['success'];
+                $ret['case_insert'] = $devdb->insert_update('dev_immediate_supports', $case_data);
             }
 
             $migration_data = array();
@@ -289,6 +324,245 @@ class dev_customer_management {
             } else {
                 $ret['migration_new_insert'] = $devdb->insert_update('dev_migrations', $migration_data, " fk_customer_id = '" . $ret['customer_insert']['success'] . "'");
             }
+
+            $economic_profile_data = array();
+            $economic_profile_data['pre_occupation'] = $params['form_data']['pre_occupation'];
+            $economic_profile_data['present_occupation'] = $params['form_data']['present_occupation'];
+            $economic_profile_data['present_income'] = $params['form_data']['present_income'];
+            $economic_profile_data['personal_savings'] = $params['form_data']['personal_savings'];
+            $economic_profile_data['personal_debt'] = $params['form_data']['personal_debt'];
+            if ($params['form_data']['new_ownership']) {
+                $economic_profile_data['current_residence_ownership'] = $params['form_data']['new_ownership'];
+            } else {
+                $economic_profile_data['current_residence_ownership'] = $params['form_data']['current_residence_ownership'];
+            }
+            if ($params['form_data']['new_residence']) {
+                $economic_profile_data['current_residence_type'] = $params['form_data']['new_residence'];
+            } else {
+                $economic_profile_data['current_residence_type'] = $params['form_data']['current_residence_type'];
+            }
+            $economic_profile_data['male_household_member'] = $params['form_data']['male_household_member'];
+            $economic_profile_data['female_household_member'] = $params['form_data']['female_household_member'];
+            $economic_profile_data['total_member'] = $params['form_data']['male_household_member'] + $params['form_data']['female_household_member'];
+
+            if ($params['form_data']['new_ownership']) {
+                $economic_profile_data['current_residence_ownership'] = $params['form_data']['new_ownership'];
+            } else {
+                $economic_profile_data['current_residence_ownership'] = $params['form_data']['current_residence_ownership'];
+            }
+            if ($params['form_data']['new_residence']) {
+                $economic_profile_data['current_residence_type'] = $params['form_data']['new_residence'];
+            } else {
+                $economic_profile_data['current_residence_type'] = $params['form_data']['current_residence_type'];
+            }
+            if ($is_update) {
+                $ret['economic_update'] = $devdb->insert_update('dev_economic_profile', $economic_profile_data, " fk_customer_id = '" . $is_update . "'");
+            } else {
+                $ret['economic_new_insert'] = $devdb->insert_update('dev_economic_profile', $economic_profile_data, " fk_customer_id = '" . $ret['customer_insert']['success'] . "'");
+            }
+
+            $skill_data = array();
+            $skill_data['have_earner_skill'] = $params['form_data']['have_earner_skill'];
+
+            if ($params['form_data']['new_have_technical'] == NULL) {
+                $data_type = $params['form_data']['technical_have_skills'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $have_technical_skills = $data_types;
+            } elseif ($params['form_data']['technical_have_skills'] == NULL) {
+                $have_technical_skills = $params['form_data']['new_have_technical'];
+            } elseif ($params['form_data']['technical_have_skills'] != NULL && $params['form_data']['new_have_technical'] != NULL) {
+                $data_type = $params['form_data']['technical_have_skills'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $have_technical_skills = $params['form_data']['new_have_technical'] . ',' . $data_types;
+            }
+
+            $skills = array();
+            if ($have_technical_skills) {
+                $skills['technical_skill'] = $have_technical_skills;
+                if ($params['form_data']['new_vocational']) {
+                    $skills['vocational_skills'] = $params['form_data']['new_vocational'];
+                }
+                if ($params['form_data']['new_handicrafts']) {
+                    $skills['handicraft_skills'] = $params['form_data']['new_handicrafts'];
+                }
+            }
+            $skill_data['have_skills'] = implode(',', $skills);
+
+            if ($is_update) {
+                $ret['skill_update'] = $devdb->insert_update('dev_customer_skills', $skill_data, " fk_customer_id = '" . $is_update . "'");
+            } else {
+                $ret['skill_new_insert'] = $devdb->insert_update('dev_customer_skills', $skill_data, " fk_customer_id = '" . $ret['customer_insert']['success'] . "'");
+            }
+
+            $customer_health_data = array();
+            $customer_health_data['is_physically_challenged'] = $params['form_data']['is_physically_challenged'];
+            $customer_health_data['disability_type'] = $params['form_data']['disability_type'];
+            $customer_health_data['having_chronic_disease'] = $params['form_data']['having_chronic_disease'];
+
+            if ($params['form_data']['new_disease_type'] == NULL) {
+                $data_type = $params['form_data']['disease_type'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $customer_health_data['disease_type'] = $data_types;
+            } elseif ($params['form_data']['disease_type'] == NULL) {
+                $customer_health_data['disease_type'] = $params['form_data']['new_disease_type'];
+            } elseif ($params['form_data']['disease_type'] != NULL && $params['form_data']['new_disease_type'] != NULL) {
+                $data_type = $params['form_data']['disease_type'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $customer_health_data['disease_type'] = $params['form_data']['new_disease_type'] . ',' . $data_types;
+            }
+
+            if ($is_update) {
+                $ret['health_update'] = $devdb->insert_update('dev_customer_health', $customer_health_data, " fk_customer_id = '" . $is_update . "'");
+            } else {
+                $ret['health_new_insert'] = $devdb->insert_update('dev_customer_health', $customer_health_data, " fk_customer_id = '" . $ret['customer_insert']['success'] . "'");
+            }
+        }
+        return $ret;
+    }
+
+    function get_cases($param = null) {
+        $param['single'] = $param['single'] ? $param['single'] : false;
+
+        $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
+
+
+        $from = "FROM dev_immediate_supports 
+
+            ";
+
+        $where = " WHERE 1";
+        $conditions = " ";
+        $sql = $select . $from . $where;
+        $count_sql = "SELECT COUNT(dev_immediate_supports.pk_customer_id) AS TOTAL " . $from . $where;
+
+        $loopCondition = array(
+//            'customer_id' => 'dev_customers.pk_customer_id',
+            'id' => 'dev_immediate_supports.fk_customer_id',
+//            'name' => 'dev_customers.full_name',
+//            'nid' => 'dev_customers.nid_number',
+//            'birth' => 'dev_customers.birth_reg_number',
+//            'passport' => 'dev_customers.passport_number',
+//            'division' => 'dev_customers.present_division',
+//            'district' => 'dev_customers.present_district',
+//            'sub_district' => 'dev_customers.present_sub_district',
+//            'ps' => 'dev_customers.present_police_station',
+//            'entry_date' => 'dev_customers.create_date',
+//            'customer_type' => 'dev_customers.customer_type',
+//            'customer_status' => 'dev_customers.customer_status',
+//            'branch_id' => 'dev_customers.fk_branch_id',
+        );
+
+        $conditions .= sql_condition_maker($loopCondition, $param);
+
+        $orderBy = sql_order_by($param);
+        $limitBy = sql_limit_by($param);
+
+        $sql .= $conditions . $orderBy . $limitBy;
+        $count_sql .= $conditions;
+
+        $cases = sql_data_collector($sql, $count_sql, $param);
+        return $cases;
+    }
+
+    function add_edit_case($params = array()) {
+        global $devdb, $_config;
+
+        $ret = array('success' => array(), 'error' => array());
+        $is_update = $params['edit'] ? $params['edit'] : array();
+
+        $oldData = array();
+        if ($is_update) {
+            $oldData = $this->get_cases(array('id' => $is_update, 'single' => true));
+            if (!$oldData) {
+                return array('error' => ['Invalid case id, no data found']);
+            }
+        }
+
+        foreach ($params['required'] as $i => $v) {
+            if (isset($params['form_data'][$i]))
+                $temp = form_validator::required($params['form_data'][$i]);
+            if ($temp !== true) {
+                $ret['error'][] = $v . ' ' . $temp;
+            }
+        }
+
+        if (!$ret['error']) {
+            $immediate_support = array();
+
+
+
+
+
+            $data_type = $params['form_data']['immediate_support'];
+            $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+            $immediate_support['immediate_support'] = $data_types;
+
+
+
+            if ($is_update) {
+//                $immediate_support['update_date'] = date('Y-m-d');
+//                $immediate_support['update_time'] = date('H:i:s');
+//                $immediate_support['update_by'] = $_config['user']['pk_user_id'];
+                $ret['customer_update'] = $devdb->insert_update('dev_immediate_supports', $immediate_support, " fk_customer_id = '" . $is_update . "'");
+            } else {
+//                $customer_data['create_date'] = date('Y-m-d');
+//                $customer_data['create_time'] = date('H:i:s');
+//                $customer_data['create_by'] = $_config['user']['pk_user_id'];
+                $ret['customer_insert'] = $devdb->insert_update('dev_immediate_supports', $immediate_support);
+            }
+
+
+
+
+//            $reintegration_plan = array();
+//
+//            
+//            if ($is_update) {
+//                $ret['migration_update'] = $devdb->insert_update('dev_migrations', $migration_data, " fk_customer_id = '" . $is_update . "'");
+//            } else {
+//                $ret['migration_new_insert'] = $devdb->insert_update('dev_migrations', $migration_data, " fk_customer_id = '" . $ret['customer_insert']['success'] . "'");
+//            }
+
+
+            $psycho_supports = array();
+
+            $psycho_supports['first_meeting'] = date('Y-m-d', strtotime($params['form_data']['first_meeting']));
+            
+            
+
+            if ($params['form_data']['new_problem_identified'] == NULL) {
+                $data_type = $params['form_data']['problem_identified'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $psycho_supports['problem_identified'] = $data_types;
+            } elseif ($params['form_data']['problem_identified'] == NULL) {
+                $psycho_supports['problem_identified'] = $params['form_data']['new_problem_identified'];
+            } elseif ($params['form_data']['problem_identified'] != NULL && $params['form_data']['new_problem_identified'] != NULL) {
+                $data_type = $params['form_data']['problem_identified'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $psycho_supports['problem_identified'] = $params['form_data']['new_problem_identified'] . ',' . $data_types;
+            }
+            
+            
+            $psycho_supports['session_duration'] = $params['form_data']['session_duration'];
+            
+            if ($params['form_data']['new_place']) {
+                $economic_profile_data['session_place'] = $params['form_data']['new_place'];
+            } else {
+                $economic_profile_data['session_place'] = $params['form_data']['session_place'];
+            }
+            
+            
+//            if ($is_update) {
+//                $ret['migration_update'] = $devdb->insert_update('dev_migrations', $migration_data, " fk_customer_id = '" . $is_update . "'");
+//            } else {
+//                $ret['migration_new_insert'] = $devdb->insert_update('dev_migrations', $migration_data, " fk_customer_id = '" . $ret['customer_insert']['success'] . "'");
+//            }
+
+
+
+
+
+
 
             $economic_profile_data = array();
             $economic_profile_data['pre_occupation'] = $params['form_data']['pre_occupation'];

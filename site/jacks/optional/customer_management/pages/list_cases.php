@@ -92,11 +92,11 @@ if ($_GET['download_csv']) {
         mkdir($target_dir);
 
     $csvFolder = $target_dir;
-    $csvFile = $csvFolder . ' participant-' . time() . '.csv';
+    $csvFile = $csvFolder . ' case-' . time() . '.csv';
 
     $fh = fopen($csvFile, 'w');
 
-    $report_title = array('', 'Participant Report', '');
+    $report_title = array('', 'Case Report', '');
     fputcsv($fh, $report_title);
 
     $filtered_with = array('', ' Division = ' . $filter_division . ', District = ' . $filter_district . ', Sub-District = ' . $filter_sub_district . ', Police Station = ' . $filter_ps, '');
@@ -165,19 +165,8 @@ if ($_GET['download_csv']) {
 doAction('render_start');
 ?>
 <div class="page-header">
-    <h1>All Participants</h1>
+    <h1>All Cases</h1>
     <div class="oh">
-        <div class="btn-group btn-group-sm">
-            <?php
-            echo linkButtonGenerator(array(
-                'href' => $myUrl . '?action=add_edit_customer',
-                'action' => 'add',
-                'icon' => 'icon_add',
-                'text' => 'New Participant Profile',
-                'title' => 'New Participant Profile',
-            ));
-            ?>
-        </div>
         <div class="btn-group btn-group-sm">
             <?php
             echo linkButtonGenerator(array(
@@ -185,8 +174,8 @@ doAction('render_start');
                 'attributes' => array('target' => '_blank'),
                 'action' => 'download',
                 'icon' => 'icon_edit',
-                'text' => 'Download Participants',
-                'title' => 'Download Participants',
+                'text' => 'Download Cases',
+                'title' => 'Download Cases',
             ));
             ?>
         </div>
@@ -268,7 +257,7 @@ filterForm($filterForm);
         </div>
     <?php endif; ?>
     <div class="table-header">
-        <?php echo searchResultText($customers['total'], $start, $per_page_items, count($customers['data']), 'participants') ?>
+        <?php echo searchResultText($customers['total'], $start, $per_page_items, count($customers['data']), 'cases') ?>
     </div>
     <table class="table table-bordered table-condensed">
         <thead>
@@ -303,17 +292,6 @@ filterForm($filterForm);
                                     'icon' => 'icon_edit',
                                     'text' => 'Edit',
                                     'title' => 'Edit Customer',
-                                ));
-                                ?>
-                            </div>
-                            <div class="btn-group btn-group-sm">
-                                <?php
-                                echo linkButtonGenerator(array(
-                                    'href' => url('admin/dev_customer_management/manage_cases?action=add_edit_case&edit=' . $customer['pk_customer_id']),
-                                    'action' => 'edit',
-                                    'icon' => 'icon_edit',
-                                    'text' => 'Case Management',
-                                    'title' => 'Case Management',
                                 ));
                                 ?>
                             </div>

@@ -19,11 +19,6 @@ if ($edit) {
     $have_skills = explode(',', $pre_data['have_skills']);
     $disease_types = explode(',', $pre_data['disease_type']);
     
-//    echo '<pre>';
-//    print_r($disease_types);
-//    exit();
-    
-
     if (!$pre_data) {
         add_notification('Invalid participant, no data found.', 'error');
         header('Location:' . build_url(NULL, array('action', 'edit')));
