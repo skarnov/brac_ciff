@@ -22,11 +22,11 @@ $args = array(
         'full_name' => 'dev_customers.full_name',
         'customer_mobile' => 'dev_customers.customer_mobile',
         'passport_number' => 'dev_customers.passport_number',
-        'present_division' => 'dev_customers.present_division',
-        'present_district' => 'dev_customers.present_district',
-        'present_sub_district' => 'dev_customers.present_sub_district',
-        'present_police_station' => 'dev_customers.present_police_station',
-        'present_post_office' => 'dev_customers.present_post_office',
+        'present_division' => 'dev_customers.permanent_division',
+        'present_district' => 'dev_customers.permanent_district',
+        'present_sub_district' => 'dev_customers.permanent_sub_district',
+        'present_police_station' => 'dev_customers.permanent_police_station',
+        'present_post_office' => 'dev_customers.permanent_post_office',
         'customer_status' => 'dev_customers.customer_status'
     ),
     'id' => $filter_id,
@@ -69,13 +69,13 @@ if ($filter_nid)
 if ($filter_passport)
     $filterString[] = 'Passport: ' . $filter_passport;
 if ($filter_division)
-    $filterString[] = 'Present Division: ' . $filter_division;
+    $filterString[] = 'Permanent Division: ' . $filter_division;
 if ($filter_district)
-    $filterString[] = 'Present District: ' . $filter_district;
+    $filterString[] = 'Permanent District: ' . $filter_district;
 if ($filter_sub_district)
-    $filterString[] = 'Present Sub-District: ' . $filter_sub_district;
+    $filterString[] = 'Permanent Sub-District: ' . $filter_sub_district;
 if ($filter_ps)
-    $filterString[] = 'Present Police Station: ' . $filter_ps;
+    $filterString[] = 'Permanent Police Station: ' . $filter_ps;
 if ($filter_entry_start_date)
     $filterString[] = 'Start Date: ' . $filter_entry_start_date;
 if ($filter_entry_end_date)
@@ -117,11 +117,11 @@ if ($_GET['download_csv']) {
                 , $user['full_name']
                 , $user['customer_mobile'] . "\r"
                 , $user['passport_number'] . "\r"
-                , $user['present_division']
-                , $user['present_district']
-                , $user['present_sub_district']
-                , $user['present_police_station']
-                , $user['present_post_office']);
+                , $user['Permanent_division']
+                , $user['Permanent_district']
+                , $user['Permanent_sub_district']
+                , $user['Permanent_police_station']
+                , $user['Permanent_post_office']);
             fputcsv($fh, $dataToSheet);
         }
     }
@@ -275,11 +275,11 @@ filterForm($filterForm);
             <tr>
                 <th>ID</th>
                 <th>Name</th>
+                <th class="tar action_column">Actions</th>
                 <th>Contact Number</th>
                 <th>Passport Number</th>
                 <th>Present Address</th>
                 <th>Status</th>
-                <th class="tar action_column">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -289,35 +289,20 @@ filterForm($filterForm);
                 <tr>
                     <td><?php echo $customer['customer_id']; ?></td>
                     <td><?php echo $customer['full_name']; ?></td>
-                    <td><?php echo $customer['customer_mobile']; ?></td>
-                    <td><?php echo $customer['passport_number']; ?></td>
-                    <td><?php echo '<b>Division - </b>' . $customer['present_division'] . ',<br><b>District - </b>' . $customer['present_district'] . ',<br><b>Sub-District - </b>' . $customer['present_sub_district'] . ',<br><b>Police Station - </b>' . $customer['present_police_station'] . ',<br><b>Post Office - </b>' . $customer['present_post_office'] ?></td>
-                    <td style="text-transform: capitalize"><?php echo $customer['customer_status']; ?></td>
                     <td class="tar action_column">
                         <?php if (has_permission('edit_customer')): ?>
-                            <div class="btn-group btn-group-sm">
-                                <?php
-                                echo linkButtonGenerator(array(
-                                    'href' => build_url(array('action' => 'add_edit_customer', 'edit' => $customer['pk_customer_id'])),
-                                    'action' => 'edit',
-                                    'icon' => 'icon_edit',
-                                    'text' => 'Edit',
-                                    'title' => 'Edit Customer',
-                                ));
-                                ?>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary">Action</button>
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="height: 31px;"><i class="fa fa-caret-down"></i></button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="<?php echo url('admin/dev_customer_management/manage_customers?action=add_edit_customer&edit=' . $customer['pk_customer_id']) ?>">Edit</a></li>
+                                    <li><a href="#">Evaluate</a></li>
+                                    <li><a href="<?php echo url('admin/dev_customer_management/manage_cases?action=add_edit_case&edit=' . $customer['pk_customer_id']) ?>">Case Management</a></li>
+                                    <li><a href="#">Reintegration Assistance Satisfaction Scale</a></li>
+                                </ul>
                             </div>
-                            <div class="btn-group btn-group-sm">
-                                <?php
-                                echo linkButtonGenerator(array(
-                                    'href' => url('admin/dev_customer_management/manage_cases?action=add_edit_case&edit=' . $customer['pk_customer_id']),
-                                    'action' => 'edit',
-                                    'icon' => 'icon_edit',
-                                    'text' => 'Case Management',
-                                    'title' => 'Case Management',
-                                ));
-                                ?>
-                            </div>
-                        <?php endif; ?>
+                        <?php endif ?>
+                        
                         <?php if (has_permission('delete_customer')): ?>
                             <div class="btn-group btn-group-sm">
                                 <?php
@@ -332,6 +317,10 @@ filterForm($filterForm);
                             </div>
                         <?php endif; ?>
                     </td>
+                    <td><?php echo $customer['customer_mobile']; ?></td>
+                    <td><?php echo $customer['passport_number']; ?></td>
+                    <td><?php echo '<b>Division - </b>' . $customer['permanent_division'] . ',<br><b>District - </b>' . $customer['permanent_district'] . ',<br><b>Sub-District - </b>' . $customer['permanent_sub_district'] . ',<br><b>Police Station - </b>' . $customer['permanent_police_station'] . ',<br><b>Post Office - </b>' . $customer['permanent_post_office'] ?></td>
+                    <td style="text-transform: capitalize"><?php echo $customer['customer_status']; ?></td>
                 </tr>
                 <?php
             }
