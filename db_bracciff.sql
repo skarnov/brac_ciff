@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 26, 2020 at 02:28 PM
+-- Generation Time: Jul 28, 2020 at 04:37 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.3
 
@@ -1749,34 +1749,35 @@ CREATE TABLE `dev_users` (
   `created_at` datetime NOT NULL,
   `created_by` int(11) UNSIGNED NOT NULL,
   `modified_at` datetime NOT NULL,
-  `modified_by` int(11) UNSIGNED NOT NULL
+  `modified_by` int(11) UNSIGNED NOT NULL,
+  `fk_project_id` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `dev_users`
 --
 
-INSERT INTO `dev_users` (`pk_user_id`, `user_fb_id`, `user_fullname`, `user_headline`, `user_name`, `user_description`, `user_picture`, `user_email`, `user_email_verified`, `user_password`, `user_password_updated`, `user_birthdate`, `user_gender`, `user_country`, `user_mobile`, `user_mobile_verified`, `user_profession`, `user_type`, `user_status`, `user_is_visible`, `user_meta_type`, `user_roles`, `user_permissions`, `user_password_reset_link`, `user_email_verification_code`, `user_private_token`, `user_branch`, `user_designation`, `created_at`, `created_by`, `modified_at`, `modified_by`) VALUES
-(1, '', '3DEVs IT LTD', NULL, 'sadmin', NULL, NULL, 'sadmin@bracbpl.com', 0, '$2y$10$kYigu3gSbeQIqgx83OaPWun.zxRwyPzYO/aOxqSiL7D0o24kORF66', 1, '1980-06-08', 'male', '', '', 0, NULL, 'admin', 'active', 1, 'user', '-1', NULL, '%242y%2410%24NgmTZ9491Shuk4iPwQlaGuNp26i6GSJzQgJAd28K31neYHK2oDYKC', NULL, NULL, NULL, NULL, '2017-12-01 00:00:00', 1, '0000-00-00 00:00:00', 68),
-(2, '', 'Md Belall', NULL, 'sk_rueei', '', 'PassportphotoExample2_1563786624.jpg', 'belal@email.com', 0, '$2y$10$xfRnvUxKT.kIXzaRzlAXuuQ3co7baBTpOnFkJRRrpsT45hF6fUZp2', 1, '0000-00-00', 'male', '', '01718728387', 0, NULL, 'admin', 'active', 1, 'user', '0', NULL, NULL, NULL, NULL, 0, 0, '2019-06-10 16:18:43', 1, '2019-07-22 15:10:24', 1),
-(3, '', 'Nazmul Biswash', NULL, 'shs_aasja', '', '', 'email@gmail.com', 0, '$2y$10$zfp7WZWNXGxkn2DYaXFeZuKIrneU2FnLALJR2xO5R83zOBLfz3RDm', 1, '0000-00-00', 'male', '', '017186736367', 0, NULL, 'admin', 'active', 1, 'user', '0', NULL, NULL, NULL, NULL, 3, 142, '2019-06-10 16:19:42', 1, '2019-06-10 16:19:42', 1),
-(4, '', 'Pollab Biswash', NULL, 'sjsj_sajsja', '', '', 'bselal@email.com', 0, '$2y$10$6K.6XQj7SMhHdlSub7inWuYpeBBIoBXh3syzxhyQqP56gUO77e.SW', 1, '0000-00-00', 'male', '', '01717363546', 0, NULL, 'admin', 'active', 1, 'user', '0,0', NULL, NULL, NULL, NULL, 3, 141, '2019-06-10 16:22:38', 1, '2019-07-17 17:05:52', 1),
-(5, '', 'Rariq Islam edit 64', NULL, 'rafiq', '', '3F6B966D00000578-4428630-image-m-80_1492690622006_1563785377.jpg', 'rafiq@gmail.com', 0, '$2y$10$vNmaROhxuSB9K9.uOC8Tf.1qqZ7oQXfziNg7/BlonNHxVxP5iAjMi', 1, '0000-00-00', 'male', '', '', 0, NULL, 'admin', 'active', 1, 'user', '0,0,0,0,0,0', NULL, NULL, NULL, NULL, 1, 137, '2019-07-22 14:47:49', 1, '2019-07-22 15:34:18', 1),
-(6, '', 'Md. Sariful Islam Sajib', NULL, 'sajib87', '', '16146340_1563786535.jpg', 'sajib87@gmail.com', 0, '$2y$10$lVYYeKgZ/mjvqM1xMu7CMuhAnXD/zJVNDsG4yXu/JfGDGbTRWcF0y', 1, '0000-00-00', 'male', 'Bangladesh', '01677066467', 0, NULL, 'admin', 'active', 1, 'user', '1,3,2', NULL, NULL, NULL, NULL, 0, 0, '2019-07-22 14:52:34', 1, '2019-07-22 15:08:55', 1),
-(7, '', 'Abdul Momin', NULL, 'abc', '', '0055-ach-090917175504_1563795559.jpg', 'abc@gmail.com', 0, '$2y$10$AFPbgCUXX0wnUzZwGXi5QeiAXX/eAbO/tj0do8tsd2dkgx/EsUvSi', 1, '0000-00-00', 'male', '', '', 0, NULL, 'admin', 'active', 1, 'user', '4', NULL, NULL, NULL, NULL, 4, 138, '2019-07-22 16:32:14', 1, '2019-07-22 17:39:19', 1),
-(8, '', 'Rariq Islam', NULL, 'rag282', '', '16146340_1563795542.jpg', 'rafiq@gmskd.com', 0, '$2y$10$/nE2FSzrvkEJGgzmU7ZQdeBtScA7OlWU2Bph7RREcFSZWbYtK2SIq', 1, '0000-00-00', 'male', '', '', 0, NULL, 'admin', 'active', 1, 'user', '4', NULL, NULL, NULL, NULL, 1, 137, '2019-07-22 17:36:51', 1, '2019-07-22 17:39:02', 1),
-(9, '', 'MD ABDUR RAHIM', NULL, 'rahim', '', '', 'drsc.narsingdi@brac.net', 0, '$2y$10$SP0QtX5HQtpLpJzMb1TroOuI9HrjcXzzifxHR2UlVln8uHUhOT5We', 1, '0000-00-00', 'male', '', '01713158364', 0, NULL, 'admin', 'active', 1, 'user', '4', NULL, NULL, NULL, NULL, 5, 152, '2019-07-22 17:41:55', 1, '2019-09-02 10:02:19', 1),
-(10, '', 'Sabina Yesmin', NULL, 'sabina', '', 'Preeti_Singh_(3)(1)_1563795804.jpg', 'sabina@gmail.com', 0, '$2y$10$Bmge4Drxa9TeNHTZ1CxLFONRRJyLgVlNir5Mvw37UAOv4i/3w.e6q', 1, '0000-00-00', 'male', '', '01658956214', 0, NULL, 'admin', 'active', 1, 'user', '4', NULL, NULL, NULL, NULL, 6, 143, '2019-07-22 17:43:24', 1, '2019-07-22 17:43:24', 1),
-(11, '', 'Mohiful Kabir Saimon', NULL, 'saimon', '', '6323_1567397238.jpg', 'drsc.cumilla@brac.net', 0, '$2y$10$5B9WW90Fuvm4VCZUVOS4m.BSlY.q5BczAKTidQAU9zcIPGnpvnCNa', 1, '0000-00-00', 'male', '', '01729485130', 0, NULL, 'admin', 'active', 1, 'user', '4', NULL, NULL, NULL, NULL, 7, 152, '2019-07-22 17:44:32', 1, '2019-09-02 10:08:25', 1),
-(12, '', 'Shimul Hasan', NULL, 'shemul', '', 'PassportphotoExample2_1563795916.jpg', 'shemul@gmail.com', 0, '$2y$10$XYriO.DmL8sb6Ckw1ktSDO0EruvNjFTS1RuW7gU7Qhu0t3k1N0NXq', 1, '0000-00-00', 'male', '', '01895623589', 0, NULL, 'admin', 'active', 1, 'user', '4', NULL, NULL, NULL, NULL, 8, 143, '2019-07-22 17:45:16', 1, '2019-07-22 17:45:16', 1),
-(13, '', 'Mosharaf Hossain', NULL, 'mosharaf', '', 'Mauro-profile-picture_1563796090.jpg', 'mosharaf@gmail.com', 0, '$2y$10$olgQeawVbYM9ycNYr1EFludEQ7Ei9tOngyf3Dnde9PGGV/HbIcyY6', 1, '0000-00-00', 'male', '', '01589658526', 0, NULL, 'admin', 'active', 1, 'user', '4', NULL, NULL, NULL, NULL, 1, 143, '2019-07-22 17:48:10', 1, '2019-07-22 17:48:10', 1),
-(14, '', 'Samrat Hasan', NULL, 'samrat', '', '', 'samrat@gmail.com', 0, '$2y$10$5xVdsgzmCkjoNfOv6jOwXuUSMg7hykxtEnlUiy6JkJYIfeED.k/Ry', 1, '0000-00-00', 'male', '', '', 0, NULL, 'admin', 'active', 1, 'user', '4', NULL, NULL, NULL, NULL, 4, 137, '2019-07-22 17:49:58', 1, '2019-07-22 17:49:58', 1),
-(15, '', 'Zakir Hossain', NULL, 'zar763r', '', '', 'zakir987@gmail.com', 0, '$2y$10$6N5wLS9Vpi/5HLtDBHD/uur74nlnLfeQJAm05k.JGUEurw5THt7p6', 1, '0000-00-00', 'male', '', '', 0, NULL, 'admin', 'active', 1, 'user', '4', NULL, NULL, NULL, NULL, 0, 0, '2019-07-23 11:47:51', 1, '2019-09-03 12:46:05', 1),
-(16, '', 'Head Office', NULL, 'admin', '', '', 'admin@brac.net', 0, '$2y$10$1N7i5RK.g40bhoHEpRYFVutjls1cE2nJi08MK46sDMa/l5f.aKQYi', 1, '0000-00-00', 'male', '', '', 0, NULL, 'admin', 'active', 1, 'user', '1', NULL, NULL, NULL, NULL, 0, 0, '2019-08-26 13:18:52', 1, '2019-08-26 13:18:52', 1),
-(17, '', 'Business Associate', NULL, 'Business', '', '', 'business@brac.net', 0, '$2y$10$3iwAWbQI1lU38xz3Ry/oZ.HyVFuFUIp2gqJhKvin.wbJJqI3lXcn.', 1, '0000-00-00', 'male', '', '', 0, NULL, 'admin', 'active', 1, 'user', '3', NULL, NULL, NULL, NULL, 0, 0, '2019-08-26 16:16:36', 1, '2019-08-26 16:16:36', 1),
-(18, '', 'Ashrafia Rabbi', NULL, 'amiami', '', 'download_1567396739.jpg', 'rabbi@gmail.com', 0, '$2y$10$BpyxsCeX7Tllp7wSCw3.xOaQfce5BkYHpUoKyP9/xu29vci1z5Hjq', 1, '0000-00-00', 'male', '', '01718987654', 0, NULL, 'admin', 'active', 1, 'user', '4', NULL, NULL, NULL, NULL, 4, 143, '2019-09-02 09:58:59', 1, '2019-09-02 10:04:50', 1),
-(19, '', 'Full Name', NULL, 'User_Name', '', '17241-200_1567493699.png', 'demo@test.com', 0, '$2y$10$gjzATsUQkB15gJ5gwPPe8.pc45xm0tSHBrkGSEXI2g/Yl7oI3l7l2', 1, '0000-00-00', 'male', 'Country', 'Mobile Number', 0, NULL, 'admin', 'active', 1, 'user', '1', NULL, NULL, NULL, NULL, 0, 0, '2019-09-03 12:54:59', 1, '2019-09-03 12:54:59', 1),
-(20, '', 'Ashraful Kabir', NULL, 'ashraful', '', '', 'ashraful@gmail.com', 0, '$2y$10$AKxHRvHU3tpIya1y0aYiSuP3eOs4q0frJuKhaBsjk2P4cCCzijdeW', 1, '0000-00-00', 'male', '', '01782088923', 0, NULL, 'admin', 'active', 1, 'user', '4', NULL, NULL, NULL, NULL, 4, 138, '2019-09-12 18:56:17', 1, '2019-09-12 18:56:17', 1);
+INSERT INTO `dev_users` (`pk_user_id`, `user_fb_id`, `user_fullname`, `user_headline`, `user_name`, `user_description`, `user_picture`, `user_email`, `user_email_verified`, `user_password`, `user_password_updated`, `user_birthdate`, `user_gender`, `user_country`, `user_mobile`, `user_mobile_verified`, `user_profession`, `user_type`, `user_status`, `user_is_visible`, `user_meta_type`, `user_roles`, `user_permissions`, `user_password_reset_link`, `user_email_verification_code`, `user_private_token`, `user_branch`, `user_designation`, `created_at`, `created_by`, `modified_at`, `modified_by`, `fk_project_id`) VALUES
+(1, '', '3DEVs IT LTD', NULL, 'sadmin', NULL, NULL, 'sadmin@bracbpl.com', 0, '$2y$10$kYigu3gSbeQIqgx83OaPWun.zxRwyPzYO/aOxqSiL7D0o24kORF66', 1, '1980-06-08', 'male', '', '', 0, NULL, 'admin', 'active', 1, 'user', '-1', NULL, '%242y%2410%24NgmTZ9491Shuk4iPwQlaGuNp26i6GSJzQgJAd28K31neYHK2oDYKC', NULL, NULL, NULL, NULL, '2017-12-01 00:00:00', 1, '0000-00-00 00:00:00', 68, NULL),
+(2, '', 'Md Belall', NULL, 'sk_rueei', '', 'PassportphotoExample2_1563786624.jpg', 'belal@email.com', 0, '$2y$10$xfRnvUxKT.kIXzaRzlAXuuQ3co7baBTpOnFkJRRrpsT45hF6fUZp2', 1, '0000-00-00', 'male', '', '01718728387', 0, NULL, 'admin', 'active', 1, 'user', '0', NULL, NULL, NULL, NULL, 0, 0, '2019-06-10 16:18:43', 1, '2019-07-22 15:10:24', 1, NULL),
+(3, '', 'Nazmul Biswash', NULL, 'shs_aasja', '', '', 'email@gmail.com', 0, '$2y$10$zfp7WZWNXGxkn2DYaXFeZuKIrneU2FnLALJR2xO5R83zOBLfz3RDm', 1, '0000-00-00', 'male', '', '017186736367', 0, NULL, 'admin', 'active', 1, 'user', '0', NULL, NULL, NULL, NULL, 3, 142, '2019-06-10 16:19:42', 1, '2019-06-10 16:19:42', 1, NULL),
+(4, '', 'Pollab Biswash', NULL, 'sjsj_sajsja', '', '', 'bselal@email.com', 0, '$2y$10$6K.6XQj7SMhHdlSub7inWuYpeBBIoBXh3syzxhyQqP56gUO77e.SW', 1, '0000-00-00', 'male', '', '01717363546', 0, NULL, 'admin', 'active', 1, 'user', '0,0', NULL, NULL, NULL, NULL, 3, 141, '2019-06-10 16:22:38', 1, '2019-07-17 17:05:52', 1, NULL),
+(5, '', 'Rariq Islam edit 64', NULL, 'rafiq', '', '3F6B966D00000578-4428630-image-m-80_1492690622006_1563785377.jpg', 'rafiq@gmail.com', 0, '$2y$10$vNmaROhxuSB9K9.uOC8Tf.1qqZ7oQXfziNg7/BlonNHxVxP5iAjMi', 1, '0000-00-00', 'male', '', '', 0, NULL, 'admin', 'active', 1, 'user', '0,0,0,0,0,0', NULL, NULL, NULL, NULL, 1, 137, '2019-07-22 14:47:49', 1, '2019-07-22 15:34:18', 1, NULL),
+(6, '', 'Md. Sariful Islam Sajib', NULL, 'sajib87', '', '16146340_1563786535.jpg', 'sajib87@gmail.com', 0, '$2y$10$lVYYeKgZ/mjvqM1xMu7CMuhAnXD/zJVNDsG4yXu/JfGDGbTRWcF0y', 1, '0000-00-00', 'male', 'Bangladesh', '01677066467', 0, NULL, 'admin', 'active', 1, 'user', '1,3,2', NULL, NULL, NULL, NULL, 0, 0, '2019-07-22 14:52:34', 1, '2019-07-22 15:08:55', 1, NULL),
+(7, '', 'Abdul Momin', NULL, 'abc', '', '0055-ach-090917175504_1563795559.jpg', 'abc@gmail.com', 0, '$2y$10$AFPbgCUXX0wnUzZwGXi5QeiAXX/eAbO/tj0do8tsd2dkgx/EsUvSi', 1, '0000-00-00', 'male', '', '', 0, NULL, 'admin', 'active', 1, 'user', '4', NULL, NULL, NULL, NULL, 4, 138, '2019-07-22 16:32:14', 1, '2019-07-22 17:39:19', 1, NULL),
+(8, '', 'Rariq Islam', NULL, 'rag282', '', '16146340_1563795542.jpg', 'rafiq@gmskd.com', 0, '$2y$10$/nE2FSzrvkEJGgzmU7ZQdeBtScA7OlWU2Bph7RREcFSZWbYtK2SIq', 1, '0000-00-00', 'male', '', '', 0, NULL, 'admin', 'active', 1, 'user', '4', NULL, NULL, NULL, NULL, 1, 137, '2019-07-22 17:36:51', 1, '2019-07-22 17:39:02', 1, NULL),
+(9, '', 'MD ABDUR RAHIM', NULL, 'rahim', '', '', 'drsc.narsingdi@brac.net', 0, '$2y$10$SP0QtX5HQtpLpJzMb1TroOuI9HrjcXzzifxHR2UlVln8uHUhOT5We', 1, '0000-00-00', 'male', '', '01713158364', 0, NULL, 'admin', 'active', 1, 'user', '4', NULL, NULL, NULL, NULL, 5, 152, '2019-07-22 17:41:55', 1, '2019-09-02 10:02:19', 1, NULL),
+(10, '', 'Sabina Yesmin', NULL, 'sabina', '', 'Preeti_Singh_(3)(1)_1563795804.jpg', 'sabina@gmail.com', 0, '$2y$10$Bmge4Drxa9TeNHTZ1CxLFONRRJyLgVlNir5Mvw37UAOv4i/3w.e6q', 1, '0000-00-00', 'male', '', '01658956214', 0, NULL, 'admin', 'active', 1, 'user', '4', NULL, NULL, NULL, NULL, 6, 143, '2019-07-22 17:43:24', 1, '2019-07-22 17:43:24', 1, NULL),
+(11, '', 'Mohiful Kabir Saimon', NULL, 'saimon', '', '6323_1567397238.jpg', 'drsc.cumilla@brac.net', 0, '$2y$10$5B9WW90Fuvm4VCZUVOS4m.BSlY.q5BczAKTidQAU9zcIPGnpvnCNa', 1, '0000-00-00', 'male', '', '01729485130', 0, NULL, 'admin', 'active', 1, 'user', '4', NULL, NULL, NULL, NULL, 7, 152, '2019-07-22 17:44:32', 1, '2019-09-02 10:08:25', 1, NULL),
+(12, '', 'Shimul Hasan', NULL, 'shemul', '', 'PassportphotoExample2_1563795916.jpg', 'shemul@gmail.com', 0, '$2y$10$XYriO.DmL8sb6Ckw1ktSDO0EruvNjFTS1RuW7gU7Qhu0t3k1N0NXq', 1, '0000-00-00', 'male', '', '01895623589', 0, NULL, 'admin', 'active', 1, 'user', '4', NULL, NULL, NULL, NULL, 8, 143, '2019-07-22 17:45:16', 1, '2019-07-22 17:45:16', 1, NULL),
+(13, '', 'Mosharaf Hossain', NULL, 'mosharaf', '', 'Mauro-profile-picture_1563796090.jpg', 'mosharaf@gmail.com', 0, '$2y$10$olgQeawVbYM9ycNYr1EFludEQ7Ei9tOngyf3Dnde9PGGV/HbIcyY6', 1, '0000-00-00', 'male', '', '01589658526', 0, NULL, 'admin', 'active', 1, 'user', '4', NULL, NULL, NULL, NULL, 1, 143, '2019-07-22 17:48:10', 1, '2019-07-22 17:48:10', 1, NULL),
+(14, '', 'Samrat Hasan', NULL, 'samrat', '', '', 'samrat@gmail.com', 0, '$2y$10$5xVdsgzmCkjoNfOv6jOwXuUSMg7hykxtEnlUiy6JkJYIfeED.k/Ry', 1, '0000-00-00', 'male', '', '', 0, NULL, 'admin', 'active', 1, 'user', '4', NULL, NULL, NULL, NULL, 4, 137, '2019-07-22 17:49:58', 1, '2019-07-22 17:49:58', 1, NULL),
+(15, '', 'Zakir Hossain', NULL, 'zar763r', '', '', 'zakir987@gmail.com', 0, '$2y$10$6N5wLS9Vpi/5HLtDBHD/uur74nlnLfeQJAm05k.JGUEurw5THt7p6', 1, '0000-00-00', 'male', '', '', 0, NULL, 'admin', 'active', 1, 'user', '4', NULL, NULL, NULL, NULL, 0, 0, '2019-07-23 11:47:51', 1, '2019-09-03 12:46:05', 1, NULL),
+(16, '', 'Head Office', NULL, 'admin', '', '', 'admin@brac.net', 0, '$2y$10$1N7i5RK.g40bhoHEpRYFVutjls1cE2nJi08MK46sDMa/l5f.aKQYi', 1, '0000-00-00', 'male', '', '', 0, NULL, 'admin', 'active', 1, 'user', '1', NULL, NULL, NULL, NULL, 0, 0, '2019-08-26 13:18:52', 1, '2019-08-26 13:18:52', 1, NULL),
+(17, '', 'Business Associate', NULL, 'Business', '', '', 'business@brac.net', 0, '$2y$10$3iwAWbQI1lU38xz3Ry/oZ.HyVFuFUIp2gqJhKvin.wbJJqI3lXcn.', 1, '0000-00-00', 'male', '', '', 0, NULL, 'admin', 'active', 1, 'user', '3', NULL, NULL, NULL, NULL, 0, 0, '2019-08-26 16:16:36', 1, '2019-08-26 16:16:36', 1, NULL),
+(18, '', 'Ashrafia Rabbi', NULL, 'amiami', '', 'download_1567396739.jpg', 'rabbi@gmail.com', 0, '$2y$10$BpyxsCeX7Tllp7wSCw3.xOaQfce5BkYHpUoKyP9/xu29vci1z5Hjq', 1, '0000-00-00', 'male', '', '01718987654', 0, NULL, 'admin', 'active', 1, 'user', '4', NULL, NULL, NULL, NULL, 4, 143, '2019-09-02 09:58:59', 1, '2019-09-02 10:04:50', 1, NULL),
+(19, '', 'Demo User', NULL, 'demo', '', '17241-200_1567493699.png', 'admin@demo.com', 0, '$2y$10$4Et9nxe51gL/IP/41dlB7eXTS7Mb9Q8CGmnms99Y7YMdxtfMJnnMm', 1, '0000-00-00', 'male', '', '', 0, NULL, 'admin', 'active', 1, 'user', '1', NULL, NULL, NULL, NULL, 0, 0, '2019-09-03 12:54:59', 1, '2020-07-28 08:32:15', 1, 0),
+(20, '', 'Ashraful Kabir', NULL, 'ashraful', '', '', 'ashraful@gmail.com', 0, '$2y$10$AKxHRvHU3tpIya1y0aYiSuP3eOs4q0frJuKhaBsjk2P4cCCzijdeW', 1, '0000-00-00', 'male', '', '01782088923', 0, NULL, 'admin', 'active', 1, 'user', '4', NULL, NULL, NULL, NULL, 4, 138, '2019-09-12 18:56:17', 1, '2019-09-12 18:56:17', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -2859,7 +2860,44 @@ INSERT INTO `dev_user_activities` (`pk_activity_log`, `activity_msg`, `activity_
 (1011, 'Basic information of participant profile Name (ID: C-20-07-000011) has been updated.', '', 'update', 'success', '2020-07-22 10:07:27', 1),
 (1012, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-07-24 09:07:44', 1),
 (1013, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-07-26 10:05:28', 1),
-(1014, 'Jack (ID: dev_errin) has been turned off', '', 'update', 'success', '2020-07-26 17:51:12', 1);
+(1014, 'Jack (ID: dev_errin) has been turned off', '', 'update', 'success', '2020-07-26 17:51:12', 1),
+(1015, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-07-27 11:17:53', 1),
+(1016, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-07-28 08:10:41', 1),
+(1017, 'Jack (ID: dev_email_template_manager) has been turned off', '', 'update', 'success', '2020-07-28 08:22:11', 1),
+(1018, 'Jack (ID: dev_activity_management_v1) has been turned off', '', 'update', 'success', '2020-07-28 08:22:25', 1),
+(1019, 'Jack (ID: dev_batch_management) has been turned off', '', 'update', 'success', '2020-07-28 08:22:27', 1),
+(1020, 'Jack (ID: dev_batch_schedule) has been turned off', '', 'update', 'success', '2020-07-28 08:22:28', 1),
+(1021, 'Jack (ID: dev_branch_management) has been turned off', '', 'update', 'success', '2020-07-28 08:22:30', 1),
+(1022, 'Jack (ID: dev_profile_management) has been turned off', '', 'update', 'success', '2020-07-28 08:22:45', 1),
+(1023, 'Jack (ID: dev_course_management) has been turned off', '', 'update', 'success', '2020-07-28 08:22:53', 1),
+(1024, 'Jack (ID: dev_documents_management) has been turned off', '', 'update', 'success', '2020-07-28 08:22:56', 1),
+(1025, 'Jack (ID: dev_financial_management) has been turned off', '', 'update', 'success', '2020-07-28 08:22:57', 1),
+(1026, 'Jack (ID: dev_followup_management) has been turned off', '', 'update', 'success', '2020-07-28 08:22:58', 1),
+(1027, 'Jack (ID: dev_lookup_management) has been turned off', '', 'update', 'success', '2020-07-28 08:22:59', 1),
+(1028, 'Jack (ID: dev_product_management) has been turned off', '', 'update', 'success', '2020-07-28 08:23:00', 1),
+(1029, 'Jack (ID: dev_project_management) has been turned off', '', 'update', 'success', '2020-07-28 08:23:01', 1),
+(1030, 'Jack (ID: dev_report_management) has been turned off', '', 'update', 'success', '2020-07-28 08:23:05', 1),
+(1031, 'Jack (ID: dev_sale_management) has been turned off', '', 'update', 'success', '2020-07-28 08:23:05', 1),
+(1032, 'Jack (ID: dev_staff_management) has been turned off', '', 'update', 'success', '2020-07-28 08:23:08', 1),
+(1033, 'Jack (ID: dev_stock_management) has been turned off', '', 'update', 'success', '2020-07-28 08:23:09', 1),
+(1034, 'Jack (ID: dev_support_management) has been turned off', '', 'update', 'success', '2020-07-28 08:23:09', 1),
+(1035, 'Jack (ID: dev_tag_management) has been turned off', '', 'update', 'success', '2020-07-28 08:23:11', 1),
+(1036, 'Jack (ID: dev_vendor_management) has been turned off', '', 'update', 'success', '2020-07-28 08:23:11', 1),
+(1037, 'Jack (ID: dev_profile_management) has been turned on', '', 'update', 'success', '2020-07-28 08:25:17', 1),
+(1038, '3DEVs IT LTD has logged out.', '', 'logout', 'success', '2020-07-28 08:26:17', 1),
+(1039, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-07-28 08:26:36', 1),
+(1040, 'Jack (ID: dev_project_management) has been turned on', '', 'update', 'success', '2020-07-28 08:28:38', 1),
+(1041, 'The user (ID: 19) has been updated.', '', 'update', 'success', '2020-07-28 08:30:59', 1),
+(1042, 'The user (ID: 19) has been updated.', '', 'update', 'success', '2020-07-28 08:32:15', 1),
+(1043, '3DEVs IT LTD has logged out.', '', 'logout', 'success', '2020-07-28 08:32:22', 1),
+(1044, 'Demo User has logged in.', '', 'login', 'success', '2020-07-28 08:32:37', 19),
+(1045, 'Permissions for the role (ID: ) has been updated.', '', 'update', 'success', '2020-07-28 08:33:16', 19),
+(1046, 'Demo User has logged out.', '', 'logout', 'success', '2020-07-28 08:33:22', 19),
+(1047, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-07-28 08:33:28', 1),
+(1048, 'Jack (ID: dev_profile_management) has been turned off', '', 'update', 'success', '2020-07-28 08:33:38', 1),
+(1049, 'Jack (ID: dev_project_management) has been turned off', '', 'update', 'success', '2020-07-28 08:33:40', 1),
+(1050, '3DEVs IT LTD has logged out.', '', 'logout', 'success', '2020-07-28 08:34:03', 1),
+(1051, 'Demo User has logged in.', '', 'login', 'success', '2020-07-28 08:34:08', 19);
 
 -- --------------------------------------------------------
 
@@ -2954,7 +2992,7 @@ CREATE TABLE `dev_user_roles` (
 --
 
 INSERT INTO `dev_user_roles` (`pk_role_id`, `role_slug`, `role_name`, `role_description`, `role_permissions`) VALUES
-(1, 'admin', 'Admin', 'Head Office Administration', 'a:60:{s:22:\"manage_user_activities\";s:3:\"yes\";s:21:\"flush_user_activities\";s:3:\"yes\";s:19:\"access_to_dashboard\";s:3:\"yes\";s:12:\"manage_users\";s:3:\"yes\";s:12:\"manage_roles\";s:3:\"yes\";s:17:\"manage_activities\";s:3:\"yes\";s:14:\"manage_batches\";s:3:\"yes\";s:9:\"add_batch\";s:3:\"yes\";s:10:\"edit_batch\";s:3:\"yes\";s:15:\"batch_schedules\";s:3:\"yes\";s:18:\"add_batch_schedule\";s:3:\"yes\";s:19:\"edit_batch_schedule\";s:3:\"yes\";s:15:\"manage_branches\";s:3:\"yes\";s:10:\"add_branch\";s:3:\"yes\";s:11:\"edit_branch\";s:3:\"yes\";s:22:\"configure_branch_types\";s:3:\"yes\";s:17:\"search_case_study\";s:3:\"yes\";s:16:\"manage_customers\";s:3:\"yes\";s:12:\"add_customer\";s:3:\"yes\";s:13:\"edit_customer\";s:3:\"yes\";s:17:\"manage_potentials\";s:3:\"yes\";s:13:\"add_potential\";s:3:\"yes\";s:14:\"edit_potential\";s:3:\"yes\";s:14:\"manage_courses\";s:3:\"yes\";s:10:\"add_course\";s:3:\"yes\";s:11:\"edit_course\";s:3:\"yes\";s:16:\"manage_documents\";s:3:\"yes\";s:15:\"upload_document\";s:3:\"yes\";s:17:\"download_document\";s:3:\"yes\";s:15:\"delete_document\";s:3:\"yes\";s:12:\"manage_cases\";s:3:\"yes\";s:8:\"add_case\";s:3:\"yes\";s:9:\"edit_case\";s:3:\"yes\";s:17:\"manage_financials\";s:3:\"yes\";s:13:\"add_financial\";s:3:\"yes\";s:14:\"edit_financial\";s:3:\"yes\";s:16:\"manage_followups\";s:3:\"yes\";s:12:\"add_followup\";s:3:\"yes\";s:13:\"edit_followup\";s:3:\"yes\";s:15:\"manage_products\";s:3:\"yes\";s:11:\"add_product\";s:3:\"yes\";s:12:\"edit_product\";s:3:\"yes\";s:15:\"manage_projects\";s:3:\"yes\";s:11:\"add_project\";s:3:\"yes\";s:12:\"edit_project\";s:3:\"yes\";s:12:\"manage_sales\";s:3:\"yes\";s:8:\"add_sale\";s:3:\"yes\";s:9:\"edit_sale\";s:3:\"yes\";s:13:\"manage_staffs\";s:3:\"yes\";s:9:\"add_staff\";s:3:\"yes\";s:10:\"edit_staff\";s:3:\"yes\";s:13:\"manage_stocks\";s:3:\"yes\";s:9:\"add_stock\";s:3:\"yes\";s:10:\"edit_stock\";s:3:\"yes\";s:15:\"manage_supports\";s:3:\"yes\";s:11:\"add_support\";s:3:\"yes\";s:12:\"edit_support\";s:3:\"yes\";s:14:\"manage_vendors\";s:3:\"yes\";s:10:\"add_vendor\";s:3:\"yes\";s:11:\"edit_vendor\";s:3:\"yes\";}'),
+(1, 'admin', 'Admin', 'Head Office Administration', 'a:10:{s:19:\"access_to_dashboard\";s:3:\"yes\";s:16:\"manage_customers\";s:3:\"yes\";s:12:\"add_customer\";s:3:\"yes\";s:13:\"edit_customer\";s:3:\"yes\";s:12:\"manage_cases\";s:3:\"yes\";s:8:\"add_case\";s:3:\"yes\";s:9:\"edit_case\";s:3:\"yes\";s:15:\"manage_projects\";s:3:\"yes\";s:11:\"add_project\";s:3:\"yes\";s:12:\"edit_project\";s:3:\"yes\";}'),
 (2, 'field-worker', 'Returnee', 'Returnee Management', 'a:0:{}'),
 (3, 'manager', 'Business', 'Business Management', 'a:35:{s:19:\"access_to_dashboard\";s:3:\"yes\";s:14:\"manage_batches\";s:3:\"yes\";s:9:\"add_batch\";s:3:\"yes\";s:10:\"edit_batch\";s:3:\"yes\";s:15:\"batch_schedules\";s:3:\"yes\";s:18:\"add_batch_schedule\";s:3:\"yes\";s:19:\"edit_batch_schedule\";s:3:\"yes\";s:15:\"manage_branches\";s:3:\"yes\";s:10:\"add_branch\";s:3:\"yes\";s:11:\"edit_branch\";s:3:\"yes\";s:22:\"configure_branch_types\";s:3:\"yes\";s:17:\"manage_potentials\";s:3:\"yes\";s:13:\"add_potential\";s:3:\"yes\";s:14:\"edit_potential\";s:3:\"yes\";s:14:\"manage_courses\";s:3:\"yes\";s:10:\"add_course\";s:3:\"yes\";s:11:\"edit_course\";s:3:\"yes\";s:17:\"manage_financials\";s:3:\"yes\";s:13:\"add_financial\";s:3:\"yes\";s:14:\"edit_financial\";s:3:\"yes\";s:15:\"manage_products\";s:3:\"yes\";s:11:\"add_product\";s:3:\"yes\";s:12:\"edit_product\";s:3:\"yes\";s:12:\"manage_sales\";s:3:\"yes\";s:8:\"add_sale\";s:3:\"yes\";s:9:\"edit_sale\";s:3:\"yes\";s:13:\"manage_staffs\";s:3:\"yes\";s:9:\"add_staff\";s:3:\"yes\";s:10:\"edit_staff\";s:3:\"yes\";s:13:\"manage_stocks\";s:3:\"yes\";s:9:\"add_stock\";s:3:\"yes\";s:10:\"edit_stock\";s:3:\"yes\";s:14:\"manage_vendors\";s:3:\"yes\";s:10:\"add_vendor\";s:3:\"yes\";s:11:\"edit_vendor\";s:3:\"yes\";}'),
 (4, 'staff', 'Manager', 'Branch Manager', NULL);
@@ -3555,7 +3593,7 @@ ALTER TABLE `dev_users_roles_relation`
 -- AUTO_INCREMENT for table `dev_user_activities`
 --
 ALTER TABLE `dev_user_activities`
-  MODIFY `pk_activity_log` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1015;
+  MODIFY `pk_activity_log` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1052;
 
 --
 -- AUTO_INCREMENT for table `dev_user_login_logout`

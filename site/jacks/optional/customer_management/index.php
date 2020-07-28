@@ -431,7 +431,7 @@ class dev_customer_management {
             ";
         } else {
             $from = "FROM dev_immediate_supports 
-                    LEFT JOIN dev_migrations ON (dev_migrations.fk_customer_id = dev_customers.pk_customer_id)
+
 
             ";
         }

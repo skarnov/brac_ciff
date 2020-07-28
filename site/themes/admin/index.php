@@ -27,9 +27,9 @@ $totalReturneeCustomer = $returneeManager->get_customers(array('select_fields' =
 
 $projectManagement = jack_obj('dev_project_management');
 
-$projects = $projectManagement->get_projects();
-$totalProjects = $projects['total'];
-$projects = $projects['data'];
+//$projects = $projectManagement->get_projects();
+//$totalProjects = $projects['total'];
+//$projects = $projects['data'];
 
 $projectSupportCount = $devdb->get_results("SELECT fk_project_id, COUNT(*) AS total FROM dev_supports GROUP BY fk_project_id;", 'fk_project_id');
 
@@ -94,7 +94,7 @@ if (has_permission('access_to_dashboard')) {
         if (has_permission('migration_reports')) {
             if (has_permission('manage_detainees')) {
                 ?>
-                <div class="col-sm-4">
+<!--                <div class="col-sm-4">
                     <div class="stat-panel">
                         <a href="<?php echo url('admin/dev_customer_management/manage_detainee_migrants') ?>" class="stat-cell bg-warning valign-middle">
                             <i class="fa fa-globe bg-icon"></i>
@@ -102,9 +102,9 @@ if (has_permission('access_to_dashboard')) {
                             <span class="text-xlg"><br>On-Migration (Detainee Migrants)</span><br>
                         </a>
                     </div>
-                </div>
+                </div>-->
             <?php } ?>
-            <div class="col-sm-4">
+<!--            <div class="col-sm-4">
                 <div class="stat-panel">
                     <a href="<?php echo url('admin/dev_customer_management/manage_returnee_migrants') ?>" class="stat-cell bg-info valign-middle">
                         <i class="fa fa-undo bg-icon"></i>
@@ -112,13 +112,13 @@ if (has_permission('access_to_dashboard')) {
                         <span class="text-xlg">Post-Migration (Returnee and Reintegration)</span><br>
                     </a>
                 </div>
-            </div>
+            </div>-->
         <?php } ?>
     </div>
     <?php
     if (has_permission('migration_reports')) {
         ?>
-        <fieldset>
+<!--        <fieldset>
             <legend>Supports</legend>
             <div class="row">
                 <div class="col-sm-4">
@@ -195,7 +195,7 @@ if (has_permission('access_to_dashboard')) {
                     </div>
                 </div>
             </div>
-        </fieldset>
+        </fieldset>-->
     <?php } ?>
     <!--    <div class="row">
             <div class="col-sm-6">
