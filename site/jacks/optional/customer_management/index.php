@@ -128,10 +128,10 @@ class dev_customer_management {
             'nid' => 'dev_customers.nid_number',
             'birth' => 'dev_customers.birth_reg_number',
             'passport' => 'dev_customers.passport_number',
-            'division' => 'dev_customers.present_division',
-            'district' => 'dev_customers.present_district',
-            'sub_district' => 'dev_customers.present_sub_district',
-            'ps' => 'dev_customers.present_police_station',
+            'division' => 'dev_customers.permanent_division',
+            'district' => 'dev_customers.permanent_district',
+            'sub_district' => 'dev_customers.permanent_sub_district',
+            'ps' => 'dev_customers.permanent_police_station',
             'entry_date' => 'dev_customers.create_date',
             'customer_type' => 'dev_customers.customer_type',
             'customer_status' => 'dev_customers.customer_status',
@@ -425,31 +425,27 @@ class dev_customer_management {
 
         $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
 
-
-        $from = "FROM dev_immediate_supports 
+        if ($param['listing']) {
+            $from = "FROM dev_immediate_supports 
 
             ";
+        } else {
+            $from = "FROM dev_immediate_supports 
+                    LEFT JOIN dev_migrations ON (dev_migrations.fk_customer_id = dev_customers.pk_customer_id)
+
+            ";
+        }
+
+
+
 
         $where = " WHERE 1";
         $conditions = " ";
         $sql = $select . $from . $where;
-        $count_sql = "SELECT COUNT(dev_immediate_supports.pk_customer_id) AS TOTAL " . $from . $where;
+        $count_sql = "SELECT COUNT(dev_immediate_supports.fk_customer_id) AS TOTAL " . $from . $where;
 
         $loopCondition = array(
-//            'customer_id' => 'dev_customers.pk_customer_id',
             'id' => 'dev_immediate_supports.fk_customer_id',
-//            'name' => 'dev_customers.full_name',
-//            'nid' => 'dev_customers.nid_number',
-//            'birth' => 'dev_customers.birth_reg_number',
-//            'passport' => 'dev_customers.passport_number',
-//            'division' => 'dev_customers.present_division',
-//            'district' => 'dev_customers.present_district',
-//            'sub_district' => 'dev_customers.present_sub_district',
-//            'ps' => 'dev_customers.present_police_station',
-//            'entry_date' => 'dev_customers.create_date',
-//            'customer_type' => 'dev_customers.customer_type',
-//            'customer_status' => 'dev_customers.customer_status',
-//            'branch_id' => 'dev_customers.fk_branch_id',
         );
 
         $conditions .= sql_condition_maker($loopCondition, $param);
@@ -488,11 +484,7 @@ class dev_customer_management {
 
         if (!$ret['error']) {
             $immediate_support = array();
-
-
-
-
-
+            
             $data_type = $params['form_data']['immediate_support'];
             $data_types = is_array($data_type) ? implode(',', $data_type) : '';
             $immediate_support['immediate_support'] = $data_types;
@@ -514,21 +506,35 @@ class dev_customer_management {
 
 
 
-//            $reintegration_plan = array();
-//
-//            
-//            if ($is_update) {
-//                $ret['migration_update'] = $devdb->insert_update('dev_migrations', $migration_data, " fk_customer_id = '" . $is_update . "'");
-//            } else {
-//                $ret['migration_new_insert'] = $devdb->insert_update('dev_migrations', $migration_data, " fk_customer_id = '" . $ret['customer_insert']['success'] . "'");
-//            }
+            $reintegration_plan = array();
+            
+            
+            if ($params['form_data']['new_service_requested'] == NULL) {
+                $data_type = $params['form_data']['service_requested'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $reintegration_plan['service_requested'] = $data_types;
+            } elseif ($params['form_data']['service_requested'] == NULL) {
+                $reintegration_plan['service_requested'] = $params['form_data']['new_service_requested'];
+            } elseif ($params['form_data']['service_requested'] != NULL && $params['form_data']['new_service_requested'] != NULL) {
+                $data_type = $params['form_data']['service_requested'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $reintegration_plan['service_requested'] = $params['form_data']['new_service_requested'] . ',' . $data_types;
+            }
+            
+
+            
+            if ($is_update) {
+                $ret['reintegration_update'] = $devdb->insert_update('dev_reintegration_plan', $reintegration_plan, " fk_customer_id = '" . $is_update . "'");
+            } else {
+                $ret['reintegration_new_insert'] = $devdb->insert_update('dev_reintegration_plan', $reintegration_plan, " fk_customer_id = '" . $ret['customer_insert']['success'] . "'");
+            }
 
 
             $psycho_supports = array();
-
+            
             $psycho_supports['first_meeting'] = date('Y-m-d', strtotime($params['form_data']['first_meeting']));
-            
-            
+
+
 
             if ($params['form_data']['new_problem_identified'] == NULL) {
                 $data_type = $params['form_data']['problem_identified'];
@@ -541,17 +547,17 @@ class dev_customer_management {
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
                 $psycho_supports['problem_identified'] = $params['form_data']['new_problem_identified'] . ',' . $data_types;
             }
-            
-            
+
+
             $psycho_supports['session_duration'] = $params['form_data']['session_duration'];
-            
+
             if ($params['form_data']['new_place']) {
                 $economic_profile_data['session_place'] = $params['form_data']['new_place'];
             } else {
                 $economic_profile_data['session_place'] = $params['form_data']['session_place'];
             }
-            
-            
+
+
 //            if ($is_update) {
 //                $ret['migration_update'] = $devdb->insert_update('dev_migrations', $migration_data, " fk_customer_id = '" . $is_update . "'");
 //            } else {
