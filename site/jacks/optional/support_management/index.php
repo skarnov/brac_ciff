@@ -508,55 +508,7 @@ class dev_support_management {
         return $ret;
     }
 
-    function add_edit_session($params = array()) {
-        global $devdb, $_config;
-
-        $ret = array('success' => array(), 'error' => array());
-        $is_update = $params['edit'] ? $params['edit'] : array();
-
-        $oldData = array();
-        if ($is_update) {
-            $oldData = $this->get_session(array('id' => $is_update, 'single' => true));
-            if (!$oldData) {
-                return array('error' => ['Invalid psychosocial session id, no data found']);
-            }
-        }
-
-        foreach ($params['required'] as $i => $v) {
-            if (isset($params['form_data'][$i]))
-                $temp = form_validator::required($params['form_data'][$i]);
-            if ($temp !== true) {
-                $ret['error'][] = $v . ' ' . $temp;
-            }
-        }
-
-        $temp = form_validator::_length($params['required']['entry_date'], 490);
-        if ($temp !== true)
-            $ret['error'][] = 'Entry Date ' . $temp;
-
-        if (!$ret['error']) {
-            $insert_data = array();
-            $insert_data['fk_psycho_support_id'] = $params['form_data']['fk_psycho_support_id'];
-            $insert_data['fk_customer_id'] = $params['form_data']['fk_customer_id'];
-            $insert_data['entry_date'] = date('Y-m-d', strtotime($params['form_data']['entry_date']));
-            $insert_data['entry_time'] = $params['form_data']['entry_time'];
-            $insert_data['session_place'] = $params['form_data']['session_place'];
-            $insert_data['session_comments'] = $params['form_data']['session_comments'];
-            $insert_data['initial_plan'] = $params['form_data']['initial_plan'];
-            $insert_data['activities_description'] = $params['form_data']['activities_description'];
-            $insert_data['next_date'] = date('Y-m-d', strtotime($params['form_data']['next_date']));
-            $insert_data['followup_comments'] = $params['form_data']['followup_comments'];
-
-            if ($is_update)
-                $ret = $devdb->insert_update('dev_psycho_sessions', $insert_data, " pk_psycho_session_id = '" . $is_update . "'");
-            else {
-                $ret = $devdb->insert_update('dev_psycho_sessions', $insert_data);
-                $update = "UPDATE dev_supports SET total_session = total_session + 1 WHERE pk_support_id = '" . $params['form_data']['pk_support_id'] . "'";
-                $devdb->query($update);
-            }
-        }
-        return $ret;
-    }
+    
 
     function add_edit_counsellor($params = array()) {
         global $devdb, $_config;
@@ -628,100 +580,52 @@ class dev_support_management {
         return $ret;
     }
 
-    function add_edit_family_counselling($params = array()) {
-        global $devdb, $_config;
+//    function add_edit_family_counselling($params = array()) {
+//        global $devdb, $_config;
+//
+//        $ret = array('success' => array(), 'error' => array());
+//        $is_update = $params['edit'] ? $params['edit'] : array();
+//
+//        $oldData = array();
+//        if ($is_update) {
+//            $oldData = $this->get_family_counselling(array('id' => $is_update, 'single' => true));
+//            if (!$oldData) {
+//                return array('error' => ['Invalid psychosocial followup id, no data found']);
+//            }
+//        }
+//
+//        foreach ($params['required'] as $i => $v) {
+//            if (isset($params['form_data'][$i]))
+//                $temp = form_validator::required($params['form_data'][$i]);
+//            if ($temp !== true) {
+//                $ret['error'][] = $v . ' ' . $temp;
+//            }
+//        }
+//
+//        $temp = form_validator::_length($params['required']['entry_date'], 490);
+//        if ($temp !== true)
+//            $ret['error'][] = 'Entry Date ' . $temp;
+//
+//        if (!$ret['error']) {
+//            $insert_data = array();
+//            $insert_data['fk_psycho_support_id'] = $params['form_data']['fk_psycho_support_id'];
+//            $insert_data['fk_customer_id'] = $params['form_data']['fk_customer_id'];
+//            $insert_data['entry_date'] = date('Y-m-d', strtotime($params['form_data']['entry_date']));
+//            $insert_data['entry_time'] = $params['form_data']['entry_time'];
+//            $insert_data['session_place'] = $params['form_data']['session_place'];
+//            $insert_data['session_comments'] = $params['form_data']['session_comments'];
+//            if ($is_update)
+//                $ret = $devdb->insert_update('dev_psycho_family_counselling', $insert_data, " pk_psycho_family_counselling_id = '" . $is_update . "'");
+//            else {
+//                $ret = $devdb->insert_update('dev_psycho_family_counselling', $insert_data);
+//                $update = "UPDATE dev_supports SET family_counselling = family_counselling + 1 WHERE pk_support_id = '" . $params['form_data']['pk_support_id'] . "'";
+//                $devdb->query($update);
+//            }
+//        }
+//        return $ret;
+//    }
 
-        $ret = array('success' => array(), 'error' => array());
-        $is_update = $params['edit'] ? $params['edit'] : array();
-
-        $oldData = array();
-        if ($is_update) {
-            $oldData = $this->get_family_counselling(array('id' => $is_update, 'single' => true));
-            if (!$oldData) {
-                return array('error' => ['Invalid psychosocial followup id, no data found']);
-            }
-        }
-
-        foreach ($params['required'] as $i => $v) {
-            if (isset($params['form_data'][$i]))
-                $temp = form_validator::required($params['form_data'][$i]);
-            if ($temp !== true) {
-                $ret['error'][] = $v . ' ' . $temp;
-            }
-        }
-
-        $temp = form_validator::_length($params['required']['entry_date'], 490);
-        if ($temp !== true)
-            $ret['error'][] = 'Entry Date ' . $temp;
-
-        if (!$ret['error']) {
-            $insert_data = array();
-            $insert_data['fk_psycho_support_id'] = $params['form_data']['fk_psycho_support_id'];
-            $insert_data['fk_customer_id'] = $params['form_data']['fk_customer_id'];
-            $insert_data['entry_date'] = date('Y-m-d', strtotime($params['form_data']['entry_date']));
-            $insert_data['entry_time'] = $params['form_data']['entry_time'];
-            $insert_data['session_place'] = $params['form_data']['session_place'];
-            $insert_data['session_comments'] = $params['form_data']['session_comments'];
-            if ($is_update)
-                $ret = $devdb->insert_update('dev_psycho_family_counselling', $insert_data, " pk_psycho_family_counselling_id = '" . $is_update . "'");
-            else {
-                $ret = $devdb->insert_update('dev_psycho_family_counselling', $insert_data);
-                $update = "UPDATE dev_supports SET family_counselling = family_counselling + 1 WHERE pk_support_id = '" . $params['form_data']['pk_support_id'] . "'";
-                $devdb->query($update);
-            }
-        }
-        return $ret;
-    }
-
-    function add_edit_completion($params = array()) {
-        global $devdb, $_config;
-
-        $ret = array('success' => array(), 'error' => array());
-        $is_update = $params['edit'] ? $params['edit'] : array();
-
-        $oldData = array();
-        if ($is_update) {
-            $oldData = $this->get_completion(array('id' => $is_update, 'single' => true));
-            if (!$oldData) {
-                return array('error' => ['Invalid psychosocial completion id, no data found']);
-            }
-        }
-
-        foreach ($params['required'] as $i => $v) {
-            if (isset($params['form_data'][$i]))
-                $temp = form_validator::required($params['form_data'][$i]);
-            if ($temp !== true) {
-                $ret['error'][] = $v . ' ' . $temp;
-            }
-        }
-
-        if (!$ret['error']) {
-            $insert_data = array();
-            $support_id = $params['form_data']['support_id'];
-            $insert_data['fk_psycho_support_id'] = $params['form_data']['fk_psycho_support_id'];
-            $insert_data['fk_customer_id'] = $params['form_data']['fk_customer_id'];
-            $insert_data['is_completed'] = $params['form_data']['is_completed'];
-            $insert_data['dropout_reason'] = $params['form_data']['dropout_reason'];
-            $insert_data['final_evaluation'] = $params['form_data']['final_evaluation'];
-            $insert_data['counselling_impact'] = $params['form_data']['counselling_impact'];
-            $insert_data['client_comments'] = $params['form_data']['client_comments'];
-            $insert_data['counsellor_comments'] = $params['form_data']['counsellor_comments'];
-
-            if ($is_update)
-                $ret = $devdb->insert_update('dev_psycho_completions', $insert_data, " pk_psycho_completion_id = '" . $is_update . "'");
-            else {
-                $ret = $devdb->insert_update('dev_psycho_completions', $insert_data);
-                if ($insert_data['is_completed'] == 'yes') {
-                    $update = "UPDATE dev_supports SET support_status = 'completed', end_date = '" . date('Y-m-d', strtotime($params['form_data']['entry_date'])) . "' WHERE pk_support_id = '$support_id'";
-                    $devdb->query($update);
-                } else if ($insert_data['is_completed'] == 'no') {
-                    $update = "UPDATE dev_supports SET support_status = 'dropout', end_date = '" . date('Y-m-d', strtotime($params['form_data']['entry_date'])) . "' WHERE pk_support_id = '$support_id'";
-                    $devdb->query($update);
-                }
-            }
-        }
-        return $ret;
-    }
+  
 
     function add_edit_evaluation($params = array()) {
         global $devdb, $_config;

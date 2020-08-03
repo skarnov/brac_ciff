@@ -296,13 +296,12 @@ filterForm($filterForm);
                                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="height: 31px;"><i class="fa fa-caret-down"></i></button>
                                 <ul class="dropdown-menu">
                                     <li><a href="<?php echo url('admin/dev_customer_management/manage_customers?action=add_edit_customer&edit=' . $customer['pk_customer_id']) ?>">Edit</a></li>
-                                    <li><a href="#">Evaluate</a></li>
+                                    <li><a href="<?php echo url('admin/dev_customer_management/manage_customers?action=add_edit_evaluate&edit=' . $customer['pk_customer_id']) ?>">Evaluate</a></li>
                                     <li><a href="<?php echo url('admin/dev_customer_management/manage_cases?action=add_edit_case&edit=' . $customer['pk_customer_id']) ?>">Case Management</a></li>
-                                    <li><a href="#">Reintegration Assistance Satisfaction Scale</a></li>
+                                    <li><a href="<?php echo url('admin/dev_customer_management/manage_customers?action=add_edit_satisfaction_scale&edit=' . $customer['pk_customer_id']) ?>">Reintegration Assistance Satisfaction Scale</a></li>
                                 </ul>
                             </div>
                         <?php endif ?>
-                        
                         <?php if (has_permission('delete_customer')): ?>
                             <div class="btn-group btn-group-sm">
                                 <?php
@@ -367,7 +366,6 @@ filterForm($filterForm);
                         value: 'deleteProfileCase'
                     }],
                 callback: function (result) {
-
                     if (result == 'deleteProfile') {
                         window.location.href = '?action=deleteProfile&id=' + logId;
                     }

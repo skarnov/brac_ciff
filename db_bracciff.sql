@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 29, 2020 at 09:28 PM
+-- Generation Time: Aug 03, 2020 at 10:29 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.3
 
@@ -552,7 +552,8 @@ CREATE TABLE `dev_customers` (
 --
 
 INSERT INTO `dev_customers` (`pk_customer_id`, `customer_id`, `full_name`, `father_name`, `mother_name`, `customer_photo`, `marital_status`, `customer_spouse`, `customer_birthdate`, `customer_gender`, `customer_religion`, `nid_number`, `passport_number`, `birth_reg_number`, `bmet_card_number`, `travel_pass`, `educational_qualification`, `customer_mobile`, `emergency_mobile`, `emergency_name`, `emergency_relation`, `present_flat`, `present_house`, `present_road`, `present_village`, `present_ward`, `present_union`, `present_post_office`, `present_post_code`, `present_police_station`, `present_sub_district`, `present_district`, `present_division`, `present_country`, `permanent_flat`, `permanent_house`, `permanent_road`, `permanent_village`, `permanent_ward`, `permanent_union`, `permanent_post_office`, `permanent_post_code`, `permanent_police_station`, `permanent_sub_district`, `permanent_district`, `permanent_division`, `preferred_location`, `last_visited_country`, `customer_status`, `customer_type`, `create_date`, `create_time`, `create_by`, `update_date`, `update_time`, `update_by`, `fk_staff_id`, `fk_branch_id`) VALUES
-(1, 'C-20-07-000011', 'Name', 'Father', 'Mother', NULL, 'divorced', '', '2020-07-21', 'female', NULL, '45478155', '172323GT73', '785456648', NULL, NULL, 'jsc', '01719020278', 'Emergency Mobile No ', 'Name of that person', 'Relation with Participant ', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'sdfgsdf', NULL, 'Goal Batahn', '4', 'Gopal', NULL, NULL, NULL, 'Sot', 'Khulna', 'Khulna', NULL, NULL, 'active', 'ciff', '2020-07-21', '20:03:49', 1, '2020-07-22', '10:07:27', 1, NULL, NULL);
+(1, 'C-20-07-000011', 'Name', 'Father', 'Mother', NULL, 'divorced', '', '2020-07-21', 'female', NULL, '45478155', '172323GT73', '785456648', NULL, NULL, 'jsc', '01719020278', 'Emergency Mobile No ', 'Name of that person', 'Relation with Participant ', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'sdfgsdf', NULL, 'Goal Batahn', '4', 'Gopal', NULL, NULL, NULL, 'Sot', 'Khulna', 'Khulna', NULL, NULL, 'active', 'ciff', '2020-07-21', '20:03:49', 1, '2020-07-22', '10:07:27', 1, NULL, NULL),
+(3, 'C-20-08-000011', 'Full Name', '', '', NULL, '', '', '2020-08-03', '', NULL, '', '', '', NULL, NULL, '', '', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', NULL, '', '', '', NULL, NULL, NULL, '', '', '', NULL, NULL, 'active', 'ciff', '2020-08-03', '10:39:48', 1, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -575,7 +576,8 @@ CREATE TABLE `dev_customer_health` (
 --
 
 INSERT INTO `dev_customer_health` (`pk_customer_health_id`, `fk_customer_id`, `is_physically_challenged`, `disability_type`, `having_chronic_disease`, `disease_type`, `need_psychosocial_support`) VALUES
-(1, 1, '', '', '', '', NULL);
+(1, 1, '', '', '', '', NULL),
+(3, 3, '', '', '', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -619,7 +621,8 @@ CREATE TABLE `dev_customer_skills` (
 --
 
 INSERT INTO `dev_customer_skills` (`pk_customer_skills_id`, `fk_customer_id`, `is_certification_required`, `required_certification`, `have_earner_skill`, `have_skills`, `need_skills`) VALUES
-(1, 1, NULL, '', '', '', NULL);
+(1, 1, NULL, '', '', '', NULL),
+(3, 3, NULL, '', '', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -780,7 +783,8 @@ CREATE TABLE `dev_economic_profile` (
 --
 
 INSERT INTO `dev_economic_profile` (`pk_economic_profile_id`, `fk_customer_id`, `pre_occupation`, `present_occupation`, `present_income`, `total_member`, `male_household_member`, `female_household_member`, `total_dependent_member`, `male_earning_member`, `female_earning_member`, `total_earner`, `household_income`, `household_expenditure`, `personal_savings`, `personal_debt`, `loan_sources`, `have_mortgages`, `mortgage_name`, `mortgage_value`, `current_residence_ownership`, `current_residence_type`) VALUES
-(1, 1, '', '', 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, '', '');
+(1, 1, '', '', 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, '', ''),
+(3, 3, '', '', 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, '', '');
 
 -- --------------------------------------------------------
 
@@ -968,7 +972,35 @@ CREATE TABLE `dev_immediate_supports` (
 --
 
 INSERT INTO `dev_immediate_supports` (`pk_immediate_support_id`, `fk_branch_id`, `fk_staff_id`, `fk_customer_id`, `immediate_support`, `create_date`, `create_time`, `create_by`, `update_date`, `update_time`, `update_by`) VALUES
-(1, NULL, NULL, 1, 'Information provision,Pocket money', NULL, NULL, NULL, '2020-07-30', '01:27:45', 1);
+(1, NULL, NULL, 1, 'Information provision', NULL, NULL, NULL, '2020-07-30', '16:31:37', 1),
+(2, NULL, NULL, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dev_initial_evaluation`
+--
+
+CREATE TABLE `dev_initial_evaluation` (
+  `pk_evaluation_id` bigint(20) NOT NULL,
+  `fk_customer_id` bigint(20) NOT NULL,
+  `is_participant` enum('yes','no') DEFAULT NULL,
+  `justification_project` text DEFAULT NULL,
+  `evaluate_services` text DEFAULT NULL,
+  `create_time` time DEFAULT NULL,
+  `create_date` date DEFAULT NULL,
+  `created_by` bigint(20) DEFAULT NULL,
+  `update_time` time DEFAULT NULL,
+  `update_date` date DEFAULT NULL,
+  `modified_by` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `dev_initial_evaluation`
+--
+
+INSERT INTO `dev_initial_evaluation` (`pk_evaluation_id`, `fk_customer_id`, `is_participant`, `justification_project`, `evaluate_services`, `create_time`, `create_date`, `created_by`, `update_time`, `update_date`, `modified_by`) VALUES
+(1, 1, 'yes', NULL, 'ADSAs,Advance training through referrals,Remigration,Psychosocial Support,asda,ada', NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1173,7 +1205,7 @@ CREATE TABLE `dev_migrations` (
 INSERT INTO `dev_migrations` (`pk_migration_id`, `fk_customer_id`, `is_cheated`, `is_money_deducted`, `is_movement_limitation`, `is_kept_document`, `migration_experience`, `left_port`, `preferred_country`, `departure_date`, `access_path`, `transport_modes`, `migration_type`, `visa_type`, `return_date`, `migration_duration`, `migration_medias`, `migration_cost`, `agency_payment`, `migration_occupation`, `destination_country_leave_reason`, `earned_money`, `sent_money`, `spent_types`, `forced_work`, `excessive_work`, `employer_threatened`, `final_destination`, `migration_reasons`) VALUES
 (1, 99, '', '', '', '', '', 'airport', '', '1970-01-01', '', '', '', '', '1970-01-01', '0', '', 0, 0, '', '', 0, 0, '', NULL, NULL, NULL, NULL, NULL),
 (2, 1, '', '', '', '', NULL, '', '', '1970-01-01', NULL, NULL, '', '', '1970-01-01', 'Year: 0, Month: 0, Days: 0', '{\"departure_media\":null,\"media_relation\":null,\"media_address\":null}', NULL, NULL, '', '', 0, NULL, NULL, '', '', '', '', ''),
-(4, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(4, 3, '', '', '', '', NULL, '', '', '2020-08-03', NULL, NULL, '', '', '2020-08-03', 'Year: 0, Month: 0, Days: 0', '{\"departure_media\":\"\",\"media_relation\":\"\",\"media_address\":\"\"}', NULL, NULL, '', '', 0, NULL, NULL, '', '', '', '', ''),
 (5, 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (6, 5, 'yes', 'yes', 'yes', 'yes', NULL, '1', '3', '20-07-2020', NULL, NULL, 'regular', 'student', '0000-00-00', NULL, '{\"departure_media\":\"6\",\"media_relation\":\"7\",\"media_address\":\"8\"}', NULL, NULL, '13', '', 14, NULL, NULL, 'yes', 'yes', 'yes', '5', 'unemployed'),
 (7, 6, 'yes', 'yes', 'yes', 'yes', NULL, '1', '3', '20-07-2020', NULL, NULL, 'regular', 'student', '0000-00-00', NULL, '{\"departure_media\":\"6\",\"media_relation\":\"7\",\"media_address\":\"8\"}', NULL, NULL, '13', 'no_job', 14, NULL, NULL, 'yes', 'yes', 'yes', '5', 'unemployed'),
@@ -1202,7 +1234,8 @@ INSERT INTO `dev_migrations` (`pk_migration_id`, `fk_customer_id`, `is_cheated`,
 (30, 29, '', '', '', '', NULL, '', '', '2020-07-21', NULL, NULL, '', '', '2020-07-21', 'Year: 0, Month: 0, Days: 0', '{\"departure_media\":\"\",\"media_relation\":\"\",\"media_address\":\"\"}', NULL, NULL, '', '', 0, NULL, NULL, '', '', '', '', ''),
 (31, 30, '', '', '', '', NULL, '', '', '2020-07-21', NULL, NULL, '', '', '2020-07-21', 'Year: 0, Month: 0, Days: 0', '{\"departure_media\":\"\",\"media_relation\":\"\",\"media_address\":\"\"}', NULL, NULL, '', '', 0, NULL, NULL, '', '', '', '', ''),
 (32, 31, '', '', '', '', NULL, '', '', '2020-07-21', NULL, NULL, '', '', '2020-07-21', 'Year: 0, Month: 0, Days: 0', '{\"departure_media\":\"\",\"media_relation\":\"\",\"media_address\":\"\"}', NULL, NULL, '', '', 0, NULL, NULL, '', '', '', '', ''),
-(38, 1, '', '', '', '', NULL, '', '', '1970-01-01', NULL, NULL, '', '', '1970-01-01', 'Year: 0, Month: 0, Days: 0', '{\"departure_media\":null,\"media_relation\":null,\"media_address\":null}', NULL, NULL, '', '', 0, NULL, NULL, '', '', '', '', '');
+(38, 1, '', '', '', '', NULL, '', '', '1970-01-01', NULL, NULL, '', '', '1970-01-01', 'Year: 0, Month: 0, Days: 0', '{\"departure_media\":null,\"media_relation\":null,\"media_address\":null}', NULL, NULL, '', '', 0, NULL, NULL, '', '', '', '', ''),
+(40, 3, '', '', '', '', NULL, '', '', '2020-08-03', NULL, NULL, '', '', '2020-08-03', 'Year: 0, Month: 0, Days: 0', '{\"departure_media\":\"\",\"media_relation\":\"\",\"media_address\":\"\"}', NULL, NULL, '', '', 0, NULL, NULL, '', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -1337,32 +1370,16 @@ CREATE TABLE `dev_psycho_completions` (
   `counselling_impact` text COLLATE utf8_unicode_ci NOT NULL,
   `client_comments` text COLLATE utf8_unicode_ci NOT NULL,
   `counsellor_comments` text COLLATE utf8_unicode_ci NOT NULL,
-  `required_session` enum('yes','no') COLLATE utf8_unicode_ci DEFAULT NULL
+  `required_session` enum('yes','no') COLLATE utf8_unicode_ci DEFAULT NULL,
+  `entry_date` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `dev_psycho_completions`
 --
 
-INSERT INTO `dev_psycho_completions` (`pk_psycho_completion_id`, `fk_psycho_support_id`, `fk_customer_id`, `is_completed`, `dropout_reason`, `review_session`, `final_evaluation`, `counselling_impact`, `client_comments`, `counsellor_comments`, `required_session`) VALUES
-(1, 1, 1, '', '', '', '', '', '', '', ''),
-(2, 1, 1, '', '', '', '', '', '', '', ''),
-(3, 1, 1, '', '', '', '', '', '', '', ''),
-(4, 0, 0, '', '', NULL, '', '', '', '', NULL),
-(5, 0, 0, '', '', NULL, '', '', '', '', NULL),
-(6, 0, 0, '', '', NULL, '', '', '', '', NULL),
-(7, 0, 0, '', '', NULL, '', '', '', '', NULL),
-(8, 0, 0, '', '', NULL, '', '', '', '', NULL),
-(9, 3, 38, 'yes', '', NULL, 'Fully Cured', 'Good', '', '', NULL),
-(10, 6, 80, 'yes', '', NULL, 'Recovered', '', '', '', NULL),
-(11, 6, 80, 'yes', '', NULL, '', '', '', '', NULL),
-(12, 10, 27, 'yes', '', NULL, '', '', '', '', NULL),
-(13, 6, 80, 'yes', '', NULL, '', '', '', '', NULL),
-(14, 6, 80, 'yes', '', NULL, '', '', '', '', NULL),
-(15, 8, 79, 'yes', '', NULL, '', '', '', '', NULL),
-(16, 11, 82, 'yes', '', NULL, 'Final Evaluation Final Evaluation', 'Impact of counselling sessionImpact of counselling session', 'Comments of client Comments of client', 'Counsellor comment Counsellor comment', NULL),
-(17, 11, 82, 'yes', '', NULL, '', '', '', '', NULL),
-(18, 1, 27, 'yes', '', NULL, '', 'hg', '', '', NULL);
+INSERT INTO `dev_psycho_completions` (`pk_psycho_completion_id`, `fk_psycho_support_id`, `fk_customer_id`, `is_completed`, `dropout_reason`, `review_session`, `final_evaluation`, `counselling_impact`, `client_comments`, `counsellor_comments`, `required_session`, `entry_date`) VALUES
+(1, 0, 1, 'yes', '', '', '', '', '', '', 'yes', '2020-07-30');
 
 -- --------------------------------------------------------
 
@@ -1448,8 +1465,12 @@ CREATE TABLE `dev_psycho_family_counselling` (
 --
 
 INSERT INTO `dev_psycho_family_counselling` (`pk_psycho_family_counselling_id`, `fk_psycho_support_id`, `fk_customer_id`, `entry_date`, `entry_time`, `session_place`, `session_comments`, `members_counseled`) VALUES
-(4, NULL, 0, '0000-00-00', '21:45:15', '453', '', '3523'),
-(5, NULL, 1, '2020-07-30', '01:23:15', '', '', '');
+(4, NULL, 0, '2020-07-30', '10:01:30', '453', '', '3523'),
+(5, NULL, 1, '2020-07-30', '10:00:45', 'Place of Family Counseling', 'Comments/Remarks', 'No of Family Members Counseled'),
+(6, NULL, 0, '2020-07-30', '10:15:30', 'fvdsfsdfsadfasfa', 'sdfsdf', 'vcxvxc'),
+(7, NULL, 0, '2020-07-01', '10:27:45', '', '', ''),
+(8, NULL, 1, '2020-07-30', '14:14:00', '', 'EDIT', ''),
+(9, NULL, 1, '2020-07-30', '14:16:15', '', 'FASFAS EDIT', '');
 
 -- --------------------------------------------------------
 
@@ -1471,7 +1492,9 @@ CREATE TABLE `dev_psycho_followups` (
 --
 
 INSERT INTO `dev_psycho_followups` (`pk_psycho_followup_id`, `fk_psycho_support_id`, `fk_customer_id`, `entry_date`, `entry_time`, `followup_comments`) VALUES
-(1, NULL, 1, '2020-07-30', '01:23:15', '');
+(1, NULL, 1, '2020-07-30', '08:55:45', ''),
+(2, NULL, 1, '2020-07-30', '14:10:30', ''),
+(3, NULL, 1, '2020-07-30', '14:33:15', 'ERFSDFRDS');
 
 -- --------------------------------------------------------
 
@@ -1505,8 +1528,7 @@ CREATE TABLE `dev_psycho_sessions` (
 --
 
 INSERT INTO `dev_psycho_sessions` (`pk_psycho_session_id`, `fk_psycho_support_id`, `fk_customer_id`, `entry_date`, `entry_time`, `session_place`, `session_comments`, `initial_plan`, `next_time`, `complete_date`, `activities_description`, `next_date`, `complete_time`, `is_complete`, `dropout_reason`, `final_thought`, `impact_support`, `followup_comments`) VALUES
-(4, 0, NULL, '2020-07-29', '23:05:45', '', 'afas', NULL, NULL, NULL, 'afasf', '2020-07-29', NULL, NULL, NULL, NULL, NULL, ''),
-(5, 0, 1, '2020-07-30', '01:23:15', '', '', NULL, NULL, NULL, '', '2020-07-30', NULL, NULL, NULL, NULL, NULL, '');
+(1, 0, 1, '2020-07-30', '14:20:15', '', 'Comments', NULL, NULL, NULL, 'Description of Activities', '2020-07-30', NULL, NULL, NULL, NULL, NULL, '');
 
 -- --------------------------------------------------------
 
@@ -1549,7 +1571,7 @@ CREATE TABLE `dev_psycho_supports` (
 
 INSERT INTO `dev_psycho_supports` (`pk_psycho_support_id`, `fk_customer_id`, `fk_project_id`, `entry_date`, `first_meeting`, `support_note`, `support_place`, `sub_type`, `problem_identified`, `problem_description`, `initial_plan`, `problem_history`, `required_session`, `is_family_counceling`, `family_counseling`, `session_number`, `session_duration`, `session_place`, `other_requirements`, `assesment_score`, `reffer_to`, `referr_address`, `contact_number`, `reason_for_reffer`, `is_home_visit`, `issue_discussed`) VALUES
 (1, 27, 1, '2019-09-09', '2019-09-09', 't', 'y', 'psycho_social_counselling', 'problems_socialization', 'g', NULL, 'g', 6, 'yes', 8, NULL, 7, '9', '6', 'r', 'u', 't', '98', 'trauma_counselling', 'yes', NULL),
-(2, 1, 0, NULL, '2020-07-29', NULL, NULL, NULL, '', '', '', NULL, NULL, '', 0, '', 0, '', '', NULL, '', '', '', '', 'yes', '');
+(2, 1, 0, NULL, '2020-07-29', NULL, NULL, NULL, 'Suicidal Ideation/Thought', '', '', NULL, NULL, '', 0, '', 0, '', '', NULL, '', '', '', '', 'yes', '');
 
 -- --------------------------------------------------------
 
@@ -1592,7 +1614,31 @@ CREATE TABLE `dev_reintegration_plan` (
 INSERT INTO `dev_reintegration_plan` (`pk_reintegration_plan_id`, `fk_customer_id`, `reintegration_plan`, `service_requested`, `service_requested_note`) VALUES
 (1, 333, 'psychosocial', 'others,Education,Job Placement,Social Protection Schemes,Special Security Measures', ''),
 (2, NULL, NULL, 'Child Care,Job Placement,Legal Services,Psychosocial Support', ''),
-(3, 1, NULL, '', '');
+(3, 1, NULL, 'Child Care,Education', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dev_reintegration_satisfaction_scale`
+--
+
+CREATE TABLE `dev_reintegration_satisfaction_scale` (
+  `pk_satisfaction_scale` bigint(20) NOT NULL,
+  `fk_customer_id` bigint(20) DEFAULT NULL,
+  `satisfied_assistance` varchar(100) DEFAULT NULL,
+  `satisfied_counseling` varchar(100) DEFAULT NULL,
+  `satisfied_economic` varchar(100) DEFAULT NULL,
+  `satisfied_social` varchar(100) DEFAULT NULL,
+  `satisfied_community` varchar(100) DEFAULT NULL,
+  `satisfied_reintegration` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `dev_reintegration_satisfaction_scale`
+--
+
+INSERT INTO `dev_reintegration_satisfaction_scale` (`pk_satisfaction_scale`, `fk_customer_id`, `satisfied_assistance`, `satisfied_counseling`, `satisfied_economic`, `satisfied_social`, `satisfied_community`, `satisfied_reintegration`) VALUES
+(1, 1, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1673,7 +1719,7 @@ CREATE TABLE `dev_social_supports` (
 --
 
 INSERT INTO `dev_social_supports` (`pk_social_support_id`, `fk_project_id`, `fk_customer_id`, `entry_date`, `support_received`, `support_from_whom`, `is_migration_forum_member`, `is_participated_show`, `learn_show`, `is_per_community_video`, `learn_video`, `end_date`, `reintegration_economic`, `soical_date`, `medical_date`, `date_housing`, `date_legal`, `attended_ipt`, `support_referred`, `date_education`) VALUES
-(2, NULL, 1, NULL, NULL, NULL, NULL, NULL, '', '', '', NULL, '', '2020-07-30', '2020-07-30', '2020-07-30', '2020-07-30', '', '', '2020-07-30');
+(2, NULL, 1, NULL, NULL, NULL, NULL, NULL, '', '', '', NULL, 'Education', '2020-07-30', '2020-07-30', '2020-07-30', '2020-07-30', '', '', '2020-07-30');
 
 -- --------------------------------------------------------
 
@@ -2987,7 +3033,33 @@ INSERT INTO `dev_user_activities` (`pk_activity_log`, `activity_msg`, `activity_
 (1054, 'Jack (ID: dev_branch_management) has been turned on', '', 'update', 'success', '2020-07-29 12:22:28', 1),
 (1055, 'Jack (ID: dev_profile_management) has been turned on', '', 'update', 'success', '2020-07-29 12:25:54', 1),
 (1056, 'Jack (ID: dev_project_management) has been turned on', '', 'update', 'success', '2020-07-29 12:26:42', 1),
-(1057, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-07-29 15:42:37', 1);
+(1057, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-07-29 15:42:37', 1),
+(1058, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-07-30 08:27:10', 1),
+(1059, 'Family Counselling Data has been updated.', '', 'update', 'success', '2020-07-30 10:00:24', 1),
+(1060, 'Family Counselling Data has been updated.', '', 'update', 'success', '2020-07-30 10:00:31', 1),
+(1061, 'Family Counselling Data has been updated.', '', 'update', 'success', '2020-07-30 10:01:02', 1),
+(1062, 'Family Counselling Data has been updated.', '', 'update', 'success', '2020-07-30 10:01:34', 1),
+(1063, 'Family Counselling Data has been saved.', '', 'create', 'success', '2020-07-30 10:26:40', 1),
+(1064, 'Family Counselling Data has been saved.', '', 'create', 'success', '2020-07-30 10:27:45', 1),
+(1065, 'Psychosocial Data has been saved.', '', 'create', 'success', '2020-07-30 11:33:43', 1),
+(1066, 'Psychosocial Data has been updated.', '', 'update', 'success', '2020-07-30 11:41:00', 1),
+(1067, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-07-30 12:28:47', 1),
+(1068, 'Psychosocial Session Completion Data has been updated.', '', 'update', 'success', '2020-07-30 14:03:41', 1),
+(1069, 'Psychosocial Session Completion Data has been updated.', '', 'update', 'success', '2020-07-30 14:05:41', 1),
+(1070, 'Psychosocial Followup Data has been saved.', '', 'create', 'success', '2020-07-30 14:10:37', 1),
+(1071, 'Family Counselling Data has been saved.', '', 'create', 'success', '2020-07-30 14:14:27', 1),
+(1072, 'Family Counselling Data has been updated.', '', 'update', 'success', '2020-07-30 14:14:52', 1),
+(1073, 'Family Counselling Data has been saved.', '', 'create', 'success', '2020-07-30 14:16:01', 1),
+(1074, 'Family Counselling Data has been updated.', '', 'update', 'success', '2020-07-30 14:16:16', 1),
+(1075, 'Psychosocial Data has been saved.', '', 'create', 'success', '2020-07-30 14:16:42', 1),
+(1076, 'Psychosocial Data has been updated.', '', 'update', 'success', '2020-07-30 14:17:24', 1),
+(1077, 'Psychosocial Data has been saved.', '', 'create', 'success', '2020-07-30 14:20:24', 1),
+(1078, 'Psychosocial Session Completion Data has been saved.', '', 'create', 'success', '2020-07-30 14:22:43', 1),
+(1079, 'Psychosocial Session Completion Data has been saved.', '', 'create', 'success', '2020-07-30 14:31:40', 1),
+(1080, 'Psychosocial Followup Data has been saved.', '', 'create', 'success', '2020-07-30 14:33:19', 1),
+(1081, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-07-30 16:12:26', 1),
+(1082, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-08-03 09:52:18', 1),
+(1083, 'Basic information of participant profile Full Name (ID: C-20-08-000011) has been saved.', '', 'create', 'success', '2020-08-03 10:39:48', 1);
 
 -- --------------------------------------------------------
 
@@ -3213,6 +3285,12 @@ ALTER TABLE `dev_immediate_supports`
   ADD PRIMARY KEY (`pk_immediate_support_id`);
 
 --
+-- Indexes for table `dev_initial_evaluation`
+--
+ALTER TABLE `dev_initial_evaluation`
+  ADD PRIMARY KEY (`pk_evaluation_id`);
+
+--
 -- Indexes for table `dev_jack_settings`
 --
 ALTER TABLE `dev_jack_settings`
@@ -3328,6 +3406,12 @@ ALTER TABLE `dev_pull_notification`
 --
 ALTER TABLE `dev_reintegration_plan`
   ADD PRIMARY KEY (`pk_reintegration_plan_id`);
+
+--
+-- Indexes for table `dev_reintegration_satisfaction_scale`
+--
+ALTER TABLE `dev_reintegration_satisfaction_scale`
+  ADD PRIMARY KEY (`pk_satisfaction_scale`);
 
 --
 -- Indexes for table `dev_social_evaluations`
@@ -3448,13 +3532,13 @@ ALTER TABLE `dev_config`
 -- AUTO_INCREMENT for table `dev_customers`
 --
 ALTER TABLE `dev_customers`
-  MODIFY `pk_customer_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `pk_customer_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `dev_customer_health`
 --
 ALTER TABLE `dev_customer_health`
-  MODIFY `pk_customer_health_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `pk_customer_health_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `dev_customer_migrations`
@@ -3466,7 +3550,7 @@ ALTER TABLE `dev_customer_migrations`
 -- AUTO_INCREMENT for table `dev_customer_skills`
 --
 ALTER TABLE `dev_customer_skills`
-  MODIFY `pk_customer_skills_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `pk_customer_skills_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `dev_documents`
@@ -3496,7 +3580,7 @@ ALTER TABLE `dev_economic_followups`
 -- AUTO_INCREMENT for table `dev_economic_profile`
 --
 ALTER TABLE `dev_economic_profile`
-  MODIFY `pk_economic_profile_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `pk_economic_profile_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `dev_economic_reintegration_referrals`
@@ -3526,7 +3610,13 @@ ALTER TABLE `dev_followups`
 -- AUTO_INCREMENT for table `dev_immediate_supports`
 --
 ALTER TABLE `dev_immediate_supports`
-  MODIFY `pk_immediate_support_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `pk_immediate_support_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `dev_initial_evaluation`
+--
+ALTER TABLE `dev_initial_evaluation`
+  MODIFY `pk_evaluation_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_jack_settings`
@@ -3568,7 +3658,7 @@ ALTER TABLE `dev_menu_items`
 -- AUTO_INCREMENT for table `dev_migrations`
 --
 ALTER TABLE `dev_migrations`
-  MODIFY `pk_migration_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `pk_migration_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `dev_pages`
@@ -3592,7 +3682,7 @@ ALTER TABLE `dev_projects`
 -- AUTO_INCREMENT for table `dev_psycho_completions`
 --
 ALTER TABLE `dev_psycho_completions`
-  MODIFY `pk_psycho_completion_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `pk_psycho_completion_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_psycho_counsellors`
@@ -3610,19 +3700,19 @@ ALTER TABLE `dev_psycho_evaluations`
 -- AUTO_INCREMENT for table `dev_psycho_family_counselling`
 --
 ALTER TABLE `dev_psycho_family_counselling`
-  MODIFY `pk_psycho_family_counselling_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `pk_psycho_family_counselling_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `dev_psycho_followups`
 --
 ALTER TABLE `dev_psycho_followups`
-  MODIFY `pk_psycho_followup_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `pk_psycho_followup_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `dev_psycho_sessions`
 --
 ALTER TABLE `dev_psycho_sessions`
-  MODIFY `pk_psycho_session_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `pk_psycho_session_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_psycho_supports`
@@ -3641,6 +3731,12 @@ ALTER TABLE `dev_pull_notification`
 --
 ALTER TABLE `dev_reintegration_plan`
   MODIFY `pk_reintegration_plan_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `dev_reintegration_satisfaction_scale`
+--
+ALTER TABLE `dev_reintegration_satisfaction_scale`
+  MODIFY `pk_satisfaction_scale` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_social_evaluations`
@@ -3694,7 +3790,7 @@ ALTER TABLE `dev_users_roles_relation`
 -- AUTO_INCREMENT for table `dev_user_activities`
 --
 ALTER TABLE `dev_user_activities`
-  MODIFY `pk_activity_log` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1058;
+  MODIFY `pk_activity_log` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1084;
 
 --
 -- AUTO_INCREMENT for table `dev_user_login_logout`

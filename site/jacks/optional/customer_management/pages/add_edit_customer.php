@@ -1,4 +1,5 @@
 <?php
+//error_reporting(0);
 global $devdb;
 $edit = $_GET['edit'] ? $_GET['edit'] : null;
 
@@ -106,9 +107,9 @@ if ($_POST) {
         $activityType = $edit ? 'update' : 'create';
         user_activity::add_activity($msg, 'success', $activityType);
         if ($edit) {
-            header('location: ' . url('admin/dev_customer_management/manage_customer?action=add_edit_customer&edit=' . $profile_id));
+            header('location: ' . url('admin/dev_customer_management/manage_customers?action=add_edit_customer&edit=' . $edit));
         } else {
-            header('location: ' . url('admin/dev_customer_management/manage_customer'));
+            header('location: ' . url('admin/dev_customer_management/manage_customers'));
         }
         exit();
     } else {
@@ -118,6 +119,8 @@ if ($_POST) {
 }
 
 doAction('render_start');
+
+ob_start();
 ?>
 <style type="text/css">
     .removeReadOnly {

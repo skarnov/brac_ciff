@@ -70,6 +70,10 @@ class dev_customer_management {
 
         if ($_GET['action'] == 'add_edit_customer')
             include('pages/add_edit_customer.php');
+        elseif ($_GET['action'] == 'add_edit_evaluate')
+            include('pages/add_edit_evaluate.php');
+        elseif ($_GET['action'] == 'add_edit_satisfaction_scale')
+            include('pages/add_edit_satisfaction_scale.php');
         elseif ($_GET['action'] == 'deleteProfile')
             include('pages/deleteProfile.php');
         elseif ($_GET['action'] == 'deleteProfileCase')
@@ -86,16 +90,18 @@ class dev_customer_management {
 
         if ($_GET['action'] == 'add_edit_case')
             include('pages/add_edit_case.php');
+        elseif ($_GET['action'] == 'add_edit_family_counseling')
+            include('pages/add_edit_family_counseling.php');
+        elseif ($_GET['action'] == 'add_edit_psychosocial_session')
+            include('pages/add_edit_psychosocial_session.php');
+        elseif ($_GET['action'] == 'add_edit_session_completion')
+            include('pages/add_edit_session_completion.php');
+        elseif ($_GET['action'] == 'add_edit_psychosocial_followup')
+            include('pages/add_edit_psychosocial_followup.php');
         elseif ($_GET['action'] == 'deleteCase')
             include('pages/deleteCase.php');
         else
             include('pages/list_cases.php');
-    }
-
-    function get_lookups($lookup_group) {
-        $sql = "SELECT * FROM dev_lookups WHERE lookup_group = '$lookup_group'";
-        $data = sql_data_collector($sql);
-        return $data;
     }
 
     function get_customers($param = null) {
@@ -249,6 +255,14 @@ class dev_customer_management {
                 $case_data = array();
                 $case_data['fk_customer_id'] = $ret['customer_insert']['success'];
                 $ret['case_insert'] = $devdb->insert_update('dev_immediate_supports', $case_data);
+
+                $evaluate_data = array();
+                $evaluate_data['fk_customer_id'] = $ret['customer_insert']['success'];
+                $ret['evaluate_insert'] = $devdb->insert_update('dev_initial_evaluation', $evaluate_data);
+
+                $satisfaction_data = array();
+                $satisfaction_data['fk_customer_id'] = $ret['customer_insert']['success'];
+                $ret['satisfaction_insert'] = $devdb->insert_update('dev_reintegration_satisfaction_scale', $satisfaction_data);
             }
 
             $migration_data = array();
@@ -420,6 +434,162 @@ class dev_customer_management {
         return $ret;
     }
 
+    function get_initial_evaluation($param = null) {
+        $param['single'] = $param['single'] ? $param['single'] : false;
+
+        $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
+        $from = "FROM dev_initial_evaluation ";
+        $where = "WHERE 1 ";
+        $conditions = " ";
+        $sql = $select . $from . $where;
+        $count_sql = "SELECT COUNT(pk_evaluation_id) AS TOTAL " . $from . $where;
+
+        $loopCondition = array(
+            'id' => 'pk_evaluation_id',
+            'customer_id' => 'fk_customer_id',
+        );
+
+        $conditions .= sql_condition_maker($loopCondition, $param);
+
+        $orderBy = sql_order_by($param);
+        $limitBy = sql_limit_by($param);
+
+        $sql .= $conditions . $orderBy . $limitBy;
+        $count_sql .= $conditions;
+
+        $supports = sql_data_collector($sql, $count_sql, $param);
+        return $supports;
+    }
+
+    function add_edit_initial_evaluation($params = array()) {
+        global $devdb, $_config;
+
+        $ret = array('success' => array(), 'error' => array());
+        $is_update = $params['edit'] ? $params['edit'] : array();
+
+        $oldData = array();
+        if ($is_update) {
+            $oldData = $this->get_initial_evaluation(array('id' => $is_update, 'single' => true));
+            if (!$oldData) {
+                return array('error' => ['Invalid evaluation id, no data found']);
+            }
+        }
+
+        foreach ($params['required'] as $i => $v) {
+            if (isset($params['form_data'][$i]))
+                $temp = form_validator::required($params['form_data'][$i]);
+            if ($temp !== true) {
+                $ret['error'][] = $v . ' ' . $temp;
+            }
+        }
+
+        if (!$ret['error']) {
+            $data = array();
+            $data['is_participant'] = $params['form_data']['is_participant'];
+            
+            if ($params['form_data']['new_evaluate_services'] == NULL) {
+                $data_type = $params['form_data']['evaluate_services'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $evaluate_services = $data_types;
+            } 
+            elseif ($params['form_data']['evaluate_services'] == NULL) {
+                $evaluate_services = $params['form_data']['new_evaluate_services'];
+            } 
+            elseif ($params['form_data']['evaluate_services'] != NULL && $params['form_data']['new_evaluate_services'] != NULL) {
+                $data_type = $params['form_data']['evaluate_services'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $evaluate_services = $params['form_data']['new_evaluate_services'] . ',' . $data_types;
+            }
+            
+            $plan = array();
+            if ($evaluate_services) {
+                $plan['evaluate_services'] = $evaluate_services;
+                if ($params['form_data']['new_social_protection']) {
+                    $plan['social_protection'] = $params['form_data']['new_social_protection'];
+                }
+                if ($params['form_data']['new_security_measures']) {
+                    $plan['security_measures'] = $params['form_data']['new_security_measures'];
+                }
+            }
+
+            $data['evaluate_services'] = implode(',', $plan);
+
+            if ($is_update) {
+
+                $ret['evaluation_update'] = $devdb->insert_update('dev_initial_evaluation', $data, " fk_customer_id = '" . $is_update . "'");
+            } else {
+
+                $ret['evaluation_insert'] = $devdb->insert_update('dev_initial_evaluation', $data);
+            }
+        }
+        return $ret;
+    }
+
+    function get_satisfaction_scale($param = null) {
+        $param['single'] = $param['single'] ? $param['single'] : false;
+
+        $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
+        $from = "FROM dev_reintegration_satisfaction_scale ";
+        $where = "WHERE 1 ";
+        $conditions = " ";
+        $sql = $select . $from . $where;
+        $count_sql = "SELECT COUNT(pk_satisfaction_scale) AS TOTAL " . $from . $where;
+
+        $loopCondition = array(
+            'id' => 'pk_satisfaction_scale',
+            'customer_id' => 'fk_customer_id',
+        );
+
+        $conditions .= sql_condition_maker($loopCondition, $param);
+
+        $orderBy = sql_order_by($param);
+        $limitBy = sql_limit_by($param);
+
+        $sql .= $conditions . $orderBy . $limitBy;
+        $count_sql .= $conditions;
+
+        $supports = sql_data_collector($sql, $count_sql, $param);
+        return $supports;
+    }
+
+    function add_edit_satisfaction_scale($params = array()) {
+        global $devdb, $_config;
+
+        $ret = array('success' => array(), 'error' => array());
+        $is_update = $params['edit'] ? $params['edit'] : array();
+
+        $oldData = array();
+        if ($is_update) {
+            $oldData = $this->get_satisfaction_scale(array('id' => $is_update, 'single' => true));
+            if (!$oldData) {
+                return array('error' => ['Invalid psychosocial followup id, no data found']);
+            }
+        }
+
+        foreach ($params['required'] as $i => $v) {
+            if (isset($params['form_data'][$i]))
+                $temp = form_validator::required($params['form_data'][$i]);
+            if ($temp !== true) {
+                $ret['error'][] = $v . ' ' . $temp;
+            }
+        }
+
+        if (!$ret['error']) {
+            $psycho_followups_data = array();
+            $psycho_followups_data['entry_time'] = $params['form_data']['followup_entry_time'];
+            $psycho_followups_data['entry_date'] = date('Y-m-d', strtotime($params['form_data']['followup_entry_date']));
+            $psycho_followups_data['followup_comments'] = $params['form_data']['followup_comments'];
+
+            if ($is_update)
+                $ret = $devdb->insert_update('dev_psycho_followups', $psycho_followups_data, " pk_psycho_followup_id = '" . $is_update . "'");
+            else {
+                $psycho_followups_data['fk_customer_id'] = $params['customer_id'];
+                $ret = $devdb->insert_update('dev_psycho_followups', $psycho_followups_data);
+            }
+        }
+        return $ret;
+    }
+
     function get_cases($param = null) {
         $param['single'] = $param['single'] ? $param['single'] : false;
 
@@ -427,18 +597,33 @@ class dev_customer_management {
 
         if ($param['listing']) {
             $from = "FROM dev_immediate_supports 
+                        LEFT JOIN dev_customers ON (dev_customers.pk_customer_id = dev_immediate_supports.fk_customer_id)
+                        LEFT JOIN dev_reintegration_plan ON (dev_reintegration_plan.fk_customer_id = dev_immediate_supports.fk_customer_id)
+             
+
+
 
             ";
         } else {
-            $from = "FROM dev_immediate_supports 
+            $from = "FROM dev_immediate_supports
+                LEFT JOIN dev_customers ON (dev_customers.pk_customer_id = dev_immediate_supports.fk_customer_id)
                         LEFT JOIN dev_reintegration_plan ON (dev_reintegration_plan.fk_customer_id = dev_immediate_supports.fk_customer_id)
                         LEFT JOIN dev_psycho_supports ON (dev_psycho_supports.fk_customer_id = dev_immediate_supports.fk_customer_id)
 
+                        LEFT JOIN dev_psycho_family_counselling ON (dev_psycho_family_counselling.fk_customer_id = dev_immediate_supports.fk_customer_id)
+                        LEFT JOIN dev_psycho_sessions ON (dev_psycho_sessions.fk_customer_id = dev_immediate_supports.fk_customer_id)
+                        LEFT JOIN dev_psycho_completions ON (dev_psycho_completions.fk_customer_id = dev_immediate_supports.fk_customer_id)
+                        LEFT JOIN dev_psycho_followups ON (dev_psycho_followups.fk_customer_id = dev_immediate_supports.fk_customer_id)
+                        LEFT JOIN dev_economic_supports ON (dev_economic_supports.fk_customer_id = dev_immediate_supports.fk_customer_id)
+                        LEFT JOIN dev_economic_reintegration_referrals ON (dev_economic_reintegration_referrals.fk_customer_id = dev_immediate_supports.fk_customer_id)
+                        LEFT JOIN dev_social_supports ON (dev_social_supports.fk_customer_id = dev_immediate_supports.fk_customer_id)
+                        LEFT JOIN dev_followups ON (dev_followups.fk_customer_id = dev_immediate_supports.fk_customer_id)
+
+
+
+
             ";
         }
-
-
-
 
         $where = " WHERE 1";
         $conditions = " ";
@@ -456,6 +641,11 @@ class dev_customer_management {
 
         $sql .= $conditions . $orderBy . $limitBy;
         $count_sql .= $conditions;
+
+//        
+//        echo '<pre>';
+//        print_r($sql);
+//        exit();
 
         $cases = sql_data_collector($sql, $count_sql, $param);
         return $cases;
@@ -530,7 +720,7 @@ class dev_customer_management {
                     $plan['security_measures'] = $params['form_data']['new_security_measures'];
                 }
             }
-            $reintegration_plan['service_requested'] = implode(',', $plan);
+//            $reintegration_plan['service_requested'] = implode(',', $plan);
             $reintegration_plan['service_requested_note'] = $params['form_data']['service_requested_note'];
             if ($is_update) {
                 $sql = "SELECT fk_customer_id FROM dev_reintegration_plan WHERE fk_customer_id = '$is_update'";
@@ -617,106 +807,6 @@ class dev_customer_management {
                 } else {
                     $psycho_supports['fk_customer_id'] = $is_update;
                     $ret['psycho_support_insert'] = $devdb->insert_update('dev_psycho_supports', $psycho_supports);
-                }
-            }
-
-            /*
-              -------------------------------------------------------------------
-              | Table Name : dev_psycho_family_counselling
-              |------------------------------------------------------------------
-             */
-
-            $psycho_family_counselling_data = array();
-            $psycho_family_counselling_data['entry_date'] = date('Y-m-d', strtotime($params['form_data']['family_entry_date']));
-            $psycho_family_counselling_data['entry_time'] = $params['form_data']['family_entry_time'];
-            $psycho_family_counselling_data['session_place'] = $params['form_data']['session_place'];
-            $psycho_family_counselling_data['members_counseled'] = $params['form_data']['members_counseled'];
-            $psycho_family_counselling_data['session_comments'] = $params['form_data']['session_comments'];
-
-            if ($is_update) {
-                $sql = "SELECT fk_customer_id FROM dev_psycho_family_counselling WHERE fk_customer_id = '$is_update'";
-                $pre_customer_id = $devdb->get_row($sql);
-
-                if ($pre_customer_id) {
-                    $ret['psycho_family_counselling_update'] = $devdb->insert_update('dev_psycho_family_counselling', $psycho_family_counselling_data, " fk_customer_id = '" . $is_update . "'");
-                } else {
-                    $psycho_family_counselling_data['fk_customer_id'] = $is_update;
-                    $ret['psycho_family_counselling_insert'] = $devdb->insert_update('dev_psycho_family_counselling', $psycho_family_counselling_data);
-                }
-            }
-
-            /*
-              -------------------------------------------------------------------
-              | Table Name : dev_psycho_sessions
-              |------------------------------------------------------------------
-             */
-
-            $psycho_sessions_data = array();
-            $psycho_sessions_data['entry_time'] = $params['form_data']['session_entry_time'];
-            $psycho_sessions_data['entry_date'] = date('Y-m-d', strtotime($params['form_data']['session_entry_date']));
-            $psycho_sessions_data['activities_description'] = $params['form_data']['activities_description'];
-            $psycho_sessions_data['session_comments'] = $params['form_data']['session_comments'];
-            $psycho_sessions_data['next_date'] = date('Y-m-d', strtotime($params['form_data']['next_date']));
-
-            if ($is_update) {
-                $sql = "SELECT fk_customer_id FROM dev_psycho_sessions WHERE fk_customer_id = '$is_update'";
-                $pre_customer_id = $devdb->get_row($sql);
-
-                if ($pre_customer_id) {
-                    $ret['psycho_sessions_update'] = $devdb->insert_update('dev_psycho_sessions', $psycho_sessions_data, " fk_customer_id = '" . $is_update . "'");
-                } else {
-                    $psycho_sessions_data['fk_customer_id'] = $is_update;
-                    $ret['psycho_sessions_insert'] = $devdb->insert_update('dev_psycho_sessions', $psycho_sessions_data);
-                }
-            }
-
-            /*
-              -------------------------------------------------------------------
-              | Table Name : dev_psycho_completions
-              |------------------------------------------------------------------
-             */
-
-            $psycho_completions_data = array();
-            $psycho_completions_data['is_completed'] = $params['form_data']['is_completed'];
-            $psycho_completions_data['dropout_reason'] = $params['form_data']['dropout_reason'];
-            $psycho_completions_data['review_session'] = $params['form_data']['review_session'];
-            $psycho_completions_data['client_comments'] = $params['form_data']['client_comments'];
-            $psycho_completions_data['counsellor_comments'] = $params['form_data']['counsellor_comments'];
-            $psycho_completions_data['final_evaluation'] = $params['form_data']['final_evaluation'];
-            $psycho_completions_data['required_session'] = $params['form_data']['required_session'];
-
-            if ($is_update) {
-                $sql = "SELECT fk_customer_id FROM dev_psycho_completions WHERE fk_customer_id = '$is_update'";
-                $pre_customer_id = $devdb->get_row($sql);
-
-                if ($pre_customer_id) {
-                    $ret['psycho_completion_update'] = $devdb->insert_update('dev_psycho_completions', $psycho_completions_data, " fk_customer_id = '" . $is_update . "'");
-                } else {
-                    $psycho_completions_data['fk_customer_id'] = $is_update;
-                    $ret['psycho_completion_insert'] = $devdb->insert_update('dev_psycho_completions', $psycho_completions_data);
-                }
-            }
-
-            /*
-              -------------------------------------------------------------------
-              | Table Name : dev_psycho_followups
-              |------------------------------------------------------------------
-             */
-
-            $psycho_followups_data = array();
-            $psycho_followups_data['entry_time'] = $params['form_data']['followup_entry_time'];
-            $psycho_followups_data['entry_date'] = date('Y-m-d', strtotime($params['form_data']['followup_entry_date']));
-            $psycho_followups_data['followup_comments'] = $params['form_data']['followup_comments'];
-
-            if ($is_update) {
-                $sql = "SELECT fk_customer_id FROM dev_psycho_followups WHERE fk_customer_id = '$is_update'";
-                $pre_customer_id = $devdb->get_row($sql);
-
-                if ($pre_customer_id) {
-                    $ret['psycho_followup_update'] = $devdb->insert_update('dev_psycho_followups', $psycho_followups_data, " fk_customer_id = '" . $is_update . "'");
-                } else {
-                    $psycho_followups_data['fk_customer_id'] = $is_update;
-                    $ret['psycho_followup_insert'] = $devdb->insert_update('dev_psycho_followups', $psycho_followups_data);
                 }
             }
 
@@ -962,6 +1052,275 @@ class dev_customer_management {
             }
 
             exit();
+        }
+        return $ret;
+    }
+
+    function get_family_counselling($param = null) {
+        $param['single'] = $param['single'] ? $param['single'] : false;
+
+        $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
+        $from = "FROM dev_psycho_family_counselling ";
+        $where = "WHERE 1 ";
+        $conditions = " ";
+        $sql = $select . $from . $where;
+        $count_sql = "SELECT COUNT(pk_psycho_family_counselling_id) AS TOTAL " . $from . $where;
+
+        $loopCondition = array(
+            'id' => 'pk_psycho_family_counselling_id',
+            'customer_id' => 'fk_customer_id',
+        );
+
+        $conditions .= sql_condition_maker($loopCondition, $param);
+
+        $orderBy = sql_order_by($param);
+        $limitBy = sql_limit_by($param);
+
+        $sql .= $conditions . $orderBy . $limitBy;
+        $count_sql .= $conditions;
+
+        $supports = sql_data_collector($sql, $count_sql, $param);
+        return $supports;
+    }
+
+    function add_edit_family_counselling($params = array()) {
+        global $devdb, $_config;
+
+        $ret = array('success' => array(), 'error' => array());
+        $is_update = $params['edit'] ? $params['edit'] : array();
+
+        $oldData = array();
+        if ($is_update) {
+            $oldData = $this->get_family_counselling(array('id' => $is_update, 'single' => true));
+            if (!$oldData) {
+                return array('error' => ['Invalid psychosocial followup id, no data found']);
+            }
+        }
+
+        foreach ($params['required'] as $i => $v) {
+            if (isset($params['form_data'][$i]))
+                $temp = form_validator::required($params['form_data'][$i]);
+            if ($temp !== true) {
+                $ret['error'][] = $v . ' ' . $temp;
+            }
+        }
+
+        if (!$ret['error']) {
+            $psycho_family_counselling_data = array();
+            $psycho_family_counselling_data['entry_date'] = date('Y-m-d', strtotime($params['form_data']['family_entry_date']));
+            $psycho_family_counselling_data['entry_time'] = $params['form_data']['family_entry_time'];
+            $psycho_family_counselling_data['session_place'] = $params['form_data']['session_place'];
+            $psycho_family_counselling_data['members_counseled'] = $params['form_data']['members_counseled'];
+            $psycho_family_counselling_data['session_comments'] = $params['form_data']['session_comments'];
+
+            if ($is_update)
+                $ret = $devdb->insert_update('dev_psycho_family_counselling', $psycho_family_counselling_data, " pk_psycho_family_counselling_id = '" . $is_update . "'");
+            else {
+                $psycho_family_counselling_data['fk_customer_id'] = $params['customer_id'];
+                $ret = $devdb->insert_update('dev_psycho_family_counselling', $psycho_family_counselling_data);
+            }
+        }
+        return $ret;
+    }
+
+    function get_psychosocial_session($param = null) {
+        $param['single'] = $param['single'] ? $param['single'] : false;
+
+        $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
+        $from = "FROM dev_psycho_sessions ";
+        $where = "WHERE 1 ";
+        $conditions = " ";
+        $sql = $select . $from . $where;
+        $count_sql = "SELECT COUNT(pk_psycho_session_id) AS TOTAL " . $from . $where;
+
+        $loopCondition = array(
+            'id' => 'pk_psycho_session_id',
+            'customer_id' => 'fk_customer_id',
+        );
+
+        $conditions .= sql_condition_maker($loopCondition, $param);
+
+        $orderBy = sql_order_by($param);
+        $limitBy = sql_limit_by($param);
+
+        $sql .= $conditions . $orderBy . $limitBy;
+        $count_sql .= $conditions;
+
+        $supports = sql_data_collector($sql, $count_sql, $param);
+        return $supports;
+    }
+
+    function add_edit_psychosocial_session($params = array()) {
+        global $devdb, $_config;
+
+        $ret = array('success' => array(), 'error' => array());
+        $is_update = $params['edit'] ? $params['edit'] : array();
+
+        $oldData = array();
+        if ($is_update) {
+            $oldData = $this->get_psychosocial_session(array('id' => $is_update, 'single' => true));
+            if (!$oldData) {
+                return array('error' => ['Invalid psychosocial session id, no data found']);
+            }
+        }
+
+        foreach ($params['required'] as $i => $v) {
+            if (isset($params['form_data'][$i]))
+                $temp = form_validator::required($params['form_data'][$i]);
+            if ($temp !== true) {
+                $ret['error'][] = $v . ' ' . $temp;
+            }
+        }
+
+        if (!$ret['error']) {
+            $psycho_sessions_data = array();
+            $psycho_sessions_data['entry_time'] = $params['form_data']['session_entry_time'];
+            $psycho_sessions_data['entry_date'] = date('Y-m-d', strtotime($params['form_data']['session_entry_date']));
+            $psycho_sessions_data['activities_description'] = $params['form_data']['activities_description'];
+            $psycho_sessions_data['session_comments'] = $params['form_data']['session_comments'];
+            $psycho_sessions_data['next_date'] = date('Y-m-d', strtotime($params['form_data']['next_date']));
+
+            if ($is_update)
+                $ret = $devdb->insert_update('dev_psycho_sessions', $psycho_sessions_data, " pk_psycho_session_id = '" . $is_update . "'");
+            else {
+                $psycho_sessions_data['fk_customer_id'] = $params['customer_id'];
+                $ret = $devdb->insert_update('dev_psycho_sessions', $psycho_sessions_data);
+            }
+        }
+        return $ret;
+    }
+
+    function get_psychosocial_completion($param = null) {
+        $param['single'] = $param['single'] ? $param['single'] : false;
+
+        $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
+        $from = "FROM dev_psycho_completions ";
+        $where = "WHERE 1 ";
+        $conditions = " ";
+        $sql = $select . $from . $where;
+        $count_sql = "SELECT COUNT(pk_psycho_completion_id) AS TOTAL " . $from . $where;
+
+        $loopCondition = array(
+            'id' => 'pk_psycho_completion_id',
+            'customer_id' => 'fk_customer_id',
+        );
+
+        $conditions .= sql_condition_maker($loopCondition, $param);
+
+        $orderBy = sql_order_by($param);
+        $limitBy = sql_limit_by($param);
+
+        $sql .= $conditions . $orderBy . $limitBy;
+        $count_sql .= $conditions;
+
+        $supports = sql_data_collector($sql, $count_sql, $param);
+        return $supports;
+    }
+
+    function add_edit_psychosocial_completion($params = array()) {
+        global $devdb, $_config;
+
+        $ret = array('success' => array(), 'error' => array());
+        $is_update = $params['edit'] ? $params['edit'] : array();
+
+        $oldData = array();
+        if ($is_update) {
+            $oldData = $this->get_psychosocial_completion(array('id' => $is_update, 'single' => true));
+            if (!$oldData) {
+                return array('error' => ['Invalid psychosocial completion id, no data found']);
+            }
+        }
+
+        foreach ($params['required'] as $i => $v) {
+            if (isset($params['form_data'][$i]))
+                $temp = form_validator::required($params['form_data'][$i]);
+            if ($temp !== true) {
+                $ret['error'][] = $v . ' ' . $temp;
+            }
+        }
+
+        if (!$ret['error']) {
+            $psycho_completions_data = array();
+            $psycho_completions_data['entry_date'] = date('Y-m-d');
+            $psycho_completions_data['is_completed'] = $params['form_data']['is_completed'];
+            $psycho_completions_data['dropout_reason'] = $params['form_data']['dropout_reason'];
+            $psycho_completions_data['review_session'] = $params['form_data']['review_session'];
+            $psycho_completions_data['client_comments'] = $params['form_data']['client_comments'];
+            $psycho_completions_data['counsellor_comments'] = $params['form_data']['counsellor_comments'];
+            $psycho_completions_data['final_evaluation'] = $params['form_data']['final_evaluation'];
+            $psycho_completions_data['required_session'] = $params['form_data']['required_session'];
+
+            if ($is_update)
+                $ret = $devdb->insert_update('dev_psycho_completions', $psycho_completions_data, " pk_psycho_completion_id = '" . $is_update . "'");
+            else {
+                $psycho_completions_data['fk_customer_id'] = $params['customer_id'];
+                $ret = $devdb->insert_update('dev_psycho_completions', $psycho_completions_data);
+            }
+        }
+        return $ret;
+    }
+
+    function get_psychosocial_followup($param = null) {
+        $param['single'] = $param['single'] ? $param['single'] : false;
+
+        $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
+        $from = "FROM dev_psycho_followups ";
+        $where = "WHERE 1 ";
+        $conditions = " ";
+        $sql = $select . $from . $where;
+        $count_sql = "SELECT COUNT(pk_psycho_followup_id) AS TOTAL " . $from . $where;
+
+        $loopCondition = array(
+            'id' => 'pk_psycho_followup_id',
+            'customer_id' => 'fk_customer_id',
+        );
+
+        $conditions .= sql_condition_maker($loopCondition, $param);
+
+        $orderBy = sql_order_by($param);
+        $limitBy = sql_limit_by($param);
+
+        $sql .= $conditions . $orderBy . $limitBy;
+        $count_sql .= $conditions;
+
+        $supports = sql_data_collector($sql, $count_sql, $param);
+        return $supports;
+    }
+
+    function add_edit_psychosocial_followup($params = array()) {
+        global $devdb, $_config;
+
+        $ret = array('success' => array(), 'error' => array());
+        $is_update = $params['edit'] ? $params['edit'] : array();
+
+        $oldData = array();
+        if ($is_update) {
+            $oldData = $this->get_psychosocial_followup(array('id' => $is_update, 'single' => true));
+            if (!$oldData) {
+                return array('error' => ['Invalid psychosocial followup id, no data found']);
+            }
+        }
+
+        foreach ($params['required'] as $i => $v) {
+            if (isset($params['form_data'][$i]))
+                $temp = form_validator::required($params['form_data'][$i]);
+            if ($temp !== true) {
+                $ret['error'][] = $v . ' ' . $temp;
+            }
+        }
+
+        if (!$ret['error']) {
+            $psycho_followups_data = array();
+            $psycho_followups_data['entry_time'] = $params['form_data']['followup_entry_time'];
+            $psycho_followups_data['entry_date'] = date('Y-m-d', strtotime($params['form_data']['followup_entry_date']));
+            $psycho_followups_data['followup_comments'] = $params['form_data']['followup_comments'];
+
+            if ($is_update)
+                $ret = $devdb->insert_update('dev_psycho_followups', $psycho_followups_data, " pk_psycho_followup_id = '" . $is_update . "'");
+            else {
+                $psycho_followups_data['fk_customer_id'] = $params['customer_id'];
+                $ret = $devdb->insert_update('dev_psycho_followups', $psycho_followups_data);
+            }
         }
         return $ret;
     }
