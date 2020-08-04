@@ -575,11 +575,15 @@ class dev_customer_management {
         }
 
         if (!$ret['error']) {
+            
+//            tanjil insert_start
             $psycho_followups_data = array();
             $psycho_followups_data['entry_time'] = $params['form_data']['followup_entry_time'];
             $psycho_followups_data['entry_date'] = date('Y-m-d', strtotime($params['form_data']['followup_entry_date']));
             $psycho_followups_data['followup_comments'] = $params['form_data']['followup_comments'];
 
+            //            tanjil insert_end
+            
             if ($is_update)
                 $ret = $devdb->insert_update('dev_psycho_followups', $psycho_followups_data, " pk_psycho_followup_id = '" . $is_update . "'");
             else {

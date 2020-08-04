@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 03, 2020 at 10:29 AM
+-- Generation Time: Aug 04, 2020 at 08:40 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.3
 
@@ -817,7 +817,7 @@ CREATE TABLE `dev_economic_reintegration_referrals` (
 --
 
 INSERT INTO `dev_economic_reintegration_referrals` (`pk_economic_referral_id`, `fk_customer_id`, `is_vocational_training`, `received_vocational`, `is_certificate_received`, `used_far`, `other_comments`, `is_economic_services`, `economic_support`, `is_assistance_received`, `refferd_to`, `trianing_date`, `place_of_training`, `duration_training`, `refferd_address`, `status_traning`, `assistance_utilized`) VALUES
-(1, 1, '', '', '', '', '', '', '', '', '', '2020-07-30', '', '', '', '', '');
+(1, 1, 'no', 'Energies supply', '', '', '', '', '', '', '', '2020-07-30', '', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -905,6 +905,38 @@ INSERT INTO `dev_email_templates` (`pk_etemplate_id`, `template_id`, `user_code`
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `dev_events`
+--
+
+CREATE TABLE `dev_events` (
+  `pk_event_id` bigint(20) NOT NULL,
+  `create_time` time DEFAULT NULL,
+  `create_date` date DEFAULT NULL,
+  `created_by` bigint(20) DEFAULT NULL,
+  `update_time` time DEFAULT NULL,
+  `update_date` date DEFAULT NULL,
+  `modified_by` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dev_event_types`
+--
+
+CREATE TABLE `dev_event_types` (
+  `pk_event_type_id` bigint(20) NOT NULL,
+  `create_time` time DEFAULT NULL,
+  `create_date` date DEFAULT NULL,
+  `created_by` bigint(20) DEFAULT NULL,
+  `update_time` time DEFAULT NULL,
+  `update_date` date DEFAULT NULL,
+  `modified_by` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `dev_followups`
 --
 
@@ -972,7 +1004,7 @@ CREATE TABLE `dev_immediate_supports` (
 --
 
 INSERT INTO `dev_immediate_supports` (`pk_immediate_support_id`, `fk_branch_id`, `fk_staff_id`, `fk_customer_id`, `immediate_support`, `create_date`, `create_time`, `create_by`, `update_date`, `update_time`, `update_by`) VALUES
-(1, NULL, NULL, 1, 'Information provision', NULL, NULL, NULL, '2020-07-30', '16:31:37', 1),
+(1, NULL, NULL, 1, 'Information provision', NULL, NULL, NULL, '2020-08-04', '13:32:13', 1),
 (2, NULL, NULL, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
@@ -1000,7 +1032,7 @@ CREATE TABLE `dev_initial_evaluation` (
 --
 
 INSERT INTO `dev_initial_evaluation` (`pk_evaluation_id`, `fk_customer_id`, `is_participant`, `justification_project`, `evaluate_services`, `create_time`, `create_date`, `created_by`, `update_time`, `update_date`, `modified_by`) VALUES
-(1, 1, 'yes', NULL, 'ADSAs,Advance training through referrals,Remigration,Psychosocial Support,asda,ada', NULL, NULL, NULL, NULL, NULL, NULL);
+(1, 1, 'no', NULL, 'Advance training through referrals,Remigration,Psychosocial Support,Psychosocial Support', NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1643,6 +1675,22 @@ INSERT INTO `dev_reintegration_satisfaction_scale` (`pk_satisfaction_scale`, `fk
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `dev_sharing_sessions`
+--
+
+CREATE TABLE `dev_sharing_sessions` (
+  `pk_sharing_session_id` bigint(20) NOT NULL,
+  `create_time` time DEFAULT NULL,
+  `create_date` date DEFAULT NULL,
+  `created_by` bigint(20) DEFAULT NULL,
+  `update_time` time DEFAULT NULL,
+  `update_date` date DEFAULT NULL,
+  `modified_by` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `dev_social_evaluations`
 --
 
@@ -1840,6 +1888,22 @@ INSERT INTO `dev_tags_group` (`pk_tag_group_id`, `tag_group_title`, `tag_group_s
 (2, 'tags', 'tags', 0),
 (3, 'migration_locations', 'migration_locations', 0),
 (4, 'occupations', 'occupations', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dev_targets`
+--
+
+CREATE TABLE `dev_targets` (
+  `pk_target_id` bigint(20) NOT NULL,
+  `create_time` time DEFAULT NULL,
+  `create_date` date DEFAULT NULL,
+  `created_by` bigint(20) DEFAULT NULL,
+  `update_time` time DEFAULT NULL,
+  `update_date` date DEFAULT NULL,
+  `modified_by` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -3059,7 +3123,9 @@ INSERT INTO `dev_user_activities` (`pk_activity_log`, `activity_msg`, `activity_
 (1080, 'Psychosocial Followup Data has been saved.', '', 'create', 'success', '2020-07-30 14:33:19', 1),
 (1081, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-07-30 16:12:26', 1),
 (1082, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-08-03 09:52:18', 1),
-(1083, 'Basic information of participant profile Full Name (ID: C-20-08-000011) has been saved.', '', 'create', 'success', '2020-08-03 10:39:48', 1);
+(1083, 'Basic information of participant profile Full Name (ID: C-20-08-000011) has been saved.', '', 'create', 'success', '2020-08-03 10:39:48', 1),
+(1084, 'Jack (ID: dev_event_management) has been turned on', '', 'update', 'success', '2020-08-04 09:20:34', 1),
+(1085, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-08-04 17:01:06', 1);
 
 -- --------------------------------------------------------
 
@@ -3273,6 +3339,18 @@ ALTER TABLE `dev_email_templates`
   ADD PRIMARY KEY (`pk_etemplate_id`);
 
 --
+-- Indexes for table `dev_events`
+--
+ALTER TABLE `dev_events`
+  ADD PRIMARY KEY (`pk_event_id`);
+
+--
+-- Indexes for table `dev_event_types`
+--
+ALTER TABLE `dev_event_types`
+  ADD PRIMARY KEY (`pk_event_type_id`);
+
+--
 -- Indexes for table `dev_followups`
 --
 ALTER TABLE `dev_followups`
@@ -3414,6 +3492,12 @@ ALTER TABLE `dev_reintegration_satisfaction_scale`
   ADD PRIMARY KEY (`pk_satisfaction_scale`);
 
 --
+-- Indexes for table `dev_sharing_sessions`
+--
+ALTER TABLE `dev_sharing_sessions`
+  ADD PRIMARY KEY (`pk_sharing_session_id`);
+
+--
 -- Indexes for table `dev_social_evaluations`
 --
 ALTER TABLE `dev_social_evaluations`
@@ -3454,6 +3538,12 @@ ALTER TABLE `dev_tags`
 --
 ALTER TABLE `dev_tags_group`
   ADD PRIMARY KEY (`pk_tag_group_id`);
+
+--
+-- Indexes for table `dev_targets`
+--
+ALTER TABLE `dev_targets`
+  ADD PRIMARY KEY (`pk_target_id`);
 
 --
 -- Indexes for table `dev_users`
@@ -3601,6 +3691,18 @@ ALTER TABLE `dev_email_templates`
   MODIFY `pk_etemplate_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `dev_events`
+--
+ALTER TABLE `dev_events`
+  MODIFY `pk_event_id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `dev_event_types`
+--
+ALTER TABLE `dev_event_types`
+  MODIFY `pk_event_type_id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `dev_followups`
 --
 ALTER TABLE `dev_followups`
@@ -3739,6 +3841,12 @@ ALTER TABLE `dev_reintegration_satisfaction_scale`
   MODIFY `pk_satisfaction_scale` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `dev_sharing_sessions`
+--
+ALTER TABLE `dev_sharing_sessions`
+  MODIFY `pk_sharing_session_id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `dev_social_evaluations`
 --
 ALTER TABLE `dev_social_evaluations`
@@ -3775,6 +3883,12 @@ ALTER TABLE `dev_tags_group`
   MODIFY `pk_tag_group_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `dev_targets`
+--
+ALTER TABLE `dev_targets`
+  MODIFY `pk_target_id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `dev_users`
 --
 ALTER TABLE `dev_users`
@@ -3790,7 +3904,7 @@ ALTER TABLE `dev_users_roles_relation`
 -- AUTO_INCREMENT for table `dev_user_activities`
 --
 ALTER TABLE `dev_user_activities`
-  MODIFY `pk_activity_log` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1084;
+  MODIFY `pk_activity_log` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1086;
 
 --
 -- AUTO_INCREMENT for table `dev_user_login_logout`
