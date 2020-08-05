@@ -24,6 +24,7 @@ if ($edit) {
 if ($_POST) {
     $data = array(
         'required' => array(
+            'is_participant' => 'Selected as a participant'
         ),
     );
     $data['form_data'] = $_POST;
@@ -60,8 +61,8 @@ doAction('render_start');
             echo linkButtonGenerator(array(
                 'href' => $myUrl,
                 'action' => 'list',
-                'text' => 'All Case ',
-                'title' => 'Manage Case ',
+                'text' => 'All Participant Profile',
+                'title' => 'Manage Participant Profile',
                 'icon' => 'icon_list',
                 'size' => 'sm'
             ));
@@ -75,7 +76,7 @@ doAction('render_start');
             <div class="row">
                 <div class="col-sm-12">
                     <div class="form-group">
-                        <label>Selected as a participant  (*)</label>
+                        <label>Selected as a participant (*)</label>
                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                             <div class="options_holder radio">
                                 <label><input class="px" type="radio" id="Yesparticipant" name="is_participant" value="yes" <?php echo $pre_data && $pre_data['is_participant'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
@@ -306,11 +307,7 @@ doAction('render_start');
                                                 ?>><span class="lbl">Trauma Counseling</span></label>
                                         </div>
                                     </div>
-                                    <label class="col-sm-4"><input class="px" id="OtherEval" type="checkbox" name="evaluate_services[]" value="Psychosocial Support" <?php
-                                        if (in_array('Psychosocial Support', $service_requested)) {
-                                            echo 'checked';
-                                        }
-                                        ?>><span class="lbl">Other</span></label>
+                                    <label class="col-sm-4"><input class="px" id="OtherEval" type="checkbox" name="evaluate_services[]" value="Psychosocial Support"><span class="lbl">Other</span></label>
                                     <div class="form-group col-sm-8">
                                         <br>
                                         <div class="form-group col-sm-12" id="InputOtherEval" style="margin-bottom: 1em; display: none;">

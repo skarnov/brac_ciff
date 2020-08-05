@@ -487,21 +487,19 @@ class dev_customer_management {
         if (!$ret['error']) {
             $data = array();
             $data['is_participant'] = $params['form_data']['is_participant'];
-            
+
             if ($params['form_data']['new_evaluate_services'] == NULL) {
                 $data_type = $params['form_data']['evaluate_services'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
                 $evaluate_services = $data_types;
-            } 
-            elseif ($params['form_data']['evaluate_services'] == NULL) {
+            } elseif ($params['form_data']['evaluate_services'] == NULL) {
                 $evaluate_services = $params['form_data']['new_evaluate_services'];
-            } 
-            elseif ($params['form_data']['evaluate_services'] != NULL && $params['form_data']['new_evaluate_services'] != NULL) {
+            } elseif ($params['form_data']['evaluate_services'] != NULL && $params['form_data']['new_evaluate_services'] != NULL) {
                 $data_type = $params['form_data']['evaluate_services'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
                 $evaluate_services = $params['form_data']['new_evaluate_services'] . ',' . $data_types;
             }
-            
+
             $plan = array();
             if ($evaluate_services) {
                 $plan['evaluate_services'] = $evaluate_services;
@@ -516,10 +514,8 @@ class dev_customer_management {
             $data['evaluate_services'] = implode(',', $plan);
 
             if ($is_update) {
-
                 $ret['evaluation_update'] = $devdb->insert_update('dev_initial_evaluation', $data, " fk_customer_id = '" . $is_update . "'");
             } else {
-
                 $ret['evaluation_insert'] = $devdb->insert_update('dev_initial_evaluation', $data);
             }
         }
@@ -561,9 +557,9 @@ class dev_customer_management {
 
         $oldData = array();
         if ($is_update) {
-            $oldData = $this->get_satisfaction_scale(array('id' => $is_update, 'single' => true));
+            $oldData = $this->get_satisfaction_scale(array('customer_id' => $is_update, 'single' => true));
             if (!$oldData) {
-                return array('error' => ['Invalid psychosocial followup id, no data found']);
+                return array('error' => ['Invalid satisfaction_scale id, no data found']);
             }
         }
 
@@ -576,9 +572,6 @@ class dev_customer_management {
         }
 
         if (!$ret['error']) {
-            
-            
-            
             $satisfaction_scale_data = array();
             $satisfaction_scale_data['satisfied_assistance'] = $params['form_data']['satisfied_assistance'];
             $satisfaction_scale_data['satisfied_counseling'] = $params['form_data']['satisfied_counseling'];
@@ -586,25 +579,12 @@ class dev_customer_management {
             $satisfaction_scale_data['satisfied_social'] = $params['form_data']['satisfied_social'];
             $satisfaction_scale_data['satisfied_community'] = $params['form_data']['satisfied_community'];
             $satisfaction_scale_data['satisfied_reintegration'] = $params['form_data']['satisfied_reintegration'];
-     
+            $satisfaction_scale_data['total_score'] = ($satisfaction_scale_data['satisfied_assistance'] + $satisfaction_scale_data['satisfied_counseling'] + $satisfaction_scale_data['satisfied_economic'] + $satisfaction_scale_data['satisfied_social'] + $satisfaction_scale_data['satisfied_community'] + $satisfaction_scale_data['satisfied_reintegration']);
 
             if ($is_update) {
                 $ret['satisfaction_update'] = $devdb->insert_update('dev_reintegration_satisfaction_scale', $satisfaction_scale_data, " fk_customer_id = '" . $is_update . "'");
             } else {
-                $ret['satisfaction_new_insert'] = $devdb->insert_update('dev_reintegration_satisfaction_scale', $satisfaction_scale_data, " fk_customer_id = '" . $ret['customer_insert']['success'] . "'");
-            }
-            
-            
-            $psycho_followups_data = array();
-            $psycho_followups_data['entry_time'] = $params['form_data']['followup_entry_time'];
-            $psycho_followups_data['entry_date'] = date('Y-m-d', strtotime($params['form_data']['followup_entry_date']));
-            $psycho_followups_data['followup_comments'] = $params['form_data']['followup_comments'];
-
-            if ($is_update)
-                $ret = $devdb->insert_update('dev_psycho_followups', $psycho_followups_data, " pk_psycho_followup_id = '" . $is_update . "'");
-            else {
-                $psycho_followups_data['fk_customer_id'] = $params['customer_id'];
-                $ret = $devdb->insert_update('dev_psycho_followups', $psycho_followups_data);
+                $ret['satisfaction_new_insert'] = $devdb->insert_update('dev_reintegration_satisfaction_scale', $satisfaction_scale_data);
             }
         }
         return $ret;

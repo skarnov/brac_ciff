@@ -10,10 +10,10 @@ if (!checkPermission($edit, 'add_case', 'edit_case')) {
 
 $pre_data = array();
 if ($edit) {
-    $pre_data = $this->get_satisfaction_scale(array('id' => $edit, 'single' => true));
-
+    $pre_data = $this->get_satisfaction_scale(array('customer_id' => $edit, 'single' => true));
+    
     if (!$pre_data) {
-        add_notification('Invalid reintegration assistance satisfaction Scale, no data found.', 'error');
+        add_notification('Invalid reintegration assistance satisfaction scale, no data found.', 'error');
         header('Location:' . build_url(NULL, array('action', 'edit')));
         exit();
     }
@@ -58,8 +58,8 @@ doAction('render_start');
             echo linkButtonGenerator(array(
                 'href' => $myUrl,
                 'action' => 'list',
-                'text' => 'All Case ',
-                'title' => 'Manage Case ',
+                'text' => 'All Participant Profile',
+                'title' => 'Manage Participant Profile',
                 'icon' => 'icon_list',
                 'size' => 'sm'
             ));
@@ -82,11 +82,11 @@ doAction('render_start');
                         <div class="col-md-8">
                             <div class="form-group">
                                 <select class="form-control" name="satisfied_assistance">
-                                    <option value="5">Very satisfied</option>
-                                    <option value="4">Satisfied</option>
-                                    <option value="3">Ok</option>
-                                    <option value="2">Dissatisfied</option>
-                                    <option value="1">Very Dissatisfied</option>
+                                    <option value="5" <?php echo $pre_data && $pre_data['satisfied_assistance'] == '5' ? 'selected' : '' ?>>Very satisfied</option>
+                                    <option value="4" <?php echo $pre_data && $pre_data['satisfied_assistance'] == '4' ? 'selected' : '' ?>>Satisfied</option>
+                                    <option value="3" <?php echo $pre_data && $pre_data['satisfied_assistance'] == '3' ? 'selected' : '' ?>>Ok</option>
+                                    <option value="2" <?php echo $pre_data && $pre_data['satisfied_assistance'] == '2' ? 'selected' : '' ?>>Dissatisfied</option>
+                                    <option value="1" <?php echo $pre_data && $pre_data['satisfied_assistance'] == '1' ? 'selected' : '' ?>>Very Dissatisfied</option>
                                 </select>
                             </div>                        
                         </div>
@@ -100,11 +100,11 @@ doAction('render_start');
                         <div class="col-md-8">
                             <div class="form-group">
                                 <select class="form-control" name="satisfied_counseling">
-                                    <option value="5">Very satisfied</option>
-                                    <option value="4">Satisfied</option>
-                                    <option value="3">Ok</option>
-                                    <option value="2">Dissatisfied</option>
-                                    <option value="1">Very Dissatisfied</option>
+                                    <option value="5" <?php echo $pre_data && $pre_data['satisfied_counseling'] == '5' ? 'selected' : '' ?>>Very satisfied</option>
+                                    <option value="4" <?php echo $pre_data && $pre_data['satisfied_counseling'] == '4' ? 'selected' : '' ?>>Satisfied</option>
+                                    <option value="3" <?php echo $pre_data && $pre_data['satisfied_counseling'] == '3' ? 'selected' : '' ?>>Ok</option>
+                                    <option value="2" <?php echo $pre_data && $pre_data['satisfied_counseling'] == '2' ? 'selected' : '' ?>>Dissatisfied</option>
+                                    <option value="1" <?php echo $pre_data && $pre_data['satisfied_counseling'] == '1' ? 'selected' : '' ?>>Very Dissatisfied</option>
                                 </select>
                             </div>                        
                         </div>
@@ -118,11 +118,11 @@ doAction('render_start');
                         <div class="col-md-8">
                             <div class="form-group">
                                 <select class="form-control" name="satisfied_economic">
-                                    <option value="5">Very satisfied</option>
-                                    <option value="4">Satisfied</option>
-                                    <option value="3">Ok</option>
-                                    <option value="2">Dissatisfied</option>
-                                    <option value="1">Very Dissatisfied</option>
+                                    <option value="5" <?php echo $pre_data && $pre_data['satisfied_economic'] == '5' ? 'selected' : '' ?>>Very satisfied</option>
+                                    <option value="4" <?php echo $pre_data && $pre_data['satisfied_economic'] == '4' ? 'selected' : '' ?>>Satisfied</option>
+                                    <option value="3" <?php echo $pre_data && $pre_data['satisfied_economic'] == '3' ? 'selected' : '' ?>>Ok</option>
+                                    <option value="2" <?php echo $pre_data && $pre_data['satisfied_economic'] == '2' ? 'selected' : '' ?>>Dissatisfied</option>
+                                    <option value="1" <?php echo $pre_data && $pre_data['satisfied_economic'] == '1' ? 'selected' : '' ?>>Very Dissatisfied</option>
                                 </select>
                             </div>                        
                         </div>
@@ -136,11 +136,11 @@ doAction('render_start');
                         <div class="col-md-8">
                             <div class="form-group">
                                 <select class="form-control" name="satisfied_social">
-                                    <option value="5">Very satisfied</option>
-                                    <option value="4">Satisfied</option>
-                                    <option value="3">Ok</option>
-                                    <option value="2">Dissatisfied</option>
-                                    <option value="1">Very Dissatisfied</option>
+                                    <option value="5" <?php echo $pre_data && $pre_data['satisfied_social'] == '5' ? 'selected' : '' ?>>Very satisfied</option>
+                                    <option value="4" <?php echo $pre_data && $pre_data['satisfied_social'] == '4' ? 'selected' : '' ?>>Satisfied</option>
+                                    <option value="3" <?php echo $pre_data && $pre_data['satisfied_social'] == '3' ? 'selected' : '' ?>>Ok</option>
+                                    <option value="2" <?php echo $pre_data && $pre_data['satisfied_social'] == '2' ? 'selected' : '' ?>>Dissatisfied</option>
+                                    <option value="1" <?php echo $pre_data && $pre_data['satisfied_social'] == '1' ? 'selected' : '' ?>>Very Dissatisfied</option>
                                 </select>
                             </div>                        
                         </div>
@@ -154,11 +154,11 @@ doAction('render_start');
                         <div class="col-md-8">
                             <div class="form-group">
                                 <select class="form-control" name="satisfied_community">
-                                    <option value="5">Very satisfied</option>
-                                    <option value="4">Satisfied</option>
-                                    <option value="3">Ok</option>
-                                    <option value="2">Dissatisfied</option>
-                                    <option value="1">Very Dissatisfied</option>
+                                    <option value="5" <?php echo $pre_data && $pre_data['satisfied_community'] == '5' ? 'selected' : '' ?>>Very satisfied</option>
+                                    <option value="4" <?php echo $pre_data && $pre_data['satisfied_community'] == '4' ? 'selected' : '' ?>>Satisfied</option>
+                                    <option value="3" <?php echo $pre_data && $pre_data['satisfied_community'] == '3' ? 'selected' : '' ?>>Ok</option>
+                                    <option value="2" <?php echo $pre_data && $pre_data['satisfied_community'] == '2' ? 'selected' : '' ?>>Dissatisfied</option>
+                                    <option value="1" <?php echo $pre_data && $pre_data['satisfied_community'] == '1' ? 'selected' : '' ?>>Very Dissatisfied</option>
                                 </select>
                             </div>                        
                         </div>
@@ -172,11 +172,11 @@ doAction('render_start');
                         <div class="col-md-8">
                             <div class="form-group">
                                 <select class="form-control" name="satisfied_reintegration">
-                                    <option value="5">Very satisfied</option>
-                                    <option value="4">Satisfied</option>
-                                    <option value="3">Ok</option>
-                                    <option value="2">Dissatisfied</option>
-                                    <option value="1">Very Dissatisfied</option>
+                                    <option value="5" <?php echo $pre_data && $pre_data['satisfied_reintegration'] == '5' ? 'selected' : '' ?>>Very satisfied</option>
+                                    <option value="4" <?php echo $pre_data && $pre_data['satisfied_reintegration'] == '4' ? 'selected' : '' ?>>Satisfied</option>
+                                    <option value="3" <?php echo $pre_data && $pre_data['satisfied_reintegration'] == '3' ? 'selected' : '' ?>>Ok</option>
+                                    <option value="2" <?php echo $pre_data && $pre_data['satisfied_reintegration'] == '2' ? 'selected' : '' ?>>Dissatisfied</option>
+                                    <option value="1" <?php echo $pre_data && $pre_data['satisfied_reintegration'] == '1' ? 'selected' : '' ?>>Very Dissatisfied</option>
                                 </select>
                             </div>                        
                         </div>
