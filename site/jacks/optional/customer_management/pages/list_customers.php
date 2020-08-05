@@ -275,11 +275,11 @@ filterForm($filterForm);
             <tr>
                 <th>ID</th>
                 <th>Name</th>
-                <th class="tar action_column">Actions</th>
                 <th>Contact Number</th>
                 <th>Passport Number</th>
                 <th>Present Address</th>
                 <th>Status</th>
+                <th class="tar action_column">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -289,11 +289,15 @@ filterForm($filterForm);
                 <tr>
                     <td><?php echo $customer['customer_id']; ?></td>
                     <td><?php echo $customer['full_name']; ?></td>
+                    <td><?php echo $customer['customer_mobile']; ?></td>
+                    <td><?php echo $customer['passport_number']; ?></td>
+                    <td><?php echo '<b>Division - </b>' . $customer['permanent_division'] . ',<br><b>District - </b>' . $customer['permanent_district'] . ',<br><b>Sub-District - </b>' . $customer['permanent_sub_district'] . ',<br><b>Police Station - </b>' . $customer['permanent_police_station'] . ',<br><b>Post Office - </b>' . $customer['permanent_post_office'] ?></td>
+                    <td style="text-transform: capitalize"><?php echo $customer['customer_status']; ?></td>
                     <td class="tar action_column">
                         <?php if (has_permission('edit_customer')): ?>
                             <div class="btn-group">
                                 <button type="button" class="btn btn-primary">Action</button>
-                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="height: 31px;"><i class="fa fa-caret-down"></i></button>
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="height: 30px;"><i class="fa fa-caret-down"></i></button>
                                 <ul class="dropdown-menu">
                                     <li><a href="<?php echo url('admin/dev_customer_management/manage_customers?action=add_edit_customer&edit=' . $customer['pk_customer_id']) ?>">Edit</a></li>
                                     <li><a href="<?php echo url('admin/dev_customer_management/manage_customers?action=add_edit_evaluate&edit=' . $customer['pk_customer_id']) ?>">Evaluate</a></li>
@@ -316,10 +320,6 @@ filterForm($filterForm);
                             </div>
                         <?php endif; ?>
                     </td>
-                    <td><?php echo $customer['customer_mobile']; ?></td>
-                    <td><?php echo $customer['passport_number']; ?></td>
-                    <td><?php echo '<b>Division - </b>' . $customer['permanent_division'] . ',<br><b>District - </b>' . $customer['permanent_district'] . ',<br><b>Sub-District - </b>' . $customer['permanent_sub_district'] . ',<br><b>Police Station - </b>' . $customer['permanent_police_station'] . ',<br><b>Post Office - </b>' . $customer['permanent_post_office'] ?></td>
-                    <td style="text-transform: capitalize"><?php echo $customer['customer_status']; ?></td>
                 </tr>
                 <?php
             }

@@ -180,6 +180,7 @@ class dev_customer_management {
 
         if (!$ret['error']) {
             $customer_data = array();
+            $customer_data['customer_id'] = $params['form_data']['customer_id'];
             $customer_data['full_name'] = $params['form_data']['full_name'];
             $customer_data['father_name'] = $params['form_data']['father_name'];
             $customer_data['mother_name'] = $params['form_data']['mother_name'];
@@ -223,18 +224,18 @@ class dev_customer_management {
                 $customer_data['create_by'] = $_config['user']['pk_user_id'];
                 $ret['customer_insert'] = $devdb->insert_update('dev_customers', $customer_data);
                 /* Customer ID Creation */
-                $sql = "SELECT COUNT(pk_customer_id) as TOTAL FROM dev_customers WHERE (create_date >= '" . date('Y-m-01') . "' AND create_date <= '" . date('Y-m-t') . "')";
-                $totalCustomer = $devdb->get_row($sql);
-                $totalCustomer = $totalCustomer['TOTAL'];
-                $x = 10;
-                while ($x--) {
-                    $totalCustomer += 1;
-                    $customerID = 'C-' . date('y-m-') . str_pad($totalCustomer, 6, "0", STR_PAD_LEFT);
-                    $customerIDUpdate = $devdb->query("UPDATE dev_customers SET customer_id = '" . $customerID . "' WHERE pk_customer_id = '" . $ret['customer_insert']['success'] . "'");
-                    if ($customerIDUpdate['success']) {
-                        break;
-                    }
-                }
+//                $sql = "SELECT COUNT(pk_customer_id) as TOTAL FROM dev_customers WHERE (create_date >= '" . date('Y-m-01') . "' AND create_date <= '" . date('Y-m-t') . "')";
+//                $totalCustomer = $devdb->get_row($sql);
+//                $totalCustomer = $totalCustomer['TOTAL'];
+//                $x = 10;
+//                while ($x--) {
+//                    $totalCustomer += 1;
+//                    $customerID = 'C-' . date('y-m-') . str_pad($totalCustomer, 6, "0", STR_PAD_LEFT);
+//                    $customerIDUpdate = $devdb->query("UPDATE dev_customers SET customer_id = '" . $customerID . "' WHERE pk_customer_id = '" . $ret['customer_insert']['success'] . "'");
+//                    if ($customerIDUpdate['success']) {
+//                        break;
+//                    }
+//                }
 
                 $migration_data = array();
                 $migration_data['fk_customer_id'] = $ret['customer_insert']['success'];
@@ -285,7 +286,7 @@ class dev_customer_management {
 
             $migration_data['migration_medias'] = json_encode($migration_medias);
 
-            //Migration Documents
+            //Migration Documents For DADA
 
             $migration_data['departure_date'] = date('Y-m-d', strtotime($params['form_data']['departure_date']));
             $migration_data['return_date'] = date('Y-m-d', strtotime($params['form_data']['return_date']));
@@ -576,14 +577,29 @@ class dev_customer_management {
 
         if (!$ret['error']) {
             
-//            tanjil insert_start
+            
+            
+            $satisfaction_scale_data = array();
+            $satisfaction_scale_data['satisfied_assistance'] = $params['form_data']['satisfied_assistance'];
+            $satisfaction_scale_data['satisfied_counseling'] = $params['form_data']['satisfied_counseling'];
+            $satisfaction_scale_data['satisfied_economic'] = $params['form_data']['satisfied_economic'];
+            $satisfaction_scale_data['satisfied_social'] = $params['form_data']['satisfied_social'];
+            $satisfaction_scale_data['satisfied_community'] = $params['form_data']['satisfied_community'];
+            $satisfaction_scale_data['satisfied_reintegration'] = $params['form_data']['satisfied_reintegration'];
+     
+
+            if ($is_update) {
+                $ret['satisfaction_update'] = $devdb->insert_update('dev_reintegration_satisfaction_scale', $satisfaction_scale_data, " fk_customer_id = '" . $is_update . "'");
+            } else {
+                $ret['satisfaction_new_insert'] = $devdb->insert_update('dev_reintegration_satisfaction_scale', $satisfaction_scale_data, " fk_customer_id = '" . $ret['customer_insert']['success'] . "'");
+            }
+            
+            
             $psycho_followups_data = array();
             $psycho_followups_data['entry_time'] = $params['form_data']['followup_entry_time'];
             $psycho_followups_data['entry_date'] = date('Y-m-d', strtotime($params['form_data']['followup_entry_date']));
             $psycho_followups_data['followup_comments'] = $params['form_data']['followup_comments'];
 
-            //            tanjil insert_end
-            
             if ($is_update)
                 $ret = $devdb->insert_update('dev_psycho_followups', $psycho_followups_data, " pk_psycho_followup_id = '" . $is_update . "'");
             else {

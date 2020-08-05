@@ -72,41 +72,117 @@ doAction('render_start');
         <div class="panel-body">
             <div class="col-sm-12">
                 <fieldset class="scheduler-border">
-                    <legend class="scheduler-border">Comment on Situation of Case</legend>
-                    <div class="form-group">
-                        <textarea class="form-control" name="comment_psychosocial" value="<?php echo $pre_data['comment_psychosocial'] ? $pre_data['comment_psychosocial'] : ''; ?>" rows="3" placeholder="Comment on psychosocial reintegration"></textarea>
+                    <legend class="scheduler-border">Reintegration Assistance Satisfaction Scale</legend>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>If applicable, how satisfied are you with the assistance of repatriation</label>
+                            </div>                        
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <select class="form-control" name="satisfied_assistance">
+                                    <option value="5">Very satisfied</option>
+                                    <option value="4">Satisfied</option>
+                                    <option value="3">Ok</option>
+                                    <option value="2">Dissatisfied</option>
+                                    <option value="1">Very Dissatisfied</option>
+                                </select>
+                            </div>                        
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <textarea class="form-control" name="comment_economic" value="<?php echo $pre_data['comment_economic'] ? $pre_data['comment_economic'] : ''; ?>" rows="3" placeholder="Comment on economic reintegration"></textarea>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>If applicable, how satisfied are you with the counseling assistance received</label>
+                            </div>                        
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <select class="form-control" name="satisfied_counseling">
+                                    <option value="5">Very satisfied</option>
+                                    <option value="4">Satisfied</option>
+                                    <option value="3">Ok</option>
+                                    <option value="2">Dissatisfied</option>
+                                    <option value="1">Very Dissatisfied</option>
+                                </select>
+                            </div>                        
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <textarea class="form-control" name="comment_social" value="<?php echo $pre_data['comment_social'] ? $pre_data['comment_social'] : ''; ?>" rows="3" placeholder="Comment on social reintegration"></textarea>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>If applicable, how satisfied are you with the economic assistance received</label>
+                            </div>                        
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <select class="form-control" name="satisfied_economic">
+                                    <option value="5">Very satisfied</option>
+                                    <option value="4">Satisfied</option>
+                                    <option value="3">Ok</option>
+                                    <option value="2">Dissatisfied</option>
+                                    <option value="1">Very Dissatisfied</option>
+                                </select>
+                            </div>                        
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <textarea class="form-control" name="complete_income" value="<?php echo $pre_data['complete_income'] ? $pre_data['complete_income'] : ''; ?>" rows="3" placeholder="Complete income tracking information"></textarea>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>If applicable, how satisfied are you with the social  assistance received</label>
+                            </div>                        
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <select class="form-control" name="satisfied_social">
+                                    <option value="5">Very satisfied</option>
+                                    <option value="4">Satisfied</option>
+                                    <option value="3">Ok</option>
+                                    <option value="2">Dissatisfied</option>
+                                    <option value="1">Very Dissatisfied</option>
+                                </select>
+                            </div>                        
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>If applicable, how satisfied are you with the assistance received at the community level</label>
+                            </div>                        
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <select class="form-control" name="satisfied_community">
+                                    <option value="5">Very satisfied</option>
+                                    <option value="4">Satisfied</option>
+                                    <option value="3">Ok</option>
+                                    <option value="2">Dissatisfied</option>
+                                    <option value="1">Very Dissatisfied</option>
+                                </select>
+                            </div>                        
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>If applicable, how satisfied are with the reintegration support overall</label>
+                            </div>                        
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <select class="form-control" name="satisfied_reintegration">
+                                    <option value="5">Very satisfied</option>
+                                    <option value="4">Satisfied</option>
+                                    <option value="3">Ok</option>
+                                    <option value="2">Dissatisfied</option>
+                                    <option value="1">Very Dissatisfied</option>
+                                </select>
+                            </div>                        
+                        </div>
                     </div>
                 </fieldset>
-                <fieldset class="scheduler-border">
-                    <legend class="scheduler-border">Status of Case after Receiving the Services</legend>
-                    <div class="form-group">
-                        <input class="form-control" name="monthly_income" value="<?php echo $pre_data['monthly_income'] ? $pre_data['monthly_income'] : ''; ?>" placeholder="Monthly income (BDT)" type="text" name="" value="">
-                    </div>
-                    <div class="form-group">
-                        <input class="form-control" name="challenges" value="<?php echo $pre_data['challenges'] ? $pre_data['challenges'] : ''; ?>" placeholder="Challenges" type="text" name="" value="">
-                    </div>
-                    <div class="form-group">
-                        <input class="form-control" name="actions_taken" value="<?php echo $pre_data['actions_taken'] ? $pre_data['actions_taken'] : ''; ?>" placeholder="Actions taken" type="text" name="" value="">
-                    </div>
-                    <div class="form-group">
-                        <input class="form-control" name="remark_participant" value="<?php echo $pre_data['remark_participant'] ? $pre_data['remark_participant'] : ''; ?>" placeholder="Remark of the participant (if any)" type="text" name="" value="">
-                    </div>
-                    <div class="form-group">
-                        <input class="form-control" name="comment_brac" value="<?php echo $pre_data['comment_brac'] ? $pre_data['comment_brac'] : ''; ?>" placeholder="Comment of BRAC Officer responsible for participant" type="text" name="" value="">
-                    </div>
-                    <div class="form-group">
-                        <input class="form-control" name="remark_district" value="<?php echo $pre_data['remark_district'] ? $pre_data['remark_district'] : ''; ?>" placeholder="Remark of District Manager" type="text" name="" value="">
-                    </div>
-                </fieldset>
+
             </div>
         </div>
         <div class="panel-footer tar">

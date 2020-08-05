@@ -1454,14 +1454,35 @@ doAction('render_start');
                                         <label>Training Certificate Received</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                             <div class="options_holder radio">
-                                                <label><input class="px" type="radio" id="is_certificate_received" name="is_certificate_received" value="yes" <?php echo $pre_data && $pre_data['is_certificate_received'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
-                                                <label><input class="px" type="radio" id="is_certificate_received" name="is_certificate_received" value="no" <?php echo $pre_data && $pre_data['is_certificate_received'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
+                                                <label><input class="px" type="radio" id="is_Yes_certificate_received" name="is_certificate_received" value="yes" <?php echo $pre_data && $pre_data['is_certificate_received'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
+                                                <label><input class="px" type="radio" id="is_No_certificate_received" name="is_certificate_received" value="no" <?php echo $pre_data && $pre_data['is_certificate_received'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label>How has the training been used so far?</label>
-                                        <textarea class="form-control" name="used_far" rows="2" placeholder=""></textarea>
+                                    <div id="usedfar" style="display: none;">
+                                        <div class="form-group">
+                                            <label>How has the training been used so far?</label>
+                                            <textarea class="form-control" name="used_far" rows="2" placeholder=""></textarea>
+                                        </div>
+                                        <script>
+                                            init.push(function () {
+                                                $('#is_Yes_certificate_received').change(function(){
+                                                    if(this.checked){
+                                                        $('#usedfar').show();
+                                                    }else{
+                                                        $('#usedfar').show();
+                                                    }
+                                                });
+                                                $('#isCompletedNo').change(function(){
+                                                    if(this.checked){
+                                                        $('#usedfar').hide();
+                                                    }else{
+                                                        $('#usedfar').show();
+                                                    }
+                                                });
+                                            });
+                                        </script> 
+
                                     </div>
                                     <div class="form-group">
                                         <label>Any other Comments</label>
@@ -2061,7 +2082,7 @@ doAction('render_start');
                                             });
                                         </script>
                                     </fieldset >
-                                    <fieldset class="scheduler-border">
+                                    <fieldset class="scheduler-border Casedropped">
                                         <legend class="scheduler-border">Confirmed Services Received after 3 Months</legend>
                                         <div class="form-group">
                                             <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
@@ -2303,7 +2324,7 @@ doAction('render_start');
                                     </fieldset>
                                 </div>					
                                 <div class="col-sm-6">
-                                    <fieldset class="scheduler-border">
+                                    <fieldset class="scheduler-border Casedropped">
                                         <legend class="scheduler-border">Comment on Situation of Case</legend>
                                         <div class="form-group">
                                             <textarea class="form-control" name="comment_psychosocial" value="<?php echo $pre_data['comment_psychosocial'] ? $pre_data['comment_psychosocial'] : ''; ?>" rows="3" placeholder="Comment on psychosocial reintegration"></textarea>
@@ -2318,7 +2339,7 @@ doAction('render_start');
                                             <textarea class="form-control" name="complete_income" value="<?php echo $pre_data['complete_income'] ? $pre_data['complete_income'] : ''; ?>" rows="3" placeholder="Complete income tracking information"></textarea>
                                         </div>
                                     </fieldset>
-                                    <fieldset class="scheduler-border">
+                                    <fieldset class="scheduler-border Casedropped">
                                         <legend class="scheduler-border">Status of Case after Receiving the Services</legend>
                                         <div class="form-group">
                                             <input class="form-control" name="monthly_income" value="<?php echo $pre_data['monthly_income'] ? $pre_data['monthly_income'] : ''; ?>" placeholder="Monthly income (BDT)" type="text" name="" value="">

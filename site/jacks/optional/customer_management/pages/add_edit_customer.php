@@ -589,9 +589,12 @@ ob_start();
                                 </div>
                                 <div class="form-group">
                                     <label>Income: (If applicable)</label>
-                                    <input class="form-control" type="text" name="earned_money" value="<?php echo $pre_data['earned_money'] ? $pre_data['earned_money'] : ''; ?>">
+                                    <input class="form-control" type="number" name="earned_money" value="<?php echo $pre_data['earned_money'] ? $pre_data['earned_money'] : ''; ?>">
                                 </div>
                             </div>
+                            <?php
+                                $migration_reasons = $migration_reasons ? $migration_reasons : array($migration_reasons);
+                            ?>                            
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Reasons for Migration (*)</label>
@@ -651,6 +654,9 @@ ob_start();
                                         });
                                     });
                                 </script>
+                                <?php
+                                    $leave_reasons = $leave_reasons ? $leave_reasons : array($leave_reasons);
+                                ?>
                                 <div class="form-group">
                                     <label>Reasons for returning to Bangladesh (*) </label>
                                     <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
@@ -794,15 +800,15 @@ ob_start();
                                     </div>
                                     <div class="form-group">
                                         <label>Monthly income of returnee after return(in BDT)</label>
-                                        <input type="text" class="form-control" name="present_income" value="<?php echo $pre_data['present_income'] ? $pre_data['present_income'] : ''; ?>" />
+                                        <input type="number" class="form-control" name="present_income" value="<?php echo $pre_data['present_income'] ? $pre_data['present_income'] : ''; ?>" />
                                     </div>
                                     <div class="form-group">
                                         <label>Savings (BDT)</label>
-                                        <input type="text" class="form-control" name="personal_savings" value="<?php echo $pre_data['personal_savings'] ? $pre_data['personal_savings'] : ''; ?>" />
+                                        <input type="number" class="form-control" name="personal_savings" value="<?php echo $pre_data['personal_savings'] ? $pre_data['personal_savings'] : ''; ?>" />
                                     </div>
                                     <div class="form-group">
                                         <label>Loan Amount (BDT)</label>
-                                        <input type="text" class="form-control" name="personal_debt" value="<?php echo $pre_data['personal_debt'] ? $pre_data['personal_debt'] : ''; ?>" />
+                                        <input type="number" class="form-control" name="personal_debt" value="<?php echo $pre_data['personal_debt'] ? $pre_data['personal_debt'] : ''; ?>" />
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
@@ -894,6 +900,9 @@ ob_start();
                                             });
                                         });
                                     </script>
+                                    <?php
+                                        $have_skills = $have_skills ? $have_skills : array($have_skills);
+                                    ?>
                                     <fieldset class="scheduler-border iga_skill">
                                         <legend class="scheduler-border">IGA Skills</legend>
                                         <div class="form-group ">
@@ -1026,6 +1035,9 @@ ob_start();
                                             });
                                         });
                                     </script>
+                                    <?php
+                                        $disease_types = $disease_types ? $disease_types : array($disease_types);
+                                    ?>
                                     <fieldset class="scheduler-border ChronicDisease" style="display: none; margin-bottom: 1em;">
                                         <legend class="scheduler-border">Type of  Disease</legend>
                                         <div class="form-group ">
@@ -1126,14 +1138,6 @@ ob_start();
         $('#profile_picture').change(function () {
             var thsName = $(this).prop('name');
             $('[name="' + thsName + '_hidden"]').val($(this).val());
-        });
-
-        new bd_new_location_selector({
-            'division': $('#present_division'),
-            'district': $('#present_district'),
-            'sub_district': $('#present_sub_district'),
-            'police_station': $('#present_police_station'),
-            'post_office': $('#present_post_office'),
         });
 
         new bd_new_location_selector({

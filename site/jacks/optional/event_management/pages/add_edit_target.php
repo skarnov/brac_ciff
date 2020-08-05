@@ -79,6 +79,19 @@ ob_start();
             
             dev_targets
             
+            
+              <div class="col-md-3">
+                <div class="form-group">
+                    <label>Select Event Type</label>
+                    <select class="form-control" id="" name="" >
+                        <option>Select One</option>
+                        <option>Excellent</option>
+                        <option>Good</option>
+                    </select>
+                </div>
+            </div>
+            
+            
 <!--            <div class="side_aligned_tab">
                 <ul id="uidemo-tabs-default-demo" class="nav nav-tabs">
                     <li class="active">
