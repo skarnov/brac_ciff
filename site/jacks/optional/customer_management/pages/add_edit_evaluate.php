@@ -10,7 +10,7 @@ if (!checkPermission($edit, 'add_case', 'edit_case')) {
 
 $pre_data = array();
 if ($edit) {
-    $pre_data = $this->get_initial_evaluation(array('id' => $edit, 'single' => true));
+    $pre_data = $this->get_initial_evaluation(array('customer_id' => $edit, 'single' => true));
     
     $service_requested = explode(',', $pre_data['evaluate_services']);
 
@@ -93,6 +93,9 @@ doAction('render_start');
                             });
                         });
                     </script>
+                    <?php
+                        $service_requested = $service_requested ? $service_requested : array($service_requested);
+                    ?> 
                     <fieldset class="scheduler-border">
                         <legend class="scheduler-border">Types of support that can be provided under the project or referred (based on the needs identified)</legend>
                         <div class="form-group">

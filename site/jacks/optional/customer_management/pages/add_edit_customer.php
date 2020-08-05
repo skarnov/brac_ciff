@@ -19,7 +19,7 @@ if ($edit) {
     $leave_reasons = explode(',', $pre_data['destination_country_leave_reason']);
     $have_skills = explode(',', $pre_data['have_skills']);
     $disease_types = explode(',', $pre_data['disease_type']);
-    
+
     if (!$pre_data) {
         add_notification('Invalid participant, no data found.', 'error');
         header('Location:' . build_url(NULL, array('action', 'edit')));
@@ -57,10 +57,45 @@ if ($_POST['ajax_type']) {
 }
 
 if ($_POST) {
-
     $data = array(
         'required' => array(
-            'full_name' => 'Full Name'
+            'full_name' => 'Full Name',
+            'father_name' => 'Father Name',
+            'customer_birthdate' => 'Customer Birthdate',
+            'customer_mobile' => 'Customer Mobile',
+            'emergency_mobile' => 'Emergency Mobile No',
+            'emergency_name' => 'Name of that person',
+            'emergency_relation' => 'Relation with Participant',
+            'educational_qualification' => 'Educational Qualification',
+            'customer_gender' => 'Sex',
+            'marital_status' => 'Marital Status',
+            'permanent_division' => 'Division',
+            'permanent_sub_district' => 'Upazila',
+            'permanent_district' => 'District',
+            'permanent_house' => 'Address',
+            'male_household_member' => 'Number of Accompany/ Number of Family Member (Male)',
+            'female_household_member' => 'Number of Accompany/ Number of Family Member (Female)',
+            'left_port' => 'Port of exit from Bangladesh',
+            'preferred_country' => 'Desired destination',
+            'final_destination' => 'Final destination',
+            'migration_type' => 'Type of Channels',
+            'visa_type' => 'Type of visa',
+            'departure_media' => 'Media of Departure (Name)',
+            'media_address' => 'Media of Departure (Address)',
+            'departure_date' => 'Date of Departure from Bangladesh (*)',
+            'return_date' => 'Date of Return to Bangladesh',
+            'migration_occupation' => 'Occupation in overseas country',
+            'migration_reasons' => 'Reasons for Migration',
+            'destination_country_leave_reason' => 'Reasons for returning to Bangladesh',
+            'pre_occupation' => 'Main occupation (before trafficking)',
+            'present_income' => 'Monthly income of returnee after return(in BDT)',
+            'personal_savings' => 'Savings (BDT)',
+            'personal_debt' => 'Loan Amount',
+            'current_residence_ownership' => 'Ownership of House',
+            'current_residence_type' => 'Type of house',
+            'have_earner_skill' => 'IGA Skills',
+            'is_physically_challenged' => 'Do you have any disability?',
+            'having_chronic_disease' => 'Any Chronic Disease?'
         ),
     );
     $data['form_data'] = $_POST;
@@ -224,7 +259,7 @@ ob_start();
                                         </div>
                                     </fieldset>
                                     <div class="form-group">
-                                        <label>Educational Qualification</label>
+                                        <label>Educational Qualification (*)</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                             <div class="options_holder radio">
                                                 <label><input class="px educations" type="radio" name="educational_qualification" value="illiterate" <?php echo $pre_data && $pre_data['educational_qualification'] == 'illiterate' ? 'checked' : '' ?>><span class="lbl">Illiterate</span></label>
@@ -275,7 +310,7 @@ ob_start();
                                         <p class="help-block"></p>
                                     </div>
                                     <div class="form-group">
-                                        <label>Gender</label>
+                                        <label>Sex (*)</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                             <div class="options_holder radio">
                                                 <label><input class="px oldGender" type="radio" name="customer_gender" value="male" <?php echo $pre_data && $pre_data['customer_gender'] == 'male' ? 'checked' : '' ?>><span class="lbl">Male</span></label>
@@ -299,7 +334,7 @@ ob_start();
                                         });
                                     </script>
                                     <div class="form-group">
-                                        <label>Marital Status</label>
+                                        <label>Marital Status (*)</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                             <div class="options_holder radio">
                                                 <label><input class="px notMarried" type="radio" name="marital_status" value="single" <?php echo $pre_data && $pre_data['marital_status'] == 'single' ? 'checked' : '' ?>><span class="lbl">Unmarried</span></label>
@@ -330,7 +365,7 @@ ob_start();
                                         });
                                     </script>
                                     <fieldset class="scheduler-border">
-                                        <legend class="scheduler-border">Address</legend>
+                                        <legend class="scheduler-border">Address Information</legend>
                                         <div class="col-sm-6">   
                                             <label class="control-label input-label">Village</label>
                                             <div class="form-group">
@@ -341,7 +376,7 @@ ob_start();
                                                 <input class="form-control" type="text" name="permanent_ward" value="<?php echo $pre_data['permanent_ward'] ? $pre_data['permanent_ward'] : ''; ?>">
                                             </div>
                                             <div class="form-group">
-                                                <label>Division</label>
+                                                <label>Division (*)</label>
                                                 <div class="select2-primary">
                                                     <select class="form-control" id="permanent_division" name="permanent_division" data-selected="<?php echo $pre_data['permanent_division'] ? $pre_data['permanent_division'] : '' ?>"></select>
                                                 </div>
@@ -352,19 +387,19 @@ ob_start();
                                             <div class="form-group">
                                                 <input class="form-control" type="text" name="permanent_union" value="<?php echo $pre_data['permanent_union'] ? $pre_data['permanent_union'] : ''; ?>">
                                             </div>
-                                            <label class="control-label input-label">Upazila</label>
+                                            <label class="control-label input-label">Upazila (*)</label>
                                             <div class="form-group">
                                                 <input class="form-control" type="text" name="permanent_sub_district" value="<?php echo $pre_data['permanent_sub_district'] ? $pre_data['permanent_sub_district'] : ''; ?>">
                                             </div>
                                             <div class="form-group">
-                                                <label>District</label>
+                                                <label>District (*)</label>
                                                 <div class="select2-success">
                                                     <select class="form-control" id="permanent_district" name="permanent_district" data-selected="<?php echo $pre_data['permanent_district'] ? $pre_data['permanent_district'] : ''; ?>"></select>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-sm-12">  
-                                            <label class="control-label input-label">Address</label>
+                                            <label class="control-label input-label">Address (*)</label>
                                             <div class="form-group">
                                                 <textarea type="text" class="form-control" name="permanent_house" /><?php echo $pre_data['permanent_house'] ? $pre_data['permanent_house'] : ''; ?></textarea>
                                             </div>
@@ -374,13 +409,13 @@ ob_start();
                                 <fieldset class="scheduler-border">
                                     <legend class="scheduler-border">Number of Accompany/ Number of Family Member</legend>
                                     <div class="col-sm-4">   
-                                        <label class="control-label input-label">Male:</label>
+                                        <label class="control-label input-label">Male (*)</label>
                                         <div class="form-group">
                                             <input type="text" class="form-control" id="maleMember" name="male_household_member" value="<?php echo $pre_data['male_household_member'] ? $pre_data['male_household_member'] : ''; ?>" />
                                         </div>
                                     </div>
                                     <div class="col-sm-4">   
-                                        <label class="control-label input-label">Female</label>
+                                        <label class="control-label input-label">Female (*)</label>
                                         <div class="form-group">
                                             <input class="form-control" id="femaleMember" type="text" name="female_household_member" value="<?php echo $pre_data['female_household_member'] ? $pre_data['female_household_member'] : ''; ?>">
                                         </div>
@@ -431,7 +466,7 @@ ob_start();
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Type of Channels</label>
+                                    <label>Type of Channels (*)</label>
                                     <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                         <div class="options_holder radio">
                                             <label><input class="px educations" type="radio" name="migration_type" value="regular" <?php echo $pre_data && $pre_data['migration_type'] == 'regular' ? 'checked' : '' ?>><span class="lbl">Regular</span></label>
@@ -441,7 +476,7 @@ ob_start();
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Type of visa</label>
+                                    <label>Type of visa (*)</label>
                                     <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                         <div class="options_holder radio">
                                             <label><input class="px visa" type="radio" name="visa_type" value="tourist" <?php echo $pre_data && $pre_data['visa_type'] == 'tourist' ? 'checked' : '' ?>><span class="lbl">Tourist</span></label>
@@ -481,7 +516,7 @@ ob_start();
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
-                                    <label class="control-label input-label">Address</label>
+                                    <label class="control-label input-label">Address (*)</label>
                                     <div class="form-group">
                                         <input class="form-control" type="text" name="media_address" value="<?php echo $migration_medias->media_address ? $migration_medias->media_address : ''; ?>">
                                     </div>
@@ -593,7 +628,7 @@ ob_start();
                                 </div>
                             </div>
                             <?php
-                                $migration_reasons = $migration_reasons ? $migration_reasons : array($migration_reasons);
+                            $migration_reasons = $migration_reasons ? $migration_reasons : array($migration_reasons);
                             ?>                            
                             <div class="col-sm-6">
                                 <div class="form-group">
@@ -655,7 +690,7 @@ ob_start();
                                     });
                                 </script>
                                 <?php
-                                    $leave_reasons = $leave_reasons ? $leave_reasons : array($leave_reasons);
+                                $leave_reasons = $leave_reasons ? $leave_reasons : array($leave_reasons);
                                 ?>
                                 <div class="form-group">
                                     <label>Reasons for returning to Bangladesh (*) </label>
@@ -754,7 +789,7 @@ ob_start();
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label>Denied freedom of movement during or between work shifts after your departure from Bangladesh? </label>
+                                            <label>Denied freedom of movement during or between work shifts after your departure from Bangladesh?</label>
                                             <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                                 <div class="options_holder radio">
                                                     <label><input class="px" type="radio" name="is_movement_limitation" value="yes" <?php echo $pre_data && $pre_data['is_movement_limitation'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
@@ -791,29 +826,29 @@ ob_start();
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Main occupation (before trafficking)</label>
+                                        <label>Main occupation (before trafficking) (*)</label>
                                         <input type="text" class="form-control" name="pre_occupation" value="<?php echo $pre_data['pre_occupation'] ? $pre_data['pre_occupation'] : ''; ?>" />
                                     </div>
                                     <div class="form-group">
-                                        <label>Main occupation (after return)</label>
+                                        <label>Main occupation (after return) (*)</label>
                                         <input type="text" class="form-control" name="present_occupation" value="<?php echo $pre_data['present_occupation'] ? $pre_data['present_occupation'] : ''; ?>" />
                                     </div>
                                     <div class="form-group">
-                                        <label>Monthly income of returnee after return(in BDT)</label>
+                                        <label>Monthly income of returnee after return(in BDT) (*)</label>
                                         <input type="number" class="form-control" name="present_income" value="<?php echo $pre_data['present_income'] ? $pre_data['present_income'] : ''; ?>" />
                                     </div>
                                     <div class="form-group">
-                                        <label>Savings (BDT)</label>
+                                        <label>Savings (BDT) (*)</label>
                                         <input type="number" class="form-control" name="personal_savings" value="<?php echo $pre_data['personal_savings'] ? $pre_data['personal_savings'] : ''; ?>" />
                                     </div>
                                     <div class="form-group">
-                                        <label>Loan Amount (BDT)</label>
+                                        <label>Loan Amount (BDT) (*)</label>
                                         <input type="number" class="form-control" name="personal_debt" value="<?php echo $pre_data['personal_debt'] ? $pre_data['personal_debt'] : ''; ?>" />
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>Ownership of House</label>
+                                        <label>Ownership of House (*)</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                             <div class="options_holder radio">
                                                 <label><input class="px house_ownership" type="radio" name="current_residence_ownership" value="own" <?php echo $pre_data && $pre_data['current_residence_ownership'] == 'own' ? 'checked' : '' ?>><span class="lbl">Own</span></label>
@@ -839,7 +874,7 @@ ob_start();
                                         });
                                     </script>
                                     <div class="form-group">
-                                        <label>Type of house</label>
+                                        <label>Type of house (*)</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                             <div class="options_holder radio">
                                                 <label><input class="px house" type="radio" name="current_residence_type" value="raw_house" <?php echo $pre_data && $pre_data['current_residence_type'] == 'raw_house' ? 'checked' : '' ?>><span class="lbl">Raw house (wall made of mud/straw, roof made of tin jute stick/ pampas grass/ khar/ leaves)</span></label>
@@ -874,7 +909,7 @@ ob_start();
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>IGA Skills ?</label>
+                                        <label>IGA Skills ? (*)</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                             <div class="options_holder radio">
                                                 <label><input class="px" type="radio" id="iga_skillYes" name="have_earner_skill" value="yes" <?php echo $pre_data && $pre_data['have_earner_skill'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
@@ -901,7 +936,7 @@ ob_start();
                                         });
                                     </script>
                                     <?php
-                                        $have_skills = $have_skills ? $have_skills : array($have_skills);
+                                    $have_skills = $have_skills ? $have_skills : array($have_skills);
                                     ?>
                                     <fieldset class="scheduler-border iga_skill">
                                         <legend class="scheduler-border">IGA Skills</legend>
@@ -980,7 +1015,7 @@ ob_start();
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>Do you have any disability?</label>
+                                        <label>Do you have any disability? (*)</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                             <div class="options_holder radio">
                                                 <label><input class="px" type="radio" id="yesdisability" name="is_physically_challenged" value="yes" <?php echo $pre_data && $pre_data['is_physically_challenged'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
@@ -1010,7 +1045,7 @@ ob_start();
                                         });
                                     </script>
                                     <div class="form-group">
-                                        <label>Any Chronic Disease?</label>
+                                        <label>Any Chronic Disease? (*)</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                             <div class="options_holder radio">
                                                 <label><input class="px" type="radio" id="yeChronicDisease" name="having_chronic_disease" value="yes" <?php echo $pre_data && $pre_data['having_chronic_disease'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
@@ -1036,7 +1071,7 @@ ob_start();
                                         });
                                     </script>
                                     <?php
-                                        $disease_types = $disease_types ? $disease_types : array($disease_types);
+                                    $disease_types = $disease_types ? $disease_types : array($disease_types);
                                     ?>
                                     <fieldset class="scheduler-border ChronicDisease" style="display: none; margin-bottom: 1em;">
                                         <legend class="scheduler-border">Type of  Disease</legend>

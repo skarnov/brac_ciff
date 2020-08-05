@@ -115,10 +115,10 @@ class dev_customer_management {
             ";
         } else {
             $from = "FROM dev_customers 
-                    LEFT JOIN dev_migrations ON (dev_migrations.fk_customer_id = dev_customers.pk_customer_id)
-                    LEFT JOIN dev_customer_health ON (dev_customer_health.fk_customer_id = dev_customers.pk_customer_id)
-                    LEFT JOIN dev_economic_profile ON (dev_economic_profile.fk_customer_id = dev_customers.pk_customer_id)
-                    LEFT JOIN dev_customer_skills ON (dev_customer_skills.fk_customer_id = dev_customers.pk_customer_id)
+                LEFT JOIN dev_migrations ON (dev_migrations.fk_customer_id = dev_customers.pk_customer_id)
+                LEFT JOIN dev_customer_health ON (dev_customer_health.fk_customer_id = dev_customers.pk_customer_id)
+                LEFT JOIN dev_economic_profile ON (dev_economic_profile.fk_customer_id = dev_customers.pk_customer_id)
+                LEFT JOIN dev_customer_skills ON (dev_customer_skills.fk_customer_id = dev_customers.pk_customer_id)
             ";
         }
 
@@ -470,7 +470,7 @@ class dev_customer_management {
 
         $oldData = array();
         if ($is_update) {
-            $oldData = $this->get_initial_evaluation(array('id' => $is_update, 'single' => true));
+            $oldData = $this->get_initial_evaluation(array('customer_id' => $is_update, 'single' => true));
             if (!$oldData) {
                 return array('error' => ['Invalid evaluation id, no data found']);
             }
