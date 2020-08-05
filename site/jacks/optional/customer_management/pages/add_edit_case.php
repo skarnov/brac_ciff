@@ -1,5 +1,5 @@
 <?php
-error_reporting(0);
+//error_reporting(0);
 global $devdb;
 $edit = $_GET['edit'] ? $_GET['edit'] : null;
 

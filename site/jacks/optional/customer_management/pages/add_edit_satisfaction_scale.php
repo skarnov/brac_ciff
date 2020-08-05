@@ -2,7 +2,7 @@
 $customer_id = $_GET['customer_id'] ? $_GET['customer_id'] : null;
 $edit = $_GET['edit'] ? $_GET['edit'] : null;
 
-if (!checkPermission($edit, 'add_case', 'edit_case')) {
+if (!checkPermission($edit, 'add_customer', 'edit_customer')) {
     add_notification('You don\'t have enough permission.', 'error');
     header('Location:' . build_url(NULL, array('edit', 'action')));
     exit();
