@@ -76,8 +76,7 @@ ob_start();
 <form id="theForm" onsubmit="return true;" method="post" action="" enctype="multipart/form-data">
     <div class="panel" id="fullForm" style="">
         <div class="panel-body">
-
-
+            dev_sharing_sessions
             <div class="col-md-4">
                 <div class="form-group">
                     <label>Training Date</label>

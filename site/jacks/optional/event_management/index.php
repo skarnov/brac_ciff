@@ -141,7 +141,7 @@ class dev_event_management {
         if ($_GET['action'] == 'add_edit_event_type')
             include('pages/add_edit_event_type.php');
         else
-            include('pages/list_achievements.php');
+            include('pages/list_event_types.php');
     }
 
     function manage_events() {

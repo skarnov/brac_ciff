@@ -76,6 +76,10 @@ ob_start();
 <form id="theForm" onsubmit="return true;" method="post" action="" enctype="multipart/form-data">
     <div class="panel" id="fullForm" style="">
         <div class="panel-body">
+            
+            
+            dev_events
+            
             <div class="col-md-3">
                 <div class="form-group">
                     <label>Select Event Type</label>

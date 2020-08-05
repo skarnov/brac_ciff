@@ -76,7 +76,10 @@ ob_start();
 <form id="theForm" onsubmit="return true;" method="post" action="" enctype="multipart/form-data">
     <div class="panel" id="fullForm" style="">
         <div class="panel-body">
-            <div class="side_aligned_tab">
+            
+            dev_targets
+            
+<!--            <div class="side_aligned_tab">
                 <ul id="uidemo-tabs-default-demo" class="nav nav-tabs">
                     <li class="active">
                         <a href="#personalInfo" data-toggle="tab">Section 1: Personal information</a>
@@ -1011,7 +1014,7 @@ ob_start();
                         </fieldset>
                     </div>
                 </div>
-            </div>
+            </div>-->
         </div>
         <div class="panel-footer tar">
             <a href="<?php echo url('admin/dev_target_management/manage_targets') ?>" class="btn btn-flat btn-labeled btn-danger"><span class="btn-label icon fa fa-times"></span>Cancel</a>
