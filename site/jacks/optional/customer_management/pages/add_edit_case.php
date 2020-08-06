@@ -1,5 +1,4 @@
 <?php
-//error_reporting(0);
 global $devdb;
 $edit = $_GET['edit'] ? $_GET['edit'] : null;
 
@@ -66,7 +65,39 @@ $psychosocial_followups = $this->get_psychosocial_followup($args);
 
 $pre_data = array();
 if ($edit) {
-    $pre_data = $this->get_cases(array('id' => $edit, 'single' => true));
+    $args = array(
+        'select_fields' => array(
+            'fk_staff_id' => 'dev_immediate_supports.fk_staff_id',
+            'fk_customer_id' => 'dev_immediate_supports.fk_customer_id',
+            'immediate_support' => 'dev_immediate_supports.immediate_support',
+            'service_requested' => 'dev_reintegration_plan.service_requested',
+            'service_requested_note' => 'dev_reintegration_plan.service_requested_note',
+            
+            
+            
+            
+//            'pk_customer_id' => 'dev_customers.pk_customer_id',
+//            'customer_id' => 'dev_customers.customer_id',
+//            'full_name' => 'dev_customers.full_name',
+//            'customer_mobile' => 'dev_customers.customer_mobile',
+//            'passport_number' => 'dev_customers.passport_number',
+//            'present_division' => 'dev_customers.permanent_division',
+//            'present_district' => 'dev_customers.permanent_district',
+//            'present_sub_district' => 'dev_customers.permanent_sub_district',
+//            'present_police_station' => 'dev_customers.permanent_police_station',
+//            'present_post_office' => 'dev_customers.permanent_post_office',
+//            'customer_status' => 'dev_customers.customer_status'
+        ),
+        'id' => $edit,
+        'single' => true
+    );
+
+    $pre_data = $this->get_cases($args);
+
+
+//    d($pre_data);
+
+
     $immediate_support = explode(',', $pre_data['immediate_support']);
     $service_requested = explode(',', $pre_data['service_requested']);
     $issue_discussed = explode(',', $pre_data['issue_discussed']);
@@ -120,10 +151,6 @@ $branch_id = $_config['user']['user_branch'];
 if ($branch_id) {
     $all_staffs = $staffs->get_staffs(array('branch' => $branch_id));
 }
-
-//echo '<pre>';
-//print_r($all_staffs);
-//exit();
 
 doAction('render_start');
 ?>
@@ -203,7 +230,7 @@ doAction('render_start');
                                         <select class="form-control" name="fk_staff_id">
                                             <option value="">Select One</option>
                                             <?php foreach ($all_staffs['data'] as $staff) : ?>
-                                                <option value="<?php echo $staff['pk_user_id'] ?>"><?php echo $staff['user_fullname'] ?></option>
+                                                <option value="<?php echo $staff['pk_user_id'] ?>" <?php echo ($pre_data['fk_staff_id'] == $staff['pk_user_id']) ? 'selected' : '' ?>><?php echo $staff['user_fullname'] ?></option>
                                             <?php endforeach ?>
                                         </select>
                                     </div>

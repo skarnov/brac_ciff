@@ -115,17 +115,18 @@ doAction('render_start');
                 </div>
             </div>
         </div>
-    </div>
-    <div class="panel-footer tar">
-        <a href="<?php echo url('admin/dev_support_management/manage_supports') ?>" class="btn btn-flat btn-labeled btn-danger"><span class="btn-label icon fa fa-times"></span>Cancel</a>
-        <?php
-        echo submitButtonGenerator(array(
-            'action' => $edit ? 'update' : 'update',
-            'size' => '',
-            'id' => 'submit',
-            'title' => $edit ? 'Update' : 'Save',
-            'icon' => $edit ? 'icon_update' : 'icon_save',
-            'text' => $edit ? 'Update' : 'Save'))
-        ?>
+
+        <div class="panel-footer tar">
+            <a href="<?php echo url('admin/dev_support_management/manage_supports') ?>" class="btn btn-flat btn-labeled btn-danger"><span class="btn-label icon fa fa-times"></span>Cancel</a>
+            <?php
+            echo submitButtonGenerator(array(
+                'action' => $edit ? 'update' : 'update',
+                'size' => '',
+                'id' => 'submit',
+                'title' => $edit ? 'Update' : 'Save',
+                'icon' => $edit ? 'icon_update' : 'icon_save',
+                'text' => $edit ? 'Update' : 'Save'))
+            ?>
+        </div>
     </div>
 </form>

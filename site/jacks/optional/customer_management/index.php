@@ -307,11 +307,12 @@ class dev_customer_management {
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
                 $migration_data['migration_reasons'] = $data_types;
             } elseif ($params['form_data']['migration_reasons'] == NULL) {
-                $migration_data['migration_reasons'] = $params['form_data']['new_migration_reason'];
+                $migration_data['other_migration_reason'] = $params['form_data']['new_migration_reason'];
             } elseif ($params['form_data']['migration_reasons'] != NULL && $params['form_data']['new_migration_reason'] != NULL) {
                 $data_type = $params['form_data']['migration_reasons'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $migration_data['migration_reasons'] = $params['form_data']['new_migration_reason'] . ',' . $data_types;
+                $migration_data['migration_reasons'] = $data_types;
+                $migration_data['other_migration_reason'] = $params['form_data']['new_migration_reason'];
             }
 
             if ($params['form_data']['new_return_reason'] == NULL) {
@@ -319,11 +320,12 @@ class dev_customer_management {
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
                 $migration_data['destination_country_leave_reason'] = $data_types;
             } elseif ($params['form_data']['destination_country_leave_reason'] == NULL) {
-                $migration_data['destination_country_leave_reason'] = $params['form_data']['new_return_reason'];
+                $migration_data['other_destination_country_leave_reason'] = $params['form_data']['new_return_reason'];
             } elseif ($params['form_data']['destination_country_leave_reason'] != NULL && $params['form_data']['new_return_reason'] != NULL) {
                 $data_type = $params['form_data']['destination_country_leave_reason'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $migration_data['destination_country_leave_reason'] = $params['form_data']['new_return_reason'] . ',' . $data_types;
+                $migration_data['destination_country_leave_reason'] = $data_types;
+                $migration_data['other_destination_country_leave_reason'] = $params['form_data']['new_return_reason'];
             }
 
             $migration_data['is_cheated'] = $params['form_data']['is_cheated'];
@@ -382,26 +384,23 @@ class dev_customer_management {
             if ($params['form_data']['new_have_technical'] == NULL) {
                 $data_type = $params['form_data']['technical_have_skills'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $have_technical_skills = $data_types;
+                $skill_data['have_skills'] = $data_types;
             } elseif ($params['form_data']['technical_have_skills'] == NULL) {
-                $have_technical_skills = $params['form_data']['new_have_technical'];
+                $skill_data['other_have_skills'] = $params['form_data']['new_have_technical'];
             } elseif ($params['form_data']['technical_have_skills'] != NULL && $params['form_data']['new_have_technical'] != NULL) {
                 $data_type = $params['form_data']['technical_have_skills'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $have_technical_skills = $params['form_data']['new_have_technical'] . ',' . $data_types;
+                $skill_data['have_skills'] = $data_types;
+                $skill_data['other_have_skills'] = $params['form_data']['new_have_technical'];
             }
 
-            $skills = array();
-            if ($have_technical_skills) {
-                $skills['technical_skill'] = $have_technical_skills;
-                if ($params['form_data']['new_vocational']) {
-                    $skills['vocational_skills'] = $params['form_data']['new_vocational'];
-                }
-                if ($params['form_data']['new_handicrafts']) {
-                    $skills['handicraft_skills'] = $params['form_data']['new_handicrafts'];
-                }
+            if ($params['form_data']['new_vocational']) {
+                $skill_data['vocational_skill'] = $params['form_data']['new_vocational'];
             }
-            $skill_data['have_skills'] = implode(',', $skills);
+
+            if ($params['form_data']['new_handicrafts']) {
+                $skill_data['handicraft_skill'] = $params['form_data']['new_handicrafts'];
+            }
 
             if ($is_update) {
                 $ret['skill_update'] = $devdb->insert_update('dev_customer_skills', $skill_data, " fk_customer_id = '" . $is_update . "'");
@@ -419,11 +418,12 @@ class dev_customer_management {
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
                 $customer_health_data['disease_type'] = $data_types;
             } elseif ($params['form_data']['disease_type'] == NULL) {
-                $customer_health_data['disease_type'] = $params['form_data']['new_disease_type'];
+                $customer_health_data['other_disease_type'] = $params['form_data']['new_disease_type'];
             } elseif ($params['form_data']['disease_type'] != NULL && $params['form_data']['new_disease_type'] != NULL) {
                 $data_type = $params['form_data']['disease_type'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $customer_health_data['disease_type'] = $params['form_data']['new_disease_type'] . ',' . $data_types;
+                $customer_health_data['disease_type'] = $data_types;
+                $customer_health_data['other_disease_type'] = $params['form_data']['new_disease_type'];
             }
 
             if ($is_update) {
@@ -611,7 +611,6 @@ class dev_customer_management {
                 LEFT JOIN dev_customers ON (dev_customers.pk_customer_id = dev_immediate_supports.fk_customer_id)
                         LEFT JOIN dev_reintegration_plan ON (dev_reintegration_plan.fk_customer_id = dev_immediate_supports.fk_customer_id)
                         LEFT JOIN dev_psycho_supports ON (dev_psycho_supports.fk_customer_id = dev_immediate_supports.fk_customer_id)
-
                         LEFT JOIN dev_psycho_family_counselling ON (dev_psycho_family_counselling.fk_customer_id = dev_immediate_supports.fk_customer_id)
                         LEFT JOIN dev_psycho_sessions ON (dev_psycho_sessions.fk_customer_id = dev_immediate_supports.fk_customer_id)
                         LEFT JOIN dev_psycho_completions ON (dev_psycho_completions.fk_customer_id = dev_immediate_supports.fk_customer_id)
@@ -693,6 +692,7 @@ class dev_customer_management {
               |------------------------------------------------------------------
              */
 
+
             if ($params['form_data']['new_service_requested'] == NULL) {
                 $data_type = $params['form_data']['service_requested'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
@@ -705,7 +705,7 @@ class dev_customer_management {
                 $service_requested = $params['form_data']['new_service_requested'] . ',' . $data_types;
             }
 
-            $reintegration_plan = array();
+            $plan = array();
             if ($service_requested) {
                 $plan['service_requested'] = $service_requested;
                 if ($params['form_data']['new_social_protection']) {
@@ -715,7 +715,7 @@ class dev_customer_management {
                     $plan['security_measures'] = $params['form_data']['new_security_measures'];
                 }
             }
-//            $reintegration_plan['service_requested'] = implode(',', $plan);
+            $reintegration_plan['service_requested'] = implode(',', $plan);
             $reintegration_plan['service_requested_note'] = $params['form_data']['service_requested_note'];
             if ($is_update) {
                 $sql = "SELECT fk_customer_id FROM dev_reintegration_plan WHERE fk_customer_id = '$is_update'";

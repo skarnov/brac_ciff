@@ -81,7 +81,7 @@ doAction('render_start');
                             </div>
                         </div>
                     </div>
-                  
+
                     <div id="showcompleted" >
                         <div class="form-group">
                             <label>Reason for drop out from the Counseling Session</label>
@@ -113,38 +113,39 @@ doAction('render_start');
                             </div>
                         </div>
                     </div>
-                            <script>
-                            init.push(function () {
-                                $('#isCompletedYes').change(function(){
-                                    if(this.checked){
-                                        $('#showcompleted').show();
-                                    }else{
-                                        $('#showcompleted').show();
-                                    }
-                                });
-                                $('#isCompletedNo').change(function(){
-                                    if(this.checked){
-                                        $('#showcompleted').hide();
-                                    }else{
-                                        $('#showcompleted').show();
-                                    }
-                                });
+                    <script>
+                        init.push(function () {
+                            $('#isCompletedYes').change(function () {
+                                if (this.checked) {
+                                    $('#showcompleted').show();
+                                } else {
+                                    $('#showcompleted').show();
+                                }
                             });
-                        </script> 
+                            $('#isCompletedNo').change(function () {
+                                if (this.checked) {
+                                    $('#showcompleted').hide();
+                                } else {
+                                    $('#showcompleted').show();
+                                }
+                            });
+                        });
+                    </script> 
                 </div>
             </div>
         </div>
-    </div>
-    <div class="panel-footer tar">
-        <a href="<?php echo url('admin/dev_support_management/manage_supports') ?>" class="btn btn-flat btn-labeled btn-danger"><span class="btn-label icon fa fa-times"></span>Cancel</a>
-        <?php
-        echo submitButtonGenerator(array(
-            'action' => $edit ? 'update' : 'update',
-            'size' => '',
-            'id' => 'submit',
-            'title' => $edit ? 'Update' : 'Save',
-            'icon' => $edit ? 'icon_update' : 'icon_save',
-            'text' => $edit ? 'Update' : 'Save'))
-        ?>
+
+        <div class="panel-footer tar">
+            <a href="<?php echo url('admin/dev_support_management/manage_supports') ?>" class="btn btn-flat btn-labeled btn-danger"><span class="btn-label icon fa fa-times"></span>Cancel</a>
+            <?php
+            echo submitButtonGenerator(array(
+                'action' => $edit ? 'update' : 'update',
+                'size' => '',
+                'id' => 'submit',
+                'title' => $edit ? 'Update' : 'Save',
+                'icon' => $edit ? 'icon_update' : 'icon_save',
+                'text' => $edit ? 'Update' : 'Save'))
+            ?>
+        </div>
     </div>
 </form>

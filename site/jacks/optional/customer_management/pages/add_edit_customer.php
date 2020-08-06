@@ -1,5 +1,4 @@
 <?php
-//error_reporting(0);
 global $devdb;
 $edit = $_GET['edit'] ? $_GET['edit'] : null;
 
@@ -85,8 +84,6 @@ if ($_POST) {
             'departure_date' => 'Date of Departure from Bangladesh (*)',
             'return_date' => 'Date of Return to Bangladesh',
             'migration_occupation' => 'Occupation in overseas country',
-            'migration_reasons' => 'Reasons for Migration',
-            'destination_country_leave_reason' => 'Reasons for returning to Bangladesh',
             'pre_occupation' => 'Main occupation (before trafficking)',
             'present_income' => 'Monthly income of returnee after return(in BDT)',
             'personal_savings' => 'Savings (BDT)',
@@ -278,7 +275,7 @@ ob_start();
                                         </div>
                                     </div>
                                     <div id="newQualificationType" style="display: none; margin-bottom: 1em;">
-                                        <input class="form-control" placeholder="Please Specity" type="text" name="new_qualification" value="">
+                                        <input class="form-control" placeholder="Please Specity" type="text" id="newQualificationText" name="new_qualification" value="<?php echo $pre_data['educational_qualification'] ?>">
                                     </div>
                                     <script>
                                         init.push(function () {
@@ -288,6 +285,7 @@ ob_start();
 
                                             $(".educations").on("click", function () {
                                                 $('#newQualificationType').hide();
+                                                $('#newQualificationText').val('');
                                             });
                                         });
                                     </script>
@@ -320,7 +318,7 @@ ob_start();
                                         </div>
                                     </div>
                                     <div id="newGenderType" style="display: none; margin-bottom: 1em;">
-                                        <input class="form-control" placeholder="Please Specity" type="text" name="new_gender" value="">
+                                        <input class="form-control" placeholder="Please Specity" type="text" id="newGenderText" name="new_gender" value="<?php echo $pre_data['customer_gender'] ?>">
                                     </div>
                                     <script>
                                         init.push(function () {
@@ -330,6 +328,7 @@ ob_start();
 
                                             $(".oldGender").on("click", function () {
                                                 $('#newGenderType').hide();
+                                                $('#newGenderText').val('');
                                             });
                                         });
                                     </script>
@@ -345,7 +344,7 @@ ob_start();
                                         </div>
                                     </div>
                                     <div id="spouse" style="display: none; margin-bottom: 1em;">
-                                        <input class="form-control" placeholder="Enter Spouse Name" type="text" name="customer_spouse" value="<?php echo $pre_data['customer_spouse'] ? $pre_data['customer_spouse'] : ''; ?>">
+                                        <input class="form-control" placeholder="Enter Spouse Name" type="text" id="customerSpouse" name="customer_spouse" value="<?php echo $pre_data['customer_spouse'] ? $pre_data['customer_spouse'] : ''; ?>">
                                     </div>
                                     <script>
                                         init.push(function () {
@@ -361,6 +360,7 @@ ob_start();
 
                                             $(".notMarried").on("click", function () {
                                                 $('#spouse').hide();
+                                                $('#customerSpouse').val('');
                                             });
                                         });
                                     </script>
@@ -482,21 +482,22 @@ ob_start();
                                             <label><input class="px visa" type="radio" name="visa_type" value="tourist" <?php echo $pre_data && $pre_data['visa_type'] == 'tourist' ? 'checked' : '' ?>><span class="lbl">Tourist</span></label>
                                             <label><input class="px visa" type="radio" name="visa_type" value="student" <?php echo $pre_data && $pre_data['visa_type'] == 'student' ? 'checked' : '' ?>><span class="lbl">Student</span></label>
                                             <label><input class="px visa" type="radio" name="visa_type" value="work" <?php echo $pre_data && $pre_data['visa_type'] == 'work' ? 'checked' : '' ?>><span class="lbl">Work</span></label>
-                                            <label><input class="px" type="radio" name="visa_type" id="newvisa"><span class="lbl">Others. Please specify…</span></label>
+                                            <label><input class="px" type="radio" name="visa_type" id="newVisa"><span class="lbl">Others. Please specify…</span></label>
                                         </div>
                                     </div>
                                 </div>
-                                <div id="newvisaType" style="display: none; margin-bottom: 1em;">
-                                    <input class="form-control" placeholder="Please Specity" type="text" name="new_visa" value="">
+                                <div id="newVisaType" style="display: none; margin-bottom: 1em;">
+                                    <input class="form-control" placeholder="Please Specity" type="text" id="newVisaTypeText" name="new_visa" value="<?php echo $pre_data['visa_type'] ?>">
                                 </div>
                                 <script>
                                     init.push(function () {
-                                        $("#newvisa").on("click", function () {
-                                            $('#newvisaType').show();
+                                        $("#newVisa").on("click", function () {
+                                            $('#newVisaType').show();
                                         });
 
                                         $(".visa").on("click", function () {
-                                            $('#newvisaType').hide();
+                                            $('#newVisaType').hide();
+                                            $('#newVisaTypeText').val('');
                                         });
                                     });
                                 </script>
@@ -632,7 +633,7 @@ ob_start();
                             ?>                            
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Reasons for Migration (*)</label>
+                                    <label>Reasons for Migration</label>
                                     <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                         <div class="options_holder radio">
                                             <label><input class="px" type="checkbox" name="migration_reasons[]" value="underemployed" <?php
@@ -675,15 +676,21 @@ ob_start();
                                                     echo 'checked';
                                                 }
                                                 ?>><span class="lbl">Education</span></label>
-                                            <label><input class="px" type="checkbox" id="newReasonsMigration"><span class="lbl">Others</span></label>
+                                            <label><input class="px" type="checkbox" id="newReasonsMigration" <?php echo $pre_data && $pre_data['other_migration_reason'] != NULL ? 'checked' : '' ?>><span class="lbl">Others</span></label>
                                         </div>
                                     </div>
                                 </div>
                                 <div id="newReasonsMigrationType" style="display: none; margin-bottom: 1em;">
-                                    <input class="form-control" placeholder="Please Specity" type="text" name="new_migration_reason" value="">
+                                    <input class="form-control" placeholder="Please Specity" type="text" id="newReasonsMigrationTypeText" name="new_migration_reason" value="<?php echo $pre_data['other_migration_reason'] ?>">
                                 </div>
                                 <script>
                                     init.push(function () {
+                                        var isChecked = $('#newReasonsMigration').is(':checked');
+
+                                        if (isChecked == true) {
+                                            $('#newReasonsMigrationType').show();
+                                        }
+
                                         $("#newReasonsMigration").on("click", function () {
                                             $('#newReasonsMigrationType').toggle();
                                         });
@@ -693,7 +700,7 @@ ob_start();
                                 $leave_reasons = $leave_reasons ? $leave_reasons : array($leave_reasons);
                                 ?>
                                 <div class="form-group">
-                                    <label>Reasons for returning to Bangladesh (*) </label>
+                                    <label>Reasons for returning to Bangladesh</label>
                                     <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                         <div class="options_holder radio">
                                             <label><input class="px" type="checkbox" name="destination_country_leave_reason[]" value="no_legal" <?php
@@ -731,15 +738,21 @@ ob_start();
                                                     echo 'checked';
                                                 }
                                                 ?>><span class="lbl">Family needs</span></label>
-                                            <label><input class="px" type="checkbox" id="newreturningBangladesh"><span class="lbl">Others</span></label>
+                                            <label><input class="px" type="checkbox" id="newreturningBangladesh" <?php echo $pre_data && $pre_data['other_destination_country_leave_reason'] != NULL ? 'checked' : '' ?>><span class="lbl">Others</span></label>
                                         </div>
                                     </div>
                                 </div>
                                 <div id="newreturningBangladeshType" style="display: none; margin-bottom: 1em;">
-                                    <input class="form-control" placeholder="Please Specity" type="text" name="new_return_reason" value="">
+                                    <input class="form-control" placeholder="Please Specity" type="text" name="new_return_reason" value="<?php echo $pre_data['other_destination_country_leave_reason'] ?>">
                                 </div>
                                 <script>
                                     init.push(function () {
+                                        var isChecked = $('#newreturningBangladesh').is(':checked');
+
+                                        if (isChecked == true) {
+                                            $('#newreturningBangladeshType').show();
+                                        }
+
                                         $("#newreturningBangladesh").on("click", function () {
                                             $('#newreturningBangladeshType').toggle();
                                         });
@@ -855,12 +868,12 @@ ob_start();
                                                 <label><input class="px house_ownership" type="radio" name="current_residence_ownership" value="rental" <?php echo $pre_data && $pre_data['current_residence_ownership'] == 'rental' ? 'checked' : '' ?>><span class="lbl">Rental</span></label>
                                                 <label><input class="px house_ownership" type="radio" name="current_residence_ownership" value="without_paying" <?php echo $pre_data && $pre_data['current_residence_ownership'] == 'without_paying' ? 'checked' : '' ?>><span class="lbl">Live without paying</span></label>
                                                 <label><input class="px house_ownership" type="radio" name="current_residence_ownership" value="khas_land" <?php echo $pre_data && $pre_data['current_residence_ownership'] == 'khas_land' ? 'checked' : '' ?>><span class="lbl">Khas land</span></label>
-                                                <label><input class="px" type="radio" name="house_ownership" id="newHouseOwnership"><span class="lbl">Others. Please specify…</span></label>
+                                                <label><input class="px" type="radio" name="current_residence_ownership" id="newHouseOwnership"><span class="lbl">Others. Please specify…</span></label>
                                             </div>
                                         </div>
                                     </div>
                                     <div id="newHouseOwnershipType" style="display: none; margin-bottom: 1em;">
-                                        <input class="form-control" placeholder="Please Specity" type="text" name="new_ownership" value="">
+                                        <input class="form-control" placeholder="Please Specity" type="text" name="new_ownership" id="newHouseOwnershipTypeText" value="<?php echo $pre_data['current_residence_ownership'] ?>">
                                     </div>
                                     <script>
                                         init.push(function () {
@@ -870,6 +883,7 @@ ob_start();
 
                                             $(".house_ownership").on("click", function () {
                                                 $('#newHouseOwnershipType').hide();
+                                                $('#newHouseOwnershipTypeText').val('');
                                             });
                                         });
                                     </script>
@@ -886,7 +900,7 @@ ob_start();
                                         </div>
                                     </div>
                                     <div id="newHouseType" style="display: none; margin-bottom: 1em;">
-                                        <input class="form-control" placeholder="Please Specity" type="text" name="new_residence" value="">
+                                        <input class="form-control" placeholder="Please Specity" id="newHouseTypeText" type="text" name="new_residence" value="<?php echo $pre_data['current_residence_type'] ?>">
                                     </div>
                                     <script>
                                         init.push(function () {
@@ -896,6 +910,7 @@ ob_start();
 
                                             $(".house").on("click", function () {
                                                 $('#newHouseType').hide();
+                                                $('#newHouseTypeText').val('');
                                             });
                                         });
                                     </script>
@@ -949,11 +964,11 @@ ob_start();
                                                         }
                                                         ?>><span class="lbl">Vocational</span></label>
                                                     <div class="form-group col-sm-9">
-                                                        <input type="text" class="form-control" placeholder="Specify....." name="new_vocational" value="" />
+                                                        <input type="text" class="form-control" placeholder="Specify....." name="new_vocational" value="<?php echo $pre_data['vocational_skill'] ? $pre_data['vocational_skill'] : ''; ?>" />
                                                     </div>
                                                     <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" value=""><span class="lbl">Handicrafts</span></label>
                                                     <div class="form-group col-sm-9">
-                                                        <input type="text" class="form-control" placeholder="Specify....." name="new_handicrafts" value="" />
+                                                        <input type="text" class="form-control" placeholder="Specify....." name="new_handicrafts" value="<?php echo $pre_data['handicraft_skill'] ? $pre_data['handicraft_skill'] : ''; ?>" />
                                                     </div>
                                                     <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" value="beauty_parlour" <?php
                                                         if (in_array('beauty_parlour', $have_skills)) {
@@ -990,15 +1005,21 @@ ob_start();
                                                             echo 'checked';
                                                         }
                                                         ?>><span class="lbl">Cooking</span></label>
-                                                    <label class="col-sm-12"><input class="px col-sm-12" type="checkbox" id="newSkill"><span class="lbl">Others</span></label>
+                                                    <label class="col-sm-12"><input class="px col-sm-12" <?php echo $pre_data && $pre_data['other_have_skills'] != NULL ? 'checked' : '' ?> type="checkbox" id="newSkill"><span class="lbl">Others</span></label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div id="newSkillType" style="display: none; margin-bottom: 1em;">
-                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_have_technical" value="">
+                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_have_technical" value="<?php echo $pre_data['other_have_skills'] ?>">
                                         </div>
                                         <script>
                                             init.push(function () {
+                                                var isChecked = $('#newSkill').is(':checked');
+
+                                                if (isChecked == true) {
+                                                    $('#newSkillType').show();
+                                                }
+
                                                 $("#newSkill").on("click", function () {
                                                     $('#newSkillType').toggle();
                                                 });
@@ -1029,7 +1050,7 @@ ob_start();
                                     </div>
                                     <script>
                                         init.push(function () {
-                                            var isChecked = $('#yesCooperated').is(':checked');
+                                            var isChecked = $('#yesdisability').is(':checked');
 
                                             if (isChecked == true) {
                                                 $('.disability').show();
@@ -1113,15 +1134,21 @@ ob_start();
                                                             echo 'checked';
                                                         }
                                                         ?>><span class="lbl">Bronchitis</span></label>
-                                                    <label><input class="px col-sm-12" type="checkbox" id="newDisease"><span class="lbl">Others</span></label>
+                                                    <label><input class="px col-sm-12" type="checkbox" <?php echo $pre_data && $pre_data['other_disease_type'] != NULL ? 'checked' : '' ?> id="newDisease"><span class="lbl">Others</span></label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div id="newDiseaseTypes" style="display: none; margin-bottom: 1em;">
-                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_disease_type" value="">
+                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_disease_type" value="<?php echo $pre_data['other_disease_type'] ?>">
                                         </div>
                                         <script>
                                             init.push(function () {
+                                                var isChecked = $('#newDisease').is(':checked');
+
+                                                if (isChecked == true) {
+                                                    $('#newDiseaseTypes').show();
+                                                }
+
                                                 $("#newDisease").on("click", function () {
                                                     $('#newDiseaseTypes').toggle();
                                                 });
