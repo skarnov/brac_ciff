@@ -32,6 +32,26 @@ class dev_event_management {
                     'edit_event' => 'Edit Event',
                     'delete_event' => 'Delete Event',
                 ),
+                'manage_complains' => array(
+                    'add_complain' => 'Add Complain',
+                    'edit_complain' => 'Edit Complain',
+                    'delete_complain' => 'Delete Complain',
+                ),
+                'manage_complain_fileds' => array(
+                    'add_complain_filed' => 'Add Complain Filed',
+                    'edit_complain_filed' => 'Edit Complain Filed',
+                    'delete_complain_filed' => 'Delete Complain Filed',
+                ),
+                'manage_complain_investigations' => array(
+                    'add_complain_investigation' => 'Add Complain Investigation',
+                    'edit_complain_investigation' => 'Edit Complain Investigation',
+                    'delete_complain_investigation' => 'Delete Complain Investigation',
+                ),
+                'manage_trainings' => array(
+                    'add_training' => 'Add Training',
+                    'edit_training' => 'Edit Training',
+                    'delete_training' => 'Delete Training',
+                ),
             ),
         );
 
@@ -94,7 +114,7 @@ class dev_event_management {
         );
         if (has_permission('manage_events'))
             admenu_register($params);
-        
+
         $params = array(
             'label' => 'Sharing Session',
             'description' => 'Manage All Sharing Session',
@@ -105,6 +125,54 @@ class dev_event_management {
             'jack' => $this->thsClass,
         );
         if (has_permission('manage_sharing_session'))
+            admenu_register($params);
+
+        $params = array(
+            'label' => 'Complains',
+            'description' => 'Manage All Complains',
+            'menu_group' => 'Events',
+            'position' => 'default',
+            'action' => 'manage_complains',
+            'iconClass' => 'fa-binoculars',
+            'jack' => $this->thsClass,
+        );
+        if (has_permission('manage_complains'))
+            admenu_register($params);
+
+        $params = array(
+            'label' => 'Complain Fileds',
+            'description' => 'Manage All Complain Fileds',
+            'menu_group' => 'Events',
+            'position' => 'default',
+            'action' => 'manage_complain_fileds',
+            'iconClass' => 'fa-binoculars',
+            'jack' => $this->thsClass,
+        );
+        if (has_permission('manage_complain_fileds'))
+            admenu_register($params);
+
+        $params = array(
+            'label' => 'Complain Investigations',
+            'description' => 'Manage All Complain Investigations',
+            'menu_group' => 'Events',
+            'position' => 'default',
+            'action' => 'manage_complain_investigations',
+            'iconClass' => 'fa-binoculars',
+            'jack' => $this->thsClass,
+        );
+        if (has_permission('manage_complain_investigations'))
+            admenu_register($params);
+
+        $params = array(
+            'label' => 'Trainings',
+            'description' => 'Manage All Trainings',
+            'menu_group' => 'Events',
+            'position' => 'default',
+            'action' => 'manage_trainings',
+            'iconClass' => 'fa-binoculars',
+            'jack' => $this->thsClass,
+        );
+        if (has_permission('manage_trainings'))
             admenu_register($params);
     }
 
@@ -157,7 +225,7 @@ class dev_event_management {
         else
             include('pages/list_events.php');
     }
-    
+
     function manage_sharing_session() {
         if (!has_permission('manage_sharing_session'))
             return true;
@@ -168,6 +236,54 @@ class dev_event_management {
             include('pages/add_edit_sharing_session.php');
         else
             include('pages/list_sharing_sessions.php');
+    }
+
+    function manage_complains() {
+        if (!has_permission('manage_complains'))
+            return true;
+        global $devdb, $_config;
+        $myUrl = jack_url($this->thsClass, 'manage_complains');
+
+        if ($_GET['action'] == 'add_edit_complain')
+            include('pages/add_edit_complain.php');
+        else
+            include('pages/list_complains.php');
+    }
+
+    function manage_complain_fileds() {
+        if (!has_permission('manage_complain_fileds'))
+            return true;
+        global $devdb, $_config;
+        $myUrl = jack_url($this->thsClass, 'manage_complain_fileds');
+
+        if ($_GET['action'] == 'add_edit_complain_filed')
+            include('pages/add_edit_complain_filed.php');
+        else
+            include('pages/list_complain_fileds.php');
+    }
+
+    function manage_complain_investigations() {
+        if (!has_permission('manage_complain_investigations'))
+            return true;
+        global $devdb, $_config;
+        $myUrl = jack_url($this->thsClass, 'manage_complain_investigations');
+
+        if ($_GET['action'] == 'add_edit_complain_investigation')
+            include('pages/add_edit_complain_investigation.php');
+        else
+            include('pages/list_complain_investigations.php');
+    }
+
+    function manage_trainings() {
+        if (!has_permission('manage_trainings'))
+            return true;
+        global $devdb, $_config;
+        $myUrl = jack_url($this->thsClass, 'manage_trainings');
+
+        if ($_GET['action'] == 'add_edit_training')
+            include('pages/add_edit_training.php');
+        else
+            include('pages/list_trainings.php');
     }
 
     function get_targets($param = null) {
@@ -205,7 +321,7 @@ class dev_event_management {
         $targets = sql_data_collector($sql, $count_sql, $param);
         return $targets;
     }
-    
+
     function get_achievements($param = null) {
         $param['single'] = $param['single'] ? $param['single'] : false;
 
@@ -241,7 +357,7 @@ class dev_event_management {
         $targets = sql_data_collector($sql, $count_sql, $param);
         return $targets;
     }
-     
+
     function get_event_types($param = null) {
         $param['single'] = $param['single'] ? $param['single'] : false;
 
@@ -277,7 +393,7 @@ class dev_event_management {
         $targets = sql_data_collector($sql, $count_sql, $param);
         return $targets;
     }
-    
+
     function get_events($param = null) {
         $param['single'] = $param['single'] ? $param['single'] : false;
 
@@ -313,7 +429,7 @@ class dev_event_management {
         $targets = sql_data_collector($sql, $count_sql, $param);
         return $targets;
     }
-    
+
     function get_sharing_sessions($param = null) {
         $param['single'] = $param['single'] ? $param['single'] : false;
 
@@ -348,6 +464,150 @@ class dev_event_management {
 
         $targets = sql_data_collector($sql, $count_sql, $param);
         return $targets;
+    }
+
+    function get_complains($param = null) {
+        $param['single'] = $param['single'] ? $param['single'] : false;
+
+        $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
+
+        if ($param['listing']) {
+            $from = "FROM dev_complains 
+
+            ";
+        } else {
+            $from = "FROM dev_complains
+
+            ";
+        }
+
+        $where = " WHERE 1";
+        $conditions = " ";
+        $sql = $select . $from . $where;
+        $count_sql = "SELECT COUNT(dev_complains.pk_complain_id) AS TOTAL " . $from . $where;
+
+        $loopCondition = array(
+            'id' => 'dev_complains.pk_complain_id',
+        );
+
+        $conditions .= sql_condition_maker($loopCondition, $param);
+
+        $orderBy = sql_order_by($param);
+        $limitBy = sql_limit_by($param);
+
+        $sql .= $conditions . $orderBy . $limitBy;
+        $count_sql .= $conditions;
+
+        $targets = sql_data_collector($sql, $count_sql, $param);
+        return $targets;
+    }
+
+    function get_complain_fileds($param = null) {
+        $param['single'] = $param['single'] ? $param['single'] : false;
+
+        $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
+
+        if ($param['listing']) {
+            $from = "FROM dev_complain_fileds
+
+            ";
+        } else {
+            $from = "FROM dev_complain_fileds
+
+            ";
+        }
+
+        $where = " WHERE 1";
+        $conditions = " ";
+        $sql = $select . $from . $where;
+        $count_sql = "SELECT COUNT(dev_complain_fileds.pk_complain_filed_id) AS TOTAL " . $from . $where;
+
+        $loopCondition = array(
+            'id' => 'dev_complain_fileds.pk_complain_filed_id',
+        );
+
+        $conditions .= sql_condition_maker($loopCondition, $param);
+
+        $orderBy = sql_order_by($param);
+        $limitBy = sql_limit_by($param);
+
+        $sql .= $conditions . $orderBy . $limitBy;
+        $count_sql .= $conditions;
+
+        $results = sql_data_collector($sql, $count_sql, $param);
+        return $results;
+    }
+
+    function get_complain_investigations($param = null) {
+        $param['single'] = $param['single'] ? $param['single'] : false;
+
+        $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
+
+        if ($param['listing']) {
+            $from = "FROM dev_complain_investigations
+
+            ";
+        } else {
+            $from = "FROM dev_complain_investigations 
+
+            ";
+        }
+
+        $where = " WHERE 1";
+        $conditions = " ";
+        $sql = $select . $from . $where;
+        $count_sql = "SELECT COUNT(dev_complain_investigations.pk_complain_investigation_id) AS TOTAL " . $from . $where;
+
+        $loopCondition = array(
+            'id' => 'dev_complain_investigations.pk_complain_investigation_id',
+        );
+
+        $conditions .= sql_condition_maker($loopCondition, $param);
+
+        $orderBy = sql_order_by($param);
+        $limitBy = sql_limit_by($param);
+
+        $sql .= $conditions . $orderBy . $limitBy;
+        $count_sql .= $conditions;
+
+        $results = sql_data_collector($sql, $count_sql, $param);
+        return $results;
+    }
+
+    function get_trainings($param = null) {
+        $param['single'] = $param['single'] ? $param['single'] : false;
+
+        $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
+
+        if ($param['listing']) {
+            $from = "FROM dev_trainings
+
+            ";
+        } else {
+            $from = "FROM dev_trainings 
+
+            ";
+        }
+
+        $where = " WHERE 1";
+        $conditions = " ";
+        $sql = $select . $from . $where;
+        $count_sql = "SELECT COUNT(dev_trainings.pk_training_id) AS TOTAL " . $from . $where;
+
+        $loopCondition = array(
+            'id' => 'dev_trainings.pk_training_id',
+        );
+
+        $conditions .= sql_condition_maker($loopCondition, $param);
+
+        $orderBy = sql_order_by($param);
+        $limitBy = sql_limit_by($param);
+
+        $sql .= $conditions . $orderBy . $limitBy;
+        $count_sql .= $conditions;
+
+        $results = sql_data_collector($sql, $count_sql, $param);
+        return $results;
     }
 
 }

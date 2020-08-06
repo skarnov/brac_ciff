@@ -121,6 +121,10 @@ if ($branch_id) {
     $all_staffs = $staffs->get_staffs(array('branch' => $branch_id));
 }
 
+//echo '<pre>';
+//print_r($all_staffs);
+//exit();
+
 doAction('render_start');
 ?>
 <style type="text/css">
@@ -193,22 +197,17 @@ doAction('render_start');
                         <fieldset>
                             <legend>Section 1: Support Provided</legend>
                             <div class="row">
-                                <!--                                <div class="col-sm-4">
-                                                                    <div class="form-group">
-                                                                        <label>Select Branch (*)</label>
-                                                                        <select class="form-control" name="fk_branch_id">
-                                                                            <option value="">Select One</option>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-sm-4">
-                                                                    <div class="form-group">
-                                                                        <label>Select Case Manager (*)</label>
-                                                                        <select class="form-control" name="fk_staff_id">
-                                                                            <option value="">Select One</option>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>-->
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Select Case Manager (*)</label>
+                                        <select class="form-control" name="fk_staff_id">
+                                            <option value="">Select One</option>
+                                            <?php foreach ($all_staffs['data'] as $staff) : ?>
+                                                <option value="<?php echo $staff['pk_user_id'] ?>"><?php echo $staff['user_fullname'] ?></option>
+                                            <?php endforeach ?>
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="col-sm-8">
                                     <fieldset class="scheduler-border">
                                         <legend class="scheduler-border">Immediate support services received</legend>
@@ -1466,17 +1465,17 @@ doAction('render_start');
                                         </div>
                                         <script>
                                             init.push(function () {
-                                                $('#is_Yes_certificate_received').change(function(){
-                                                    if(this.checked){
+                                                $('#is_Yes_certificate_received').change(function () {
+                                                    if (this.checked) {
                                                         $('#usedfar').show();
-                                                    }else{
+                                                    } else {
                                                         $('#usedfar').show();
                                                     }
                                                 });
-                                                $('#isCompletedNo').change(function(){
-                                                    if(this.checked){
+                                                $('#isCompletedNo').change(function () {
+                                                    if (this.checked) {
                                                         $('#usedfar').hide();
-                                                    }else{
+                                                    } else {
                                                         $('#usedfar').show();
                                                     }
                                                 });

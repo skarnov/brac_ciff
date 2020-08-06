@@ -514,6 +514,9 @@ class dev_customer_management {
             $data['evaluate_services'] = implode(',', $plan);
 
             if ($is_update) {
+                $data['update_date'] = date('Y-m-d');
+                $data['update_time'] = date('H:i:s');
+                $data['modified_by'] = $_config['user']['pk_user_id'];
                 $ret['evaluation_update'] = $devdb->insert_update('dev_initial_evaluation', $data, " fk_customer_id = '" . $is_update . "'");
             } else {
                 $ret['evaluation_insert'] = $devdb->insert_update('dev_initial_evaluation', $data);
@@ -582,6 +585,9 @@ class dev_customer_management {
             $satisfaction_scale_data['total_score'] = ($satisfaction_scale_data['satisfied_assistance'] + $satisfaction_scale_data['satisfied_counseling'] + $satisfaction_scale_data['satisfied_economic'] + $satisfaction_scale_data['satisfied_social'] + $satisfaction_scale_data['satisfied_community'] + $satisfaction_scale_data['satisfied_reintegration']);
 
             if ($is_update) {
+                $satisfaction_scale_data['update_date'] = date('Y-m-d');
+                $satisfaction_scale_data['update_time'] = date('H:i:s');
+                $satisfaction_scale_data['modified_by'] = $_config['user']['pk_user_id'];
                 $ret['satisfaction_update'] = $devdb->insert_update('dev_reintegration_satisfaction_scale', $satisfaction_scale_data, " fk_customer_id = '" . $is_update . "'");
             } else {
                 $ret['satisfaction_new_insert'] = $devdb->insert_update('dev_reintegration_satisfaction_scale', $satisfaction_scale_data);
@@ -599,10 +605,6 @@ class dev_customer_management {
             $from = "FROM dev_immediate_supports 
                         LEFT JOIN dev_customers ON (dev_customers.pk_customer_id = dev_immediate_supports.fk_customer_id)
                         LEFT JOIN dev_reintegration_plan ON (dev_reintegration_plan.fk_customer_id = dev_immediate_supports.fk_customer_id)
-             
-
-
-
             ";
         } else {
             $from = "FROM dev_immediate_supports
@@ -618,10 +620,6 @@ class dev_customer_management {
                         LEFT JOIN dev_economic_reintegration_referrals ON (dev_economic_reintegration_referrals.fk_customer_id = dev_immediate_supports.fk_customer_id)
                         LEFT JOIN dev_social_supports ON (dev_social_supports.fk_customer_id = dev_immediate_supports.fk_customer_id)
                         LEFT JOIN dev_followups ON (dev_followups.fk_customer_id = dev_immediate_supports.fk_customer_id)
-
-
-
-
             ";
         }
 
@@ -641,11 +639,6 @@ class dev_customer_management {
 
         $sql .= $conditions . $orderBy . $limitBy;
         $count_sql .= $conditions;
-
-//        
-//        echo '<pre>';
-//        print_r($sql);
-//        exit();
 
         $cases = sql_data_collector($sql, $count_sql, $param);
         return $cases;
@@ -680,6 +673,8 @@ class dev_customer_management {
               |------------------------------------------------------------------
              */
             $immediate_support = array();
+            $immediate_support['fk_branch_id'] = $_config['user']['user_branch'];
+            $immediate_support['fk_staff_id'] = $params['form_data']['fk_staff_id'];
 
             $data_type = $params['form_data']['immediate_support'];
             $data_types = is_array($data_type) ? implode(',', $data_type) : '';
