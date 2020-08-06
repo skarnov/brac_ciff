@@ -958,15 +958,11 @@ ob_start();
                                         <div class="form-group ">
                                             <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                                 <div class="options_holder radio">
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" value="vocational" <?php
-                                                        if (in_array('vocational', $have_skills)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Vocational</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" <?php echo $pre_data && $pre_data['vocational_skill'] != NULL ? 'checked' : '' ?>><span class="lbl">Vocational</span></label>
                                                     <div class="form-group col-sm-9">
                                                         <input type="text" class="form-control" placeholder="Specify....." name="new_vocational" value="<?php echo $pre_data['vocational_skill'] ? $pre_data['vocational_skill'] : ''; ?>" />
                                                     </div>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" value=""><span class="lbl">Handicrafts</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" <?php echo $pre_data && $pre_data['handicraft_skill'] != NULL ? 'checked' : '' ?>><span class="lbl">Handicrafts</span></label>
                                                     <div class="form-group col-sm-9">
                                                         <input type="text" class="form-control" placeholder="Specify....." name="new_handicrafts" value="<?php echo $pre_data['handicraft_skill'] ? $pre_data['handicraft_skill'] : ''; ?>" />
                                                     </div>

@@ -2090,3 +2090,11 @@ function processToRender($data, $language = null, $strictCheck = false)
     return $outputData;
 }
 /*************/
+
+/*Sheikh Obydullah*/
+
+function d($data){
+    echo '<pre>';
+    print_r($data);
+    exit();
+}

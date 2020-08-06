@@ -692,30 +692,28 @@ class dev_customer_management {
               |------------------------------------------------------------------
              */
 
+            $reintegration_plan = array();
 
             if ($params['form_data']['new_service_requested'] == NULL) {
                 $data_type = $params['form_data']['service_requested'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $service_requested = $data_types;
+                $reintegration_plan['service_requested'] = $data_types;
             } elseif ($params['form_data']['service_requested'] == NULL) {
-                $service_requested = $params['form_data']['new_service_requested'];
+                $reintegration_plan['other_service_requested'] = $params['form_data']['new_service_requested'];
             } elseif ($params['form_data']['service_requested'] != NULL && $params['form_data']['new_service_requested'] != NULL) {
                 $data_type = $params['form_data']['service_requested'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $service_requested = $params['form_data']['new_service_requested'] . ',' . $data_types;
+                $reintegration_plan['service_requested'] = $data_types;
+                $reintegration_plan['other_service_requested'] = $params['form_data']['new_service_requested'];
             }
 
-            $plan = array();
-            if ($service_requested) {
-                $plan['service_requested'] = $service_requested;
-                if ($params['form_data']['new_social_protection']) {
-                    $plan['social_protection'] = $params['form_data']['new_social_protection'];
-                }
-                if ($params['form_data']['new_security_measures']) {
-                    $plan['security_measures'] = $params['form_data']['new_security_measures'];
-                }
+            if ($params['form_data']['new_social_protection']) {
+                $reintegration_plan['social_protection'] = $params['form_data']['new_social_protection'];
             }
-            $reintegration_plan['service_requested'] = implode(',', $plan);
+            if ($params['form_data']['new_security_measures']) {
+                $reintegration_plan['security_measure'] = $params['form_data']['new_security_measures'];
+            }
+
             $reintegration_plan['service_requested_note'] = $params['form_data']['service_requested_note'];
             if ($is_update) {
                 $sql = "SELECT fk_customer_id FROM dev_reintegration_plan WHERE fk_customer_id = '$is_update'";

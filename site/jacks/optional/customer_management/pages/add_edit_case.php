@@ -71,11 +71,10 @@ if ($edit) {
             'fk_customer_id' => 'dev_immediate_supports.fk_customer_id',
             'immediate_support' => 'dev_immediate_supports.immediate_support',
             'service_requested' => 'dev_reintegration_plan.service_requested',
+            'other_service_requested' => 'dev_reintegration_plan.other_service_requested',
+            'social_protection' => 'dev_reintegration_plan.social_protection',
+            'security_measure' => 'dev_reintegration_plan.security_measure',
             'service_requested_note' => 'dev_reintegration_plan.service_requested_note',
-            
-            
-            
-            
 //            'pk_customer_id' => 'dev_customers.pk_customer_id',
 //            'customer_id' => 'dev_customers.customer_id',
 //            'full_name' => 'dev_customers.full_name',
@@ -503,30 +502,36 @@ doAction('render_start');
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
-                                                            <label><input class="px" type="checkbox" value="Social Protection Schemes" ><span class="lbl">Social Protection Schemes</span></label>
+                                                            <label><input class="px" type="checkbox" value="Social Protection Schemes" <?php echo $pre_data && $pre_data['social_protection'] != NULL ? 'checked' : '' ?>><span class="lbl">Social Protection Schemes</span></label>
                                                         </div>
                                                         <div class="form-group">
-                                                            <input class="form-control" placeholder="Specify the services" type="text" name="new_social_protection" value="<?php echo $pre_data['new_social_protection'] ? $pre_data['new_social_protection'] : ''; ?>">
+                                                            <input class="form-control" placeholder="Specify the services" type="text" name="new_social_protection" value="<?php echo $pre_data['social_protection'] ? $pre_data['social_protection'] : ''; ?>">
                                                         </div>
                                                         <div class="form-group">
-                                                            <label><input class="px" type="checkbox" value="Special Security Measures"><span class="lbl">Special Security Measures</span></label>
+                                                            <label><input class="px" type="checkbox" value="Special Security Measures" <?php echo $pre_data && $pre_data['security_measure'] != NULL ? 'checked' : '' ?>><span class="lbl">Special Security Measures</span></label>
                                                         </div>
                                                         <div class="form-group">
-                                                            <input class="form-control" placeholder="Specify the services" type="text" name="new_security_measures" value="<?php echo $pre_data['new_security_measures'] ? $pre_data['new_security_measures'] : ''; ?>">
+                                                            <input class="form-control" placeholder="Specify the services" type="text" name="new_security_measures" value="<?php echo $pre_data['security_measure'] ? $pre_data['security_measure'] : ''; ?>">
                                                         </div>
                                                         <div class="form-group ">
                                                             <label>Other Services Requested</label>
                                                             <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                                                 <div class="options_holder radio">
-                                                                    <label><input class="px col-sm-12" type="checkbox" id="newServiceRequested"><span class="lbl">Others</span></label>
+                                                                    <label><input class="px col-sm-12" type="checkbox" id="newServiceRequested" <?php echo $pre_data && $pre_data['other_service_requested'] != NULL ? 'checked' : '' ?>><span class="lbl">Others</span></label>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div id="newServiceRequestedTypes" style="display: none; margin-bottom: 1em;">
-                                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_service_requested" value="<?php echo $pre_data['new_service_requested'] ? $pre_data['new_service_requested'] : ''; ?>">
+                                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_service_requested" value="<?php echo $pre_data['other_service_requested'] ? $pre_data['other_service_requested'] : ''; ?>">
                                                         </div>
                                                         <script>
                                                             init.push(function () {
+                                                                var isChecked = $('#newServiceRequested').is(':checked');
+
+                                                                if (isChecked == true) {
+                                                                    $('#newServiceRequestedTypes').show();
+                                                                }
+
                                                                 $("#newServiceRequested").on("click", function () {
                                                                     $('#newServiceRequestedTypes').toggle();
                                                                 });
@@ -534,7 +539,7 @@ doAction('render_start');
                                                         </script>
                                                         <div class="form-group">
                                                             <label>Note (If any)</label>
-                                                            <textarea class="form-control" name="service_requested_note" value="<?php echo $pre_data['service_requested_note'] ? $pre_data['service_requested_note'] : ''; ?>" rows="5" placeholder="Note"></textarea>
+                                                            <textarea class="form-control" name="service_requested_note" rows="5" placeholder="Note"><?php echo $pre_data['service_requested_note'] ? $pre_data['service_requested_note'] : ''; ?></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
