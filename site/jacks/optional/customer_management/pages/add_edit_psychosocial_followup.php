@@ -29,12 +29,6 @@ if ($_POST) {
     $data['customer_id'] = $customer_id;
     $data['edit'] = $edit;
 
-
-//    echo '<pre>';
-//    print_r($data);
-//    exit();
-//    
-//    
     $ret = $this->add_edit_psychosocial_followup($data);
 
     if ($ret['success']) {
@@ -82,7 +76,7 @@ doAction('render_start');
                     <div class="form-group">
                         <label>Time (*)</label>
                         <div class="input-group date">
-                            <input type="text" name="followup_entry_time" value="<?php echo $pre_data['followup_entry_time'] ? $pre_data['followup_entry_time'] : ''; ?>"  class="form-control"  id="FollowupTime"><span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                            <input type="text" name="followup_entry_time" value="<?php echo $pre_data['entry_time'] && $pre_data['entry_time'] != '00-00-00' ? date('H:i:s', strtotime($pre_data['entry_time'])) : date('H:i:s'); ?>" class="form-control" id="FollowupTime"><span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                         </div>
                     </div>
                     <script>
@@ -100,7 +94,7 @@ doAction('render_start');
                     <div class="form-group">
                         <label>Date (*)</label>
                         <div class="input-group">
-                            <input id="FollowupTimeDate" name="followup_entry_date" type="text" class="form-control" value="<?php echo $pre_data['followup_entry_date'] && $pre_data['followup_entry_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['followup_entry_date'])) : date('d-m-Y'); ?>">
+                            <input id="FollowupTimeDate" name="followup_entry_date" type="text" class="form-control" value="<?php echo $pre_data['entry_date'] && $pre_data['entry_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['entry_date'])) : date('d-m-Y'); ?>">
                         </div>
                     </div>
                     <script type="text/javascript">
@@ -110,12 +104,11 @@ doAction('render_start');
                     </script>
                     <div class="form-group">
                         <label>Followup Comment (*)</label>
-                        <textarea class="form-control" name="followup_comments" value="<?php echo $pre_data['followup_comments'] ? $pre_data['followup_comments'] : ''; ?>"  rows="3" placeholder=""></textarea>
+                        <textarea class="form-control" required name="followup_comments" rows="3" placeholder=""><?php echo $pre_data['followup_comments'] ? $pre_data['followup_comments'] : ''; ?></textarea>
                     </div>
                 </div>
             </div>
         </div>
-
         <div class="panel-footer tar">
             <a href="<?php echo url('admin/dev_support_management/manage_supports') ?>" class="btn btn-flat btn-labeled btn-danger"><span class="btn-label icon fa fa-times"></span>Cancel</a>
             <?php

@@ -46,7 +46,6 @@ $args = array(
     ),
 );
 
-
 $psychosocial_completions = $this->get_psychosocial_completion($args);
 
 $args = array(
@@ -67,6 +66,7 @@ $pre_data = array();
 if ($edit) {
     $args = array(
         'select_fields' => array(
+            'pk_immediate_support_id' => 'dev_immediate_supports.pk_immediate_support_id',
             'fk_staff_id' => 'dev_immediate_supports.fk_staff_id',
             'fk_customer_id' => 'dev_immediate_supports.fk_customer_id',
             'immediate_support' => 'dev_immediate_supports.immediate_support',
@@ -75,27 +75,96 @@ if ($edit) {
             'social_protection' => 'dev_reintegration_plan.social_protection',
             'security_measure' => 'dev_reintegration_plan.security_measure',
             'service_requested_note' => 'dev_reintegration_plan.service_requested_note',
-//            'pk_customer_id' => 'dev_customers.pk_customer_id',
-//            'customer_id' => 'dev_customers.customer_id',
-//            'full_name' => 'dev_customers.full_name',
-//            'customer_mobile' => 'dev_customers.customer_mobile',
-//            'passport_number' => 'dev_customers.passport_number',
-//            'present_division' => 'dev_customers.permanent_division',
-//            'present_district' => 'dev_customers.permanent_district',
-//            'present_sub_district' => 'dev_customers.permanent_sub_district',
-//            'present_police_station' => 'dev_customers.permanent_police_station',
-//            'present_post_office' => 'dev_customers.permanent_post_office',
-//            'customer_status' => 'dev_customers.customer_status'
+            'first_meeting' => 'dev_psycho_supports.first_meeting',
+            'is_home_visit' => 'dev_psycho_supports.is_home_visit',
+            'issue_discussed' => 'dev_psycho_supports.issue_discussed',
+            'other_issue_discussed' => 'dev_psycho_supports.other_issue_discussed',
+            'problem_identified' => 'dev_psycho_supports.problem_identified',
+            'problem_description' => 'dev_psycho_supports.problem_description',
+            'initial_plan' => 'dev_psycho_supports.initial_plan',
+            'is_family_counceling' => 'dev_psycho_supports.is_family_counceling',
+            'family_counseling' => 'dev_psycho_supports.family_counseling',
+            'session_place' => 'dev_psycho_supports.session_place',
+            'session_number' => 'dev_psycho_supports.session_number',
+            'session_duration' => 'dev_psycho_supports.session_duration',
+            'other_requirements' => 'dev_psycho_supports.other_requirements',
+            'reffer_to' => 'dev_psycho_supports.reffer_to',
+            'referr_address' => 'dev_psycho_supports.referr_address',
+            'contact_number' => 'dev_psycho_supports.contact_number',
+            'reason_for_reffer' => 'dev_psycho_supports.reason_for_reffer',
+            'other_reason_for_reffer' => 'dev_psycho_supports.other_reason_for_reffer',
+            'full_name' => 'dev_customers.full_name',
+            'inkind_project' => 'dev_economic_supports.inkind_project',
+            'other_inkind_project' => 'dev_economic_supports.other_inkind_project',
+            'inkind_received' => 'dev_economic_supports.inkind_received',
+            'training_duration' => 'dev_economic_supports.training_duration',
+            'is_certification_received' => 'dev_economic_supports.is_certification_received',
+            'training_used' => 'dev_economic_supports.training_used',
+            'economic_other_comments' => 'dev_economic_supports.other_comments AS economic_other_comments',
+            'microbusiness_established' => 'dev_economic_supports.microbusiness_established',
+            'month_inauguration' => 'dev_economic_supports.month_inauguration',
+            'year_inauguration' => 'dev_economic_supports.year_inauguration',
+            'family_training' => 'dev_economic_supports.family_training',
+            'traning_entry_date' => 'dev_economic_supports.traning_entry_date',
+            'place_traning' => 'dev_economic_supports.place_traning',
+            'duration_traning' => 'dev_economic_supports.duration_traning',
+            'training_status' => 'dev_economic_supports.training_status',
+            'received_vocational_training' => 'dev_economic_supports.received_vocational_training',
+            'other_received_vocational_training' => 'dev_economic_supports.other_received_vocational_training',
+            'training_start_date' => 'dev_economic_supports.training_start_date',
+            'training_end_date' => 'dev_economic_supports.training_end_date',
+            'is_vocational_training' => 'dev_economic_reintegration_referrals.is_vocational_training',
+            'received_vocational' => 'dev_economic_reintegration_referrals.received_vocational',
+            'other_received_vocational' => 'dev_economic_reintegration_referrals.other_received_vocational',
+            'is_certificate_received' => 'dev_economic_reintegration_referrals.is_certificate_received',
+            'used_far' => 'dev_economic_reintegration_referrals.used_far',
+            'economic_referrals_other_comments' => 'dev_economic_reintegration_referrals.other_comments AS economic_referrals_other_comments',
+            'is_economic_services' => 'dev_economic_reintegration_referrals.is_economic_services',
+            'economic_support' => 'dev_economic_reintegration_referrals.economic_support',
+            'other_economic_support' => 'dev_economic_reintegration_referrals.other_economic_support',
+            'is_assistance_received' => 'dev_economic_reintegration_referrals.is_assistance_received',
+            'refferd_to' => 'dev_economic_reintegration_referrals.refferd_to',
+            'refferd_address' => 'dev_economic_reintegration_referrals.refferd_address',
+            'trianing_date' => 'dev_economic_reintegration_referrals.trianing_date',
+            'place_of_training' => 'dev_economic_reintegration_referrals.place_of_training',
+            'duration_training' => 'dev_economic_reintegration_referrals.duration_training',
+            'status_traning' => 'dev_economic_reintegration_referrals.status_traning',
+            'assistance_utilized' => 'dev_economic_reintegration_referrals.assistance_utilized',
+            'reintegration_economic' => 'dev_social_supports.reintegration_economic',
+            'other_reintegration_economic' => 'dev_social_supports.other_reintegration_economic',
+            'soical_date' => 'dev_social_supports.soical_date',
+            'medical_date' => 'dev_social_supports.medical_date',
+            'date_education' => 'dev_social_supports.date_education',
+            'date_housing' => 'dev_social_supports.date_housing',
+            'date_legal' => 'dev_social_supports.date_legal',
+            'attended_ipt' => 'dev_social_supports.attended_ipt',
+            'learn_show' => 'dev_social_supports.learn_show',
+            'is_per_community_video' => 'dev_social_supports.is_per_community_video',
+            'learn_video' => 'dev_social_supports.learn_video',
+            'support_referred' => 'dev_social_supports.support_referred',
+            'other_support_referred' => 'dev_social_supports.other_support_referred',
+            'casedropped' => 'dev_followups.casedropped',
+            'reason_dropping' => 'dev_followups.reason_dropping',
+            'other_reason_dropping' => 'dev_followups.other_reason_dropping',
+            'confirm_services' => 'dev_followups.confirm_services',
+            'social_protection' => 'dev_followups.social_protection',
+            'special_security' => 'dev_followups.special_security',
+            'comment_psychosocial' => 'dev_followups.comment_psychosocial',
+            'comment_economic' => 'dev_followups.comment_economic',
+            'comment_social' => 'dev_followups.comment_social',
+            'complete_income' => 'dev_followups.complete_income',
+            'monthly_income' => 'dev_followups.monthly_income',
+            'challenges' => 'dev_followups.challenges',
+            'actions_taken' => 'dev_followups.actions_taken',
+            'remark_participant' => 'dev_followups.remark_participant',
+            'comment_brac' => 'dev_followups.comment_brac',
+            'remark_district' => 'dev_followups.remark_district',
         ),
         'id' => $edit,
         'single' => true
     );
 
     $pre_data = $this->get_cases($args);
-
-
-//    d($pre_data);
-
 
     $immediate_support = explode(',', $pre_data['immediate_support']);
     $service_requested = explode(',', $pre_data['service_requested']);
@@ -593,15 +662,21 @@ doAction('render_start');
                                                     if (in_array('Other', $issue_discussed)) {
                                                         echo 'checked';
                                                     }
-                                                    ?> name="issue_discussed[]" id="newIssues"><span class="lbl">Others</span></label>
+                                                    ?> name="issue_discussed[]" id="newIssues" <?php echo $pre_data && $pre_data['other_issue_discussed'] != NULL ? 'checked' : '' ?>><span class="lbl">Others</span></label>
                                             </div>
                                         </div>
                                     </div>
                                     <div id="newIssuesType" style="display: none; margin-bottom: 1em;">
-                                        <input class="form-control" placeholder="Please Specity" type="text" name="new_issue_discussed" value="<?php echo $pre_data['new_issue_discussed'] ? $pre_data['new_issue_discussed'] : ''; ?>">
+                                        <input class="form-control" placeholder="Please Specity" type="text" name="new_issue_discussed" value="<?php echo $pre_data['other_issue_discussed'] ? $pre_data['other_issue_discussed'] : ''; ?>">
                                     </div>
                                     <script>
                                         init.push(function () {
+                                            var isChecked = $('#newIssues').is(':checked');
+
+                                            if (isChecked == true) {
+                                                $('#newIssuesType').show();
+                                            }
+
                                             $("#newIssues").on("click", function () {
                                                 $('#newIssuesType').toggle();
                                             });
@@ -686,11 +761,11 @@ doAction('render_start');
                                     </div>
                                     <div class="form-group">
                                         <label>Description of the problem</label>
-                                        <textarea class="form-control" name="problem_description" rows="5" placeholder="" value="<?php echo $pre_data['problem_description'] ? $pre_data['problem_description'] : ''; ?>"></textarea>
+                                        <textarea class="form-control" name="problem_description" rows="5"><?php echo $pre_data['problem_description'] ? $pre_data['problem_description'] : ''; ?></textarea>
                                     </div>
                                     <div class="form-group">
                                         <label>Initial Plan</label>
-                                        <textarea class="form-control" name="initial_plan" rows="5" placeholder="" value="<?php echo $pre_data['initial_plan'] ? $pre_data['initial_plan'] : ''; ?>"></textarea>
+                                        <textarea class="form-control" name="initial_plan" rows="5" placeholder=""><?php echo $pre_data['initial_plan'] ? $pre_data['initial_plan'] : ''; ?></textarea>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
@@ -705,7 +780,7 @@ doAction('render_start');
                                     </div>
                                     <div class="form-group Familymembers" style="display:none">
                                         <label>If yes, how many?</label>
-                                        <input class="form-control" type="text" name="family_counseling" value="<?php echo $pre_data['family_counseling'] ? $pre_data['family_counseling'] : ''; ?>">
+                                        <input class="form-control" type="number" name="family_counseling" value="<?php echo $pre_data['family_counseling'] ? $pre_data['family_counseling'] : ''; ?>">
                                     </div>
                                     <script>
                                         init.push(function () {
@@ -735,7 +810,7 @@ doAction('render_start');
                                         </div>
                                     </div>
                                     <div id="newPlaceSessionType" style="display: none; margin-bottom: 1em;">
-                                        <input class="form-control" placeholder="Please Specity" type="text" name="new_session_place" value="<?php echo $pre_data['new_session_place'] ? $pre_data['new_session_place'] : ''; ?>">
+                                        <input class="form-control" placeholder="Please Specity" type="text" id="newPlaceSessionTypeText" name="new_session_place" value="<?php echo $pre_data['session_place'] ? $pre_data['session_place'] : ''; ?>">
                                     </div>
                                     <script>
                                         init.push(function () {
@@ -745,12 +820,13 @@ doAction('render_start');
 
                                             $(".newPlaceSession").on("click", function () {
                                                 $('#newPlaceSessionType').hide();
+                                                $('#newPlaceSessionTypeText').val('');
                                             });
                                         });
                                     </script>
                                     <div class="form-group">
                                         <label>Number of Sessions (Estimate)</label>
-                                        <input class="form-control" type="text" id="session_number" name="session_number" value="<?php echo $pre_data['session_number'] ? $pre_data['session_number'] : ''; ?>">
+                                        <input class="form-control" type="number" id="session_number" name="session_number" value="<?php echo $pre_data['session_number'] ? $pre_data['session_number'] : ''; ?>">
                                     </div>
                                     <div class="form-group">
                                         <label>Duration of Session</label>
@@ -777,34 +853,40 @@ doAction('render_start');
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                             <div class="options_holder radio">
                                                 <label><input class="px" type="checkbox" name="reason_for_reffer[]" value="Trauma Counselling" <?php
-                                                    if (in_array('Trauma Counselling', $problem_identified)) {
+                                                    if (in_array('Trauma Counselling', $reason_for_reffer)) {
                                                         echo 'checked';
                                                     }
                                                     ?>><span class="lbl">Trauma Counselling </span></label>
                                                 <label><input class="px" type="checkbox" name="reason_for_reffer[]" value="Family Counseling" <?php
-                                                    if (in_array('Family Counseling', $problem_identified)) {
+                                                    if (in_array('Family Counseling', $reason_for_reffer)) {
                                                         echo 'checked';
                                                     }
                                                     ?>><span class="lbl">Family Counseling </span></label>
                                                 <label><input class="px" type="checkbox" name="reason_for_reffer[]" value="Psychiatric Treatment" <?php
-                                                    if (in_array('Psychiatric Treatment', $problem_identified)) {
+                                                    if (in_array('Psychiatric Treatment', $reason_for_reffer)) {
                                                         echo 'checked';
                                                     }
                                                     ?>><span class="lbl">Psychiatric Treatment  </span></label>
                                                 <label><input class="px" type="checkbox" name="reason_for_reffer[]" value="Medical Treatment" <?php
-                                                    if (in_array('Medical Treatment', $problem_identified)) {
+                                                    if (in_array('Medical Treatment', $reason_for_reffer)) {
                                                         echo 'checked';
                                                     }
                                                     ?>><span class="lbl">Medical Treatment </span></label>
-                                                <label><input class="px col-sm-12" type="checkbox" name="reason_for_reffer[]" id="newReasonReferral"><span class="lbl">Others</span></label>
+                                                <label><input class="px col-sm-12" type="checkbox" name="reason_for_reffer[]" id="newReasonReferral" <?php echo $pre_data && $pre_data['other_reason_for_reffer'] != NULL ? 'checked' : '' ?>><span class="lbl">Others</span></label>
                                             </div>
                                         </div>
                                     </div>
                                     <div id="newReasonReferralTypes" style="display: none; margin-bottom: 1em;">
-                                        <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_reason_for_reffer" value="<?php echo $pre_data['new_reason_for_reffer'] ? $pre_data['new_reason_for_reffer'] : ''; ?>">
+                                        <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_reason_for_reffer" value="<?php echo $pre_data['other_reason_for_reffer'] ? $pre_data['other_reason_for_reffer'] : ''; ?>">
                                     </div>
                                     <script>
                                         init.push(function () {
+                                            var isChecked = $('#newReasonReferral').is(':checked');
+
+                                            if (isChecked == true) {
+                                                $('#newReasonReferralTypes').show();
+                                            }
+
                                             $("#newReasonReferral").on("click", function () {
                                                 $('#newReasonReferralTypes').toggle();
                                             });
@@ -925,11 +1007,6 @@ doAction('render_start');
                             <a href="<?php echo url('dev_customer_management/manage_cases?action=add_edit_psychosocial_followup&customer_id=' . $edit) ?>" target="_blank" class="btn btn-success btn-sm" style="margin-bottom: 1%">Add New Psychosocial Followup</a>
                         </fieldset>
                     </div>
-
-
-
-
-
                     <div class="tab-pane fade " id="EconomicReintegration">
                         <fieldset>
                             <legend>Section 4: Economic Reintegration Support</legend>
@@ -1003,21 +1080,27 @@ doAction('render_start');
                                                         }
                                                         ?>
                                                                                     ><span class="lbl">Safe Migration</span></label>
-                                                    <label class="col-sm-12"><input class="px col-sm-12" type="checkbox" name="inkind_project[]" id="newInkind"><span class="lbl">Others</span></label>
+                                                    <label class="col-sm-12"><input class="px col-sm-12" type="checkbox" name="inkind_project[]" id="newInkind" <?php echo $pre_data && $pre_data['other_inkind_project'] != NULL ? 'checked' : '' ?>><span class="lbl">Others</span></label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div id="newInkindType" style="display: none; margin-bottom: 1em;">
-                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_inkind_project" value="<?php echo $pre_data['new_inkind_project'] ? $pre_data['new_inkind_project'] : ''; ?>">
+                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_inkind_project" value="<?php echo $pre_data['other_inkind_project'] ? $pre_data['other_inkind_project'] : ''; ?>">
                                         </div>
                                         <script>
                                             init.push(function () {
+                                                var isChecked = $('#newInkind').is(':checked');
+
+                                                if (isChecked == true) {
+                                                    $('#newInkindType').show();
+                                                }
+
                                                 $("#newInkind").on("click", function () {
                                                     $('#newInkindType').toggle();
                                                 });
                                             });
                                         </script>
-                                    </fieldset >
+                                    </fieldset>
                                     <div class="form-group">
                                         <label>Received Financial Literacy Training ?</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
@@ -1027,23 +1110,23 @@ doAction('render_start');
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group LiteracyTraining" style="display:none">
+                                    <div class="form-group" id="training_duration" style="display:none">
                                         <input class="form-control" type="text" name="training_duration" placeholder="Duration of training" value="<?php echo $pre_data['training_duration'] ? $pre_data['training_duration'] : ''; ?>">
                                     </div>
                                     <script>
                                         init.push(function () {
-                                            var isChecked = $('#yesCooperated').is(':checked');
+                                            var isChecked = $('#InkindReceived').is(':checked');
 
                                             if (isChecked == true) {
-                                                $('.LiteracyTraining').show();
+                                                $('#training_duration').show();
                                             }
 
                                             $("#InkindReceived").on("click", function () {
-                                                $('.LiteracyTraining').show();
+                                                $('#training_duration').show();
                                             });
 
                                             $("#noInkindReceived").on("click", function () {
-                                                $('.LiteracyTraining').hide();
+                                                $('#training_duration').hide();
                                             });
                                         });
                                     </script>
@@ -1051,19 +1134,37 @@ doAction('render_start');
                                         <label>Training Certificate Received</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                             <div class="options_holder radio">
-                                                <label><input class="px" type="radio" id="is_certification_received" name="is_certification_received" value="yes" <?php echo $pre_data && $pre_data['is_certification_received'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
-                                                <label><input class="px" type="radio" id="is_certification_received" name="is_certification_received" value="no" <?php echo $pre_data && $pre_data['is_certification_received'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
+                                                <label><input class="px" type="radio" id="yes_certification_received" name="is_certification_received" value="yes" <?php echo $pre_data && $pre_data['is_certification_received'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
+                                                <label><input class="px" type="radio" id="no_certification_received" name="is_certification_received" value="no" <?php echo $pre_data && $pre_data['is_certification_received'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group Training">
                                         <label>How has the training been used so far?</label>
-                                        <textarea class="form-control" rows="2" name="training_used" value="<?php echo $pre_data['training_used'] ? $pre_data['training_used'] : ''; ?>" placeholder=""></textarea>
+                                        <textarea class="form-control" rows="2" name="training_used" placeholder=""><?php echo $pre_data['training_used'] ? $pre_data['training_used'] : ''; ?></textarea>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group Training">
                                         <label>Any other Comments</label>
-                                        <textarea class="form-control" rows="2"  name="other_comments" value="<?php echo $pre_data['other_comments'] ? $pre_data['other_comments'] : ''; ?>" placeholder="Any other Comments"></textarea>
+                                        <textarea class="form-control" rows="2" name="economic_other_comments" placeholder="Any other Comments"><?php echo $pre_data['economic_other_comments'] ? $pre_data['economic_other_comments'] : ''; ?></textarea>
                                     </div>
+                                    <script>
+                                        init.push(function () {
+                                            $('.Training').hide();
+                                            var isChecked = $('#yes_certification_received').is(':checked');
+
+                                            if (isChecked == true) {
+                                                $('.Training').show();
+                                            }
+
+                                            $("#yes_certification_received").on("click", function () {
+                                                $('.Training').show();
+                                            });
+
+                                            $("#no_certification_received").on("click", function () {
+                                                $('.Training').hide();
+                                            });
+                                        });
+                                    </script>
                                     <div class="form-group">
                                         <label>Microbusiness Established</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
@@ -1079,7 +1180,7 @@ doAction('render_start');
                                     </div>
                                     <script>
                                         init.push(function () {
-                                            var isChecked = $('#yesCooperated').is(':checked');
+                                            var isChecked = $('#yesMicrobusiness').is(':checked');
 
                                             if (isChecked == true) {
                                                 $('.Microbusiness').show();
@@ -1134,7 +1235,7 @@ doAction('render_start');
                                         });
                                     </script>
                                     <div class="form-group">
-                                        <label>Status Of Training (*)</label>
+                                        <label>Status Of Training</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                             <div class="options_holder radio">
                                                 <label><input class="px" type="radio" id="" name="training_status" value="completed" <?php echo $pre_data && $pre_data['training_status'] == 'completed' ? 'checked' : '' ?>><span class="lbl">Completed</span></label>
@@ -1269,15 +1370,21 @@ doAction('render_start');
                                                             echo 'checked';
                                                         }
                                                         ?>><span class="lbl">Domestic work</span></label>
-                                                    <label class="col-sm-12"><input class="px col-sm-12" type="checkbox" name="received_vocational_training[]" id="newVocational"><span class="lbl">Others</span></label>
+                                                    <label class="col-sm-12"><input class="px col-sm-12" type="checkbox" name="received_vocational_training[]" id="newVocational" <?php echo $pre_data && $pre_data['other_received_vocational_training'] != NULL ? 'checked' : '' ?>><span class="lbl">Others</span></label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div id="newVocationalType" style="display: none; margin-bottom: 1em;">
-                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" value="<?php echo $pre_data['new_received_vocational_training'] ? $pre_data['new_received_vocational_training'] : ''; ?>" name="new_received_vocational_training" value="">
+                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" value="<?php echo $pre_data['other_received_vocational_training'] ? $pre_data['other_received_vocational_training'] : ''; ?>" name="new_received_vocational_training" value="">
                                         </div>
                                         <script>
                                             init.push(function () {
+                                                var isChecked = $('#newVocational').is(':checked');
+
+                                                if (isChecked == true) {
+                                                    $('#newVocationalType').show();
+                                                }
+
                                                 $("#newVocational").on("click", function () {
                                                     $('#newVocationalType').toggle();
                                                 });
@@ -1466,15 +1573,21 @@ doAction('render_start');
                                                             echo 'checked';
                                                         }
                                                         ?>><span class="lbl">Domestic work</span></label>
-                                                    <label class="col-sm-12"><input class="px col-sm-12" type="checkbox" name="received_vocational[]" id="newReferralstraining"><span class="lbl">Others</span></label>
+                                                    <label class="col-sm-12"><input class="px col-sm-12" type="checkbox" name="received_vocational[]" id="newReferralstraining" <?php echo $pre_data && $pre_data['other_received_vocational'] != NULL ? 'checked' : '' ?>><span class="lbl">Others</span></label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div id="newReferralstrainingType" style="display: none; margin-bottom: 1em;">
-                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_received_vocational" value="<?php echo $pre_data['new_received_vocational'] ? $pre_data['new_received_vocational'] : ''; ?>">
+                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_received_vocational" value="<?php echo $pre_data['other_received_vocational'] ? $pre_data['other_received_vocational'] : ''; ?>">
                                         </div>
                                         <script>
                                             init.push(function () {
+                                                var isChecked = $('#newReferralstraining').is(':checked');
+
+                                                if (isChecked == true) {
+                                                    $('#newReferralstrainingType').show();
+                                                }
+
                                                 $("#newReferralstraining").on("click", function () {
                                                     $('#newReferralstrainingType').toggle();
                                                 });
@@ -1504,7 +1617,7 @@ doAction('render_start');
                                                         $('#usedfar').show();
                                                     }
                                                 });
-                                                $('#isCompletedNo').change(function () {
+                                                $('#is_No_certificate_received').change(function () {
                                                     if (this.checked) {
                                                         $('#usedfar').hide();
                                                     } else {
@@ -1513,24 +1626,41 @@ doAction('render_start');
                                                 });
                                             });
                                         </script> 
-
                                     </div>
                                     <div class="form-group">
                                         <label>Any other Comments</label>
-                                        <textarea class="form-control" name="other_comments" rows="2" placeholder=""></textarea>
+                                        <textarea class="form-control" name="economic_referrals_other_comments" rows="2" placeholder=""><?php echo $pre_data['economic_referrals_other_comments'] ?></textarea>
                                     </div>
                                     <div class="form-group">
                                         <label>Referrals done for economic services</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                             <div class="options_holder radio">
-                                                <label><input class="px" type="radio" id="is_economic_services" name="is_economic_services" value="yes" <?php echo $pre_data && $pre_data['is_economic_services'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
-                                                <label><input class="px" type="radio" id="is_economic_services" name="is_economic_services" value="no" <?php echo $pre_data && $pre_data['is_economic_services'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
+                                                <label><input class="px" type="radio" id="yes_economic_services" name="is_economic_services" value="yes" <?php echo $pre_data && $pre_data['is_economic_services'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
+                                                <label><input class="px" type="radio" id="no_economic_services" name="is_economic_services" value="no" <?php echo $pre_data && $pre_data['is_economic_services'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
                                             </div>
                                         </div>
                                     </div>
-                                    <fieldset class="scheduler-border">
+                                    <script>
+                                        init.push(function () {
+                                            $('.areaEconomicSupport').hide();
+                                            var isChecked = $('#yes_economic_services').is(':checked');
+
+                                            if (isChecked == true) {
+                                                $('.areaEconomicSupport').show();
+                                            }
+
+                                            $("#yes_economic_services").on("click", function () {
+                                                $('.areaEconomicSupport').show();
+                                            });
+
+                                            $("#no_economic_services").on("click", function () {
+                                                $('.areaEconomicSupport').hide();
+                                            });
+                                        });
+                                    </script>
+                                    <fieldset class="scheduler-border areaEconomicSupport">
                                         <legend class="scheduler-border">Types of Economic Support</legend>
-                                        <div class="form-group ">
+                                        <div class="form-group">
                                             <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                                 <div class="options_holder radio">
                                                     <label class="col-sm-4"><input class="px" type="checkbox" name="economic_support[]" value="Microbusiness" <?php
@@ -1595,27 +1725,33 @@ doAction('render_start');
                                                             echo 'checked';
                                                         }
                                                         ?>><span class="lbl">Advance Training</span></label>
-                                                    <label class="col-sm-12"><input class="px col-sm-12" type="checkbox" name="economic_support[]"  id="EconomicSupport"><span class="lbl">Others</span></label>
+                                                    <label class="col-sm-12"><input class="px col-sm-12" type="checkbox" name="economic_support[]" id="newEconomicSupport" <?php echo $pre_data && $pre_data['other_economic_support'] != NULL ? 'checked' : '' ?>><span class="lbl">Others</span></label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div id="EconomicSupportType" style="display: none; margin-bottom: 1em;">
-                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_economic_support" value="<?php echo $pre_data['new_economic_support'] ? $pre_data['new_economic_support'] : ''; ?>">
+                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_economic_support" value="<?php echo $pre_data['other_economic_support'] ? $pre_data['other_economic_support'] : ''; ?>">
                                         </div>
-                                        <script>
-                                            init.push(function () {
-                                                $("#EconomicSupport").on("click", function () {
-                                                    $('#EconomicSupportType').toggle();
-                                                });
+                                    </fieldset>
+                                    <script>
+                                        init.push(function () {
+                                            var isChecked = $('#newEconomicSupport').is(':checked');
+
+                                            if (isChecked == true) {
+                                                $('#EconomicSupportType').show();
+                                            }
+
+                                            $("#newEconomicSupport").on("click", function () {
+                                                $('#EconomicSupportType').toggle();
                                             });
-                                        </script>
-                                    </fieldset >
+                                        });
+                                    </script>
                                     <div class="form-group">
                                         <label>Required Assistance Received</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                             <div class="options_holder radio">
-                                                <label><input class="px" type="radio" id="" name="is_assistance_received" value="yes" <?php echo $pre_data && $pre_data['is_assistance_received'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
-                                                <label><input class="px" type="radio" id="" name="is_assistance_received" value="no" <?php echo $pre_data && $pre_data['is_assistance_received'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
+                                                <label><input class="px" type="radio" name="is_assistance_received" value="yes" <?php echo $pre_data && $pre_data['is_assistance_received'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
+                                                <label><input class="px" type="radio" name="is_assistance_received" value="no" <?php echo $pre_data && $pre_data['is_assistance_received'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
                                             </div>
                                         </div>
                                     </div>
@@ -1641,14 +1777,14 @@ doAction('render_start');
                                         <label>Status of the Training</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                             <div class="options_holder radio">
-                                                <label><input class="px" type="radio" id="status_traning" name="status_traning" value="yes" <?php echo $pre_data && $pre_data['status_traning'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Completed</span></label>
-                                                <label><input class="px" type="radio" id="status_traning" name="status_traning" value="no" <?php echo $pre_data && $pre_data['status_traning'] == 'no' ? 'checked' : '' ?>><span class="lbl">Not Completed</span></label>
+                                                <label><input class="px" type="radio" name="status_traning" value="yes" <?php echo $pre_data && $pre_data['status_traning'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Completed</span></label>
+                                                <label><input class="px" type="radio" name="status_traning" value="no" <?php echo $pre_data && $pre_data['status_traning'] == 'no' ? 'checked' : '' ?>><span class="lbl">Not Completed</span></label>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label>How has the assistance been utilized?</label>
-                                        <textarea class="form-control" name="assistance_utilized" rows="2" placeholder=""></textarea>
+                                        <textarea class="form-control" name="assistance_utilized" rows="2" placeholder=""><?php echo $pre_data['assistance_utilized'] ?></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -1781,15 +1917,21 @@ doAction('render_start');
                                                                 echo 'checked';
                                                             }
                                                             ?>><span class="lbl">Legal Arbitration</span></label>
-                                                        <label class="col-sm-12"><input class="px col-sm-12" type="checkbox" name="reintegration_economic[]" id="TypesofEconomic"><span class="lbl">Others</span></label>
+                                                        <label class="col-sm-12"><input class="px col-sm-12" type="checkbox" name="reintegration_economic[]" id="TypesofEconomic" <?php echo $pre_data['other_reintegration_economic'] != NULL ? 'checked' : '' ?>><span class="lbl">Others</span></label>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12" id="TypesofEconomicType" style="display: none; margin-bottom: 1em;">
-                                                <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_reintegration_economic" value="<?php echo $pre_data['new_reintegration_economic'] ? $pre_data['new_reintegration_economic'] : ''; ?>">
+                                                <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_reintegration_economic" value="<?php echo $pre_data['other_reintegration_economic'] ? $pre_data['other_reintegration_economic'] : ''; ?>">
                                             </div>
                                             <script>
                                                 init.push(function () {
+                                                    var isChecked = $('#TypesofEconomic').is(':checked');
+
+                                                    if (isChecked == true) {
+                                                        $('#TypesofEconomicType').show();
+                                                    }
+
                                                     $("#TypesofEconomic").on("click", function () {
                                                         $('#TypesofEconomicType').toggle();
                                                     });
@@ -1866,10 +2008,17 @@ doAction('render_start');
                                         </div>
                                     </div>
                                     <div class="form-group" id="LearnShowType" style="display: none; margin-bottom: 1em;">
-                                        <textarea class="form-control" name="learn_show" rows="3" value="<?php echo $pre_data['learn_show'] ? $pre_data['learn_show'] : ''; ?>" placeholder="Lessons learnt from IPT show"></textarea>
+                                        <textarea class="form-control" name="learn_show" rows="3" placeholder="Lessons learnt from IPT show"><?php echo $pre_data['learn_show'] ? $pre_data['learn_show'] : ''; ?></textarea>
                                     </div>
                                     <script>
                                         init.push(function () {
+                                            
+                                            var isChecked = $('#yesLiteracyTraining').is(':checked');
+
+                                            if (isChecked == true) {
+                                                $('#LearnShowType').show();
+                                            }
+                                            
                                             $("#yesLiteracyTraining").on("click", function () {
                                                 $('#LearnShowType').toggle();
                                             });
@@ -1885,10 +2034,17 @@ doAction('render_start');
                                         </div>
                                     </div>
                                     <div class="form-group"id="LearnVideo" style="display: none; margin-bottom: 1em;">
-                                        <textarea class="form-control" name="learn_video" rows="3" placeholder="Lessons learnt from video show"></textarea>
+                                        <textarea class="form-control" name="learn_video" rows="3" placeholder="Lessons learnt from video show"><?php echo $pre_data['learn_video'] ? $pre_data['learn_video'] : ''; ?></textarea>
                                     </div>
                                     <script>
                                         init.push(function () {
+
+                                            var isChecked = $('#yesCommunityVideo').is(':checked');
+
+                                            if (isChecked == true) {
+                                                $('#LearnVideo').show();
+                                            }
+
                                             $("#yesCommunityVideo").on("click", function () {
                                                 $('#LearnVideo').toggle();
                                             });
@@ -2017,15 +2173,21 @@ doAction('render_start');
                                                             echo 'checked';
                                                         }
                                                         ?>><span class="lbl">Legal Arbitration</span></label>
-                                                    <label class="col-sm-12"><input class="px col-sm-12" type="checkbox" id="supportreferred"><span class="lbl">Others</span></label>
+                                                    <label class="col-sm-12"><input class="px col-sm-12" type="checkbox" id="supportreferred" <?php echo $pre_data['other_support_referred'] != NULL ? 'checked' : '' ?>><span class="lbl">Others</span></label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-sm-12" id="TypesupportreferredType" style="display: none; margin-bottom: 1em;">
-                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_supportreferred" value="<?php echo $pre_data['new_supportreferred'] ? $pre_data['new_supportreferred'] : ''; ?>">
+                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_supportreferred" value="<?php echo $pre_data['other_support_referred'] ? $pre_data['other_support_referred'] : ''; ?>">
                                         </div>
                                         <script>
                                             init.push(function () {
+                                                var isChecked = $('#supportreferred').is(':checked');
+
+                                                if (isChecked == true) {
+                                                    $('#TypesupportreferredType').show();
+                                                }
+
                                                 $("#supportreferred").on("click", function () {
                                                     $('#TypesupportreferredType').toggle();
                                                 });
@@ -2098,28 +2260,34 @@ doAction('render_start');
                                                             echo 'checked';
                                                         }
                                                         ?>><span class="lbl">Re-migrated</span></label>
-                                                    <label class="col-sm-12"><input  class="px col-sm-12" type="checkbox" id="ReasonDropping"><span class="lbl">Others</span></label>
+                                                    <label class="col-sm-12"><input  class="px col-sm-12" type="checkbox" id="ReasonDropping" <?php echo $pre_data['other_reason_dropping'] != NULL ? 'checked' : '' ?>><span class="lbl">Others</span></label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div id="ReasonDroppingType" style="display: none; margin-bottom: 1em;">
-                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_reason_dropping" value="<?php echo $pre_data['new_reason_dropping'] ? $pre_data['new_reason_dropping'] : ''; ?>">
+                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_reason_dropping" value="<?php echo $pre_data['other_reason_dropping'] ? $pre_data['other_reason_dropping'] : ''; ?>">
                                         </div>
                                         <script>
                                             init.push(function () {
+                                                var isChecked = $('#ReasonDropping').is(':checked');
+
+                                                if (isChecked == true) {
+                                                    $('#ReasonDroppingType').show();
+                                                }
+
                                                 $("#ReasonDropping").on("click", function () {
                                                     $('#ReasonDroppingType').toggle();
                                                 });
                                             });
                                         </script>
                                     </fieldset >
-                                    <fieldset class="scheduler-border Casedropped">
+                                    <fieldset class="scheduler-border">
                                         <legend class="scheduler-border">Confirmed Services Received after 3 Months</legend>
                                         <div class="form-group">
                                             <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                                 <div class="options_holder radio">
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="confirm_services[]" value=">Child Care" <?php
-                                                        if (in_array('Child Care"', $confirm_services)) {
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="confirm_services[]" value="Child Care" <?php
+                                                        if (in_array('Child Care', $confirm_services)) {
                                                             echo 'checked';
                                                         }
                                                         ?>><span class="lbl">Child Care</span></label>
@@ -2324,56 +2492,42 @@ doAction('render_start');
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-sm-12">
-                                                        <label><input class="px" type="checkbox" id="YesSpecifySevervice" value="Social Protection Schemes"  ><span class="lbl">Social Protection Schemes</span></label>
+                                                        <label><input class="px" type="checkbox" id="YesSpecifySevervice" value="Social Protection Schemes"><span class="lbl">Social Protection Schemes</span></label>
                                                     </div>
-                                                    <div class="form-group col-sm-12" id="SpecifySevervice" style="margin-bottom: 1em; display: none;">
-                                                        <input class="form-control" type="text" placeholder="Specify the services" name="social_protection_service" value="<?php echo $pre_data['social_protection_service'] ? $pre_data['social_protection_service'] : ''; ?>">
+                                                    <div class="form-group col-sm-12">
+                                                        <input class="form-control" type="text" placeholder="Social Protection Schemes" name="social_protection" value="<?php echo $pre_data['social_protection'] ? $pre_data['social_protection'] : ''; ?>">
                                                     </div>
-                                                    <script>
-                                                        init.push(function () {
-                                                            $("#YesSpecifySevervice").on("click", function () {
-                                                                $('#SpecifySevervice').toggle();
-                                                            });
-                                                        });
-                                                    </script>
                                                     <div class="form-group col-sm-12">
                                                         <label><input class="px" type="checkbox" id="YesSecurityMeasures" value="Special Security Measures, Please Specify"><span class="lbl">Special Security Measures</span></label>
                                                     </div>
-                                                    <div class="form-group col-sm-12" id="SecurityMeasures" style="margin-bottom: 1em; display: none;">
-                                                        <input class="form-control" type="text" name="special_security_measures" placeholder="Specify the services" value="<?php echo $pre_data['special_security_measures'] ? $pre_data['special_security_measures'] : ''; ?>">
+                                                    <div class="form-group col-sm-12">
+                                                        <input class="form-control" type="text" name="special_security" placeholder="Special Security Measures" value="<?php echo $pre_data['special_security'] ? $pre_data['special_security'] : ''; ?>">
                                                     </div>
-                                                    <script>
-                                                        init.push(function () {
-                                                            $("#YesSecurityMeasures").on("click", function () {
-                                                                $('#SecurityMeasures').toggle();
-                                                            });
-                                                        });
-                                                    </script>
                                                 </div>
                                             </div>
                                         </div>
                                     </fieldset>
                                 </div>					
                                 <div class="col-sm-6">
-                                    <fieldset class="scheduler-border Casedropped">
+                                    <fieldset class="scheduler-border">
                                         <legend class="scheduler-border">Comment on Situation of Case</legend>
                                         <div class="form-group">
-                                            <textarea class="form-control" name="comment_psychosocial" value="<?php echo $pre_data['comment_psychosocial'] ? $pre_data['comment_psychosocial'] : ''; ?>" rows="3" placeholder="Comment on psychosocial reintegration"></textarea>
+                                            <textarea class="form-control" name="comment_psychosocial" rows="3" placeholder="Comment on psychosocial reintegration"><?php echo $pre_data['comment_psychosocial'] ? $pre_data['comment_psychosocial'] : ''; ?></textarea>
                                         </div>
                                         <div class="form-group">
-                                            <textarea class="form-control" name="comment_economic" value="<?php echo $pre_data['comment_economic'] ? $pre_data['comment_economic'] : ''; ?>" rows="3" placeholder="Comment on economic reintegration"></textarea>
+                                            <textarea class="form-control" name="comment_economic" rows="3" placeholder="Comment on economic reintegration"><?php echo $pre_data['comment_economic'] ? $pre_data['comment_economic'] : ''; ?></textarea>
                                         </div>
                                         <div class="form-group">
-                                            <textarea class="form-control" name="comment_social" value="<?php echo $pre_data['comment_social'] ? $pre_data['comment_social'] : ''; ?>" rows="3" placeholder="Comment on social reintegration"></textarea>
+                                            <textarea class="form-control" name="comment_social" rows="3" placeholder="Comment on social reintegration"><?php echo $pre_data['comment_social'] ? $pre_data['comment_social'] : ''; ?></textarea>
                                         </div>
                                         <div class="form-group">
-                                            <textarea class="form-control" name="complete_income" value="<?php echo $pre_data['complete_income'] ? $pre_data['complete_income'] : ''; ?>" rows="3" placeholder="Complete income tracking information"></textarea>
+                                            <textarea class="form-control" name="complete_income" rows="3" placeholder="Complete income tracking information"><?php echo $pre_data['complete_income'] ? $pre_data['complete_income'] : ''; ?></textarea>
                                         </div>
                                     </fieldset>
-                                    <fieldset class="scheduler-border Casedropped">
+                                    <fieldset class="scheduler-border">
                                         <legend class="scheduler-border">Status of Case after Receiving the Services</legend>
                                         <div class="form-group">
-                                            <input class="form-control" name="monthly_income" value="<?php echo $pre_data['monthly_income'] ? $pre_data['monthly_income'] : ''; ?>" placeholder="Monthly income (BDT)" type="text" name="" value="">
+                                            <input class="form-control" name="monthly_income" value="<?php echo $pre_data['monthly_income'] ? $pre_data['monthly_income'] : ''; ?>" placeholder="Monthly income (BDT)" type="number" name="" value="">
                                         </div>
                                         <div class="form-group">
                                             <input class="form-control" name="challenges" value="<?php echo $pre_data['challenges'] ? $pre_data['challenges'] : ''; ?>" placeholder="Challenges" type="text" name="" value="">
@@ -2395,7 +2549,6 @@ doAction('render_start');
                             </div>
                         </fieldset>
                     </div>
-
                 </div>
             </div>
         </div>

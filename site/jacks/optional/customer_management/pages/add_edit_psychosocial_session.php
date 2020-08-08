@@ -76,7 +76,7 @@ doAction('render_start');
                     <div class="form-group">
                         <label>Time (*)</label>
                         <div class="input-group date">
-                            <input type="text" name="session_entry_time" value="<?php echo $pre_data['session_entry_time'] && $pre_data['session_entry_time'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['session_entry_time'])) : date('d-m-Y'); ?>" class="form-control" id="ReintegrationTime"><span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                            <input type="text" name="session_entry_time" value="<?php echo $pre_data['entry_time'] && $pre_data['entry_time'] != '00-00-00' ? date('H:i:s', strtotime($pre_data['entry_time'])) : date('H:i:s'); ?>" class="form-control" id="ReintegrationTime"><span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                         </div>
                     </div>
                     <script>
@@ -94,7 +94,7 @@ doAction('render_start');
                     <div class="form-group">
                         <label>Date (*)</label>
                         <div class="input-group">
-                            <input id="ReintegrationDate" type="text" class="form-control" name="session_entry_date" value="<?php echo $pre_data['session_entry_date'] && $pre_data['session_entry_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['session_entry_date'])) : date('d-m-Y'); ?>">
+                            <input id="ReintegrationDate" type="text" class="form-control" name="session_entry_date" value="<?php echo $pre_data['entry_date'] && $pre_data['entry_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['entry_date'])) : date('d-m-Y'); ?>">
                         </div>
                     </div>
                     <script type="text/javascript">
@@ -106,11 +106,11 @@ doAction('render_start');
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Description of Activities</label>
-                        <textarea class="form-control" rows="3"  name="activities_description" value="<?php echo $pre_data['activities_description'] ? $pre_data['activities_description'] : ''; ?>" placeholder="Description of Activities"></textarea>
+                        <textarea class="form-control" rows="3"  name="activities_description" placeholder="Description of Activities"><?php echo $pre_data['activities_description'] ? $pre_data['activities_description'] : ''; ?></textarea>
                     </div>
                     <div class="form-group">
                         <label>Comments</label>
-                        <textarea class="form-control" rows="3" name="session_comments" value="<?php echo $pre_data['session_comments'] ? $pre_data['session_comments'] : ''; ?>" placeholder="Comments"></textarea>
+                        <textarea class="form-control" rows="3" name="session_comments" placeholder="Comments"><?php echo $pre_data['session_comments'] ? $pre_data['session_comments'] : ''; ?></textarea>
                     </div>
                     <label>Next date for Session</label>
                     <div class="input-group">
@@ -124,18 +124,17 @@ doAction('render_start');
                 </div>
             </div>
         </div>
-    
-    <div class="panel-footer tar">
-        <a href="<?php echo url('admin/dev_customer_management/manage_cases') ?>" class="btn btn-flat btn-labeled btn-danger"><span class="btn-label icon fa fa-times"></span>Cancel</a>
-        <?php
-        echo submitButtonGenerator(array(
-            'action' => $edit ? 'update' : 'update',
-            'size' => '',
-            'id' => 'submit',
-            'title' => $edit ? 'Update' : 'Save',
-            'icon' => $edit ? 'icon_update' : 'icon_save',
-            'text' => $edit ? 'Update' : 'Save'))
-        ?>
-    </div>
+        <div class="panel-footer tar">
+            <a href="<?php echo url('admin/dev_customer_management/manage_cases') ?>" class="btn btn-flat btn-labeled btn-danger"><span class="btn-label icon fa fa-times"></span>Cancel</a>
+            <?php
+            echo submitButtonGenerator(array(
+                'action' => $edit ? 'update' : 'update',
+                'size' => '',
+                'id' => 'submit',
+                'title' => $edit ? 'Update' : 'Save',
+                'icon' => $edit ? 'icon_update' : 'icon_save',
+                'text' => $edit ? 'Update' : 'Save'))
+            ?>
         </div>
+    </div>
 </form>

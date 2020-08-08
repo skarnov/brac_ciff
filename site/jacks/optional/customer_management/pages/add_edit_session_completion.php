@@ -81,48 +81,28 @@ doAction('render_start');
                             </div>
                         </div>
                     </div>
-
-                    <div id="showcompleted" >
+                    <div id="showcompleted" style="display: none">
                         <div class="form-group">
                             <label>Reason for drop out from the Counseling Session</label>
                             <input class="form-control" type="text" id="dropout_reason"  name="dropout_reason" value="<?php echo $pre_data['dropout_reason'] ? $pre_data['dropout_reason'] : ''; ?>">
                         </div>
-                        <div class="form-group">
-                            <label>Review of Counselling Session</label>
-                            <input class="form-control" type="text" id="review_session"  name="review_session" value="<?php echo $pre_data['review_session'] ? $pre_data['review_session'] : ''; ?>">
-                        </div>
-                        <div class="form-group">
-                            <label>Comments of the Client</label>
-                            <textarea class="form-control" name="client_comments" value="<?php echo $pre_data['client_comments'] ? $pre_data['client_comments'] : ''; ?>" rows="2" placeholder="Comments of the Client"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Counsellor’s Comment</label>
-                            <textarea class="form-control" rows="2" name="counsellor_comments" value="<?php echo $pre_data['counsellor_comments'] ? $pre_data['counsellor_comments'] : ''; ?>" placeholder="Counsellor’s Comment"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Final Evaluation</label>
-                            <input class="form-control" type="text" id="final_evaluation"  name="final_evaluation" value="<?php echo $pre_data['final_evaluation'] ? $pre_data['final_evaluation'] : ''; ?>">
-                        </div>
-                        <div class="form-group">
-                            <label>Required Session After Completion (If Any)</label>
-                            <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
-                                <div class="options_holder radio">
-                                    <label><input class="px" type="radio" id="RequiredSessionYes" name="required_session" value="yes" <?php echo $pre_data && $pre_data['required_session'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
-                                    <label><input class="px" type="radio" id="RequiredSessionNo" name="required_session" value="no" <?php echo $pre_data && $pre_data['required_session'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <script>
                         init.push(function () {
-                            $('#isCompletedYes').change(function () {
+                            var isChecked = $('#isCompletedNo').is(':checked');
+
+                            if (isChecked == true) {
+                                $('#showcompleted').show();
+                            }
+
+                            $('#isCompletedNo').change(function () {
                                 if (this.checked) {
                                     $('#showcompleted').show();
                                 } else {
                                     $('#showcompleted').show();
                                 }
                             });
-                            $('#isCompletedNo').change(function () {
+                            $('#isCompletedYes').change(function () {
                                 if (this.checked) {
                                     $('#showcompleted').hide();
                                 } else {
@@ -130,11 +110,35 @@ doAction('render_start');
                                 }
                             });
                         });
-                    </script> 
+                    </script>
+                    <div class="form-group">
+                        <label>Review of Counselling Session</label>
+                        <input class="form-control" type="text" id="review_session" name="review_session" value="<?php echo $pre_data['review_session'] ? $pre_data['review_session'] : ''; ?>">
+                    </div>
+                    <div class="form-group">
+                        <label>Comments of the Client</label>
+                        <textarea class="form-control" name="client_comments" rows="2" placeholder="Comments of the Client"><?php echo $pre_data['client_comments'] ? $pre_data['client_comments'] : ''; ?></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Counsellor’s Comment</label>
+                        <textarea class="form-control" rows="2" name="counsellor_comments" placeholder="Counsellor’s Comment"><?php echo $pre_data['counsellor_comments'] ? $pre_data['counsellor_comments'] : ''; ?></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Final Evaluation</label>
+                        <input class="form-control" type="text" id="final_evaluation" name="final_evaluation" value="<?php echo $pre_data['final_evaluation'] ? $pre_data['final_evaluation'] : ''; ?>">
+                    </div>
+                    <div class="form-group">
+                        <label>Required Session After Completion (If Any)</label>
+                        <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
+                            <div class="options_holder radio">
+                                <label><input class="px" type="radio" id="RequiredSessionYes" name="required_session" value="yes" <?php echo $pre_data && $pre_data['required_session'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
+                                <label><input class="px" type="radio" id="RequiredSessionNo" name="required_session" value="no" <?php echo $pre_data && $pre_data['required_session'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
         <div class="panel-footer tar">
             <a href="<?php echo url('admin/dev_support_management/manage_supports') ?>" class="btn btn-flat btn-labeled btn-danger"><span class="btn-label icon fa fa-times"></span>Cancel</a>
             <?php

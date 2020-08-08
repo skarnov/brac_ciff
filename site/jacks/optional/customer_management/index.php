@@ -742,11 +742,12 @@ class dev_customer_management {
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
                 $psycho_supports['issue_discussed'] = $data_types;
             } elseif ($params['form_data']['issue_discussed'] == NULL) {
-                $psycho_supports['issue_discussed'] = $params['form_data']['new_issue_discussed'];
+                $psycho_supports['other_issue_discussed'] = $params['form_data']['new_issue_discussed'];
             } elseif ($params['form_data']['issue_discussed'] != NULL && $params['form_data']['new_issue_discussed'] != NULL) {
                 $data_type = $params['form_data']['issue_discussed'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $psycho_supports['issue_discussed'] = $params['form_data']['new_issue_discussed'] . ',' . $data_types;
+                $psycho_supports['issue_discussed'] = $data_types;
+                $psycho_supports['other_issue_discussed'] = $params['form_data']['new_issue_discussed'];
             }
 
             if ($params['form_data']['new_problem_identified'] == NULL) {
@@ -784,11 +785,12 @@ class dev_customer_management {
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
                 $psycho_supports['reason_for_reffer'] = $data_types;
             } elseif ($params['form_data']['reason_for_reffer'] == NULL) {
-                $psycho_supports['reason_for_reffer'] = $params['form_data']['new_reason_for_reffer'];
+                $psycho_supports['other_reason_for_reffer'] = $params['form_data']['new_reason_for_reffer'];
             } elseif ($params['form_data']['reason_for_reffer'] != NULL && $params['form_data']['new_reason_for_reffer'] != NULL) {
                 $data_type = $params['form_data']['reason_for_reffer'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $psycho_supports['reason_for_reffer'] = $params['form_data']['new_reason_for_reffer'] . ',' . $data_types;
+                $psycho_supports['reason_for_reffer'] = $data_types;
+                $psycho_supports['other_reason_for_reffer'] = $params['form_data']['new_reason_for_reffer'];
             }
 
             if ($is_update) {
@@ -816,18 +818,19 @@ class dev_customer_management {
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
                 $economic_supports_data['inkind_project'] = $data_types;
             } elseif ($params['form_data']['inkind_project'] == NULL) {
-                $economic_supports_data['inkind_project'] = $params['form_data']['new_inkind_project'];
+                $economic_supports_data['other_inkind_project'] = $params['form_data']['new_inkind_project'];
             } elseif ($params['form_data']['inkind_project'] != NULL && $params['form_data']['new_inkind_project'] != NULL) {
                 $data_type = $params['form_data']['inkind_project'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $economic_supports_data['inkind_project'] = $params['form_data']['new_inkind_project'] . ',' . $data_types;
+                $economic_supports_data['inkind_project'] = $data_types;
+                $economic_supports_data['other_inkind_project'] = $params['form_data']['new_inkind_project'];
             }
 
             $economic_supports_data['inkind_received'] = $params['form_data']['inkind_received'];
             $economic_supports_data['training_duration'] = $params['form_data']['training_duration'];
             $economic_supports_data['is_certification_received'] = $params['form_data']['is_certification_received'];
             $economic_supports_data['training_used'] = $params['form_data']['training_used'];
-            $economic_supports_data['other_comments'] = $params['form_data']['other_comments'];
+            $economic_supports_data['other_comments'] = $params['form_data']['economic_other_comments'];
             $economic_supports_data['microbusiness_established'] = $params['form_data']['microbusiness_established'];
             $economic_supports_data['month_inauguration'] = $params['form_data']['month_inauguration'];
             $economic_supports_data['year_inauguration'] = $params['form_data']['year_inauguration'];
@@ -842,11 +845,12 @@ class dev_customer_management {
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
                 $economic_supports_data['received_vocational_training'] = $data_types;
             } elseif ($params['form_data']['received_vocational_training'] == NULL) {
-                $economic_supports_data['received_vocational_training'] = $params['form_data']['new_received_vocational_training'];
+                $economic_supports_data['other_received_vocational_training'] = $params['form_data']['new_received_vocational_training'];
             } elseif ($params['form_data']['received_vocational_training'] != NULL && $params['form_data']['new_received_vocational_training'] != NULL) {
                 $data_type = $params['form_data']['received_vocational_training'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $economic_supports_data['received_vocational_training'] = $params['form_data']['new_received_vocational_training'] . ',' . $data_types;
+                $economic_supports_data['received_vocational_training'] = $data_types;
+                $economic_supports_data['other_received_vocational_training'] = $params['form_data']['new_received_vocational_training'];
             }
 
             $economic_supports_data['training_start_date'] = date('Y-m-d', strtotime($params['form_data']['training_start_date']));
@@ -877,15 +881,16 @@ class dev_customer_management {
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
                 $economic_reintegration_data['received_vocational'] = $data_types;
             } elseif ($params['form_data']['received_vocational'] == NULL) {
-                $economic_reintegration_data['received_vocational'] = $params['form_data']['new_received_vocational'];
+                $economic_reintegration_data['other_received_vocational'] = $params['form_data']['new_received_vocational'];
             } elseif ($params['form_data']['received_vocational'] != NULL && $params['form_data']['new_received_vocational'] != NULL) {
                 $data_type = $params['form_data']['received_vocational'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $economic_reintegration_data['received_vocational'] = $params['form_data']['new_received_vocational'] . ',' . $data_types;
+                $economic_reintegration_data['received_vocational'] = $data_types;
+                $economic_reintegration_data['other_received_vocational'] = $params['form_data']['new_received_vocational'];
             }
             $economic_reintegration_data['is_certificate_received'] = $params['form_data']['is_certificate_received'];
             $economic_reintegration_data['used_far'] = $params['form_data']['used_far'];
-            $economic_reintegration_data['other_comments'] = $params['form_data']['other_comments'];
+            $economic_reintegration_data['other_comments'] = $params['form_data']['economic_referrals_other_comments'];
             $economic_reintegration_data['is_economic_services'] = $params['form_data']['is_economic_services'];
 
             if ($params['form_data']['new_economic_support'] == NULL) {
@@ -893,11 +898,12 @@ class dev_customer_management {
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
                 $economic_reintegration_data['economic_support'] = $data_types;
             } elseif ($params['form_data']['economic_support'] == NULL) {
-                $economic_reintegration_data['economic_support'] = $params['form_data']['new_economic_support'];
+                $economic_reintegration_data['other_economic_support'] = $params['form_data']['new_economic_support'];
             } elseif ($params['form_data']['economic_support'] != NULL && $params['form_data']['new_economic_support'] != NULL) {
                 $data_type = $params['form_data']['economic_support'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $economic_reintegration_data['economic_support'] = $params['form_data']['new_economic_support'] . ',' . $data_types;
+                $economic_reintegration_data['economic_support'] = $data_types;
+                $economic_reintegration_data['other_economic_support'] = $params['form_data']['new_economic_support'];
             }
             $economic_reintegration_data['is_assistance_received'] = $params['form_data']['is_assistance_received'];
             $economic_reintegration_data['refferd_to'] = $params['form_data']['refferd_to'];
@@ -933,11 +939,12 @@ class dev_customer_management {
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
                 $dev_social_supports_data['reintegration_economic'] = $data_types;
             } elseif ($params['form_data']['reintegration_economic'] == NULL) {
-                $dev_social_supports_data['reintegration_economic'] = $params['form_data']['new_reintegration_economic'];
+                $dev_social_supports_data['other_reintegration_economic'] = $params['form_data']['new_reintegration_economic'];
             } elseif ($params['form_data']['reintegration_economic'] != NULL && $params['form_data']['new_reintegration_economic'] != NULL) {
                 $data_type = $params['form_data']['reintegration_economic'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $dev_social_supports_data['reintegration_economic'] = $params['form_data']['new_reintegration_economic'] . ',' . $data_types;
+                $dev_social_supports_data['reintegration_economic'] = $data_types;
+                $dev_social_supports_data['other_reintegration_economic'] = $params['form_data']['new_reintegration_economic'];
             }
 
             $dev_social_supports_data['soical_date'] = date('Y-m-d', strtotime($params['form_data']['soical_date']));
@@ -955,11 +962,12 @@ class dev_customer_management {
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
                 $dev_social_supports_data['support_referred'] = $data_types;
             } elseif ($params['form_data']['support_referred'] == NULL) {
-                $dev_social_supports_data['support_referred'] = $params['form_data']['new_supportreferred'];
+                $dev_social_supports_data['other_support_referred'] = $params['form_data']['new_supportreferred'];
             } elseif ($params['form_data']['support_referred'] != NULL && $params['form_data']['new_supportreferred'] != NULL) {
                 $data_type = $params['form_data']['support_referred'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $dev_social_supports_data['support_referred'] = $params['form_data']['new_supportreferred'] . ',' . $data_types;
+                $dev_social_supports_data['support_referred'] = $data_types;
+                $dev_social_supports_data['other_support_referred'] = $params['form_data']['new_supportreferred'];
             }
 
             if ($is_update) {
@@ -986,39 +994,34 @@ class dev_customer_management {
             if ($params['form_data']['new_reason_dropping'] == NULL) {
                 $data_type = $params['form_data']['reason_dropping'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $dev_social_supports_data['reason_dropping'] = $data_types;
+                $dev_followups_data['reason_dropping'] = $data_types;
             } elseif ($params['form_data']['reason_dropping'] == NULL) {
-                $dev_social_supports_data['reason_dropping'] = $params['form_data']['new_reason_dropping'];
+                $dev_followups_data['other_reason_dropping'] = $params['form_data']['new_reason_dropping'];
             } elseif ($params['form_data']['reason_dropping'] != NULL && $params['form_data']['new_reason_dropping'] != NULL) {
                 $data_type = $params['form_data']['reason_dropping'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $dev_social_supports_data['reason_dropping'] = $params['form_data']['new_reason_dropping'] . ',' . $data_types;
+                $dev_followups_data['reason_dropping'] = $data_types;
+                $dev_followups_data['other_reason_dropping'] = $params['form_data']['new_reason_dropping'];
             }
-
 
             if ($params['form_data']['new_confirm_services'] == NULL) {
                 $data_type = $params['form_data']['confirm_services'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $confirm_services = $data_types;
+                $dev_followups_data['confirm_services'] = $data_types;
             } elseif ($params['form_data']['confirm_services'] == NULL) {
-                $confirm_services = $params['form_data']['new_confirm_services'];
+                $dev_followups_data['confirm_services'] = $params['form_data']['new_confirm_services'];
             } elseif ($params['form_data']['confirm_services'] != NULL && $params['form_data']['new_confirm_services'] != NULL) {
                 $data_type = $params['form_data']['confirm_services'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $confirm_services = $params['form_data']['new_confirm_services'] . ',' . $data_types;
+                $dev_followups_data['confirm_services'] = $params['form_data']['new_confirm_services'] . ',' . $data_types;
             }
 
-            $confirm_services_data = array();
-            if ($confirm_services) {
-                $confirm_services_data['confirm_services'] = $confirm_services;
-                if ($params['form_data']['social_protection_service']) {
-                    $confirm_services_data['social_protection'] = $params['form_data']['social_protection_service'];
-                }
-                if ($params['form_data']['special_security_measures']) {
-                    $confirm_services_data['security_measures'] = $params['form_data']['special_security_measures'];
-                }
+            if ($params['form_data']['social_protection']) {
+                $dev_followups_data['social_protection'] = $params['form_data']['social_protection'];
             }
-            $dev_followups_data['confirm_services'] = implode(',', $confirm_services_data);
+            if ($params['form_data']['special_security']) {
+                $dev_followups_data['special_security'] = $params['form_data']['special_security'];
+            }
 
             $dev_followups_data['comment_psychosocial'] = $params['form_data']['comment_psychosocial'];
             $dev_followups_data['comment_economic'] = $params['form_data']['comment_economic'];
@@ -1043,8 +1046,6 @@ class dev_customer_management {
                     $ret['followup_insert'] = $devdb->insert_update('dev_followups', $dev_followups_data);
                 }
             }
-
-            exit();
         }
         return $ret;
     }

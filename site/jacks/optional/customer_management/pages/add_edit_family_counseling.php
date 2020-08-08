@@ -29,12 +29,6 @@ if ($_POST) {
     $data['customer_id'] = $customer_id;
     $data['edit'] = $edit;
 
-
-//    echo '<pre>';
-//    print_r($data);
-//    exit();
-//    
-//    
     $ret = $this->add_edit_family_counselling($data);
 
     if ($ret['success']) {
@@ -77,14 +71,12 @@ doAction('render_start');
 <form id="theForm" onsubmit="return true;" method="post" action="" enctype="multipart/form-data">
     <div class="panel">
         <div class="panel-body">
-
-
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Family Counseling Date</label>
                         <div class="input-group">
-                            <input id="FamilyCounselingDate" type="text" class="form-control" name="family_entry_date" value="<?php echo $pre_data['family_entry_date'] && $pre_data['family_entry_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['family_entry_date'])) : date('d-m-Y'); ?>">
+                            <input id="FamilyCounselingDate" type="text" class="form-control" name="family_entry_date" value="<?php echo $pre_data['entry_date'] && $pre_data['entry_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['entry_date'])) : date('d-m-Y'); ?>">
                         </div>
                         <script type="text/javascript">
                             init.push(function () {
@@ -95,7 +87,7 @@ doAction('render_start');
                     <div class="form-group ">
                         <label>Family Counseling Time</label>
                         <div class="input-group date">
-                            <input type="text" name="family_entry_time"  value="<?php echo $pre_data['family_entry_time'] && $pre_data['family_entry_time'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['family_entry_time'])) : date('d-m-Y'); ?>"class="form-control" id="bs-timepicker-component"><span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                            <input type="text" name="family_entry_time"  value="<?php echo $pre_data['entry_time'] && $pre_data['entry_time'] != '00-00-00' ? date('H:i:s', strtotime($pre_data['entry_time'])) : date('H:i:s'); ?>"class="form-control" id="bs-timepicker-component"><span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                         </div>
                     </div>
                     <script>
@@ -118,19 +110,17 @@ doAction('render_start');
                     </div>
                     <div class="form-group">
                         <label>No of Family Members Counseled</label>
-                        <input class="form-control" type="text" id="members_counseled" name="members_counseled" value="<?php echo $pre_data['members_counseled'] ? $pre_data['members_counseled'] : ''; ?>">
+                        <input class="form-control" type="number" id="members_counseled" name="members_counseled" value="<?php echo $pre_data['members_counseled'] ? $pre_data['members_counseled'] : ''; ?>">
                     </div>
                 </div>
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label>Comments/Remarks</label>
-                        <textarea class="form-control" name="session_comments" value="<?php echo $pre_data['session_comments'] ? $pre_data['session_comments'] : ''; ?>" rows="5" placeholder="Comments/Remarks"></textarea>
+                        <textarea class="form-control" name="session_comments" rows="5" placeholder="Comments/Remarks"><?php echo $pre_data['session_comments'] ? $pre_data['session_comments'] : ''; ?></textarea>
                     </div>
                 </div>
             </div>
-
         </div>
-
         <div class="panel-footer tar">
             <a href="<?php echo url('admin/dev_customer_management/manage_cases') ?>" class="btn btn-flat btn-labeled btn-danger"><span class="btn-label icon fa fa-times"></span>Cancel</a>
             <?php
