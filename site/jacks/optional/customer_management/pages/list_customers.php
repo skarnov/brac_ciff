@@ -69,13 +69,13 @@ if ($filter_nid)
 if ($filter_passport)
     $filterString[] = 'Passport: ' . $filter_passport;
 if ($filter_division)
-    $filterString[] = 'Permanent Division: ' . $filter_division;
+    $filterString[] = 'Division: ' . $filter_division;
 if ($filter_district)
-    $filterString[] = 'Permanent District: ' . $filter_district;
+    $filterString[] = 'District: ' . $filter_district;
 if ($filter_sub_district)
-    $filterString[] = 'Permanent Sub-District: ' . $filter_sub_district;
+    $filterString[] = 'Sub-District: ' . $filter_sub_district;
 if ($filter_ps)
-    $filterString[] = 'Permanent Police Station: ' . $filter_ps;
+    $filterString[] = 'Police Station: ' . $filter_ps;
 if ($filter_entry_start_date)
     $filterString[] = 'Start Date: ' . $filter_entry_start_date;
 if ($filter_entry_end_date)
@@ -105,7 +105,7 @@ if ($_GET['download_csv']) {
     $blank_row = array('');
     fputcsv($fh, $blank_row);
 
-    $headers = array('#', 'ID', 'Name', 'Contact Number', 'Passport Number', 'Present Division', 'Present District', 'Present Sub-District', 'Present Police Station', 'Present Post Office');
+    $headers = array('#', 'ID', 'Name', 'Contact Number', 'Passport Number', 'Division', 'District', 'Sub-District', 'Police Station', 'Present Post Office');
     fputcsv($fh, $headers);
 
     if ($data) {
@@ -117,11 +117,11 @@ if ($_GET['download_csv']) {
                 , $user['full_name']
                 , $user['customer_mobile'] . "\r"
                 , $user['passport_number'] . "\r"
-                , $user['Permanent_division']
-                , $user['Permanent_district']
-                , $user['Permanent_sub_district']
-                , $user['Permanent_police_station']
-                , $user['Permanent_post_office']);
+                , $user['permanent_division']
+                , $user['permanent_district']
+                , $user['permanent_sub_district']
+                , $user['permanent_police_station']
+                , $user['permanent_post_office']);
             fputcsv($fh, $dataToSheet);
         }
     }

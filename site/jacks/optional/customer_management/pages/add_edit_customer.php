@@ -411,19 +411,19 @@ ob_start();
                                     <div class="col-sm-4">   
                                         <label class="control-label input-label">Male (*)</label>
                                         <div class="form-group">
-                                            <input type="text" class="form-control" id="maleMember" name="male_household_member" value="<?php echo $pre_data['male_household_member'] ? $pre_data['male_household_member'] : ''; ?>" />
+                                            <input type="number" class="form-control" id="maleMember" name="male_household_member" value="<?php echo $pre_data['male_household_member'] ? $pre_data['male_household_member'] : ''; ?>" />
                                         </div>
                                     </div>
                                     <div class="col-sm-4">   
                                         <label class="control-label input-label">Female (*)</label>
                                         <div class="form-group">
-                                            <input class="form-control" id="femaleMember" type="text" name="female_household_member" value="<?php echo $pre_data['female_household_member'] ? $pre_data['female_household_member'] : ''; ?>">
+                                            <input class="form-control" id="femaleMember" type="number" name="female_household_member" value="<?php echo $pre_data['female_household_member'] ? $pre_data['female_household_member'] : ''; ?>">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">   
                                         <label class="control-label input-label">Total</label>
                                         <div class="form-group">
-                                            <input class="form-control" id="totalMember" type="text" value="<?php echo $pre_data['male_household_member'] + $pre_data['female_household_member'] ?>">
+                                            <input class="form-control" id="totalMember" type="number" value="<?php echo $pre_data['male_household_member'] + $pre_data['female_household_member'] ?>">
                                         </div>
                                     </div>
                                 </fieldset>

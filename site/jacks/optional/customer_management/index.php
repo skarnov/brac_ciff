@@ -683,7 +683,7 @@ class dev_customer_management {
                 $immediate_support['update_date'] = date('Y-m-d');
                 $immediate_support['update_time'] = date('H:i:s');
                 $immediate_support['update_by'] = $_config['user']['pk_user_id'];
-                $ret['customer_update'] = $devdb->insert_update('dev_immediate_supports', $immediate_support, " fk_customer_id = '" . $is_update . "'");
+                $ret['support_update'] = $devdb->insert_update('dev_immediate_supports', $immediate_support, " fk_customer_id = '" . $is_update . "'");
             }
 
             /*

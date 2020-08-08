@@ -197,7 +197,7 @@ if ($_POST) {
 
     $ret = $this->add_edit_case($data);
 
-    if ($ret['case_insert'] || $ret['case_update']) {
+    if ($ret['support_update']) {
         $msg = "Information of case has been " . ($edit ? 'updated.' : 'saved.');
         add_notification($msg);
         $activityType = $edit ? 'update' : 'create';
@@ -303,6 +303,9 @@ doAction('render_start');
                                         </select>
                                     </div>
                                 </div>
+                                <?php
+                                $immediate_support = $immediate_support ? $immediate_support : array($immediate_support);
+                                ?>   
                                 <div class="col-sm-8">
                                     <fieldset class="scheduler-border">
                                         <legend class="scheduler-border">Immediate support services received</legend>
@@ -371,6 +374,9 @@ doAction('render_start');
                             </div>
                         </fieldset>
                     </div>
+                    <?php
+                    $service_requested = $service_requested ? $service_requested : array($service_requested);
+                    ?> 
                     <div class="tab-pane fade " id="PreferredServices">
                         <fieldset>
                             <legend>Section 2: Preferred Services and Reintegration Plan</legend>
@@ -644,6 +650,9 @@ doAction('render_start');
                                             </div>
                                         </div>
                                     </div>
+                                    <?php
+                                    $issue_discussed = $issue_discussed ? $issue_discussed : array($issue_discussed);
+                                    ?> 
                                     <div class="form-group">
                                         <label>Issues Discussed (*)</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
@@ -682,6 +691,9 @@ doAction('render_start');
                                             });
                                         });
                                     </script>
+                                    <?php
+                                    $problem_identified = $problem_identified ? $problem_identified : array($problem_identified);
+                                    ?> 
                                     <div class="form-group">
                                         <label>Problems Identified</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
@@ -848,6 +860,9 @@ doAction('render_start');
                                     <div class="form-group">
                                         <input class="form-control" placeholder="Phone Number" type="text" name="contact_number" value="<?php echo $pre_data['contact_number'] ? $pre_data['contact_number'] : ''; ?>">
                                     </div>
+                                    <?php
+                                    $reason_for_reffer = $reason_for_reffer ? $reason_for_reffer : array($reason_for_reffer);
+                                    ?> 
                                     <div class="form-group ">
                                         <label>Reason for Referral</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
@@ -1007,6 +1022,9 @@ doAction('render_start');
                             <a href="<?php echo url('dev_customer_management/manage_cases?action=add_edit_psychosocial_followup&customer_id=' . $edit) ?>" target="_blank" class="btn btn-success btn-sm" style="margin-bottom: 1%">Add New Psychosocial Followup</a>
                         </fieldset>
                     </div>
+                    <?php
+                    $inkind_project = $inkind_project ? $inkind_project : array($inkind_project);
+                    ?> 
                     <div class="tab-pane fade " id="EconomicReintegration">
                         <fieldset>
                             <legend>Section 4: Economic Reintegration Support</legend>
@@ -1244,6 +1262,9 @@ doAction('render_start');
                                         </div>
                                     </div>
                                 </div>
+                                <?php
+                                $received_vocational_training = $received_vocational_training ? $received_vocational_training : array($received_vocational_training);
+                                ?> 
                                 <div class="col-sm-6">
                                     <fieldset class="scheduler-border">
                                         <legend class="scheduler-border">Name of the Vocational Training Received</legend>
@@ -1449,6 +1470,9 @@ doAction('render_start');
                                             });
                                         });
                                     </script>
+                                    <?php
+                                    $received_vocational = $received_vocational ? $received_vocational : array($received_vocational);
+                                    ?> 
                                     <fieldset class="scheduler-border Referralstraining">
                                         <legend class="scheduler-border">Name of the Vocational Training Received</legend>
                                         <div class="form-group ">
@@ -1658,6 +1682,9 @@ doAction('render_start');
                                             });
                                         });
                                     </script>
+                                    <?php
+                                    $economic_support = $economic_support ? $economic_support : array($economic_support);
+                                    ?> 
                                     <fieldset class="scheduler-border areaEconomicSupport">
                                         <legend class="scheduler-border">Types of Economic Support</legend>
                                         <div class="form-group">
@@ -1790,6 +1817,9 @@ doAction('render_start');
                             </div>
                         </fieldset>
                     </div>
+                    <?php
+                    $reintegration_economic = $reintegration_economic ? $reintegration_economic : array($reintegration_economic);
+                    ?> 
                     <div class="tab-pane fade " id="SocialReintegrationSupport">
                         <fieldset>
                             <legend>Section 5: Social Reintegration Support</legend>
@@ -2012,13 +2042,13 @@ doAction('render_start');
                                     </div>
                                     <script>
                                         init.push(function () {
-                                            
+
                                             var isChecked = $('#yesLiteracyTraining').is(':checked');
 
                                             if (isChecked == true) {
                                                 $('#LearnShowType').show();
                                             }
-                                            
+
                                             $("#yesLiteracyTraining").on("click", function () {
                                                 $('#LearnShowType').toggle();
                                             });
@@ -2051,6 +2081,9 @@ doAction('render_start');
                                         });
                                     </script>
                                 </div>
+                                <?php
+                                $support_referred = $support_referred ? $support_referred : array($support_referred);
+                                ?> 
                                 <div class="col-sm-8">
                                     <fieldset class="scheduler-border">
                                         <legend class="scheduler-border">Types of Support Referred for</legend>
@@ -2198,6 +2231,9 @@ doAction('render_start');
                             </div>
                         </fieldset>
                     </div>
+                    <?php
+                    $reason_dropping = $reason_dropping ? $reason_dropping : array($reason_dropping);
+                    ?> 
                     <div class="tab-pane fade " id="ReviewFollowUp">
                         <fieldset>
                             <legend>Section 6: Review and Follow-Up</legend>
@@ -2280,7 +2316,10 @@ doAction('render_start');
                                                 });
                                             });
                                         </script>
-                                    </fieldset >
+                                    </fieldset>
+                                    <?php
+                                    $confirm_services = $confirm_services ? $confirm_services : array($confirm_services);
+                                    ?> 
                                     <fieldset class="scheduler-border">
                                         <legend class="scheduler-border">Confirmed Services Received after 3 Months</legend>
                                         <div class="form-group">
