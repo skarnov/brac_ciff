@@ -42,7 +42,7 @@ ob_start();
 ?>
 <div class="table-primary table-responsive">
     <div class="table-header">
-<?php echo searchResultText($cases['total'], $start, $per_page_items, count($cases['data']), 'cases') ?>
+        <?php echo searchResultText($cases['total'], $start, $per_page_items, count($cases['data']), 'cases') ?>
     </div>
     <table class="table table-bordered table-condensed">
         <thead>
@@ -57,9 +57,9 @@ ob_start();
             </tr>
         </thead>
         <tbody>
-<?php
-foreach ($cases['data'] as $i => $case) {
-    ?>
+            <?php
+            foreach ($cases['data'] as $i => $case) {
+                ?>
                 <tr>
                     <td><?php echo $case['pk_immediate_support_id']; ?></td>
                     <td><?php echo $case['full_name']; ?></td>
@@ -68,29 +68,29 @@ foreach ($cases['data'] as $i => $case) {
                     <td><?php echo '<b>Division - </b>' . $case['permanent_division'] . ',<br><b>District - </b>' . $case['permanent_district'] . ',<br><b>Sub-District - </b>' . $case['permanent_sub_district'] . ',<br><b>Police Station - </b>' . $case['permanent_police_station'] . ',<br><b>Post Office - </b>' . $case['permanent_post_office'] ?></td>
                     <td style="text-transform: capitalize"><?php echo $case['customer_status']; ?></td>
                     <td class="tar action_column">
-    <?php if (has_permission('edit_case')): ?>
+                        <?php if (has_permission('edit_case')): ?>
                             <div class="btn-group btn-group-sm">
-                            <?php
-                            echo linkButtonGenerator(array(
-                                'href' => build_url(array('action' => 'add_edit_case', 'edit' => $case['fk_customer_id'])),
-                                'action' => 'edit',
-                                'icon' => 'icon_edit',
-                                'text' => 'Edit',
-                                'title' => 'Edit Case',
-                            ));
-                            ?>
+                                <?php
+                                echo linkButtonGenerator(array(
+                                    'href' => build_url(array('action' => 'add_edit_case', 'edit' => $case['fk_customer_id'])),
+                                    'action' => 'edit',
+                                    'icon' => 'icon_edit',
+                                    'text' => 'Edit',
+                                    'title' => 'Edit Case',
+                                ));
+                                ?>
                             </div>
-                            <?php endif; ?>
+                        <?php endif; ?>
                     </td>
                 </tr>
-                        <?php
-                    }
-                    ?>
+                <?php
+            }
+            ?>
         </tbody>
     </table>
     <div class="table-footer oh">
         <div class="pull-left">
-<?php echo $pagination ?>
+            <?php echo $pagination ?>
         </div>
     </div>
 </div>

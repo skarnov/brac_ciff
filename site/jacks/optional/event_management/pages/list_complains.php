@@ -43,12 +43,11 @@ ob_start();
     <table class="table table-bordered table-condensed">
         <thead>
             <tr>
-                <th>Branch</th>
-                <th>Month</th>
-                <th>Complain Name</th>
-                <th>Complain Value</th>
-                <th>Achievement Value</th>
-                <th>Remark</th>
+                <th>Register Date</th>
+                <th>Service Recipient</th>
+                <th>Recipient Age</th>
+                <th>Recipient Sex</th>
+                <th>Address</th>
                 <th class="tar action_column">Actions</th>
             </tr>
         </thead>
@@ -57,12 +56,17 @@ ob_start();
             foreach ($complains['data'] as $i => $complain) {
                 ?>
                 <tr>
-                    <td>
+                    <td><?php echo date('d-m-Y', strtotime($complain['complain_register_date'])) ?></td>
+                    <td><?php echo $complain['type_recipient']; ?></td>
+                    <td style="text-transform: capitalize"><?php echo $complain['age']; ?></td>
+                    <td style="text-transform: capitalize"><?php echo $complain['gender']; ?></td>
+                    <td><?php echo $complain['address']; ?></td>
+                    <td class="tar action_column">
                         <?php if (has_permission('edit_complain')): ?>
                             <div class="btn-group btn-group-sm">
                                 <?php
                                 echo linkButtonGenerator(array(
-                                    'href' => build_url(array('action' => 'add_edit_complain', 'edit' => $complain['fk_customer_id'])),
+                                    'href' => build_url(array('action' => 'add_edit_complain', 'edit' => $complain['pk_complain_id'])),
                                     'action' => 'edit',
                                     'icon' => 'icon_edit',
                                     'text' => 'Edit',
@@ -102,7 +106,7 @@ ob_start();
         $(document).on('click', '.delete_single_record', function () {
             var ths = $(this);
             var thisCell = ths.closest('td');
-            var logId = ths.attr('data-id');
+            var logId = ths.attr('data-id');        
             if (!logId)
                 return false;
 
@@ -111,19 +115,12 @@ ob_start();
                 title: 'Delete Record!',
                 inputType: 'checkbox',
                 inputOptions: [{
-                        text: 'Delete Only Profile',
-                        value: 'deleteProfile'
-                    },
-                    {
-                        text: 'Delete Profile With Case Management',
-                        value: 'deleteProfileCase'
+                        text: 'Click To Confirm Delete',
+                        value: 'delete'
                     }],
                 callback: function (result) {
-                    if (result == 'deleteProfile') {
-                        window.location.href = '?action=deleteProfile&id=' + logId;
-                    }
-                    if (result == 'deleteProfileCase') {
-                        window.location.href = '?action=deleteProfileCase&id=' + logId;
+                    if (result == 'delete') {
+                        window.location.href = '?action=deleteComplain&id=' + logId;
                     }
                     hide_button_overlay_working(thisCell);
                 }
