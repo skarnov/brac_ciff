@@ -288,6 +288,8 @@ class dev_event_management {
 
         if ($_GET['action'] == 'add_edit_training')
             include('pages/add_edit_training.php');
+        elseif ($_GET['action'] == 'deleteTraining')
+            include('pages/deleteTraining.php');
         else
             include('pages/list_trainings.php');
     }
@@ -788,6 +790,58 @@ class dev_event_management {
 
         $results = sql_data_collector($sql, $count_sql, $param);
         return $results;
+    }
+
+    function add_edit_training($params = array()) {
+        global $devdb, $_config;
+
+        $ret = array('success' => array(), 'error' => array());
+        $is_update = $params['edit'] ? $params['edit'] : array();
+
+        $oldData = array();
+        if ($is_update) {
+            $oldData = $this->get_complains(array('id' => $is_update, 'single' => true));
+            if (!$oldData) {
+                return array('error' => ['Invalid training id, no data found']);
+            }
+        }
+
+        foreach ($params['required'] as $i => $v) {
+            if (isset($params['form_data'][$i]))
+                $temp = form_validator::required($params['form_data'][$i]);
+            if ($temp !== true) {
+                $ret['error'][] = $v . ' ' . $temp;
+            }
+        }
+
+        if (!$ret['error']) {
+            $training_data = array();
+            $training_data['beneficiary_id'] = $params['form_data']['beneficiary_id'];
+            $training_data['name'] = $params['form_data']['name'];
+            if ($params['form_data']['new_gender']) {
+                $training_data['gender'] = $params['form_data']['new_gender'];
+            } else {
+                $training_data['gender'] = $params['form_data']['gender'];
+            }
+            $training_data['profession'] = $params['form_data']['profession'];
+            $training_data['training_name'] = $params['form_data']['training_name'];
+            $training_data['address'] = $params['form_data']['address'];
+            $training_data['mobile'] = $params['form_data']['mobile'];
+            $training_data['age'] = $params['form_data']['age'];
+
+            if ($is_update) {
+                $training_data['update_date'] = date('Y-m-d');
+                $training_data['update_time'] = date('H:i:s');
+                $training_data['modified_by'] = $_config['user']['pk_user_id'];
+                $ret = $devdb->insert_update('dev_trainings', $training_data, " pk_training_id   = '" . $is_update . "'");
+            } else {
+                $training_data['create_date'] = date('Y-m-d');
+                $training_data['create_time'] = date('H:i:s');
+                $training_data['created_by'] = $_config['user']['pk_user_id'];
+                $ret = $devdb->insert_update('dev_trainings', $training_data);
+            }
+        }
+        return $ret;
     }
 
     function add_edit_event($params = array()) {

@@ -43,12 +43,11 @@ ob_start();
     <table class="table table-bordered table-condensed">
         <thead>
             <tr>
-                <th>Branch</th>
-                <th>Month</th>
+                <th>Beneficiary ID</th>
                 <th>Training Name</th>
-                <th>Training Value</th>
-                <th>Achievement Value</th>
-                <th>Remark</th>
+                <th>Participant Name</th>
+                <th>Mobile</th>
+                <th>Sex</th>
                 <th class="tar action_column">Actions</th>
             </tr>
         </thead>
@@ -57,12 +56,17 @@ ob_start();
             foreach ($trainings['data'] as $i => $training) {
                 ?>
                 <tr>
-                    <td>
+                    <td><?php echo $training['beneficiary_id']; ?></td>
+                    <td><?php echo $training['training_name']; ?></td>
+                    <td><?php echo $training['name']; ?></td>
+                    <td><?php echo $training['mobile']; ?></td>
+                    <td><?php echo $training['gender']; ?></td>
+                    <td class="tar action_column">
                         <?php if (has_permission('edit_training')): ?>
                             <div class="btn-group btn-group-sm">
                                 <?php
                                 echo linkButtonGenerator(array(
-                                    'href' => build_url(array('action' => 'add_edit_training', 'edit' => $training['fk_customer_id'])),
+                                    'href' => build_url(array('action' => 'add_edit_training', 'edit' => $training['pk_training_id'])),
                                     'action' => 'edit',
                                     'icon' => 'icon_edit',
                                     'text' => 'Edit',
@@ -111,19 +115,12 @@ ob_start();
                 title: 'Delete Record!',
                 inputType: 'checkbox',
                 inputOptions: [{
-                        text: 'Delete Only Profile',
-                        value: 'deleteProfile'
-                    },
-                    {
-                        text: 'Delete Profile With Case Management',
-                        value: 'deleteProfileCase'
+                        text: 'Click To Confirm Delete',
+                        value: 'delete'
                     }],
                 callback: function (result) {
-                    if (result == 'deleteProfile') {
-                        window.location.href = '?action=deleteProfile&id=' + logId;
-                    }
-                    if (result == 'deleteProfileCase') {
-                        window.location.href = '?action=deleteProfileCase&id=' + logId;
+                    if (result == 'delete') {
+                        window.location.href = '?action=deleteTraining&id=' + logId;
                     }
                     hide_button_overlay_working(thisCell);
                 }

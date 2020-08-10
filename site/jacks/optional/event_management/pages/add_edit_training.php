@@ -11,7 +11,7 @@ if (!checkPermission($edit, 'add_training', 'edit_training')) {
 $pre_data = array();
 
 if ($edit) {
-    $pre_data = $this->get_trainings(array('training_id' => $edit, 'single' => true));
+    $pre_data = $this->get_trainings(array('id' => $edit, 'single' => true));
 
     if (!$pre_data) {
         add_notification('Invalid training, no data found.', 'error');
@@ -30,15 +30,15 @@ if ($_POST) {
 
     $ret = $this->add_edit_training($data);
 
-    if ($ret['training_insert'] || $ret['training_update']) {
+    if ($ret) {
         $msg = "Training has been " . ($edit ? 'updated.' : 'saved.');
         add_notification($msg);
         $activityType = $edit ? 'update' : 'create';
         user_activity::add_activity($msg, 'success', $activityType);
         if ($edit) {
-            header('location: ' . url('admin/dev_training_management/manage_trainings?action=add_edit_training&edit=' . $edit));
+            header('location: ' . url('admin/dev_event_management/manage_trainings?action=add_edit_training&edit=' . $edit));
         } else {
-            header('location: ' . url('admin/dev_training_management/manage_trainings'));
+            header('location: ' . url('admin/dev_event_management/manage_trainings'));
         }
         exit();
     } else {
@@ -76,17 +76,67 @@ ob_start();
 <form id="theForm" onsubmit="return true;" method="post" action="" enctype="multipart/form-data">
     <div class="panel" id="fullForm" style="">
         <div class="panel-body">
-            
-            
-            dev_trainings
-            
-    
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="inputId">Beneficiary ID</label>
+                    <input type="text" class="form-control" id="BeneficiaryId" name="beneficiary_id" value="<?php echo $pre_data['beneficiary_id']; ?>">
+                </div>
+                <div class="form-group">
+                    <label for="inputId">Participant Name</label>
+                    <input type="text" class="form-control" id="Name" name="name" value="<?php echo $pre_data['name']; ?>">
+                </div>
+                <div class="form-group">
+                    <label for="inputId">Age</label>
+                    <input type="text" class="form-control" id="Age" name="age" value="<?php echo $pre_data['age']; ?>">
+                </div>
+                <div class="form-group">
+                    <label>Sex</label>
+                    <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
+                        <div class="options_holder radio">
+                            <label><input class="px oldGender" type="radio" name="gender" value="male" <?php echo $pre_data && $pre_data['gender'] == 'male' ? 'checked' : '' ?>><span class="lbl">Male</span></label>
+                            <label><input class="px oldGender" type="radio" name="gender" value="female" <?php echo $pre_data && $pre_data['gender'] == 'female' ? 'checked' : '' ?>><span class="lbl">Female</span></label>
+                            <label><input class="px" type="radio" name="gender" id="newGender"><span class="lbl">Other</span></label>
+                        </div>
+                    </div>
+                </div>           
+                <div id="newGenderType" style="display: none; margin-bottom: 1em;">
+                    <input class="form-control" placeholder="Please Specity" type="text" id="newGenderText" name="new_gender" value="<?php echo $pre_data['gender'] ?>">
+                </div>
+                <script>
+                    init.push(function () {
+                        $("#newGender").on("click", function () {
+                            $('#newGenderType').show();
+                        });
 
-            
-            
+                        $(".oldGender").on("click", function () {
+                            $('#newGenderType').hide();
+                            $('#newGenderText').val('');
+                        });
+                    });
+                </script>           
+
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="inputId">Profession</label>
+                    <input type="text" class="form-control" id="Profesion" name="profession" value="<?php echo $pre_data['profession']; ?>">
+                </div>            
+                <div class="form-group">
+                    <label for="inputId">Training Name</label>
+                    <input type="text" class="form-control" id="Profesion" name="training_name" value="<?php echo $pre_data['training_name']; ?>">
+                </div>            
+                <div class="form-group">
+                    <label for="inputId">Address</label>
+                    <textarea class="form-control" name="address"><?php echo $pre_data['address']; ?></textarea>
+                </div>            
+                <div class="form-group">
+                    <label for="inputId">Mobile</label>
+                    <input type="number" class="form-control" id="Mobile" name="mobile" value="<?php echo $pre_data['mobile']; ?>">
+                </div>  
+            </div>
         </div>
         <div class="panel-footer tar">
-            <a href="<?php echo url('admin/dev_training_management/manage_trainings') ?>" class="btn btn-flat btn-labeled btn-danger"><span class="btn-label icon fa fa-times"></span>Cancel</a>
+            <a href="<?php echo url('admin/dev_event_management/manage_trainings') ?>" class="btn btn-flat btn-labeled btn-danger"><span class="btn-label icon fa fa-times"></span>Cancel</a>
             <?php
             echo submitButtonGenerator(array(
                 'action' => $edit ? 'update' : 'update',
@@ -103,13 +153,6 @@ ob_start();
 <script type="text/javascript">
     var BD_LOCATIONS = <?php echo getBDLocationJson(); ?>;
     init.push(function () {
-        new bd_new_location_selector({
-            'division': $('#division'),
-            'district': $('#district'),
-            'sub_district': $('#sub_district'),
-            'police_station': $('#police_station'),
-        });
-
         theForm.find('input:submit, button:submit').prop('disabled', true);
     });
 </script>
