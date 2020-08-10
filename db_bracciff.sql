@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 08, 2020 at 05:34 AM
+-- Generation Time: Aug 10, 2020 at 08:04 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.3
 
@@ -394,6 +394,16 @@ INSERT INTO `dev_branch_types` (`pk_item_id`, `fk_item_id`, `item_sort_order`, `
 
 CREATE TABLE `dev_complains` (
   `pk_complain_id` bigint(20) NOT NULL,
+  `fk_branch_id` bigint(20) DEFAULT NULL,
+  `name` varchar(160) DEFAULT NULL,
+  `type_recipient` text DEFAULT NULL,
+  `type_service` text DEFAULT NULL,
+  `know_service` text DEFAULT NULL,
+  `complain_register_date` date DEFAULT NULL,
+  `age` varchar(30) DEFAULT NULL,
+  `gender` varchar(30) DEFAULT NULL,
+  `address` text DEFAULT NULL,
+  `remark` text DEFAULT NULL,
   `create_time` time DEFAULT NULL,
   `create_date` date DEFAULT NULL,
   `created_by` bigint(20) DEFAULT NULL,
@@ -401,6 +411,14 @@ CREATE TABLE `dev_complains` (
   `update_date` date DEFAULT NULL,
   `modified_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `dev_complains`
+--
+
+INSERT INTO `dev_complains` (`pk_complain_id`, `fk_branch_id`, `name`, `type_recipient`, `type_service`, `know_service`, `complain_register_date`, `age`, `gender`, `address`, `remark`, `create_time`, `create_date`, `created_by`, `update_time`, `update_date`, `modified_by`) VALUES
+(5, 0, 'Name of service recipient', 'Service recipient (victim, family, relative, community)', 'Type of service seeking advice/complaints/information/support', 'how he/she knows about this service of the project (IPT show, vedio show, scholl quiz, palli somaj,CTC, DLAC, social media, IEC/BCC, other (please sepecify)', '2020-07-01', '22', 'Sex', 'how he/she knows about this service of the project (IPT show, vedio show, scholl quiz, palli somaj,CTC, DLAC, social media, IEC/BCC, other (please sepecify)', 'how he/she knows about this service of the project (IPT show, vedio show, scholl quiz, palli somaj,CTC, DLAC, social media, IEC/BCC, other (please sepecify)', NULL, NULL, NULL, NULL, NULL, NULL),
+(6, 0, 'Name of service recipient', '', '', '', '2020-08-09', '', '', '', '', '17:03:16', '2020-08-09', 1, '17:03:32', '2020-08-09', 1);
 
 -- --------------------------------------------------------
 
@@ -410,6 +428,17 @@ CREATE TABLE `dev_complains` (
 
 CREATE TABLE `dev_complain_fileds` (
   `pk_complain_filed_id` bigint(20) NOT NULL,
+  `complain_register_date` date DEFAULT NULL,
+  `month` varchar(30) DEFAULT NULL,
+  `division` varchar(50) DEFAULT NULL,
+  `district` varchar(50) DEFAULT NULL,
+  `upazila` varchar(100) DEFAULT NULL,
+  `police_station` varchar(100) DEFAULT NULL,
+  `case_id` varchar(60) DEFAULT NULL,
+  `age` varchar(30) DEFAULT NULL,
+  `gender` varchar(30) DEFAULT NULL,
+  `type_case` varchar(50) DEFAULT NULL,
+  `comments` text DEFAULT NULL,
   `create_time` time DEFAULT NULL,
   `create_date` date DEFAULT NULL,
   `created_by` bigint(20) DEFAULT NULL,
@@ -417,6 +446,13 @@ CREATE TABLE `dev_complain_fileds` (
   `update_date` date DEFAULT NULL,
   `modified_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `dev_complain_fileds`
+--
+
+INSERT INTO `dev_complain_fileds` (`pk_complain_filed_id`, `complain_register_date`, `month`, `division`, `district`, `upazila`, `police_station`, `case_id`, `age`, `gender`, `type_case`, `comments`, `create_time`, `create_date`, `created_by`, `update_time`, `update_date`, `modified_by`) VALUES
+(1, '2020-01-01', 'January', NULL, '', 'Select Municipality/Upazilla', 'Name of police station', 'Case ID', 'Age', 'female', 'Flee away with', 'Comments', '17:02:17', '2020-08-09', 1, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -426,6 +462,17 @@ CREATE TABLE `dev_complain_fileds` (
 
 CREATE TABLE `dev_complain_investigations` (
   `pk_complain_investigation_id` bigint(20) NOT NULL,
+  `complain_register_date` date DEFAULT NULL,
+  `month` varchar(30) DEFAULT NULL,
+  `division` varchar(50) DEFAULT NULL,
+  `district` varchar(50) DEFAULT NULL,
+  `upazila` varchar(100) DEFAULT NULL,
+  `police_station` varchar(100) DEFAULT NULL,
+  `case_id` varchar(60) DEFAULT NULL,
+  `age` varchar(30) DEFAULT NULL,
+  `gender` varchar(30) DEFAULT NULL,
+  `type_case` varchar(50) DEFAULT NULL,
+  `comments` text DEFAULT NULL,
   `create_time` time DEFAULT NULL,
   `create_date` date DEFAULT NULL,
   `created_by` bigint(20) DEFAULT NULL,
@@ -1729,6 +1776,16 @@ INSERT INTO `dev_reintegration_satisfaction_scale` (`pk_satisfaction_scale`, `fk
 
 CREATE TABLE `dev_sharing_sessions` (
   `pk_sharing_session_id` bigint(20) NOT NULL,
+  `traning_date` date DEFAULT NULL,
+  `traning_name` varchar(150) DEFAULT NULL,
+  `evaluator_profession` text DEFAULT NULL,
+  `satisfied_training` int(2) DEFAULT NULL,
+  `satisfied_supports` int(2) DEFAULT NULL,
+  `satisfied_facilitation` int(2) DEFAULT NULL,
+  `outcome_training` int(2) DEFAULT NULL,
+  `trafficking_law` int(2) DEFAULT NULL,
+  `policy_process` int(2) DEFAULT NULL,
+  `all_contents` varchar(160) DEFAULT NULL,
   `create_time` time DEFAULT NULL,
   `create_date` date DEFAULT NULL,
   `created_by` bigint(20) DEFAULT NULL,
@@ -1965,6 +2022,14 @@ CREATE TABLE `dev_targets` (
 
 CREATE TABLE `dev_trainings` (
   `pk_training_id` bigint(20) NOT NULL,
+  `beneficiary_id` varchar(50) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `gender` varchar(30) DEFAULT NULL,
+  `profession` varchar(100) DEFAULT NULL,
+  `training_name` varchar(150) DEFAULT NULL,
+  `address` text DEFAULT NULL,
+  `mobile` varchar(20) DEFAULT NULL,
+  `age` varchar(30) DEFAULT NULL,
   `create_time` time DEFAULT NULL,
   `create_date` date DEFAULT NULL,
   `created_by` bigint(20) DEFAULT NULL,
@@ -1972,6 +2037,15 @@ CREATE TABLE `dev_trainings` (
   `update_date` date DEFAULT NULL,
   `modified_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `dev_trainings`
+--
+
+INSERT INTO `dev_trainings` (`pk_training_id`, `beneficiary_id`, `name`, `gender`, `profession`, `training_name`, `address`, `mobile`, `age`, `create_time`, `create_date`, `created_by`, `update_time`, `update_date`, `modified_by`) VALUES
+(1, 'Beneficiary ID', 'Participant Name', 'on', 'Profession', 'Training Name', 'Address', 'Mobile', 'Age', NULL, NULL, NULL, NULL, NULL, NULL),
+(2, 'Beneficiary ID', 'Participant Name', '', '', '', '', '', '', '11:14:33', '2020-08-10', 1, NULL, NULL, NULL),
+(3, 'Beneficiary ID', 'Participant Name', 'female', '', '', '', '', '', '11:14:46', '2020-08-10', 1, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -3280,7 +3354,20 @@ INSERT INTO `dev_user_activities` (`pk_activity_log`, `activity_msg`, `activity_
 (1169, 'Psychosocial Session Completion Data has been updated.', '', 'update', 'success', '2020-08-07 12:54:34', 19),
 (1170, 'Psychosocial Followup Data has been saved.', '', 'create', 'success', '2020-08-07 13:00:47', 19),
 (1171, 'Psychosocial Followup Data has been updated.', '', 'update', 'success', '2020-08-07 13:03:15', 19),
-(1172, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-08-08 00:44:29', 1);
+(1172, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-08-08 00:44:29', 1),
+(1173, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-08-09 12:13:20', 1),
+(1174, 'Complain Investigation has been saved.', '', 'create', 'success', '2020-08-09 18:11:28', 1),
+(1175, 'Complain Investigation has been updated.', '', 'update', 'success', '2020-08-09 18:29:16', 1),
+(1176, 'Complain Investigation has been updated.', '', 'update', 'success', '2020-08-09 18:29:24', 1),
+(1177, 'Complain Investigation has been updated.', '', 'update', 'success', '2020-08-09 18:30:26', 1),
+(1178, 'Complain Investigation has been updated.', '', 'update', 'success', '2020-08-09 19:12:58', 1),
+(1179, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-08-10 10:25:57', 1),
+(1180, 'Training has been saved.', '', 'create', 'success', '2020-08-10 11:11:25', 1),
+(1181, 'Training has been saved.', '', 'create', 'success', '2020-08-10 11:14:33', 1),
+(1182, 'Training has been saved.', '', 'create', 'success', '2020-08-10 11:14:46', 1),
+(1183, 'Training has been saved.', '', 'create', 'success', '2020-08-10 11:15:05', 1),
+(1184, 'Training has been saved.', '', 'create', 'success', '2020-08-10 11:18:04', 1),
+(1185, 'Training has been updated.', '', 'update', 'success', '2020-08-10 11:20:11', 1);
 
 -- --------------------------------------------------------
 
@@ -3795,19 +3882,19 @@ ALTER TABLE `dev_branch_types`
 -- AUTO_INCREMENT for table `dev_complains`
 --
 ALTER TABLE `dev_complains`
-  MODIFY `pk_complain_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_complain_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `dev_complain_fileds`
 --
 ALTER TABLE `dev_complain_fileds`
-  MODIFY `pk_complain_filed_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_complain_filed_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `dev_complain_investigations`
 --
 ALTER TABLE `dev_complain_investigations`
-  MODIFY `pk_complain_investigation_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_complain_investigation_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_config`
@@ -4089,7 +4176,7 @@ ALTER TABLE `dev_targets`
 -- AUTO_INCREMENT for table `dev_trainings`
 --
 ALTER TABLE `dev_trainings`
-  MODIFY `pk_training_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_training_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `dev_users`
@@ -4107,7 +4194,7 @@ ALTER TABLE `dev_users_roles_relation`
 -- AUTO_INCREMENT for table `dev_user_activities`
 --
 ALTER TABLE `dev_user_activities`
-  MODIFY `pk_activity_log` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1173;
+  MODIFY `pk_activity_log` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1186;
 
 --
 -- AUTO_INCREMENT for table `dev_user_login_logout`
