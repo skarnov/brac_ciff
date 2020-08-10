@@ -12,7 +12,7 @@ $pre_data = array();
 
 if ($edit) {
     $pre_data = $this->get_sharing_sessions(array('id' => $edit, 'single' => true));
-
+    
     if (!$pre_data) {
         add_notification('Invalid sharing session, no data found.', 'error');
         header('Location:' . build_url(NULL, array('action', 'edit')));
@@ -90,24 +90,24 @@ ob_start();
                 </div>
                 <label class="control-label input-label">Training Name</label>
                 <div class="form-group">
-                    <input class="form-control" type="text" name="traning_name" value="">
+                    <input class="form-control" type="text" name="traning_name" value="<?php echo $pre_data['traning_name'] ?>">
                 </div>
                 <div class="form-group">
                     <label>Evaluator Profession</label>
                     <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                         <div class="options_holder radio">
-                            <label><input class="px" type="checkbox" name="evaluator_profession[]" value=""><span class="lbl">Judicial govt. employee</span></label>
-                            <label><input class="px" type="checkbox" name="evaluator_profession[]" value=""><span class="lbl">Non-judicial Govt. employee</span></label>
-                            <label><input class="px" type="checkbox" name="evaluator_profession[]" value=""><span class="lbl">Lawyers</span></label>
-                            <label><input class="px" type="checkbox" name="evaluator_profession[]" value=""><span class="lbl">NGO</span></label>
-                            <label><input class="px" type="checkbox" name="evaluator_profession[]" value=""><span class="lbl">Journalist</span></label>
-                            <label><input class="px" type="checkbox" name="evaluator_profession[]" value=""><span class="lbl">Public representative</span></label>
-                            <label><input class="px col-sm-12" type="checkbox" id="newEvaluatorProfession"><span class="lbl">Others</span></label>
+                            <label><input class="px" type="radio" name="evaluator_profession" value="Judicial govt. employee" <?php echo $pre_data && $pre_data['evaluator_profession'] == 'Judicial govt. employee' ? 'checked' : '' ?>><span class="lbl">Judicial govt. employee</span></label>
+                            <label><input class="px" type="radio" name="evaluator_profession" value="Non-judicial Govt. employee" <?php echo $pre_data && $pre_data['evaluator_profession'] == 'Non-judicial Govt. employee' ? 'checked' : '' ?>><span class="lbl">Non-judicial Govt. employee</span></label>
+                            <label><input class="px" type="radio" name="evaluator_profession" value="Lawyers" <?php echo $pre_data && $pre_data['evaluator_profession'] == 'Lawyers' ? 'checked' : '' ?>><span class="lbl">Lawyers</span></label>
+                            <label><input class="px" type="radio" name="evaluator_profession" value="NGO" <?php echo $pre_data && $pre_data['evaluator_profession'] == 'NGO' ? 'checked' : '' ?>><span class="lbl">NGO</span></label>
+                            <label><input class="px" type="radio" name="evaluator_profession" value="Journalist" <?php echo $pre_data && $pre_data['evaluator_profession'] == 'Journalist' ? 'checked' : '' ?>><span class="lbl">Journalist</span></label>
+                            <label><input class="px" type="radio" name="evaluator_profession" value="Public representative" <?php echo $pre_data && $pre_data['evaluator_profession'] == 'Public representative' ? 'checked' : '' ?>><span class="lbl">Public representative</span></label>
+                            <label><input class="px col-sm-12" type="radio" name="evaluator_profession" id="newEvaluatorProfession"><span class="lbl">Others</span></label>
                         </div>
                     </div>
                 </div>
                 <div id="newEvaluatorProfessionType" style="display: none; margin-bottom: 1em;">
-                    <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_evaluator_profession" value="">
+                    <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_evaluator_profession" value="<?php echo $pre_data['evaluator_profession']; ?>">
                 </div>
                 <script>
                     init.push(function () {
@@ -125,11 +125,11 @@ ob_start();
                         <div class="select2-success">
                             <select class="form-control" id="" name="satisfied_training" >
                                 <option value="">Select One</option>
-                                <option value="Very Satisfied">Very Satisfied</option>
-                                <option value="Satisfied">Satisfied</option>
-                                <option value="Ok">Ok</option>
-                                <option value="Dissatisfied">Dissatisfied</option>
-                                <option value="Very Dissatisfied">Very Dissatisfied</option>
+                                <option value="5" <?php echo $pre_data && $pre_data['satisfied_training'] == '5' ? 'selected' : '' ?>>Very Satisfied</option>
+                                <option value="4" <?php echo $pre_data && $pre_data['satisfied_training'] == '4' ? 'selected' : '' ?>>Satisfied</option>
+                                <option value="3" <?php echo $pre_data && $pre_data['satisfied_training'] == '3' ? 'selected' : '' ?>>Ok</option>
+                                <option value="2" <?php echo $pre_data && $pre_data['satisfied_training'] == '2' ? 'selected' : '' ?>>Dissatisfied</option>
+                                <option value="1" <?php echo $pre_data && $pre_data['satisfied_training'] == '1' ? 'selected' : '' ?>>Very Dissatisfied</option>
                             </select>
                         </div>
                     </div>
@@ -138,11 +138,11 @@ ob_start();
                         <div class="select2-success">
                             <select class="form-control" id="" name="satisfied_supports" >
                                 <option value="">Select One</option>
-                                <option value="Very Satisfied">Very Satisfied</option>
-                                <option value="Satisfied">Satisfied</option>
-                                <option value="Ok">Ok</option>
-                                <option value="Dissatisfied">Dissatisfied</option>
-                                <option value="Very Dissatisfied">Very Dissatisfied</option>
+                                <option value="5" <?php echo $pre_data && $pre_data['satisfied_supports'] == '5' ? 'selected' : '' ?>>Very Satisfied</option>
+                                <option value="4" <?php echo $pre_data && $pre_data['satisfied_supports'] == '4' ? 'selected' : '' ?>>Satisfied</option>
+                                <option value="3" <?php echo $pre_data && $pre_data['satisfied_supports'] == '3' ? 'selected' : '' ?>>Ok</option>
+                                <option value="2" <?php echo $pre_data && $pre_data['satisfied_supports'] == '2' ? 'selected' : '' ?>>Dissatisfied</option>
+                                <option value="1" <?php echo $pre_data && $pre_data['satisfied_supports'] == '1' ? 'selected' : '' ?>>Very Dissatisfied</option>
                             </select>
                         </div>
                     </div>
@@ -151,11 +151,11 @@ ob_start();
                         <div class="select2-success">
                             <select class="form-control" id="" name="satisfied_facilitation" >
                                 <option value="">Select One</option>
-                                <option value="Very Satisfied">Very Satisfied</option>
-                                <option value="Satisfied">Satisfied</option>
-                                <option value="Ok">Ok</option>
-                                <option value="Dissatisfied">Dissatisfied</option>
-                                <option value="Very Dissatisfied">Very Dissatisfied</option>
+                                <option value="5" <?php echo $pre_data && $pre_data['satisfied_facilitation'] == '5' ? 'selected' : '' ?>>Very Satisfied</option>
+                                <option value="4" <?php echo $pre_data && $pre_data['satisfied_facilitation'] == '4' ? 'selected' : '' ?>>Satisfied</option>
+                                <option value="3" <?php echo $pre_data && $pre_data['satisfied_facilitation'] == '3' ? 'selected' : '' ?>>Ok</option>
+                                <option value="2" <?php echo $pre_data && $pre_data['satisfied_facilitation'] == '2' ? 'selected' : '' ?>>Dissatisfied</option>
+                                <option value="1" <?php echo $pre_data && $pre_data['satisfied_facilitation'] == '1' ? 'selected' : '' ?>>Very Dissatisfied</option>
                             </select>
                         </div>
                     </div>
@@ -169,11 +169,11 @@ ob_start();
                         <div class="select2-success">
                             <select class="form-control" id="" name="outcome_training" >
                                 <option value="">Select One</option>
-                                <option value="Excellent">Excellent</option>
-                                <option value="Very Good">Very Good</option>
-                                <option value="Ok">Ok</option>
-                                <option value="Not Very Good">Not Very Good</option>
-                                <option value="Not At All">Not At All</option>
+                                <option value="5" <?php echo $pre_data && $pre_data['outcome_training'] == '5' ? 'selected' : '' ?>>Very Satisfied</option>
+                                <option value="4" <?php echo $pre_data && $pre_data['outcome_training'] == '4' ? 'selected' : '' ?>>Satisfied</option>
+                                <option value="3" <?php echo $pre_data && $pre_data['outcome_training'] == '3' ? 'selected' : '' ?>>Ok</option>
+                                <option value="2" <?php echo $pre_data && $pre_data['outcome_training'] == '2' ? 'selected' : '' ?>>Dissatisfied</option>
+                                <option value="1" <?php echo $pre_data && $pre_data['outcome_training'] == '1' ? 'selected' : '' ?>>Very Dissatisfied</option>
                             </select>
                         </div>
                     </div>
@@ -182,11 +182,11 @@ ob_start();
                         <div class="select2-success">
                             <select class="form-control" id="" name="trafficking_law" >
                                 <option value="">Select One</option>
-                                <option value="Excellent">Excellent</option>
-                                <option value="Very Good">Very Good</option>
-                                <option value="Ok">Ok</option>
-                                <option value="Not Very Good">Not Very Good</option>
-                                <option value="Not At All">Not At All</option>
+                                <option value="5" <?php echo $pre_data && $pre_data['trafficking_law'] == '5' ? 'selected' : '' ?>>Very Satisfied</option>
+                                <option value="4" <?php echo $pre_data && $pre_data['trafficking_law'] == '4' ? 'selected' : '' ?>>Satisfied</option>
+                                <option value="3" <?php echo $pre_data && $pre_data['trafficking_law'] == '3' ? 'selected' : '' ?>>Ok</option>
+                                <option value="2" <?php echo $pre_data && $pre_data['trafficking_law'] == '2' ? 'selected' : '' ?>>Dissatisfied</option>
+                                <option value="1" <?php echo $pre_data && $pre_data['trafficking_law'] == '1' ? 'selected' : '' ?>>Very Dissatisfied</option>
                             </select>
                         </div>
                     </div>
@@ -195,11 +195,11 @@ ob_start();
                         <div class="select2-success">
                             <select class="form-control" id="" name="policy_process" >
                                 <option value="">Select One</option>
-                                <option value="Excellent">Excellent</option>
-                                <option value="Very Good">Very Good</option>
-                                <option value="Ok">Ok</option>
-                                <option value="Not Very Good">Not Very Good</option>
-                                <option value="Not At All">Not At All</option>
+                                <option value="5" <?php echo $pre_data && $pre_data['policy_process'] == '5' ? 'selected' : '' ?>>Very Satisfied</option>
+                                <option value="4" <?php echo $pre_data && $pre_data['policy_process'] == '4' ? 'selected' : '' ?>>Satisfied</option>
+                                <option value="3" <?php echo $pre_data && $pre_data['policy_process'] == '3' ? 'selected' : '' ?>>Ok</option>
+                                <option value="2" <?php echo $pre_data && $pre_data['policy_process'] == '2' ? 'selected' : '' ?>>Dissatisfied</option>
+                                <option value="1" <?php echo $pre_data && $pre_data['policy_process'] == '1' ? 'selected' : '' ?>>Very Dissatisfied</option>
                             </select>
                         </div>
                     </div>
@@ -208,23 +208,23 @@ ob_start();
                         <div class="select2-success">
                             <select class="form-control" id="" name="all_contents" >
                                 <option value="">Select One</option>
-                                <option value="Excellent">Excellent</option>
-                                <option value="Very Good">Very Good</option>
-                                <option value="Ok">Ok</option>
-                                <option value="Not Very Good">Not Very Good</option>
-                                <option value="Not At All">Not At All</option>
+                                <option value="5" <?php echo $pre_data && $pre_data['all_contents'] == '5' ? 'selected' : '' ?>>Very Satisfied</option>
+                                <option value="4" <?php echo $pre_data && $pre_data['all_contents'] == '4' ? 'selected' : '' ?>>Satisfied</option>
+                                <option value="3" <?php echo $pre_data && $pre_data['all_contents'] == '3' ? 'selected' : '' ?>>Ok</option>
+                                <option value="2" <?php echo $pre_data && $pre_data['all_contents'] == '2' ? 'selected' : '' ?>>Dissatisfied</option>
+                                <option value="1" <?php echo $pre_data && $pre_data['all_contents'] == '1' ? 'selected' : '' ?>>Very Dissatisfied</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <textarea class="form-control" placeholder="Recommendation (If Any)" type="text" name="recommendation" value=""></textarea>
+                        <textarea class="form-control" placeholder="Recommendation (If Any)" type="text" name="recommendation"><?php echo $pre_data['recommendation']; ?></textarea>
                     </div>
                 </fieldset>
             </div>
         </div>
     </div>
     <div class="panel-footer tar">
-        <a href="<?php echo url('admin/dev_event_management/manage_sharing_sessions') ?>" class="btn btn-flat btn-labeled btn-danger"><span class="btn-label icon fa fa-times"></span>Cancel</a>
+        <a href="<?php echo url('admin/dev_event_management/manage_sharing_session') ?>" class="btn btn-flat btn-labeled btn-danger"><span class="btn-label icon fa fa-times"></span>Cancel</a>
         <?php
         echo submitButtonGenerator(array(
             'action' => $edit ? 'update' : 'update',

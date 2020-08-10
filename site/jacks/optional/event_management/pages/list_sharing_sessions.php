@@ -38,17 +38,14 @@ ob_start();
 </div>
 <div class="table-primary table-responsive">
     <div class="table-header">
-        <?php echo searchResultText($sharing_sessions['total'], $start, $per_page_items, count($sharing_sessions['data']), 'sharing_sessions') ?>
+        <?php echo searchResultText($sharing_sessions['total'], $start, $per_page_items, count($sharing_sessions['data']), 'Sharing sessions') ?>
     </div>
     <table class="table table-bordered table-condensed">
         <thead>
             <tr>
-                <th>Branch</th>
-                <th>Month</th>
-                <th>Sharing Session Name</th>
-                <th>Sharing Session Value</th>
-                <th>Achievement Value</th>
-                <th>Remark</th>
+                <th>Date</th>
+                <th>Training Name</th>
+                <th>Evaluator Profession</th>
                 <th class="tar action_column">Actions</th>
             </tr>
         </thead>
@@ -57,12 +54,15 @@ ob_start();
             foreach ($sharing_sessions['data'] as $i => $sharing_session) {
                 ?>
                 <tr>
-                    <td>
+                    <td><?php echo date('d-m-Y', strtotime($sharing_session['traning_date'])) ?></td>
+                    <td><?php echo $sharing_session['traning_name']; ?></td>
+                    <td><?php echo $sharing_session['evaluator_profession']; ?></td>
+                    <td class="tar action_column">
                         <?php if (has_permission('edit_sharing_session')): ?>
                             <div class="btn-group btn-group-sm">
                                 <?php
                                 echo linkButtonGenerator(array(
-                                    'href' => build_url(array('action' => 'add_edit_sharing_session', 'edit' => $sharing_session['fk_customer_id'])),
+                                    'href' => build_url(array('action' => 'add_edit_sharing_session', 'edit' => $sharing_session['pk_sharing_session_id'])),
                                     'action' => 'edit',
                                     'icon' => 'icon_edit',
                                     'text' => 'Edit',
@@ -102,7 +102,7 @@ ob_start();
         $(document).on('click', '.delete_single_record', function () {
             var ths = $(this);
             var thisCell = ths.closest('td');
-            var logId = ths.attr('data-id');
+            var logId = ths.attr('data-id');        
             if (!logId)
                 return false;
 
@@ -111,19 +111,12 @@ ob_start();
                 title: 'Delete Record!',
                 inputType: 'checkbox',
                 inputOptions: [{
-                        text: 'Delete Only Profile',
-                        value: 'deleteProfile'
-                    },
-                    {
-                        text: 'Delete Profile With Case Management',
-                        value: 'deleteProfileCase'
+                        text: 'Click To Confirm Delete',
+                        value: 'delete'
                     }],
                 callback: function (result) {
-                    if (result == 'deleteProfile') {
-                        window.location.href = '?action=deleteProfile&id=' + logId;
-                    }
-                    if (result == 'deleteProfileCase') {
-                        window.location.href = '?action=deleteProfileCase&id=' + logId;
+                    if (result == 'delete') {
+                        window.location.href = '?action=deleteSession&id=' + logId;
                     }
                     hide_button_overlay_working(thisCell);
                 }

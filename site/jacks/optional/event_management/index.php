@@ -234,6 +234,8 @@ class dev_event_management {
 
         if ($_GET['action'] == 'add_edit_sharing_session')
             include('pages/add_edit_sharing_session.php');
+        elseif ($_GET['action'] == 'deleteSession')
+            include('pages/deleteSession.php');
         else
             include('pages/list_sharing_sessions.php');
     }
@@ -438,6 +440,94 @@ class dev_event_management {
         return $targets;
     }
 
+    function add_edit_event($params = array()) {
+        global $devdb, $_config;
+
+        $ret = array('success' => array(), 'error' => array());
+        $is_update = $params['edit'] ? $params['edit'] : array();
+
+        $oldData = array();
+        if ($is_update) {
+            $oldData = $this->get_events(array('id' => $is_update, 'single' => true));
+            if (!$oldData) {
+                return array('error' => ['Invalid event id, no data found']);
+            }
+        }
+
+        foreach ($params['required'] as $i => $v) {
+            if (isset($params['form_data'][$i]))
+                $temp = form_validator::required($params['form_data'][$i]);
+            if ($temp !== true) {
+                $ret['error'][] = $v . ' ' . $temp;
+            }
+        }
+
+        if (!$ret['error']) {
+            $events_data = array();
+            $events_data['event_type'] = $params['form_data']['event_type'];
+            $events_data['event_branch'] = $params['form_data']['event_branch'];
+            $events_data['event_date'] = $params['form_data']['event_date'];
+            $events_data['division'] = $params['form_data']['division'];
+            $events_data['upazila'] = $params['form_data']['upazila'];
+            $events_data['village'] = $params['form_data']['village'];
+            $events_data['ward'] = $params['form_data']['ward'];
+            $events_data['below_male'] = $params['form_data']['below_male'];
+            $events_data['above_male'] = $params['form_data']['above_male'];
+            $events_data['above_female'] = $params['form_data']['above_female'];
+            $events_data['preparatory_work'] = $params['form_data']['preparatory_work'];
+            $events_data['time_management'] = $params['form_data']['time_management'];
+            $events_data['participants_attention'] = $params['form_data']['participants_attention'];
+            $events_data['logistical_arrangements'] = $params['form_data']['logistical_arrangements'];
+            $events_data['relevancy_delivery'] = $params['form_data']['relevancy_delivery'];
+            $events_data['participants_feedback'] = $params['form_data']['participants_feedback'];
+            $events_data['note'] = $params['form_data']['note'];
+            $events_data['interview_date'] = $params['form_data']['interview_date'];
+            $events_data['interview_time'] = $params['form_data']['interview_time'];
+            $events_data['reviewed_internal'] = $params['form_data']['reviewed_internal'];
+            $events_data['beneficiary_id'] = $params['form_data']['beneficiary_id'];
+            $events_data['participant_name'] = $params['form_data']['participant_name'];
+            if ($params['form_data']['new_gender']) {
+                $events_data['gender'] = $params['form_data']['new_gender'];
+            } else {
+                $events_data['gender'] = $params['form_data']['gender'];
+            }
+            $events_data['age'] = $params['age']['age'];
+            $events_data['messages_issues'] = $params['messages_issues']['messages_issues'];
+            if ($params['form_data']['new_issues']) {
+                $events_data['issue'] = $params['form_data']['new_issues'];
+            } else {
+                $events_data['issue'] = $params['form_data']['issue'];
+            }
+            $events_data['victim'] = $params['form_data']['victim'];
+            $events_data['victim_family'] = $params['form_data']['victim_family'];
+            $events_data['issues'] = $params['form_data']['issues'];
+            $events_data['personal_message'] = $params['form_data']['personal_message'];
+            $events_data['mentioned_event'] = $params['form_data']['mentioned_event'];
+            $events_data['additional_comments'] = $params['form_data']['additional_comments'];
+            $events_data['quote'] = $params['form_data']['quote'];
+
+
+            if ($params['form_data']['new_qualification']) {
+                $events_data['educational_qualification'] = $params['form_data']['new_qualification'];
+            } else {
+                $events_data['educational_qualification'] = $params['form_data']['educational_qualification'];
+            }
+
+            if ($is_update) {
+                $sql = "SELECT fk_customer_id FROM dev_events WHERE fk_customer_id = '$is_update'";
+                $pre_customer_id = $devdb->get_row($sql);
+
+                if ($pre_customer_id) {
+                    $ret['events_update'] = $devdb->insert_update('dev_events', $events_data, " fk_customer_id = '" . $is_update . "'");
+                } else {
+                    $economic_reintegration_data['fk_customer_id'] = $is_update;
+                    $ret['events_insert'] = $devdb->insert_update('dev_events', $events_data);
+                }
+            }
+        }
+        return $ret;
+    }
+
     function get_sharing_sessions($param = null) {
         $param['single'] = $param['single'] ? $param['single'] : false;
 
@@ -472,6 +562,62 @@ class dev_event_management {
 
         $targets = sql_data_collector($sql, $count_sql, $param);
         return $targets;
+    }
+
+    function add_edit_sharing_session($params = array()) {
+        global $devdb, $_config;
+
+        $ret = array('success' => array(), 'error' => array());
+        $is_update = $params['edit'] ? $params['edit'] : array();
+
+        $oldData = array();
+        if ($is_update) {
+            $oldData = $this->get_sharing_sessions(array('id' => $is_update, 'single' => true));
+            if (!$oldData) {
+                return array('error' => ['Invalid sharing session id, no data found']);
+            }
+        }
+
+        foreach ($params['required'] as $i => $v) {
+            if (isset($params['form_data'][$i]))
+                $temp = form_validator::required($params['form_data'][$i]);
+            if ($temp !== true) {
+                $ret['error'][] = $v . ' ' . $temp;
+            }
+        }
+
+        if (!$ret['error']) {
+            $sharing_session_data = array();
+            $sharing_session_data['traning_date'] = date('Y-m-d', strtotime($params['form_data']['traning_date']));
+            $sharing_session_data['traning_name'] = $params['form_data']['traning_name'];
+
+            if ($params['form_data']['new_evaluator_profession']) {
+                $sharing_session_data['evaluator_profession'] = $params['form_data']['new_evaluator_profession'];
+            } else {
+                $sharing_session_data['evaluator_profession'] = $params['form_data']['evaluator_profession'];
+            }
+
+            $sharing_session_data['satisfied_training'] = $params['form_data']['satisfied_training'];
+            $sharing_session_data['satisfied_supports'] = $params['form_data']['satisfied_supports'];
+            $sharing_session_data['satisfied_facilitation'] = $params['form_data']['satisfied_facilitation'];
+            $sharing_session_data['outcome_training'] = $params['form_data']['outcome_training'];
+            $sharing_session_data['trafficking_law'] = $params['form_data']['trafficking_law'];
+            $sharing_session_data['policy_process'] = $params['form_data']['policy_process'];
+            $sharing_session_data['all_contents'] = $params['form_data']['all_contents'];
+            $sharing_session_data['recommendation'] = $params['form_data']['recommendation'];
+            if ($is_update) {
+                $sharing_session_data['update_date'] = date('Y-m-d');
+                $sharing_session_data['update_time'] = date('H:i:s');
+                $sharing_session_data['modified_by'] = $_config['user']['pk_user_id'];
+                $ret['update'] = $devdb->insert_update('dev_sharing_sessions', $sharing_session_data, " pk_sharing_session_id  = '" . $is_update . "'");
+            } else {
+                $sharing_session_data['create_date'] = date('Y-m-d');
+                $sharing_session_data['create_time'] = date('H:i:s');
+                $sharing_session_data['created_by'] = $_config['user']['pk_user_id'];
+                $ret['insert'] = $devdb->insert_update('dev_sharing_sessions', $sharing_session_data);
+            }
+        }
+        return $ret;
     }
 
     function get_complains($param = null) {
@@ -839,122 +985,6 @@ class dev_event_management {
                 $training_data['create_time'] = date('H:i:s');
                 $training_data['created_by'] = $_config['user']['pk_user_id'];
                 $ret = $devdb->insert_update('dev_trainings', $training_data);
-            }
-        }
-        return $ret;
-    }
-
-    function add_edit_event($params = array()) {
-        global $devdb, $_config;
-
-        $ret = array('success' => array(), 'error' => array());
-        $is_update = $params['edit'] ? $params['edit'] : array();
-
-        $oldData = array();
-        if ($is_update) {
-            $oldData = $this->get_events(array('customer_id' => $is_update, 'single' => true));
-            if (!$oldData) {
-                return array('error' => ['Invalid returnee id, no data found']);
-            }
-        }
-
-        foreach ($params['required'] as $i => $v) {
-            if (isset($params['form_data'][$i]))
-                $temp = form_validator::required($params['form_data'][$i]);
-            if ($temp !== true) {
-                $ret['error'][] = $v . ' ' . $temp;
-            }
-        }
-
-        if (!$ret['error']) {
-
-            $events_data = array();
-            $events_data['event_type'] = $params['form_data']['event_type'];
-            $events_data['event_branch'] = $params['form_data']['event_branch'];
-            $events_data['event_date'] = $params['form_data']['event_date'];
-            $events_data['division'] = $params['form_data']['division'];
-            $events_data['upazila'] = $params['form_data']['upazila'];
-            $events_data['village'] = $params['form_data']['village'];
-            $events_data['ward'] = $params['form_data']['ward'];
-            $events_data['below_male'] = $params['form_data']['below_male'];
-            $events_data['above_male'] = $params['form_data']['above_male'];
-            $events_data['above_female'] = $params['form_data']['above_female'];
-            $events_data['preparatory_work'] = $params['form_data']['preparatory_work'];
-            $events_data['time_management'] = $params['form_data']['time_management'];
-            $events_data['participants_attention'] = $params['form_data']['participants_attention'];
-            $events_data['logistical_arrangements'] = $params['form_data']['logistical_arrangements'];
-            $events_data['relevancy_delivery'] = $params['form_data']['relevancy_delivery'];
-            $events_data['participants_feedback'] = $params['form_data']['participants_feedback'];
-            $events_data['note'] = $params['form_data']['note'];
-            $events_data['interview_date'] = $params['form_data']['interview_date'];
-            $events_data['interview_time'] = $params['form_data']['interview_time'];
-            $events_data['reviewed_internal'] = $params['form_data']['reviewed_internal'];
-            $events_data['beneficiary_id'] = $params['form_data']['beneficiary_id'];
-            $events_data['participant_name'] = $params['form_data']['participant_name'];
-            if ($params['form_data']['new_gender']) {
-                $events_data['gender'] = $params['form_data']['new_gender'];
-            } else {
-                $events_data['gender'] = $params['form_data']['gender'];
-            }
-            $events_data['age'] = $params['age']['age'];
-            $events_data['messages_issues'] = $params['messages_issues']['messages_issues'];
-            if ($params['form_data']['new_issues']) {
-                $events_data['issue'] = $params['form_data']['new_issues'];
-            } else {
-                $events_data['issue'] = $params['form_data']['issue'];
-            }
-            $events_data['victim'] = $params['form_data']['victim'];
-            $events_data['victim_family'] = $params['form_data']['victim_family'];
-            $events_data['issues'] = $params['form_data']['issues'];
-            $events_data['personal_message'] = $params['form_data']['personal_message'];
-            $events_data['mentioned_event'] = $params['form_data']['mentioned_event'];
-            $events_data['additional_comments'] = $params['form_data']['additional_comments'];
-            $events_data['quote'] = $params['form_data']['quote'];
-
-
-            if ($params['form_data']['new_qualification']) {
-                $events_data['educational_qualification'] = $params['form_data']['new_qualification'];
-            } else {
-                $events_data['educational_qualification'] = $params['form_data']['educational_qualification'];
-            }
-
-            if ($is_update) {
-                $sql = "SELECT fk_customer_id FROM dev_events WHERE fk_customer_id = '$is_update'";
-                $pre_customer_id = $devdb->get_row($sql);
-
-                if ($pre_customer_id) {
-                    $ret['events_update'] = $devdb->insert_update('dev_events', $events_data, " fk_customer_id = '" . $is_update . "'");
-                } else {
-                    $economic_reintegration_data['fk_customer_id'] = $is_update;
-                    $ret['events_insert'] = $devdb->insert_update('dev_events', $events_data);
-                }
-            }
-
-            $sharing_session_data = array();
-            $sharing_session_data['traning_date'] = $params['form_data']['traning_date'];
-            $sharing_session_data['traning_name'] = $params['form_data']['traning_name'];
-            if ($params['form_data']['new_evaluator_profession']) {
-                $sharing_session_data['educational_qualification'] = $params['form_data']['new_evaluator_profession'];
-            } else {
-                $sharing_session_data['evaluator_profession'] = $params['form_data']['evaluator_profession'];
-            }
-            $sharing_session_data['satisfied_training'] = $params['form_data']['satisfied_training'];
-            $sharing_session_data['satisfied_supports'] = $params['form_data']['satisfied_supports'];
-            $sharing_session_data['satisfied_facilitation'] = $params['form_data']['satisfied_facilitation'];
-            $sharing_session_data['outcome_training'] = $params['form_data']['outcome_training'];
-            $sharing_session_data['trafficking_law'] = $params['form_data']['trafficking_law'];
-            $sharing_session_data['policy_process'] = $params['form_data']['policy_process'];
-            $sharing_session_data['all_contents'] = $params['form_data']['all_contents'];
-            if ($is_update) {
-                $sql = "SELECT fk_customer_id FROM dev_sharing_sessions WHERE fk_customer_id = '$is_update'";
-                $pre_customer_id = $devdb->get_row($sql);
-
-                if ($pre_customer_id) {
-                    $ret['events_update'] = $devdb->insert_update('dev_sharing_sessions', $sharing_session_data, " fk_customer_id = '" . $is_update . "'");
-                } else {
-                    $sharing_session_data['fk_customer_id'] = $is_update;
-                    $ret['events_insert'] = $devdb->insert_update('dev_sharing_sessions', $sharing_session_data);
-                }
             }
         }
         return $ret;
