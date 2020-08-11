@@ -32,6 +32,11 @@ class dev_event_management {
                     'edit_event' => 'Edit Event',
                     'delete_event' => 'Delete Event',
                 ),
+                'manage_event_validations' => array(
+                    'add_event_validation' => 'Add Event Validation',
+                    'edit_event_validation' => 'Edit Event Validation',
+                    'delete_event_validation' => 'Delete Event Validation',
+                ),
                 'manage_complains' => array(
                     'add_complain' => 'Add Complain',
                     'edit_complain' => 'Edit Complain',
@@ -114,6 +119,18 @@ class dev_event_management {
         );
         if (has_permission('manage_events'))
             admenu_register($params);
+
+//        $params = array(
+//            'label' => 'Event Validation',
+//            'description' => 'Manage All Event Validation',
+//            'menu_group' => 'Events',
+//            'position' => 'default',
+//            'action' => 'manage_event_validations',
+//            'iconClass' => 'fa-binoculars',
+//            'jack' => $this->thsClass,
+//        );
+//        if (has_permission('manage_event_validations'))
+//            admenu_register($params);
 
         $params = array(
             'label' => 'Sharing Session',
@@ -208,6 +225,8 @@ class dev_event_management {
 
         if ($_GET['action'] == 'add_edit_event_type')
             include('pages/add_edit_event_type.php');
+        elseif ($_GET['action'] == 'deleteEventType')
+            include('pages/deleteEventType.php');
         else
             include('pages/list_event_types.php');
     }
@@ -222,8 +241,24 @@ class dev_event_management {
             include('pages/add_edit_event.php');
         elseif ($_GET['action'] == 'add_edit_event_validation')
             include('pages/add_edit_event_validation.php');
+        elseif ($_GET['action'] == 'deleteEvent')
+            include('pages/deleteEvent.php');
         else
             include('pages/list_events.php');
+    }
+
+    function manage_event_validations() {
+        if (!has_permission('manage_event_validations'))
+            return true;
+        global $devdb, $_config;
+        $myUrl = jack_url($this->thsClass, 'manage_event_validations');
+
+        if ($_GET['action'] == 'add_edit_event_validation')
+            include('pages/add_edit_event_validation.php');
+        elseif ($_GET['action'] == 'deleteEventValidation')
+            include('pages/deleteEventValidation.php');
+        else
+            include('pages/list_event_validations.php');
     }
 
     function manage_sharing_session() {
@@ -404,6 +439,46 @@ class dev_event_management {
         return $targets;
     }
 
+    function add_edit_event_type($params = array()) {
+        global $devdb, $_config;
+
+        $ret = array('success' => array(), 'error' => array());
+        $is_update = $params['edit'] ? $params['edit'] : array();
+
+        $oldData = array();
+        if ($is_update) {
+            $oldData = $this->get_event_types(array('id' => $is_update, 'single' => true));
+            if (!$oldData) {
+                return array('error' => ['Invalid event type id, no data found']);
+            }
+        }
+
+        foreach ($params['required'] as $i => $v) {
+            if (isset($params['form_data'][$i]))
+                $temp = form_validator::required($params['form_data'][$i]);
+            if ($temp !== true) {
+                $ret['error'][] = $v . ' ' . $temp;
+            }
+        }
+
+        if (!$ret['error']) {
+            $data = array();
+            $data['event_type'] = $params['form_data']['event_type'];
+            if ($is_update) {
+                $data['update_date'] = date('Y-m-d');
+                $data['update_time'] = date('H:i:s');
+                $data['modified_by'] = $_config['user']['pk_user_id'];
+                $ret['event_types_update'] = $devdb->insert_update('dev_event_types', $data, " pk_event_type_id  = '" . $is_update . "'");
+            } else {
+                $data['create_date'] = date('Y-m-d');
+                $data['create_time'] = date('H:i:s');
+                $data['created_by'] = $_config['user']['pk_user_id'];
+                $ret['event_types_insert'] = $devdb->insert_update('dev_event_types', $data);
+            }
+        }
+        return $ret;
+    }
+
     function get_events($param = null) {
         $param['single'] = $param['single'] ? $param['single'] : false;
 
@@ -465,13 +540,18 @@ class dev_event_management {
         if (!$ret['error']) {
             $events_data = array();
             $events_data['event_type'] = $params['form_data']['event_type'];
-            $events_data['event_branch'] = $params['form_data']['event_branch'];
-            $events_data['event_date'] = $params['form_data']['event_date'];
+            $events_data['event_branch'] = $_config['user']['user_branch'];
+            $events_data['event_date'] = date('Y-m-d', strtotime($params['form_data']['event_date']));
+            $events_data['event_start_time'] = $params['form_data']['event_start_time'];
             $events_data['division'] = $params['form_data']['division'];
+            $events_data['district'] = $params['form_data']['district'];
             $events_data['upazila'] = $params['form_data']['upazila'];
+            $events_data['event_union'] = $params['form_data']['event_union'];
             $events_data['village'] = $params['form_data']['village'];
             $events_data['ward'] = $params['form_data']['ward'];
+            $events_data['location'] = $params['form_data']['location'];
             $events_data['below_male'] = $params['form_data']['below_male'];
+            $events_data['below_female'] = $params['form_data']['below_female'];
             $events_data['above_male'] = $params['form_data']['above_male'];
             $events_data['above_female'] = $params['form_data']['above_female'];
             $events_data['preparatory_work'] = $params['form_data']['preparatory_work'];
@@ -481,48 +561,127 @@ class dev_event_management {
             $events_data['relevancy_delivery'] = $params['form_data']['relevancy_delivery'];
             $events_data['participants_feedback'] = $params['form_data']['participants_feedback'];
             $events_data['note'] = $params['form_data']['note'];
-            $events_data['interview_date'] = $params['form_data']['interview_date'];
-            $events_data['interview_time'] = $params['form_data']['interview_time'];
-            $events_data['reviewed_internal'] = $params['form_data']['reviewed_internal'];
-            $events_data['beneficiary_id'] = $params['form_data']['beneficiary_id'];
-            $events_data['participant_name'] = $params['form_data']['participant_name'];
+            if ($is_update) {
+                $events_data['update_date'] = date('Y-m-d');
+                $events_data['update_time'] = date('H:i:s');
+                $events_data['modified_by'] = $_config['user']['pk_user_id'];
+                $ret['events_update'] = $devdb->insert_update('dev_events', $events_data, " pk_event_id  = '" . $is_update . "'");
+            } else {
+                $events_data['create_date'] = date('Y-m-d');
+                $events_data['create_time'] = date('H:i:s');
+                $events_data['created_by'] = $_config['user']['pk_user_id'];
+                $ret['events_insert'] = $devdb->insert_update('dev_events', $events_data);
+            }
+        }
+        return $ret;
+    }
+
+    function get_event_validations($param = null) {
+        $param['single'] = $param['single'] ? $param['single'] : false;
+
+        $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
+
+        if ($param['listing']) {
+            $from = "FROM dev_event_validations 
+
+            ";
+        } else {
+            $from = "FROM dev_event_validations 
+
+            ";
+        }
+
+        $where = " WHERE 1";
+        $conditions = " ";
+        $sql = $select . $from . $where;
+        $count_sql = "SELECT COUNT(dev_event_validations.pk_validation_id) AS TOTAL " . $from . $where;
+
+        $loopCondition = array(
+            'id' => 'dev_event_validations.pk_validation_id',
+            'event_id' => 'dev_event_validations.fk_event_id',
+        );
+
+        $conditions .= sql_condition_maker($loopCondition, $param);
+
+        $orderBy = sql_order_by($param);
+        $limitBy = sql_limit_by($param);
+
+        $sql .= $conditions . $orderBy . $limitBy;
+        $count_sql .= $conditions;
+
+        $targets = sql_data_collector($sql, $count_sql, $param);
+        return $targets;
+    }
+
+    function add_edit_event_validation($params = array()) {
+        global $devdb, $_config;
+
+        $ret = array('success' => array(), 'error' => array());
+        $is_update = $params['edit'] ? $params['edit'] : array();
+
+        $oldData = array();
+        if ($is_update) {
+            $oldData = $this->get_event_validations(array('id' => $is_update, 'single' => true));
+            if (!$oldData) {
+                return array('error' => ['Invalid event validation id, no data found']);
+            }
+        }
+
+        foreach ($params['required'] as $i => $v) {
+            if (isset($params['form_data'][$i]))
+                $temp = form_validator::required($params['form_data'][$i]);
+            if ($temp !== true) {
+                $ret['error'][] = $v . ' ' . $temp;
+            }
+        }
+
+        if (!$ret['error']) {
+            $data = array();
+            $data['fk_event_id'] = $params['event_id'];
+            $data['interview_date'] = date('Y-m-d', strtotime($params['form_data']['interview_date']));
+            $data['interview_time'] = $params['form_data']['interview_time'];
+            $data['reviewed_by'] = $params['form_data']['reviewed_by'];
+            $data['beneficiary_id'] = $params['form_data']['beneficiary_id'];
+            $data['participant_name'] = $params['form_data']['participant_name'];
             if ($params['form_data']['new_gender']) {
-                $events_data['gender'] = $params['form_data']['new_gender'];
+                $data['gender'] = $params['form_data']['new_gender'];
             } else {
-                $events_data['gender'] = $params['form_data']['gender'];
+                $data['gender'] = $params['form_data']['gender'];
             }
-            $events_data['age'] = $params['age']['age'];
-            $events_data['messages_issues'] = $params['messages_issues']['messages_issues'];
-            if ($params['form_data']['new_issues']) {
-                $events_data['issue'] = $params['form_data']['new_issues'];
-            } else {
-                $events_data['issue'] = $params['form_data']['issue'];
-            }
-            $events_data['victim'] = $params['form_data']['victim'];
-            $events_data['victim_family'] = $params['form_data']['victim_family'];
-            $events_data['issues'] = $params['form_data']['issues'];
-            $events_data['personal_message'] = $params['form_data']['personal_message'];
-            $events_data['mentioned_event'] = $params['form_data']['mentioned_event'];
-            $events_data['additional_comments'] = $params['form_data']['additional_comments'];
-            $events_data['quote'] = $params['form_data']['quote'];
+            $data['age'] = $params['form_data']['age'];
+            $data['mobile'] = $params['form_data']['mobile'];
+            $data['enjoyment'] = $params['form_data']['enjoyment'];
+            $data['victim'] = $params['form_data']['victim'];
+            $data['victim_family'] = $params['form_data']['victim_family'];
 
-
-            if ($params['form_data']['new_qualification']) {
-                $events_data['educational_qualification'] = $params['form_data']['new_qualification'];
-            } else {
-                $events_data['educational_qualification'] = $params['form_data']['educational_qualification'];
+            if ($params['form_data']['new_message'] == NULL) {
+                $data_type = $params['form_data']['message'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $data['message'] = $data_types;
+            } elseif ($params['form_data']['message'] == NULL) {
+                $data['other_message'] = $params['form_data']['new_message'];
+            } elseif ($params['form_data']['message'] != NULL && $params['form_data']['new_message'] != NULL) {
+                $data_type = $params['form_data']['message'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $data['message'] = $data_types;
+                $data['other_message'] = $params['form_data']['new_message'];
             }
+
+            $data['use_message'] = $params['form_data']['use_message'];
+            $data['mentioned_event'] = $params['form_data']['mentioned_event'];
+            $data['additional_comments'] = $params['form_data']['additional_comments'];
+            $data['quote'] = $params['form_data']['quote'];
 
             if ($is_update) {
-                $sql = "SELECT fk_customer_id FROM dev_events WHERE fk_customer_id = '$is_update'";
-                $pre_customer_id = $devdb->get_row($sql);
-
-                if ($pre_customer_id) {
-                    $ret['events_update'] = $devdb->insert_update('dev_events', $events_data, " fk_customer_id = '" . $is_update . "'");
-                } else {
-                    $economic_reintegration_data['fk_customer_id'] = $is_update;
-                    $ret['events_insert'] = $devdb->insert_update('dev_events', $events_data);
-                }
+                $data['update_date'] = date('Y-m-d');
+                $data['update_time'] = date('H:i:s');
+                $data['modified_by'] = $_config['user']['pk_user_id'];
+                $ret['event_validations_update'] = $devdb->insert_update('dev_event_validations', $data, " pk_validation_id  = '" . $is_update . "'");
+            } else {
+                $data['create_date'] = date('Y-m-d');
+                $data['create_time'] = date('H:i:s');
+                $data['created_by'] = $_config['user']['pk_user_id'];
+                $ret['event_validations_insert'] = $devdb->insert_update('dev_event_validations', $data);
             }
         }
         return $ret;

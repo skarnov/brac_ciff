@@ -43,12 +43,10 @@ ob_start();
     <table class="table table-bordered table-condensed">
         <thead>
             <tr>
-                <th>Branch</th>
-                <th>Month</th>
-                <th>Event Name</th>
-                <th>Event Value</th>
-                <th>Achievement Value</th>
-                <th>Remark</th>
+                <th>Date</th>
+                <th>District</th>
+                <th>Upazila</th>
+                <th>Observation Score</th>
                 <th class="tar action_column">Actions</th>
             </tr>
         </thead>
@@ -57,12 +55,27 @@ ob_start();
             foreach ($events['data'] as $i => $event) {
                 ?>
                 <tr>
-                    <td>
+                    <td><?php echo date('d-m-Y', strtotime($event['event_date'])) ?></td>
+                    <td><?php echo $event['district']; ?></td>
+                    <td><?php echo $event['upazila']; ?></td>
+                    <td><?php echo $event['participants_feedback']; ?></td>
+                    <td class="tar action_column">
                         <?php if (has_permission('edit_event')): ?>
                             <div class="btn-group btn-group-sm">
                                 <?php
                                 echo linkButtonGenerator(array(
-                                    'href' => build_url(array('action' => 'add_edit_event', 'edit' => $event['fk_customer_id'])),
+                                    'href' => url('admin/dev_event_management/manage_event_validations&event_id=' . $event['pk_event_id']),
+                                    'action' => 'edit',
+                                    'icon' => 'icon_add',
+                                    'text' => 'Event Validation',
+                                    'title' => 'Event Validation',
+                                ));
+                                ?>
+                            </div>
+                            <div class="btn-group btn-group-sm">
+                                <?php
+                                echo linkButtonGenerator(array(
+                                    'href' => build_url(array('action' => 'add_edit_event', 'edit' => $event['pk_event_id'])),
                                     'action' => 'edit',
                                     'icon' => 'icon_edit',
                                     'text' => 'Edit',
@@ -111,19 +124,12 @@ ob_start();
                 title: 'Delete Record!',
                 inputType: 'checkbox',
                 inputOptions: [{
-                        text: 'Delete Only Profile',
-                        value: 'deleteProfile'
-                    },
-                    {
-                        text: 'Delete Profile With Case Management',
-                        value: 'deleteProfileCase'
+                        text: 'Click To Confirm Delete',
+                        value: 'delete'
                     }],
                 callback: function (result) {
-                    if (result == 'deleteProfile') {
-                        window.location.href = '?action=deleteProfile&id=' + logId;
-                    }
-                    if (result == 'deleteProfileCase') {
-                        window.location.href = '?action=deleteProfileCase&id=' + logId;
+                    if (result == 'delete') {
+                        window.location.href = '?action=deleteEvent&id=' + logId;
                     }
                     hide_button_overlay_working(thisCell);
                 }

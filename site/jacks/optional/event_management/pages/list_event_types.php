@@ -38,17 +38,12 @@ ob_start();
 </div>
 <div class="table-primary table-responsive">
     <div class="table-header">
-        <?php echo searchResultText($event_types['total'], $start, $per_page_items, count($event_types['data']), 'event_types') ?>
+        <?php echo searchResultText($event_types['total'], $start, $per_page_items, count($event_types['data']), 'event types') ?>
     </div>
     <table class="table table-bordered table-condensed">
         <thead>
             <tr>
-                <th>Branch</th>
-                <th>Month</th>
                 <th>Event Type Name</th>
-                <th>Event Type Value</th>
-                <th>Achievement Value</th>
-                <th>Remark</th>
                 <th class="tar action_column">Actions</th>
             </tr>
         </thead>
@@ -57,12 +52,13 @@ ob_start();
             foreach ($event_types['data'] as $i => $event_type) {
                 ?>
                 <tr>
-                    <td>
+                    <td><?php echo $event_type['event_type']; ?></td>
+                    <td class="tar action_column">
                         <?php if (has_permission('edit_event_type')): ?>
                             <div class="btn-group btn-group-sm">
                                 <?php
                                 echo linkButtonGenerator(array(
-                                    'href' => build_url(array('action' => 'add_edit_event_type', 'edit' => $event_type['fk_customer_id'])),
+                                    'href' => build_url(array('action' => 'add_edit_event_type', 'edit' => $event_type['pk_event_type_id'])),
                                     'action' => 'edit',
                                     'icon' => 'icon_edit',
                                     'text' => 'Edit',
@@ -111,19 +107,12 @@ ob_start();
                 title: 'Delete Record!',
                 inputType: 'checkbox',
                 inputOptions: [{
-                        text: 'Delete Only Profile',
-                        value: 'deleteProfile'
-                    },
-                    {
-                        text: 'Delete Profile With Case Management',
-                        value: 'deleteProfileCase'
+                        text: 'Click To Confirm Delete',
+                        value: 'delete'
                     }],
                 callback: function (result) {
-                    if (result == 'deleteProfile') {
-                        window.location.href = '?action=deleteProfile&id=' + logId;
-                    }
-                    if (result == 'deleteProfileCase') {
-                        window.location.href = '?action=deleteProfileCase&id=' + logId;
+                    if (result == 'delete') {
+                        window.location.href = '?action=deleteEventType&id=' + logId;
                     }
                     hide_button_overlay_working(thisCell);
                 }

@@ -11,10 +11,10 @@ if (!checkPermission($edit, 'add_event_type', 'edit_event_type')) {
 $pre_data = array();
 
 if ($edit) {
-    $pre_data = $this->get_event_types(array('event_type_id' => $edit, 'single' => true));
-
+    $pre_data = $this->get_event_types(array('id' => $edit, 'single' => true));
+    
     if (!$pre_data) {
-        add_notification('Invalid event_type, no data found.', 'error');
+        add_notification('Invalid event type, no data found.', 'error');
         header('Location:' . build_url(NULL, array('action', 'edit')));
         exit();
     }
@@ -30,15 +30,15 @@ if ($_POST) {
 
     $ret = $this->add_edit_event_type($data);
 
-    if ($ret['event_type_insert'] || $ret['event_type_update']) {
+    if ($ret) {
         $msg = "Event Type has been " . ($edit ? 'updated.' : 'saved.');
         add_notification($msg);
         $activityType = $edit ? 'update' : 'create';
         user_activity::add_activity($msg, 'success', $activityType);
         if ($edit) {
-            header('location: ' . url('admin/dev_event_type_management/manage_event_types?action=add_edit_event_type&edit=' . $edit));
+            header('location: ' . url('admin/dev_event_management/manage_event_types?action=add_edit_event_type&edit=' . $edit));
         } else {
-            header('location: ' . url('admin/dev_event_type_management/manage_event_types'));
+            header('location: ' . url('admin/dev_event_management/manage_event_types'));
         }
         exit();
     } else {
@@ -76,17 +76,15 @@ ob_start();
 <form id="theForm" onsubmit="return true;" method="post" action="" enctype="multipart/form-data">
     <div class="panel" id="fullForm" style="">
         <div class="panel-body">
-            
-            
-            dev_event_types
-            
-    
-
-            
-            
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Event Type</label>
+                    <input type="text" class="form-control" name="event_type" value="<?php echo $pre_data['event_type'] ?>"/>
+                </div>
+            </div>
         </div>
         <div class="panel-footer tar">
-            <a href="<?php echo url('admin/dev_event_type_management/manage_event_types') ?>" class="btn btn-flat btn-labeled btn-danger"><span class="btn-label icon fa fa-times"></span>Cancel</a>
+            <a href="<?php echo url('admin/dev_event_management/manage_event_types') ?>" class="btn btn-flat btn-labeled btn-danger"><span class="btn-label icon fa fa-times"></span>Cancel</a>
             <?php
             echo submitButtonGenerator(array(
                 'action' => $edit ? 'update' : 'update',
@@ -103,13 +101,6 @@ ob_start();
 <script type="text/javascript">
     var BD_LOCATIONS = <?php echo getBDLocationJson(); ?>;
     init.push(function () {
-        new bd_new_location_selector({
-            'division': $('#division'),
-            'district': $('#district'),
-            'sub_district': $('#sub_district'),
-            'police_station': $('#police_station'),
-        });
-
         theForm.find('input:submit, button:submit').prop('disabled', true);
     });
 </script>
