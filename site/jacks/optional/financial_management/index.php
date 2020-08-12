@@ -259,44 +259,7 @@ class dev_financial_management {
         return $income; 
     }
     
-    function add_edit_target($params = array()) {
-        global $devdb, $_config;
-
-        $ret = array('success' => array(), 'error' => array());
-        $is_update = $params['edit'] ? $params['edit'] : array();
-
-        $oldData = array();
-        if ($is_update) {
-            $oldData = $this->get_sales_targets(array('target_id' => $edit, 'single' => true));
-            if (!$oldData) {
-                return array('error' => ['Invalid target id, no data found']);
-            }
-        }
-
-        if (!$ret['error']) {
-            $insert_data = array();
-            $dateNow = date('Y-m-d');
-            $timeNow = date('H:i:s');
-            $insert_data['fk_project_id'] = $params['form_data']['project_id'];
-            $insert_data['fk_branch_id'] = $params['form_data']['branch_id'];
-            $insert_data['fk_staff_id'] = $params['form_data']['staff_id'];
-            $insert_data['month_name'] = $params['form_data']['month_name'];
-            $insert_data['target_quantity'] = $params['form_data']['target_quantity'];
-            
-            if ($is_update){
-                $insert_data['update_date'] = $dateNow;
-                $insert_data['update_time'] = $timeNow;
-                $insert_data['update_by'] = $_config['user']['pk_user_id'];
-                $ret = $devdb->insert_update('dev_sales_targets', $insert_data, " pk_target_id = '" . $is_update . "'");
-            }else {
-                $insert_data['create_date'] = $dateNow;
-                $insert_data['create_time'] = $timeNow;
-                $insert_data['create_by'] = $_config['user']['pk_user_id'];
-                $ret = $devdb->insert_update('dev_sales_targets', $insert_data);
-            }
-        }
-        return $ret;
-    }
+    
     
     function manage_sales_achievement() {
         if (!has_permission('manage_financials'))

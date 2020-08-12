@@ -31,7 +31,7 @@ if ($_POST) {
     $ret = $this->add_edit_target($data);
 
     if ($ret) {
-        $msg = "Target has been " . ($edit ? 'updated.' : 'saved.');
+        $msg = "Achievement has been " . ($edit ? 'updated.' : 'saved.');
         add_notification($msg);
         $activityType = $edit ? 'update' : 'create';
         user_activity::add_activity($msg, 'success', $activityType);
@@ -57,7 +57,7 @@ ob_start();
     }
 </style>
 <div class="page-header">
-    <h1><?php echo $edit ? 'Update ' : 'New ' ?> Target </h1>
+    <h1><?php echo $edit ? 'Update ' : 'New ' ?> Achievement </h1>
     <div class="oh">
         <div class="btn-group btn-group-sm">
             <?php
@@ -79,7 +79,7 @@ ob_start();
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="inputBranch">Select Month</label>
-                    <select class="form-control" name="month" >
+                    <select class="form-control" name="month" readonly>
                         <option value="January" <?php echo $pre_data && $pre_data['target_month'] == 'January' ? 'selected' : '' ?>>January</option>
                         <option value="February" <?php echo $pre_data && $pre_data['target_month'] == 'February' ? 'selected' : '' ?>>February</option>
                         <option value="March" <?php echo $pre_data && $pre_data['target_month'] == 'March' ? 'selected' : '' ?>>March</option>
@@ -96,23 +96,21 @@ ob_start();
                 </div>
                 <div class="form-group">
                     <label>Target Name (*)</label>
-                    <input class="form-control" required type="text" name="target_name" value="<?php echo $pre_data['target_name'] ? $pre_data['target_name'] : ''; ?>">
+                    <input class="form-control" readonly type="text" name="target_name" value="<?php echo $pre_data['target_name'] ? $pre_data['target_name'] : ''; ?>">
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label>Target Value/Amount (*)</label>
-                    <input class="form-control" required type="text" name="target_value" value="<?php echo $pre_data['target_value'] ? $pre_data['target_value'] : ''; ?>">
+                    <input class="form-control" readonly type="text" name="target_value" value="<?php echo $pre_data['target_value'] ? $pre_data['target_value'] : ''; ?>">
                 </div>
-                <?php if ($edit) : ?>
-                    <div class="form-group">
-                        <label>Enter Achievement</label>
-                        <input class="form-control" type="text" name="achievement_value" value="<?php echo $pre_data['achievement_value'] ? $pre_data['achievement_value'] : ''; ?>">
-                    </div>
-                <?php endif ?>
+                <div class="form-group">
+                    <label>Enter Achievement</label>
+                    <input class="form-control" type="text" name="achievement_value" value="<?php echo $pre_data['achievement_value'] ? $pre_data['achievement_value'] : ''; ?>">
+                </div>
                 <div class="form-group">
                     <label>Remark</label>
-                    <textarea class="form-control" name="remark"><?php echo $pre_data['remark'] ? $pre_data['remark'] : ''; ?></textarea>
+                    <textarea class="form-control" readonly name="remark"><?php echo $pre_data['remark'] ? $pre_data['remark'] : ''; ?></textarea>
                 </div>
             </div>
         </div>

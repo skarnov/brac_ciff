@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 10, 2020 at 08:04 AM
+-- Generation Time: Aug 12, 2020 at 12:24 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.3
 
@@ -1011,6 +1011,28 @@ INSERT INTO `dev_email_templates` (`pk_etemplate_id`, `template_id`, `user_code`
 
 CREATE TABLE `dev_events` (
   `pk_event_id` bigint(20) NOT NULL,
+  `event_type` varchar(50) DEFAULT NULL,
+  `event_branch` varchar(100) DEFAULT NULL,
+  `event_date` date DEFAULT NULL,
+  `event_start_time` time DEFAULT NULL,
+  `division` varchar(50) DEFAULT NULL,
+  `district` varchar(50) DEFAULT NULL,
+  `upazila` varchar(80) DEFAULT NULL,
+  `event_union` varchar(80) DEFAULT NULL,
+  `location` text DEFAULT NULL,
+  `village` varchar(150) DEFAULT NULL,
+  `ward` varchar(150) DEFAULT NULL,
+  `below_male` int(2) DEFAULT NULL,
+  `below_female` int(2) DEFAULT NULL,
+  `above_male` int(2) DEFAULT NULL,
+  `above_female` int(2) DEFAULT NULL,
+  `preparatory_work` int(2) DEFAULT NULL,
+  `time_management` int(2) DEFAULT NULL,
+  `participants_attention` int(2) DEFAULT NULL,
+  `logistical_arrangements` int(2) DEFAULT NULL,
+  `relevancy_delivery` int(2) DEFAULT NULL,
+  `participants_feedback` int(2) DEFAULT NULL,
+  `note` text DEFAULT NULL,
   `create_time` time DEFAULT NULL,
   `create_date` date DEFAULT NULL,
   `created_by` bigint(20) DEFAULT NULL,
@@ -1018,6 +1040,14 @@ CREATE TABLE `dev_events` (
   `update_date` date DEFAULT NULL,
   `modified_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `dev_events`
+--
+
+INSERT INTO `dev_events` (`pk_event_id`, `event_type`, `event_branch`, `event_date`, `event_start_time`, `division`, `district`, `upazila`, `event_union`, `location`, `village`, `ward`, `below_male`, `below_female`, `above_male`, `above_female`, `preparatory_work`, `time_management`, `participants_attention`, `logistical_arrangements`, `relevancy_delivery`, `participants_feedback`, `note`, `create_time`, `create_date`, `created_by`, `update_time`, `update_date`, `modified_by`) VALUES
+(2, 'Select One', '', '2020-08-11', '07:22:00', 'Rangpur', '', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '15:22:09', '2020-08-11', 1, '15:41:42', '2020-08-11', 1),
+(3, '3', '', '2020-08-12', '11:52:29', 'Rajshahi', 'Joypurhat', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, '', '11:53:59', '2020-08-12', 1, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1027,6 +1057,7 @@ CREATE TABLE `dev_events` (
 
 CREATE TABLE `dev_event_types` (
   `pk_event_type_id` bigint(20) NOT NULL,
+  `event_type` varchar(100) DEFAULT NULL,
   `create_time` time DEFAULT NULL,
   `create_date` date DEFAULT NULL,
   `created_by` bigint(20) DEFAULT NULL,
@@ -1034,6 +1065,54 @@ CREATE TABLE `dev_event_types` (
   `update_date` date DEFAULT NULL,
   `modified_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `dev_event_types`
+--
+
+INSERT INTO `dev_event_types` (`pk_event_type_id`, `event_type`, `create_time`, `create_date`, `created_by`, `update_time`, `update_date`, `modified_by`) VALUES
+(3, 'Event Type', '23:58:24', '2020-08-11', 1, '00:01:01', '2020-08-12', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dev_event_validations`
+--
+
+CREATE TABLE `dev_event_validations` (
+  `pk_validation_id` bigint(20) NOT NULL,
+  `fk_event_id` bigint(20) NOT NULL,
+  `interview_date` date DEFAULT NULL,
+  `interview_time` time DEFAULT NULL,
+  `reviewed_by` varchar(30) DEFAULT NULL,
+  `beneficiary_id` varchar(30) DEFAULT NULL,
+  `participant_name` varchar(100) DEFAULT NULL,
+  `gender` varchar(30) DEFAULT NULL,
+  `age` varchar(20) DEFAULT NULL,
+  `mobile` varchar(20) DEFAULT NULL,
+  `enjoyment` varchar(30) DEFAULT NULL,
+  `victim` enum('yes','no') DEFAULT NULL,
+  `victim_family` enum('yes','no') DEFAULT NULL,
+  `message` text DEFAULT NULL,
+  `other_message` text DEFAULT NULL,
+  `use_message` text DEFAULT NULL,
+  `mentioned_event` text DEFAULT NULL,
+  `additional_comments` text DEFAULT NULL,
+  `quote` text DEFAULT NULL,
+  `create_time` time DEFAULT NULL,
+  `create_date` date DEFAULT NULL,
+  `created_by` bigint(20) DEFAULT NULL,
+  `update_time` time DEFAULT NULL,
+  `update_date` date DEFAULT NULL,
+  `modified_by` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `dev_event_validations`
+--
+
+INSERT INTO `dev_event_validations` (`pk_validation_id`, `fk_event_id`, `interview_date`, `interview_time`, `reviewed_by`, `beneficiary_id`, `participant_name`, `gender`, `age`, `mobile`, `enjoyment`, `victim`, `victim_family`, `message`, `other_message`, `use_message`, `mentioned_event`, `additional_comments`, `quote`, `create_time`, `create_date`, `created_by`, `update_time`, `update_date`, `modified_by`) VALUES
+(1, 2, '2020-08-11', '21:14:18', 'internal', 'Beneficiary ID', 'Participant Name', '1', 'Participant Age', 'Participant Mobile', 'no', 'yes', 'yes', 'Trafficking in persons,Result of human trafficking', NULL, 'How do you intend to use these messages in your personal life?', 'What was mentioned in the event show that was not clear to you?', 'Additional comments (if any)', 'Quote', '21:15:54', '2020-08-11', 1, '22:01:28', '2020-08-11', 1);
 
 -- --------------------------------------------------------
 
@@ -1786,6 +1865,7 @@ CREATE TABLE `dev_sharing_sessions` (
   `trafficking_law` int(2) DEFAULT NULL,
   `policy_process` int(2) DEFAULT NULL,
   `all_contents` varchar(160) DEFAULT NULL,
+  `recommendation` text DEFAULT NULL,
   `create_time` time DEFAULT NULL,
   `create_date` date DEFAULT NULL,
   `created_by` bigint(20) DEFAULT NULL,
@@ -1793,6 +1873,13 @@ CREATE TABLE `dev_sharing_sessions` (
   `update_date` date DEFAULT NULL,
   `modified_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `dev_sharing_sessions`
+--
+
+INSERT INTO `dev_sharing_sessions` (`pk_sharing_session_id`, `traning_date`, `traning_name`, `evaluator_profession`, `satisfied_training`, `satisfied_supports`, `satisfied_facilitation`, `outcome_training`, `trafficking_law`, `policy_process`, `all_contents`, `recommendation`, `create_time`, `create_date`, `created_by`, `update_time`, `update_date`, `modified_by`) VALUES
+(2, '2020-08-10', 'Training Name', 'NGO', 5, 5, 5, 5, 5, 5, '5', 'Recommandation', '17:06:59', '2020-08-10', 1, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -2006,6 +2093,12 @@ INSERT INTO `dev_tags_group` (`pk_tag_group_id`, `tag_group_title`, `tag_group_s
 
 CREATE TABLE `dev_targets` (
   `pk_target_id` bigint(20) NOT NULL,
+  `fk_branch_id` bigint(20) NOT NULL,
+  `target_month` varchar(30) DEFAULT NULL,
+  `target_name` varchar(150) DEFAULT NULL,
+  `target_value` varchar(200) DEFAULT NULL,
+  `achievement_value` varchar(150) DEFAULT NULL,
+  `remark` text DEFAULT NULL,
   `create_time` time DEFAULT NULL,
   `create_date` date DEFAULT NULL,
   `created_by` bigint(20) DEFAULT NULL,
@@ -2013,6 +2106,13 @@ CREATE TABLE `dev_targets` (
   `update_date` date DEFAULT NULL,
   `modified_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `dev_targets`
+--
+
+INSERT INTO `dev_targets` (`pk_target_id`, `fk_branch_id`, `target_month`, `target_name`, `target_value`, `achievement_value`, `remark`, `create_time`, `create_date`, `created_by`, `update_time`, `update_date`, `modified_by`) VALUES
+(6, 0, 'August', 'Target Name', 'Target Value', 'Achievement', 'Remark', '16:11:25', '2020-08-12', 1, '16:19:20', '2020-08-12', 1);
 
 -- --------------------------------------------------------
 
@@ -3367,7 +3467,53 @@ INSERT INTO `dev_user_activities` (`pk_activity_log`, `activity_msg`, `activity_
 (1182, 'Training has been saved.', '', 'create', 'success', '2020-08-10 11:14:46', 1),
 (1183, 'Training has been saved.', '', 'create', 'success', '2020-08-10 11:15:05', 1),
 (1184, 'Training has been saved.', '', 'create', 'success', '2020-08-10 11:18:04', 1),
-(1185, 'Training has been updated.', '', 'update', 'success', '2020-08-10 11:20:11', 1);
+(1185, 'Training has been updated.', '', 'update', 'success', '2020-08-10 11:20:11', 1),
+(1186, 'Sharing Session has been saved.', '', 'create', 'success', '2020-08-10 16:15:50', 1),
+(1187, 'Sharing Session has been saved.', '', 'create', 'success', '2020-08-10 16:16:56', 1),
+(1188, 'Sharing Session has been saved.', '', 'create', 'success', '2020-08-10 16:19:18', 1),
+(1189, 'Sharing Session has been saved.', '', 'create', 'success', '2020-08-10 16:19:56', 1),
+(1190, 'Sharing Session has been saved.', '', 'create', 'success', '2020-08-10 16:24:09', 1),
+(1191, 'Sharing Session has been saved.', '', 'create', 'success', '2020-08-10 16:25:11', 1),
+(1192, 'Sharing Session has been saved.', '', 'create', 'success', '2020-08-10 16:28:07', 1),
+(1193, 'Sharing Session has been saved.', '', 'create', 'success', '2020-08-10 16:28:17', 1),
+(1194, 'Sharing Session has been saved.', '', 'create', 'success', '2020-08-10 17:01:22', 1),
+(1195, 'Sharing Session has been updated.', '', 'update', 'success', '2020-08-10 17:02:40', 1),
+(1196, 'Sharing Session has been updated.', '', 'update', 'success', '2020-08-10 17:03:11', 1),
+(1197, 'Sharing Session has been saved.', '', 'create', 'success', '2020-08-10 17:06:59', 1),
+(1198, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-08-11 13:09:58', 1),
+(1199, 'Event has been saved.', '', 'create', 'success', '2020-08-11 15:08:16', 1),
+(1200, 'Event has been updated.', '', 'update', 'success', '2020-08-11 15:09:51', 1),
+(1201, 'Event has been updated.', '', 'update', 'success', '2020-08-11 15:11:28', 1),
+(1202, 'Event has been saved.', '', 'create', 'success', '2020-08-11 15:22:09', 1),
+(1203, 'Event has been updated.', '', 'update', 'success', '2020-08-11 15:41:42', 1),
+(1204, 'Event Validation has been saved.', '', 'create', 'success', '2020-08-11 21:15:54', 1),
+(1205, 'Event Validation has been saved.', '', 'create', 'success', '2020-08-11 21:19:07', 1),
+(1206, 'Event Validation has been updated.', '', 'update', 'success', '2020-08-11 22:01:28', 1),
+(1207, 'Event Validation has been saved.', '', 'create', 'success', '2020-08-11 22:01:44', 1),
+(1208, 'Event Type has been saved.', '', 'create', 'success', '2020-08-11 23:44:17', 1),
+(1209, 'Event Type has been saved.', '', 'create', 'success', '2020-08-11 23:57:04', 1),
+(1210, 'Event Type has been saved.', '', 'create', 'success', '2020-08-11 23:58:24', 1),
+(1211, 'Event Type has been updated.', '', 'update', 'success', '2020-08-12 00:00:17', 1),
+(1212, 'Event Type has been updated.', '', 'update', 'success', '2020-08-12 00:01:01', 1),
+(1213, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-08-12 11:37:05', 1),
+(1214, 'Event has been saved.', '', 'create', 'success', '2020-08-12 11:53:59', 1),
+(1215, 'Target has been saved.', '', 'create', 'success', '2020-08-12 12:50:33', 1),
+(1216, 'Target has been saved.', '', 'create', 'success', '2020-08-12 12:51:08', 1),
+(1217, 'Target has been saved.', '', 'create', 'success', '2020-08-12 12:51:21', 1),
+(1218, 'Target has been saved.', '', 'create', 'success', '2020-08-12 12:52:46', 1),
+(1219, 'Target has been updated.', '', 'update', 'success', '2020-08-12 13:05:18', 1),
+(1220, 'Target has been updated.', '', 'update', 'success', '2020-08-12 13:05:36', 1),
+(1221, 'Target has been updated.', '', 'update', 'success', '2020-08-12 13:10:48', 1),
+(1222, 'Achievement has been updated.', '', 'update', 'success', '2020-08-12 15:56:04', 1),
+(1223, 'Achievement has been updated.', '', 'update', 'success', '2020-08-12 16:08:22', 1),
+(1224, 'Achievement has been updated.', '', 'update', 'success', '2020-08-12 16:08:42', 1),
+(1225, 'Target has been saved.', '', 'create', 'success', '2020-08-12 16:11:25', 1),
+(1226, 'Achievement has been updated.', '', 'update', 'success', '2020-08-12 16:11:49', 1),
+(1227, 'Target has been updated.', '', 'update', 'success', '2020-08-12 16:12:25', 1),
+(1228, 'Achievement has been updated.', '', 'update', 'success', '2020-08-12 16:14:48', 1),
+(1229, 'Achievement has been updated.', '', 'update', 'success', '2020-08-12 16:19:20', 1),
+(1230, 'Target has been saved.', '', 'create', 'success', '2020-08-12 16:20:07', 1),
+(1231, 'Target has been updated.', '', 'update', 'success', '2020-08-12 16:20:18', 1);
 
 -- --------------------------------------------------------
 
@@ -3609,6 +3755,12 @@ ALTER TABLE `dev_events`
 --
 ALTER TABLE `dev_event_types`
   ADD PRIMARY KEY (`pk_event_type_id`);
+
+--
+-- Indexes for table `dev_event_validations`
+--
+ALTER TABLE `dev_event_validations`
+  ADD PRIMARY KEY (`pk_validation_id`);
 
 --
 -- Indexes for table `dev_followups`
@@ -3978,13 +4130,19 @@ ALTER TABLE `dev_email_templates`
 -- AUTO_INCREMENT for table `dev_events`
 --
 ALTER TABLE `dev_events`
-  MODIFY `pk_event_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_event_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `dev_event_types`
 --
 ALTER TABLE `dev_event_types`
-  MODIFY `pk_event_type_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_event_type_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `dev_event_validations`
+--
+ALTER TABLE `dev_event_validations`
+  MODIFY `pk_validation_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `dev_followups`
@@ -4128,7 +4286,7 @@ ALTER TABLE `dev_reintegration_satisfaction_scale`
 -- AUTO_INCREMENT for table `dev_sharing_sessions`
 --
 ALTER TABLE `dev_sharing_sessions`
-  MODIFY `pk_sharing_session_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_sharing_session_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `dev_social_evaluations`
@@ -4170,7 +4328,7 @@ ALTER TABLE `dev_tags_group`
 -- AUTO_INCREMENT for table `dev_targets`
 --
 ALTER TABLE `dev_targets`
-  MODIFY `pk_target_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_target_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `dev_trainings`
@@ -4194,7 +4352,7 @@ ALTER TABLE `dev_users_roles_relation`
 -- AUTO_INCREMENT for table `dev_user_activities`
 --
 ALTER TABLE `dev_user_activities`
-  MODIFY `pk_activity_log` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1186;
+  MODIFY `pk_activity_log` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1232;
 
 --
 -- AUTO_INCREMENT for table `dev_user_login_logout`

@@ -43,11 +43,10 @@ ob_start();
     <table class="table table-bordered table-condensed">
         <thead>
             <tr>
-                <th>Branch</th>
                 <th>Month</th>
                 <th>Target Name</th>
                 <th>Target Value</th>
-                <th>Achievement Value</th>
+                <th>Achievement</th>
                 <th>Remark</th>
                 <th class="tar action_column">Actions</th>
             </tr>
@@ -57,12 +56,28 @@ ob_start();
             foreach ($targets['data'] as $i => $target) {
                 ?>
                 <tr>
-                    <td>
+                    <td><?php echo $target['target_month']; ?></td>
+                    <td><?php echo $target['target_name']; ?></td>
+                    <td><?php echo $target['target_value']; ?></td>
+                    <td><?php echo $target['achievement_value']; ?></td>
+                    <td><?php echo $target['remark']; ?></td>
+                    <td class="tar action_column">
                         <?php if (has_permission('edit_target')): ?>
                             <div class="btn-group btn-group-sm">
                                 <?php
                                 echo linkButtonGenerator(array(
-                                    'href' => build_url(array('action' => 'add_edit_target', 'edit' => $target['fk_customer_id'])),
+                                    'href' => build_url(array('action' => 'add_edit_achievement', 'edit' => $target['pk_target_id'])),
+                                    'action' => 'add',
+                                    'icon' => 'icon_add',
+                                    'text' => 'Achievement',
+                                    'title' => 'Achievement',
+                                ));
+                                ?>
+                            </div>
+                            <div class="btn-group btn-group-sm">
+                                <?php
+                                echo linkButtonGenerator(array(
+                                    'href' => build_url(array('action' => 'add_edit_target', 'edit' => $target['pk_target_id'])),
                                     'action' => 'edit',
                                     'icon' => 'icon_edit',
                                     'text' => 'Edit',
@@ -111,19 +126,12 @@ ob_start();
                 title: 'Delete Record!',
                 inputType: 'checkbox',
                 inputOptions: [{
-                        text: 'Delete Only Profile',
-                        value: 'deleteProfile'
-                    },
-                    {
-                        text: 'Delete Profile With Case Management',
-                        value: 'deleteProfileCase'
+                        text: 'Click To Confirm Delete',
+                        value: 'delete'
                     }],
                 callback: function (result) {
-                    if (result == 'deleteProfile') {
-                        window.location.href = '?action=deleteProfile&id=' + logId;
-                    }
-                    if (result == 'deleteProfileCase') {
-                        window.location.href = '?action=deleteProfileCase&id=' + logId;
+                    if (result == 'delete') {
+                        window.location.href = '?action=deleteTarget&id=' + logId;
                     }
                     hide_button_overlay_working(thisCell);
                 }

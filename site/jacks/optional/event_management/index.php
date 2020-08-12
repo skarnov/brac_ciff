@@ -85,18 +85,6 @@ class dev_event_management {
             admenu_register($params);
 
         $params = array(
-            'label' => 'Achievements',
-            'description' => 'Manage All Achievements',
-            'menu_group' => 'Events',
-            'position' => 'default',
-            'action' => 'manage_achievements',
-            'iconClass' => 'fa-binoculars',
-            'jack' => $this->thsClass,
-        );
-        if (has_permission('manage_achievements'))
-            admenu_register($params);
-
-        $params = array(
             'label' => 'Event Types',
             'description' => 'Manage All Event Types',
             'menu_group' => 'Events',
@@ -119,18 +107,6 @@ class dev_event_management {
         );
         if (has_permission('manage_events'))
             admenu_register($params);
-
-//        $params = array(
-//            'label' => 'Event Validation',
-//            'description' => 'Manage All Event Validation',
-//            'menu_group' => 'Events',
-//            'position' => 'default',
-//            'action' => 'manage_event_validations',
-//            'iconClass' => 'fa-binoculars',
-//            'jack' => $this->thsClass,
-//        );
-//        if (has_permission('manage_event_validations'))
-//            admenu_register($params);
 
         $params = array(
             'label' => 'Sharing Session',
@@ -201,20 +177,12 @@ class dev_event_management {
 
         if ($_GET['action'] == 'add_edit_target')
             include('pages/add_edit_target.php');
-        else
-            include('pages/list_targets.php');
-    }
-
-    function manage_achievements() {
-        if (!has_permission('manage_achievements'))
-            return true;
-        global $devdb, $_config;
-        $myUrl = jack_url($this->thsClass, 'manage_achievements');
-
-        if ($_GET['action'] == 'add_edit_achievement')
+        elseif ($_GET['action'] == 'deleteTarget')
+            include('pages/deleteTarget.php');
+        elseif ($_GET['action'] == 'add_edit_achievement')
             include('pages/add_edit_achievement.php');
         else
-            include('pages/list_achievements.php');
+            include('pages/list_targets.php');
     }
 
     function manage_event_types() {
@@ -365,6 +333,47 @@ class dev_event_management {
 
         $targets = sql_data_collector($sql, $count_sql, $param);
         return $targets;
+    }
+
+    function add_edit_target($params = array()) {
+        global $devdb, $_config;
+
+        $ret = array('success' => array(), 'error' => array());
+        $is_update = $params['edit'] ? $params['edit'] : array();
+
+        $oldData = array();
+        if ($is_update) {
+            $oldData = $this->get_targets(array('id' => $edit, 'single' => true));
+            if (!$oldData) {
+                return array('error' => ['Invalid target id, no data found']);
+            }
+        }
+
+        if (!$ret['error']) {
+            $data = array();
+            $dateNow = date('Y-m-d');
+            $timeNow = date('H:i:s');
+
+            $data['fk_branch_id'] = $_config['user']['user_branch'];
+            $data['target_month'] = $params['form_data']['month'];
+            $data['target_name'] = $params['form_data']['target_name'];
+            $data['target_value'] = $params['form_data']['target_value'];
+            $data['achievement_value'] = $params['form_data']['achievement_value'];
+            $data['remark'] = $params['form_data']['remark'];
+
+            if ($is_update) {
+                $data['update_date'] = $dateNow;
+                $data['update_time'] = $timeNow;
+                $data['modified_by'] = $_config['user']['pk_user_id'];
+                $ret = $devdb->insert_update('dev_targets', $data, " pk_target_id  = '" . $is_update . "'");
+            } else {
+                $data['create_date'] = $dateNow;
+                $data['create_time'] = $timeNow;
+                $data['created_by'] = $_config['user']['pk_user_id'];
+                $ret = $devdb->insert_update('dev_targets', $data);
+            }
+        }
+        return $ret;
     }
 
     function get_achievements($param = null) {

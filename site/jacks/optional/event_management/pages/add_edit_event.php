@@ -47,6 +47,8 @@ if ($_POST) {
     }
 }
 
+$all_types = $this->get_event_types();
+
 doAction('render_start');
 
 ob_start();
@@ -79,9 +81,11 @@ ob_start();
             <div class="col-md-3">
                 <div class="form-group">
                     <label>Select Event Type</label>
-                    <select class="form-control" id="" name="event_type" >
+                    <select class="form-control" name="event_type" >
                         <option>Select One</option>
-
+                        <?php foreach ($all_types['data'] as $type) : ?>
+                            <option value="<?php echo $type['pk_event_type_id'] ?>"><?php echo $type['event_type'] ?></option>   
+                        <?php endforeach ?>
                     </select>
                 </div>
             </div>
