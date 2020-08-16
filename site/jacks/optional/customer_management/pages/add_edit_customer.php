@@ -375,12 +375,12 @@ ob_start();
                                             <div class="form-group">
                                                 <input class="form-control" type="text" name="permanent_ward" value="<?php echo $pre_data['permanent_ward'] ? $pre_data['permanent_ward'] : ''; ?>">
                                             </div>
-                                            <div class="form-group">
-                                                <label>Division (*)</label>
-                                                <div class="select2-primary">
-                                                    <select class="form-control" id="permanent_division" name="permanent_division" data-selected="<?php echo $pre_data['permanent_division'] ? $pre_data['permanent_division'] : '' ?>"></select>
-                                                </div>
-                                            </div>
+                                            <!--                                            <div class="form-group">
+                                                                                            <label>Division (*)</label>
+                                                                                            <div class="select2-primary">
+                                                                                                <select class="form-control" id="permanent_division" name="permanent_division" data-selected="<?php echo $pre_data['permanent_division'] ? $pre_data['permanent_division'] : '' ?>"></select>
+                                                                                            </div>
+                                                                                        </div>-->
                                         </div>
                                         <div class="col-sm-6">
                                             <label class="control-label input-label">Union/Pourashava</label>
@@ -388,15 +388,35 @@ ob_start();
                                                 <input class="form-control" type="text" name="permanent_union" value="<?php echo $pre_data['permanent_union'] ? $pre_data['permanent_union'] : ''; ?>">
                                             </div>
                                             <label class="control-label input-label">Upazila (*)</label>
+
                                             <div class="form-group">
-                                                <input class="form-control" type="text" name="permanent_sub_district" value="<?php echo $pre_data['permanent_sub_district'] ? $pre_data['permanent_sub_district'] : ''; ?>">
+                                                <select class="form-control" name="permanent_sub_district">
+                                                    <option value="">Select One</option>
+                                                    <option value="Jashore Sadar" <?php echo $pre_data && $pre_data['permanent_sub_district'] == 'Jashore Sadar' ? 'selected' : '' ?>>Jashore Sadar</option>
+                                                    <option value="Jhikargacha" <?php echo $pre_data && $pre_data['permanent_sub_district'] == 'Jhikargacha' ? 'selected' : '' ?>>Jhikargacha</option>
+                                                    <option value="Sharsha" <?php echo $pre_data && $pre_data['permanent_sub_district'] == 'Sharsha' ? 'selected' : '' ?>>Sharsha</option>
+                                                    <option value="Chougachha" <?php echo $pre_data && $pre_data['permanent_sub_district'] == 'Chougachha' ? 'selected' : '' ?>>Chougachha</option>
+                                                    <option value="Manirampur" <?php echo $pre_data && $pre_data['permanent_sub_district'] == 'Manirampur' ? 'selected' : '' ?>>Manirampur</option>
+                                                    <option value="Bagherpara" <?php echo $pre_data && $pre_data['permanent_sub_district'] == 'Bagherpara' ? 'selected' : '' ?>>Bagherpara</option>
+                                                    <option value="Keshabpur" <?php echo $pre_data && $pre_data['permanent_sub_district'] == 'Keshabpur' ? 'selected' : '' ?>>Keshabpur</option>
+                                                    <option value="Abhaynagar" <?php echo $pre_data && $pre_data['permanent_sub_district'] == 'Abhaynagar' ? 'selected' : '' ?>>Abhaynagar</option>
+                                                </select>
                                             </div>
-                                            <div class="form-group">
-                                                <label>District (*)</label>
-                                                <div class="select2-success">
-                                                    <select class="form-control" id="permanent_district" name="permanent_district" data-selected="<?php echo $pre_data['permanent_district'] ? $pre_data['permanent_district'] : ''; ?>"></select>
-                                                </div>
-                                            </div>
+
+
+                                            <!--                                            <div class="form-group">
+                                                                                            <input class="form-control" type="text" name="permanent_sub_district" value="<?php echo $pre_data['permanent_sub_district'] ? $pre_data['permanent_sub_district'] : ''; ?>">
+                                                                                        </div>-->
+
+                                            <input class="form-control" type="hidden" name="permanent_district" value="jashore">
+                                            <input class="form-control" type="hidden" name="permanent_division" value="khulna">
+
+                                            <!--                                            <div class="form-group">
+                                                                                            <label>District (*)</label>
+                                                                                            <div class="select2-success">
+                                                                                                <select class="form-control" id="permanent_district" name="permanent_district" data-selected="<?php echo $pre_data['permanent_district'] ? $pre_data['permanent_district'] : ''; ?>"></select>
+                                                                                            </div>
+                                                                                        </div>-->
                                         </div>
                                         <div class="col-sm-12">  
                                             <label class="control-label input-label">Address (*)</label>
