@@ -706,7 +706,9 @@ class dev_customer_management {
                 $reintegration_plan['service_requested'] = $data_types;
                 $reintegration_plan['other_service_requested'] = $params['form_data']['new_service_requested'];
             }
-
+            
+            $reintegration_plan['reintegration_financial_service'] = $params['form_data']['reintegration_financial_service'];
+            
             if ($params['form_data']['new_social_protection']) {
                 $reintegration_plan['social_protection'] = $params['form_data']['new_social_protection'];
             }
@@ -905,6 +907,9 @@ class dev_customer_management {
                 $economic_reintegration_data['economic_support'] = $data_types;
                 $economic_reintegration_data['other_economic_support'] = $params['form_data']['new_economic_support'];
             }
+            
+            $economic_reintegration_data['economic_financial_service'] = $params['form_data']['economic_financial_service'];
+            
             $economic_reintegration_data['is_assistance_received'] = $params['form_data']['is_assistance_received'];
             $economic_reintegration_data['refferd_to'] = $params['form_data']['refferd_to'];
             $economic_reintegration_data['refferd_address'] = $params['form_data']['refferd_address'];
@@ -1015,7 +1020,9 @@ class dev_customer_management {
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
                 $dev_followups_data['confirm_services'] = $params['form_data']['new_confirm_services'] . ',' . $data_types;
             }
-
+            
+            $dev_followups_data['financial_service'] = $params['form_data']['followup_financial_service'];
+            
             if ($params['form_data']['social_protection']) {
                 $dev_followups_data['social_protection'] = $params['form_data']['social_protection'];
             }

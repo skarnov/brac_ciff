@@ -70,6 +70,7 @@ if ($edit) {
             'fk_staff_id' => 'dev_immediate_supports.fk_staff_id',
             'fk_customer_id' => 'dev_immediate_supports.fk_customer_id',
             'immediate_support' => 'dev_immediate_supports.immediate_support',
+            'reintegration_financial_service' => 'dev_reintegration_plan.reintegration_financial_service',
             'service_requested' => 'dev_reintegration_plan.service_requested',
             'other_service_requested' => 'dev_reintegration_plan.other_service_requested',
             'social_protection' => 'dev_reintegration_plan.social_protection',
@@ -120,6 +121,7 @@ if ($edit) {
             'used_far' => 'dev_economic_reintegration_referrals.used_far',
             'economic_referrals_other_comments' => 'dev_economic_reintegration_referrals.other_comments AS economic_referrals_other_comments',
             'is_economic_services' => 'dev_economic_reintegration_referrals.is_economic_services',
+            'economic_financial_service' => 'dev_economic_reintegration_referrals.economic_financial_service',
             'economic_support' => 'dev_economic_reintegration_referrals.economic_support',
             'other_economic_support' => 'dev_economic_reintegration_referrals.other_economic_support',
             'is_assistance_received' => 'dev_economic_reintegration_referrals.is_assistance_received',
@@ -147,6 +149,7 @@ if ($edit) {
             'reason_dropping' => 'dev_followups.reason_dropping',
             'other_reason_dropping' => 'dev_followups.other_reason_dropping',
             'confirm_services' => 'dev_followups.confirm_services',
+            'financial_service' => 'dev_followups.financial_service AS followup_financial_service',
             'social_protection' => 'dev_followups.social_protection',
             'special_security' => 'dev_followups.special_security',
             'comment_psychosocial' => 'dev_followups.comment_psychosocial',
@@ -165,7 +168,7 @@ if ($edit) {
     );
 
     $pre_data = $this->get_cases($args);
-
+    
     $immediate_support = explode(',', $pre_data['immediate_support']);
     $service_requested = explode(',', $pre_data['service_requested']);
     $issue_discussed = explode(',', $pre_data['issue_discussed']);
@@ -333,18 +336,13 @@ doAction('render_start');
                                                                 echo 'checked';
                                                             }
                                                             ?>><span class="lbl">Shelter and accommodation</span></label>
-                                                        <label><input class="px" type="checkbox" name="immediate_support[]" value="Want to leave home" <?php
-                                                            if (in_array('Want to leave home', $immediate_support)) {
-                                                                echo 'checked';
-                                                            }
-                                                            ?>><span class="lbl">Want to leave home</span></label>
-                                                    </div>
-                                                    <div class="col-sm-6">   
                                                         <label><input class="px" type="checkbox" name="immediate_support[]" value="Onward transportation" <?php
                                                             if (in_array('Onward transportation', $immediate_support)) {
                                                                 echo 'checked';
                                                             }
                                                             ?>><span class="lbl">Onward transportation</span></label>
+                                                    </div>
+                                                    <div class="col-sm-6">
                                                         <label><input class="px" type="checkbox" name="immediate_support[]" value="Health assessment and health assistance" <?php
                                                             if (in_array('Health assessment and health assistance', $immediate_support)) {
                                                                 echo 'checked';
@@ -424,6 +422,10 @@ doAction('render_start');
                                                                         echo 'checked';
                                                                     }
                                                                     ?>><span class="lbl">Loan</span></label>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label>Other Financial Service</label>
+                                                                <input class="form-control" placeholder="Other financial service" type="text" name="reintegration_financial_service" value="<?php echo $pre_data['reintegration_financial_service'] ? $pre_data['reintegration_financial_service'] : ''; ?>">
                                                             </div>
                                                         </div>
                                                         <label class="col-sm-4"><input class="px" type="checkbox" name="service_requested[]" value="Housing" <?php
@@ -1039,16 +1041,14 @@ doAction('render_start');
                                                         if (in_array('Microbusiness', $inkind_project)) {
                                                             echo 'checked';
                                                         }
-                                                        ?>
-                                                                                   ><span class="lbl">Microbusiness</span></label>
+                                                        ?>><span class="lbl">Microbusiness</span></label>
                                                     <div class="form-group col-sm-8">
                                                         <div class="options_holder radio">
                                                             <label><input class="px" type="checkbox" name="inkind_project[]" value="Business grant from project" <?php
                                                                 if (in_array('Business grant from project', $inkind_project)) {
                                                                     echo 'checked';
                                                                 }
-                                                                ?>
-                                                                          ><span class="lbl">Business grant from project</span></label>
+                                                                ?>><span class="lbl">Business grant from project</span></label>
                                                             <label><input class="px" type="checkbox" name="inkind_project[]" value="Enrolled in community enterprise" <?php
                                                                 if (in_array('Enrolled in community enterprise', $inkind_project)) {
                                                                     echo 'checked';
@@ -1275,8 +1275,7 @@ doAction('render_start');
                                                         if (in_array('Agriculture forestry, fishing and farming', $received_vocational_training)) {
                                                             echo 'checked';
                                                         }
-                                                        ?>
-                                                                                    ><span class="lbl">Agriculture forestry, fishing and farming</span></label>
+                                                        ?>><span class="lbl">Agriculture forestry, fishing and farming</span></label>
                                                     <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational_training[]" value="Mining and quarrying" <?php
                                                         if (in_array('Mining and quarrying', $received_vocational_training)) {
                                                             echo 'checked';
@@ -1391,6 +1390,11 @@ doAction('render_start');
                                                             echo 'checked';
                                                         }
                                                         ?>><span class="lbl">Domestic work</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational_training[]" value="Health and social work" <?php
+                                                        if (in_array('Health and social work', $received_vocational_training)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Health and social work</span></label>
                                                     <label class="col-sm-12"><input class="px col-sm-12" type="checkbox" name="received_vocational_training[]" id="newVocational" <?php echo $pre_data && $pre_data['other_received_vocational_training'] != NULL ? 'checked' : '' ?>><span class="lbl">Others</span></label>
                                                 </div>
                                             </div>
@@ -1597,6 +1601,11 @@ doAction('render_start');
                                                             echo 'checked';
                                                         }
                                                         ?>><span class="lbl">Domestic work</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Health and social work" <?php
+                                                        if (in_array('Health and social work', $received_vocational)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Health and social work</span></label>
                                                     <label class="col-sm-12"><input class="px col-sm-12" type="checkbox" name="received_vocational[]" id="newReferralstraining" <?php echo $pre_data && $pre_data['other_received_vocational'] != NULL ? 'checked' : '' ?>><span class="lbl">Others</span></label>
                                                 </div>
                                             </div>
@@ -1650,10 +1659,6 @@ doAction('render_start');
                                                 });
                                             });
                                         </script> 
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Any other Comments</label>
-                                        <textarea class="form-control" name="economic_referrals_other_comments" rows="2" placeholder=""><?php echo $pre_data['economic_referrals_other_comments'] ?></textarea>
                                     </div>
                                     <div class="form-group">
                                         <label>Referrals done for economic services</label>
@@ -1721,6 +1726,10 @@ doAction('render_start');
                                                                     echo 'checked';
                                                                 }
                                                                 ?>><span class="lbl">Loan</span></label>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Other Financial Service</label>
+                                                            <input class="form-control" placeholder="Other financial service" type="text" name="economic_financial_service" value="<?php echo $pre_data['economic_financial_service'] ? $pre_data['economic_financial_service'] : ''; ?>">
                                                         </div>
                                                     </div>
                                                     <label class="col-sm-12"><input class="px" type="checkbox" name="economic_support[]" value="Job Placement" <?php
@@ -1812,6 +1821,10 @@ doAction('render_start');
                                     <div class="form-group">
                                         <label>How has the assistance been utilized?</label>
                                         <textarea class="form-control" name="assistance_utilized" rows="2" placeholder=""><?php echo $pre_data['assistance_utilized'] ?></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Any other Comments</label>
+                                        <textarea class="form-control" name="economic_referrals_other_comments" rows="2" placeholder=""><?php echo $pre_data['economic_referrals_other_comments'] ?></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -1932,21 +1945,30 @@ doAction('render_start');
                                                                     ?>><span class="lbl">Support for housing loan</span></label>
                                                             </div>
                                                         </div>
-                                                        <label class="col-sm-12"><input class="px" type="checkbox" name="reintegration_economic[]" value="Legal Services" <?php
+                                                        <label class="col-sm-4"><input class="px" type="checkbox" name="reintegration_economic[]" value="Legal Services" <?php
                                                             if (in_array('Legal Services', $reintegration_economic)) {
                                                                 echo 'checked';
                                                             }
                                                             ?>><span class="lbl">Legal Services</span></label>
-                                                        <label class="col-sm-12"><input class="px" type="checkbox" name="reintegration_economic[]" value="Legal Aid" <?php
-                                                            if (in_array('Legal Aid', $reintegration_economic)) {
-                                                                echo 'checked';
-                                                            }
-                                                            ?>><span class="lbl">Legal Aid</span></label>
-                                                        <label class="col-sm-12"><input class="px" type="checkbox" name="reintegration_economic[]" value="Legal Arbitration" <?php
-                                                            if (in_array('Legal Arbitration', $reintegration_economic)) {
-                                                                echo 'checked';
-                                                            }
-                                                            ?>><span class="lbl">Legal Arbitration</span></label>
+                                                        <div class="form-group col-sm-8">
+                                                            <div class="options_holder radio">
+                                                                <label><input class="px" type="checkbox" name="reintegration_economic[]" value="Legal Aid" <?php
+                                                                    if (in_array('Legal Aid"', $reintegration_economic)) {
+                                                                        echo 'checked';
+                                                                    }
+                                                                    ?>><span class="lbl">Legal Aid</span></label>
+                                                                <label><input class="px" type="checkbox" name="reintegration_economic[]" value="Claiming Compensation" <?php
+                                                                    if (in_array('Claiming Compensation', $reintegration_economic)) {
+                                                                        echo 'checked';
+                                                                    }
+                                                                    ?>><span class="lbl">Claiming Compensation</span></label>
+                                                                <label><input class="px" type="checkbox" name="reintegration_economic[]" value="Assistance in resolving family dispute" <?php
+                                                                    if (in_array('Assistance in resolving family dispute', $reintegration_economic)) {
+                                                                        echo 'checked';
+                                                                    }
+                                                                    ?>><span class="lbl">Assistance in resolving family dispute</span></label>
+                                                            </div>
+                                                        </div>
                                                         <label class="col-sm-12"><input class="px col-sm-12" type="checkbox" name="reintegration_economic[]" id="TypesofEconomic" <?php echo $pre_data['other_reintegration_economic'] != NULL ? 'checked' : '' ?>><span class="lbl">Others</span></label>
                                                     </div>
                                                 </div>
@@ -2042,7 +2064,6 @@ doAction('render_start');
                                     </div>
                                     <script>
                                         init.push(function () {
-
                                             var isChecked = $('#yesLiteracyTraining').is(':checked');
 
                                             if (isChecked == true) {
@@ -2068,7 +2089,6 @@ doAction('render_start');
                                     </div>
                                     <script>
                                         init.push(function () {
-
                                             var isChecked = $('#yesCommunityVideo').is(':checked');
 
                                             if (isChecked == true) {
@@ -2191,21 +2211,30 @@ doAction('render_start');
                                                                 ?>><span class="lbl">Support for housing loan</span></label>
                                                         </div>
                                                     </div>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="support_referred[]" value="Legal Services" <?php
-                                                        if (in_array('Legal Services', $support_referred)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Legal Services</span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="support_referred[]" value="Legal Aid" <?php
-                                                        if (in_array('Legal Aid', $support_referred)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Legal Aid</span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="support_referred[]" value="Legal Arbitration" <?php
-                                                        if (in_array('Legal Arbitration', $support_referred)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Legal Arbitration</span></label>
+                                                    <label class="col-sm-4"><input class="px" type="checkbox" name="support_referred[]" value="Legal Services" <?php
+                                                            if (in_array('Legal Services', $support_referred)) {
+                                                                echo 'checked';
+                                                            }
+                                                            ?>><span class="lbl">Legal Services</span></label>
+                                                        <div class="form-group col-sm-8">
+                                                            <div class="options_holder radio">
+                                                                <label><input class="px" type="checkbox" name="support_referred[]" value="Legal Aid" <?php
+                                                                    if (in_array('Legal Aid"', $support_referred)) {
+                                                                        echo 'checked';
+                                                                    }
+                                                                    ?>><span class="lbl">Legal Aid</span></label>
+                                                                <label><input class="px" type="checkbox" name="support_referred[]" value="Claiming Compensation" <?php
+                                                                    if (in_array('Claiming Compensation', $support_referred)) {
+                                                                        echo 'checked';
+                                                                    }
+                                                                    ?>><span class="lbl">Claiming Compensation</span></label>
+                                                                <label><input class="px" type="checkbox" name="support_referred[]" value="Assistance in resolving family dispute" <?php
+                                                                    if (in_array('Assistance in resolving family dispute', $support_referred)) {
+                                                                        echo 'checked';
+                                                                    }
+                                                                    ?>><span class="lbl">Assistance in resolving family dispute</span></label>
+                                                            </div>
+                                                        </div>
                                                     <label class="col-sm-12"><input class="px col-sm-12" type="checkbox" id="supportreferred" <?php echo $pre_data['other_support_referred'] != NULL ? 'checked' : '' ?>><span class="lbl">Others</span></label>
                                                 </div>
                                             </div>
@@ -2362,6 +2391,10 @@ doAction('render_start');
                                                                 }
                                                                 ?>><span class="lbl">Loan</span></label>
                                                         </div>
+                                                        <div class="form-group">
+                                                            <label>Other Financial Service</label>
+                                                            <input class="form-control" placeholder="Other financial service" type="text" name="followup_financial_service" value="<?php echo $pre_data['followup_financial_service'] ? $pre_data['followup_financial_service'] : ''; ?>">
+                                                        </div>
                                                     </div>
                                                     <label class="col-sm-4"><input class="px" type="checkbox" name="confirm_services[]" value="Housing" <?php
                                                         if (in_array('Housing', $confirm_services)) {
@@ -2387,23 +2420,28 @@ doAction('render_start');
                                                             echo 'checked';
                                                         }
                                                         ?>><span class="lbl">Job Placement</span></label>
-                                                    <label class="col-sm-4"><input class="px" type="checkbox" name="confirm_services[]" value="Legal Services" <?php
+                                                    <label class="col-sm-4"><input class="px" type="checkbox" name="reintegration_economic[]" value="Legal Services" <?php
                                                         if (in_array('Legal Services', $confirm_services)) {
                                                             echo 'checked';
                                                         }
                                                         ?>><span class="lbl">Legal Services</span></label>
                                                     <div class="form-group col-sm-8">
                                                         <div class="options_holder radio">
-                                                            <label><input class="px" type="checkbox" name="confirm_services[]" value="Legal Aid" <?php
-                                                                if (in_array('Legal Aid', $confirm_services)) {
+                                                            <label><input class="px" type="checkbox" name="reintegration_economic[]" value="Legal Aid" <?php
+                                                                if (in_array('Legal Aid"', $confirm_services)) {
                                                                     echo 'checked';
                                                                 }
                                                                 ?>><span class="lbl">Legal Aid</span></label>
-                                                            <label><input class="px" type="checkbox" name="confirm_services[]" value="Legal Arbitration" <?php
-                                                                if (in_array('Legal Arbitration', $confirm_services)) {
+                                                            <label><input class="px" type="checkbox" name="reintegration_economic[]" value="Claiming Compensation" <?php
+                                                                if (in_array('Claiming Compensation', $confirm_services)) {
                                                                     echo 'checked';
                                                                 }
-                                                                ?>><span class="lbl">Legal Arbitration</span></label>
+                                                                ?>><span class="lbl">Claiming Compensation</span></label>
+                                                            <label><input class="px" type="checkbox" name="reintegration_economic[]" value="Assistance in resolving family dispute" <?php
+                                                                if (in_array('Assistance in resolving family dispute', $confirm_services)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Assistance in resolving family dispute</span></label>
                                                         </div>
                                                     </div>
                                                     <label class="col-sm-12"><input class="px" type="checkbox" name="confirm_services[]" value="Job Placement" <?php

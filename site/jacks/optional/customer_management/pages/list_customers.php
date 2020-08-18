@@ -279,7 +279,7 @@ filterForm($filterForm);
                 <th>Passport Number</th>
                 <th>Present Address</th>
                 <th>Status</th>
-                <th class="tar action_column">Actions</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -293,18 +293,14 @@ filterForm($filterForm);
                     <td><?php echo $customer['passport_number']; ?></td>
                     <td><?php echo '<b>Division - </b>' . $customer['permanent_division'] . ',<br><b>District - </b>' . $customer['permanent_district'] . ',<br><b>Sub-District - </b>' . $customer['permanent_sub_district'] . ',<br><b>Police Station - </b>' . $customer['permanent_police_station'] . ',<br><b>Post Office - </b>' . $customer['permanent_post_office'] ?></td>
                     <td style="text-transform: capitalize"><?php echo $customer['customer_status']; ?></td>
-                    <td class="tar action_column">
+                    <td>
                         <?php if (has_permission('edit_customer')): ?>
                             <div class="btn-group">
-                                <button type="button" class="btn btn-primary">Action</button>
-                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="height: 30px;"><i class="fa fa-caret-down"></i></button>
-                                <ul class="dropdown-menu">
-                                    <li><a href="<?php echo url('admin/dev_customer_management/manage_customers?action=add_edit_customer&edit=' . $customer['pk_customer_id']) ?>">Edit</a></li>
-                                    <li><a href="<?php echo url('admin/dev_customer_management/manage_customers?action=add_edit_evaluate&edit=' . $customer['pk_customer_id']) ?>">Evaluate</a></li>
-                                    <li><a href="<?php echo url('admin/dev_customer_management/manage_cases?action=add_edit_case&edit=' . $customer['pk_customer_id']) ?>">Case Management</a></li>
-                                    <li><a href="<?php echo url('admin/dev_customer_management/manage_customers?action=add_edit_satisfaction_scale&edit=' . $customer['pk_customer_id']) ?>">Reintegration Assistance Satisfaction Scale</a></li>
-                                </ul>
-                            </div>
+                                <a href="<?php echo url('admin/dev_customer_management/manage_customers?action=add_edit_customer&edit=' . $customer['pk_customer_id']) ?>" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i> Edit</a>
+                                <a href="<?php echo url('admin/dev_customer_management/manage_customers?action=add_edit_evaluate&edit=' . $customer['pk_customer_id']) ?>" class="btn btn-warning">Evaluate</a>
+                                <a href="<?php echo url('admin/dev_customer_management/manage_cases?action=add_edit_case&edit=' . $customer['pk_customer_id']) ?>" class="btn btn-info">Case Management</a>
+                                <a href="<?php echo url('admin/dev_customer_management/manage_customers?action=add_edit_satisfaction_scale&edit=' . $customer['pk_customer_id']) ?>" class="btn btn-dark-gray">Reintegration Assistance Satisfaction Scale</a>
+                            </div>                                
                         <?php endif ?>
                         <?php if (has_permission('delete_customer')): ?>
                             <div class="btn-group btn-group-sm">
