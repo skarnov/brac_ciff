@@ -36,9 +36,9 @@ if ($_POST) {
         $activityType = $edit ? 'update' : 'create';
         user_activity::add_activity($msg, 'success', $activityType);
         if ($edit) {
-            header('location: ' . url('admin/dev_event_management/manage_sharing_sessions?action=add_edit_sharing_session&edit=' . $edit));
+            header('location: ' . url('admin/dev_event_management/manage_sharing_session?action=add_edit_sharing_session&edit=' . $edit));
         } else {
-            header('location: ' . url('admin/dev_event_management/manage_sharing_sessions'));
+            header('location: ' . url('admin/dev_event_management/manage_sharing_session'));
         }
         exit();
     } else {
