@@ -78,6 +78,8 @@ class dev_customer_management {
             include('pages/deleteProfile.php');
         elseif ($_GET['action'] == 'deleteProfileCase')
             include('pages/deleteProfileCase.php');
+        elseif ($_GET['action'] == 'deleteMigration')
+            include('pages/deleteMigration.php');
         else
             include('pages/list_customers.php');
     }
@@ -154,6 +156,36 @@ class dev_customer_management {
 
         $customers = sql_data_collector($sql, $count_sql, $param);
         return $customers;
+    }
+
+    function get_migration_documents($param = null) {
+        $param['single'] = $param['single'] ? $param['single'] : false;
+
+        $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
+
+        $from = "FROM dev_migration_documents
+            ";
+
+        $where = " WHERE 1";
+        $conditions = " ";
+        $sql = $select . $from . $where;
+        $count_sql = "SELECT COUNT(dev_migration_documents.pk_document_id) AS TOTAL " . $from . $where;
+
+        $loopCondition = array(
+            'document_id' => 'dev_migration_documents.pk_document_id',
+            'customer_id' => 'dev_migration_documents.fk_customer_id',
+        );
+
+        $conditions .= sql_condition_maker($loopCondition, $param);
+
+        $orderBy = sql_order_by($param);
+        $limitBy = sql_limit_by($param);
+
+        $sql .= $conditions . $orderBy . $limitBy;
+        $count_sql .= $conditions;
+
+        $migrations = sql_data_collector($sql, $count_sql, $param);
+        return $migrations;
     }
 
     function add_edit_customer($params = array()) {
@@ -236,7 +268,6 @@ class dev_customer_management {
 //                        break;
 //                    }
 //                }
-
                 $migration_data = array();
                 $migration_data['fk_customer_id'] = $ret['customer_insert']['success'];
                 $ret['migration_insert'] = $devdb->insert_update('dev_migrations', $migration_data);
@@ -285,8 +316,6 @@ class dev_customer_management {
             $migration_medias['media_address'] = $params['form_data']['media_address'];
 
             $migration_data['migration_medias'] = json_encode($migration_medias);
-
-            //Migration Documents For DADA
 
             $migration_data['departure_date'] = date('Y-m-d', strtotime($params['form_data']['departure_date']));
             $migration_data['return_date'] = date('Y-m-d', strtotime($params['form_data']['return_date']));
@@ -338,8 +367,98 @@ class dev_customer_management {
 
             if ($is_update) {
                 $ret['migration_update'] = $devdb->insert_update('dev_migrations', $migration_data, " fk_customer_id = '" . $is_update . "'");
+
+                $devdb->query("DELETE FROM dev_migration_documents WHERE fk_customer_id = '$is_update'");
+
+                $migration_documents = array();
+                $document_name = $params['form_data']['document_name'];
+
+                $key = 0;
+                foreach ($document_name as $key => $value) {
+                    if ($_FILES['document_file']['name'][$key]) {
+                        $supported_ext = array('jpg', 'png');
+                        $max_filesize = 512000;
+                        $target_dir = _path('uploads', 'absolute') . "/";
+                        if (!file_exists($target_dir))
+                            mkdir($target_dir);
+                        $target_file = $target_dir . basename($_FILES['document_file']['name'][$key]);
+                        $fileinfo = pathinfo($target_file);
+                        $target_file = $target_dir . str_replace(' ', '_', $fileinfo['filename']) . '_' . time() . '.' . $fileinfo['extension'];
+                        $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
+                        if (in_array(strtolower($imageFileType), $supported_ext)) {
+                            if ($max_filesize && $_FILES['document_file']['size'][$key] <= $max_filesize) {
+                                if (!move_uploaded_file($_FILES['document_file']['tmp_name'][$key], $target_file)) {
+                                    $ret['error'][] = 'Customer Picture : File was not uploaded, please try again.';
+                                    $params['form_data']['document_file'] = '';
+                                } else {
+                                    $fileinfo = pathinfo($target_file);
+                                    $params['form_data']['document_file'] = $fileinfo['basename'];
+                                    @unlink(_path('uploads', 'absolute') . '/' . $params['form_data']['document_old_file'][$key]);
+                                }
+                            } else
+                                $ret['error'][] = 'Customer Picture : <strong>' . $_FILES['document_file']['size'][$key] . ' B</strong> is more than supported file size <strong>' . $max_filesize . ' B';
+                        } else
+                            $ret['error'][] = 'Customer Picture : <strong>.' . $imageFileType . '</strong> is not supported extension. Only supports .' . implode(', .', $supported_ext);
+                    } else {
+                        $params['form_data']['document_file'] = $params['form_data']['document_old_file'][$key];
+                    }
+
+                    $migration_documents['fk_customer_id'] = $is_update;
+                    $migration_documents['document_name'] = $value;
+                    $migration_documents['document_file'] = $params['form_data']['document_file'];
+                    $migration_documents['modify_time'] = date('H:i:s');
+                    $migration_documents['modify_date'] = date('Y-m-d');
+                    $migration_documents['modified_by'] = $_config['user']['pk_user_id'];
+                    $ret['migration_document'] = $devdb->insert_update('dev_migration_documents', $migration_documents);
+
+                    $key++;
+                }
             } else {
                 $ret['migration_new_insert'] = $devdb->insert_update('dev_migrations', $migration_data, " fk_customer_id = '" . $ret['customer_insert']['success'] . "'");
+
+                $migration_documents = array();
+                $migration_files = $params['form_data']['document_name'];
+
+                $key = 0;
+                foreach ($document_name as $key => $value) {
+                    if ($_FILES['document_file']['name'][$key]) {
+                        $supported_ext = array('jpg', 'png');
+                        $max_filesize = 512000;
+                        $target_dir = _path('uploads', 'absolute') . "/";
+                        if (!file_exists($target_dir))
+                            mkdir($target_dir);
+                        $target_file = $target_dir . basename($_FILES['document_file']['name'][$key]);
+                        $fileinfo = pathinfo($target_file);
+                        $target_file = $target_dir . str_replace(' ', '_', $fileinfo['filename']) . '_' . time() . '.' . $fileinfo['extension'];
+                        $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
+                        if (in_array(strtolower($imageFileType), $supported_ext)) {
+                            if ($max_filesize && $_FILES['document_file']['size'][$key] <= $max_filesize) {
+                                if (!move_uploaded_file($_FILES['document_file']['tmp_name'][$key], $target_file)) {
+                                    $ret['error'][] = 'Customer Picture : File was not uploaded, please try again.';
+                                    $params['form_data']['document_file'] = '';
+                                } else {
+                                    $fileinfo = pathinfo($target_file);
+                                    $params['form_data']['document_file'] = $fileinfo['basename'];
+                                    @unlink(_path('uploads', 'absolute') . '/' . $params['form_data']['document_old_file'][$key]);
+                                }
+                            } else
+                                $ret['error'][] = 'Customer Picture : <strong>' . $_FILES['document_file']['size'][$key] . ' B</strong> is more than supported file size <strong>' . $max_filesize . ' B';
+                        } else
+                            $ret['error'][] = 'Customer Picture : <strong>.' . $imageFileType . '</strong> is not supported extension. Only supports .' . implode(', .', $supported_ext);
+                    } else {
+                        $params['form_data']['document_file'] = $params['form_data']['document_old_file'][$key];
+                    }
+
+                    $migration_documents['fk_customer_id'] = $ret['customer_insert']['success'];
+                    $migration_documents['document_name'] = $value;
+                    $migration_documents['document_file'] = $params['form_data']['document_file'];
+                    $migration_documents['create_time'] = date('H:i:s');
+                    $migration_documents['create_date'] = date('Y-m-d');
+                    $migration_documents['created_by'] = $_config['user']['pk_user_id'];
+                    $ret['migration_document'] = $devdb->insert_update('dev_migration_documents', $migration_documents);
+
+                    $key++;
+                }
             }
 
             $economic_profile_data = array();
@@ -706,9 +825,9 @@ class dev_customer_management {
                 $reintegration_plan['service_requested'] = $data_types;
                 $reintegration_plan['other_service_requested'] = $params['form_data']['new_service_requested'];
             }
-            
+
             $reintegration_plan['reintegration_financial_service'] = $params['form_data']['reintegration_financial_service'];
-            
+
             if ($params['form_data']['new_social_protection']) {
                 $reintegration_plan['social_protection'] = $params['form_data']['new_social_protection'];
             }
@@ -907,9 +1026,9 @@ class dev_customer_management {
                 $economic_reintegration_data['economic_support'] = $data_types;
                 $economic_reintegration_data['other_economic_support'] = $params['form_data']['new_economic_support'];
             }
-            
+
             $economic_reintegration_data['economic_financial_service'] = $params['form_data']['economic_financial_service'];
-            
+
             $economic_reintegration_data['is_assistance_received'] = $params['form_data']['is_assistance_received'];
             $economic_reintegration_data['refferd_to'] = $params['form_data']['refferd_to'];
             $economic_reintegration_data['refferd_address'] = $params['form_data']['refferd_address'];
@@ -1020,9 +1139,9 @@ class dev_customer_management {
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
                 $dev_followups_data['confirm_services'] = $params['form_data']['new_confirm_services'] . ',' . $data_types;
             }
-            
+
             $dev_followups_data['financial_service'] = $params['form_data']['followup_financial_service'];
-            
+
             if ($params['form_data']['social_protection']) {
                 $dev_followups_data['social_protection'] = $params['form_data']['social_protection'];
             }

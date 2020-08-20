@@ -12,12 +12,15 @@ $pre_data = array();
 
 if ($edit) {
     $pre_data = $this->get_customers(array('customer_id' => $edit, 'single' => true));
+    
     $migration_medias = json_decode($pre_data['migration_medias']);
     $migration_reasons = explode(',', $pre_data['migration_reasons']);
 
     $leave_reasons = explode(',', $pre_data['destination_country_leave_reason']);
     $have_skills = explode(',', $pre_data['have_skills']);
     $disease_types = explode(',', $pre_data['disease_type']);
+
+    $migration_documents = $this->get_migration_documents(array('customer_id' => $pre_data['pk_customer_id']));
 
     if (!$pre_data) {
         add_notification('Invalid participant, no data found.', 'error');
@@ -402,12 +405,9 @@ ob_start();
                                                     <option value="Abhaynagar" <?php echo $pre_data && $pre_data['permanent_sub_district'] == 'Abhaynagar' ? 'selected' : '' ?>>Abhaynagar</option>
                                                 </select>
                                             </div>
-
-
                                             <!--                                            <div class="form-group">
                                                                                             <input class="form-control" type="text" name="permanent_sub_district" value="<?php echo $pre_data['permanent_sub_district'] ? $pre_data['permanent_sub_district'] : ''; ?>">
                                                                                         </div>-->
-
                                             <input class="form-control" type="hidden" name="permanent_district" value="jashore">
                                             <input class="form-control" type="hidden" name="permanent_division" value="khulna">
 
@@ -527,19 +527,19 @@ ob_start();
                                 <div class="col-sm-4">
                                     <label class="control-label input-label">Name(*)</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" name="departure_media" value="<?php echo $migration_medias->departure_media ? $migration_medias->departure_media : ''; ?>" />
+                                        <input type="text" class="form-control" name="departure_media" value="<?php echo $migration_medias->departure_media ? $migration_medias->departure_media : $pre_data['departure_media']; ?>" />
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <label class="control-label input-label">Relation</label>
                                     <div class="form-group">
-                                        <input class="form-control" type="text" name="media_relation" value="<?php echo $migration_medias->media_relation ? $migration_medias->media_relation : ''; ?>">
+                                        <input class="form-control" type="text" name="media_relation" value="<?php echo $migration_medias->media_relation ? $migration_medias->media_relation : $pre_data['media_relation']; ?>">
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <label class="control-label input-label">Address (*)</label>
                                     <div class="form-group">
-                                        <input class="form-control" type="text" name="media_address" value="<?php echo $migration_medias->media_address ? $migration_medias->media_address : ''; ?>">
+                                        <input class="form-control" type="text" name="media_address" value="<?php echo $migration_medias->media_address ? $migration_medias->media_address : $pre_data['media_address']; ?>">
                                     </div>
                                 </div>
                             </fieldset>  
@@ -555,49 +555,83 @@ ob_start();
                                     <div class="form-group">
                                         <a href="javascript:;" id="addMoreDocument" class="btn btn-success"><i class="btn-label fa fa-plus-circle"></i> Add More Document</a>
                                     </div>
+                                    <?php if($edit): foreach ($migration_documents['data'] as $document): ?>
+                                        <aside>
+                                            <div class="col-md-6">
+                                                <label class="control-label input-label">Document Name</label>
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="document_name[]" value="<?php echo $document['document_name'] ?>" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <label class="control-label input-label">Upload Document</label>
+                                                
+                                                <img src="<?php echo image_url($document['document_file']); ?>" class="img img-responsive"/>
+                                                
+                                                <div class="form-group">
+                                                    <input type="hidden" class="form-control" name="document_old_file[]" value="<?php echo $document['document_file'] ?>" />
+                                                    <input type="file" class="form-control" name="document_file[]" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1" style="margin-top:5%;">
+                                                <div class="form-group">
+                                                    <a href="javascript:" data-id="<?php echo $document['pk_document_id'] ?>" data-customer="<?php echo $document['fk_customer_id'] ?>" class="btn btn-danger remove_row">X</a>
+                                                </div>
+                                            </div>
+                                        </aside>
+                                    <?php endforeach; endif; ?>
                                     <div id="documentUploads" style="display: none">
-                                        <div class="col-md-6">
-                                            <label class="control-label input-label">Document Name</label>
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" name="document_name[]" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-5">
-                                            <label class="control-label input-label">Upload Document</label>
-                                            <div class="form-group">
-                                                <input type="file" class="form-control" name="customer_photo[]" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-1" style="margin-top:5%;">
-                                            <div class="form-group">
-                                                <a href="javascript:" class="btn btn-danger remove_row">X</a>
-                                            </div>
-                                        </div>
+
                                     </div>
                                 </div>
-                            </fieldset>  
+                            </fieldset>
                             <script>
                                 init.push(function () {
+                                    $(document).on('click', '.remove_row', function () {
+                                        var ths = $(this);
+                                        var thisCell = ths.closest('div');
+                                        var logId = ths.attr('data-id');
+                                        var customer = ths.attr('data-customer');
+                                        if (!logId)
+                                            return false;
+
+                                        show_button_overlay_working(thisCell);
+                                        bootbox.prompt({
+                                            title: 'Delete Record!',
+                                            inputType: 'checkbox',
+                                            inputOptions: [{
+                                                    text: 'Delete Migration',
+                                                    value: 'deleteMigration'
+                                                }],
+                                            callback: function (result) {
+                                                if (result == 'deleteMigration') {
+                                                    window.location.href = '?action=deleteMigration&id=' + logId + '&customer=' + customer;
+                                                }
+                                                hide_button_overlay_working(thisCell);
+                                            }
+                                        });
+                                    });
+
                                     var upload = '\
-                                        <aside>\
-                                            <div class="col-md-6">\
-                                                <label class="control-label input-label">Document Name</label>\
-                                                <div class="form-group">\
-                                                    <input type="text" class="form-control" name="document_name[]" />\
+                                            <aside>\
+                                                <div class="col-md-6">\
+                                                    <label class="control-label input-label">Document Name</label>\
+                                                    <div class="form-group">\
+                                                        <input type="text" class="form-control" name="document_name[]" />\
+                                                    </div>\
                                                 </div>\
-                                            </div>\
-                                            <div class="col-md-5">\
-                                                <label class="control-label input-label">Upload Document</label>\
-                                                <div class="form-group">\
-                                                    <input type="file" class="form-control" name="customer_photo[]" />\
+                                                <div class="col-md-5">\
+                                                    <label class="control-label input-label">Upload Document</label>\
+                                                    <div class="form-group">\
+                                                        <input type="file" class="form-control" name="document_file[]" />\
+                                                    </div>\
                                                 </div>\
-                                            </div>\
-                                            <div class="col-md-1" style="margin-top:5%;">\
-                                                <div class="form-group">\
-                                                    <a href="javascript:" class="btn btn-danger remove_row">X</a>\
+                                                <div class="col-md-1" style="margin-top:5%;">\
+                                                    <div class="form-group">\
+                                                        <a href="javascript:" class="btn btn-danger remove_row">X</a>\
+                                                    </div>\
                                                 </div>\
-                                            </div>\
-                                        </aside>';
+                                            </aside>';
 
                                     $("#documentUploads").show();
 
