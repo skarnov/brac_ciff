@@ -3,7 +3,7 @@ $start = $_GET['start'] ? $_GET['start'] : 0;
 $per_page_items = 10;
 
 $args = array(
-    'type' => 'story',
+    'type' => 'study',
     'limit' => array(
         'start' => $start * $per_page_items,
         'count' => $per_page_items
@@ -14,23 +14,23 @@ $args = array(
     ),
 );
 
-$stories = $this->get_knowledge($args);
-$pagination = pagination($stories['total'], $per_page_items, $start);
+$study_reports = $this->get_knowledge($args);
+$pagination = pagination($study_reports['total'], $per_page_items, $start);
 
 doAction('render_start');
 ob_start();
 ?>
 <div class="page-header">
-    <h1>All Stories</h1>
+    <h1>All Study Report</h1>
     <div class="oh">
         <div class="btn-group btn-group-sm">
             <?php
             echo linkButtonGenerator(array(
-                'href' => $myUrl . '?action=add_edit_story',
+                'href' => $myUrl . '?action=add_edit_study_report',
                 'action' => 'add',
                 'icon' => 'icon_add',
-                'text' => 'New Story',
-                'title' => 'New Story',
+                'text' => 'New Study Report',
+                'title' => 'New Study Report',
             ));
             ?>
         </div>
@@ -38,7 +38,7 @@ ob_start();
 </div>
 <div class="table-primary table-responsive">
     <div class="table-header">
-        <?php echo searchResultText($stories['total'], $start, $per_page_items, count($stories['data']), 'stories') ?>
+        <?php echo searchResultText($study_reports['total'], $start, $per_page_items, count($study_reports['data']), 'study reports') ?>
     </div>
     <table class="table table-bordered table-condensed">
         <thead>
@@ -51,27 +51,27 @@ ob_start();
         </thead>
         <tbody>
             <?php
-            foreach ($stories['data'] as $i => $story) {
+            foreach ($study_reports['data'] as $i => $report) {
                 ?>
                 <tr>
-                    <td><?php echo date('d-m-Y', strtotime($story['create_date'])) ?></td>
-                    <td><?php echo $story['name']; ?></td>
-                    <td><a href="<?php echo image_url($story['document_file']); ?>" target="_blank">Click Here</a></td>
+                    <td><?php echo date('d-m-Y', strtotime($report['create_date'])) ?></td>
+                    <td><?php echo $report['name']; ?></td>
+                    <td><a href="<?php echo image_url($report['document_file']); ?>" target="_blank">Click Here</a></td>
                     <td class="tar action_column">
-                        <?php if (has_permission('edit_story')): ?>
+                        <?php if (has_permission('edit_study_report')): ?>
                             <div class="btn-group btn-group-sm">
                                 <?php
                                 echo linkButtonGenerator(array(
-                                    'href' => build_url(array('action' => 'add_edit_story', 'edit' => $story['pk_knowledge_id'])),
+                                    'href' => build_url(array('action' => 'add_edit_study_report', 'edit' => $report['pk_knowledge_id'])),
                                     'action' => 'edit',
                                     'icon' => 'icon_edit',
                                     'text' => 'Edit',
-                                    'title' => 'Edit Story',
+                                    'title' => 'Edit Study Report',
                                 ));
                                 ?>
                             </div>
                         <?php endif; ?>
-                        <?php if (has_permission('delete_story')): ?>
+                        <?php if (has_permission('delete_study_report')): ?>
                             <div class="btn-group btn-group-sm">
                                 <?php
                                 echo buttonButtonGenerator(array(
@@ -79,7 +79,7 @@ ob_start();
                                     'icon' => 'icon_delete',
                                     'text' => 'Delete',
                                     'title' => 'Delete Record',
-                                    'attributes' => array('data-id' => $story['pk_knowledge_id']),
+                                    'attributes' => array('data-id' => $report['pk_knowledge_id']),
                                     'classes' => 'delete_single_record'));
                                 ?>
                             </div>
@@ -116,7 +116,7 @@ ob_start();
                     }],
                 callback: function (result) {
                     if (result == 'delete') {
-                        window.location.href = '?action=deleteStory&id=' + logId;
+                        window.location.href = '?action=deleteStudyReport&id=' + logId;
                     }
                     hide_button_overlay_working(thisCell);
                 }

@@ -1,15 +1,14 @@
 <?php
-class dev_branch_management
-{
+
+class dev_branch_management {
+
     var $thsClass = 'dev_branch_management';
 
-    function __construct()
-    {
+    function __construct() {
         jack_register($this);
     }
 
-    function init()
-    {
+    function init() {
         $permissions = array(
             'group_name' => 'Branch Management',
             'permissions' => array(
@@ -27,8 +26,7 @@ class dev_branch_management
         }
     }
 
-    function adm_menus()
-    {
+    function adm_menus() {
         $params = array(
             'label' => 'Branches',
             'description' => 'Manage All Branches',
@@ -38,12 +36,13 @@ class dev_branch_management
             'iconClass' => 'fa-binoculars',
             'jack' => $this->thsClass,
         );
-        if (has_permission('manage_branches')) admenu_register($params);
+        if (has_permission('manage_branches'))
+            admenu_register($params);
     }
 
-    function manage_branches()
-    {
-        if (!has_permission('manage_branches')) return null;
+    function manage_branches() {
+        if (!has_permission('manage_branches'))
+            return null;
         global $devdb, $_config;
         $myUrl = jack_url($this->thsClass, 'manage_branches');
 
@@ -55,12 +54,12 @@ class dev_branch_management
             include('pages/list_branches.php');
     }
 
-    function get_all_branches_hierarchical($parent = null)
-    {
+    function get_all_branches_hierarchical($parent = null) {
         $items = array();
 
         $sql = "SELECT * FROM dev_branches WHERE 1 ";
-        if($parent) $sql .= "";
+        if ($parent)
+            $sql .= "";
 
         $param['single'] = $param['single'] ? $param['single'] : false;
 
@@ -95,8 +94,7 @@ class dev_branch_management
         return $customers;
     }
 
-    function get_branches($param = null)
-    {
+    function get_branches($param = null) {
         $param['single'] = $param['single'] ? $param['single'] : false;
 
         $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : 'branches.*,  branch_type.item_title as branch_type_name, branch_type._branch_type_slug , parent_branches.branch_name as parent_branch_name, projects.project_name');
@@ -136,8 +134,7 @@ class dev_branch_management
         return $customers;
     }
 
-    function add_edit_branch($params = array())
-    {
+    function add_edit_branch($params = array()) {
         global $devdb, $_config;
 
         $ret = array('success' => array(), 'error' => array());
@@ -161,8 +158,10 @@ class dev_branch_management
             }
         }
 
-        if (!strlen($params['branch_name'])) $ret['error'][] = 'Please provide the name for the branch';
-        if (!strlen($params['fk_branch_type'])) $ret['error'][] = 'Please select branch type';
+        if (!strlen($params['branch_name']))
+            $ret['error'][] = 'Please provide the name for the branch';
+        if (!strlen($params['fk_branch_type']))
+            $ret['error'][] = 'Please select branch type';
 
         if (!$ret['error']) {
             $insert_data = array(
@@ -202,12 +201,12 @@ class dev_branch_management
         return $ret;
     }
 
-    function get_branch_form($edit = null)
-    {
+    function get_branch_form($edit = null) {
         $data = array();
         if ($edit) {
             $data = $this->get_branches(array('id' => $edit, 'single' => true));
-            if (!$data) return array('error' => ['Invalid branch, no data found']);
+            if (!$data)
+                return array('error' => ['Invalid branch, no data found']);
         }
         $branch_types = $this->get_menuItems(true);
 
@@ -217,220 +216,220 @@ class dev_branch_management
 
         ob_start();
         ?>
-    <form onsubmit="return false;">
-        <div class="form-group">
-            <label>Branch Type</label>
-            <select required class="form-control" id="fk_branch_type" name="fk_branch_type">
-                <option value="">Select One</option>
-                <?php
-                foreach ($branch_types as $i => $v) {
-                    $selected = $data && $data['fk_branch_type'] == $v['pk_item_id'] ? 'selected' : '';
-                    echo '<option ' . $selected . ' value="' . $v['pk_item_id'] . '">' . $v['item_title'] . '</option>';
-                }
-                ?>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Parent Branch</label>
-            <select class="form-control" data-selected="<?php echo $data['fk_branch_id']?>" name="fk_branch_id" id="fk_branch_id"></select>
-        </div>
-        <div class="form-group">
-            <label>Project</label>
-            <select required class="form-control" id="fk_project_id" name="fk_project_id">
-                <option value="">Select One</option>
-                <?php
-                foreach ($projects as $i => $v) {
-                    $selected = $data && $data['fk_project_id'] == $v['pk_project_id'] ? 'selected' : '';
-                    echo '<option ' . $selected . ' value="' . $v['pk_project_id'] . '">' . $v['project_short_name'] . '</option>';
-                }
-                ?>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Branch Name</label>
-            <input required type="text" name="branch_name" class="form-control char_limit" data-max-char="100" value="<?php echo $data['branch_name'] ?>" />
-        </div>
-        <div class="form-group col-sm-4">
-            <label>Division</label>
-            <div class="select2-primary">
-                <select class="form-control" id="new_division" name="branch_division" data-selected="<?php echo $data['branch_division'] ?>"></select>
-            </div>
-        </div>
-        <div class="form-group col-sm-4">
-            <label>District</label>
-            <div class="select2-success">
-                <select class="form-control" id="new_district" name="branch_district" data-selected="<?php echo $data['branch_district']; ?>"></select>
-            </div>
-        </div>
-        <div class="form-group col-sm-4">
-            <label>Sub-District</label>
-            <div class="select2-success">
-                <select class="form-control" id="new_sub_district" name="branch_sub_district" data-selected="<?php echo $data['branch_sub_district']; ?>"></select>
-            </div>
-        </div>
-        <div class="form-group col-sm-8">
-            <label>Branch Address</label>
-            <textarea name="branch_address" class="form-control" style="resize: none;"><?php echo $data['branch_address'] ?></textarea>
-        </div>
-    </form>
-    <script type="text/javascript">
-        new bd_new_location_selector({
-            'division': $('#new_division'),
-            'district': $('#new_district'),
-            'sub_district': $('#new_sub_district'),
-        });
-        $(document).off('change', '#fk_branch_type').on('change', '#fk_branch_type', function(){
-            var ths = $(this);
-            var target = $('#fk_branch_id');
-            var _selected = target.attr('data-selected') ? target.attr('data-selected') : null;
-            target.html('');
-            if(!ths.val().length) return;
-            target.attr('readonly', true);
-            basicAjaxCall({
-                data: {
-                    ajax_type: 'get_parent_branches',
-                    branch_type: ths.val()
-                },
-                success: function(ret) {
-                    if(ret.success){
-                        ret = ret.success
-                        var itemCount = Object.keys(ret).length;
-                        if(!itemCount) return false;
-                        else if(Object.keys(ret).length == 1){
-                            for (var i in ret) {
-                                target.append('<option value="' + ret[i]['pk_branch_id'] + '" selected>' + ret[i]['branch_name'] + '</option>');
-                            }
-                            target.attr('readonly', true);
-                        }
-                        else{
-                            target.html('<option value="">Select One</option>');
-                            for (var i in ret) {
-                                var selected = _selected == ret[i]['pk_branch_id'] ? 'selected' : '';
-                                target.append('<option value="' + ret[i]['pk_branch_id'] + '" '+selected+'>' + ret[i]['branch_name'] + '</option>');
-                            }
-                            target.attr('readonly', false);
-                        }
+        <form onsubmit="return false;">
+            <div class="form-group">
+                <label>Branch Type</label>
+                <select required class="form-control" id="fk_branch_type" name="fk_branch_type">
+                    <option value="">Select One</option>
+                    <?php
+                    foreach ($branch_types as $i => $v) {
+                        $selected = $data && $data['fk_branch_type'] == $v['pk_item_id'] ? 'selected' : '';
+                        echo '<option ' . $selected . ' value="' . $v['pk_item_id'] . '">' . $v['item_title'] . '</option>';
                     }
-                    
-                }
+                    ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Parent Branch</label>
+                <select class="form-control" data-selected="<?php echo $data['fk_branch_id'] ?>" name="fk_branch_id" id="fk_branch_id"></select>
+            </div>
+            <div class="form-group">
+                <label>Project</label>
+                <select required class="form-control" id="fk_project_id" name="fk_project_id">
+                    <option value="">Select One</option>
+                    <?php
+                    foreach ($projects as $i => $v) {
+                        $selected = $data && $data['fk_project_id'] == $v['pk_project_id'] ? 'selected' : '';
+                        echo '<option ' . $selected . ' value="' . $v['pk_project_id'] . '">' . $v['project_short_name'] . '</option>';
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Branch Name</label>
+                <input required type="text" name="branch_name" class="form-control char_limit" data-max-char="100" value="<?php echo $data['branch_name'] ?>" />
+            </div>
+            <div class="form-group col-sm-4">
+                <label>Division</label>
+                <div class="select2-primary">
+                    <select class="form-control" id="new_division" name="branch_division" data-selected="<?php echo $data['branch_division'] ?>"></select>
+                </div>
+            </div>
+            <div class="form-group col-sm-4">
+                <label>District</label>
+                <div class="select2-success">
+                    <select class="form-control" id="new_district" name="branch_district" data-selected="<?php echo $data['branch_district']; ?>"></select>
+                </div>
+            </div>
+            <div class="form-group col-sm-4">
+                <label>Sub-District</label>
+                <div class="select2-success">
+                    <select class="form-control" id="new_sub_district" name="branch_sub_district" data-selected="<?php echo $data['branch_sub_district']; ?>"></select>
+                </div>
+            </div>
+            <div class="form-group col-sm-8">
+                <label>Branch Address</label>
+                <textarea name="branch_address" class="form-control" style="resize: none;"><?php echo $data['branch_address'] ?></textarea>
+            </div>
+        </form>
+        <script type="text/javascript">
+            new bd_new_location_selector({
+                'division': $('#new_division'),
+                'district': $('#new_district'),
+                'sub_district': $('#new_sub_district'),
             });
-        });
-        $('#fk_branch_type').change();
-    </script>
-    <?php
-    $out = ob_get_clean();
+            $(document).off('change', '#fk_branch_type').on('change', '#fk_branch_type', function () {
+                var ths = $(this);
+                var target = $('#fk_branch_id');
+                var _selected = target.attr('data-selected') ? target.attr('data-selected') : null;
+                target.html('');
+                if (!ths.val().length)
+                    return;
+                target.attr('readonly', true);
+                basicAjaxCall({
+                    data: {
+                        ajax_type: 'get_parent_branches',
+                        branch_type: ths.val()
+                    },
+                    success: function (ret) {
+                        if (ret.success) {
+                            ret = ret.success
+                            var itemCount = Object.keys(ret).length;
+                            if (!itemCount)
+                                return false;
+                            else if (Object.keys(ret).length == 1) {
+                                for (var i in ret) {
+                                    target.append('<option value="' + ret[i]['pk_branch_id'] + '" selected>' + ret[i]['branch_name'] + '</option>');
+                                }
+                                target.attr('readonly', true);
+                            } else {
+                                target.html('<option value="">Select One</option>');
+                                for (var i in ret) {
+                                    var selected = _selected == ret[i]['pk_branch_id'] ? 'selected' : '';
+                                    target.append('<option value="' + ret[i]['pk_branch_id'] + '" ' + selected + '>' + ret[i]['branch_name'] + '</option>');
+                                }
+                                target.attr('readonly', false);
+                            }
+                        }
 
-    return array('success' => $out);
-}
+                    }
+                });
+            });
+            $('#fk_branch_type').change();
+        </script>
+        <?php
+        $out = ob_get_clean();
+        return array('success' => $out);
+    }
 
-function put_branch_form($data)
-{
-    return $this->add_edit_branch($data);
-}
+    function put_branch_form($data) {
+        return $this->add_edit_branch($data);
+    }
 
-function menu_item_edit_form($item)
-{
-    global $_config;
-    ob_start();
-    ?>
-    <div class="panel menu_edit_form" style="display: none;">
-        <div class="panel-body">
-            <form>
-                <input type="hidden" name="menu_item_id" value="<?php echo $item['pk_item_id'] ?>" />
-                <div class="form-group">
-                    <label>Type Name</label>
-                    <input type="text" name="item_title" data-max-char="100" class="form-control char_limit" value="<?php echo $item['item_title'] ?>" />
-                </div>
-                <div class="form-group">
-                    <label>Type Short Name</label>
-                    <input type="text" name="item_short_title" data-max-char="20" class="form-control char_limit" value="<?php echo $item['item_short_title'] ?>" />
-                </div>
-                <?php
-                echo buttonButtonGenerator(array(
-                    'action' => 'update',
-                    'icon' => 'icon_update',
-                    'text' => 'Update',
-                    'title' => 'Update Menu Item',
-                    'classes' => 'edit_menu_item',
-                    'size' => '',
-                ));
-                ?>
-            </form>
+    function menu_item_edit_form($item) {
+        global $_config;
+        ob_start();
+        ?>
+        <div class="panel menu_edit_form" style="display: none;">
+            <div class="panel-body">
+                <form>
+                    <input type="hidden" name="menu_item_id" value="<?php echo $item['pk_item_id'] ?>" />
+                    <div class="form-group">
+                        <label>Type Name</label>
+                        <input type="text" name="item_title" data-max-char="100" class="form-control char_limit" value="<?php echo $item['item_title'] ?>" />
+                    </div>
+                    <div class="form-group">
+                        <label>Type Short Name</label>
+                        <input type="text" name="item_short_title" data-max-char="20" class="form-control char_limit" value="<?php echo $item['item_short_title'] ?>" />
+                    </div>
+        <?php
+        echo buttonButtonGenerator(array(
+            'action' => 'update',
+            'icon' => 'icon_update',
+            'text' => 'Update',
+            'title' => 'Update Menu Item',
+            'classes' => 'edit_menu_item',
+            'size' => '',
+        ));
+        ?>
+                </form>
+            </div>
         </div>
-    </div>
-    <?php
-    return ob_get_clean();
-}
-function deleteMenuItems($args = array())
-{
-    global $devdb;
+        <?php
+        return ob_get_clean();
+    }
 
-    $menu_items = $this->get_menuItems(true);
-    $delete = $this->recur_deleteMenuItems($args['menu_item'], $menu_items);
+    function deleteMenuItems($args = array()) {
+        global $devdb;
 
-    $sql = "DELETE FROM dev_branch_types WHERE pk_item_id IN (" . implode(',', $delete) . ")";
-    $deleted = $devdb->query($sql);
+        $menu_items = $this->get_menuItems(true);
+        $delete = $this->recur_deleteMenuItems($args['menu_item'], $menu_items);
 
-    return $deleted;
-}
-function recur_deleteMenuItems($key, &$data)
-{
-    $child = array();
-    $child[] = $key;
-    if ($data) {
-        foreach ($data as $i => $v) {
-            if ($v['fk_item_id'] == $key) {
-                $child[] = $v['pk_item_id'];
-                $temp = $this->recur_deleteMenuItems($v['pk_item_id'], $data);
-                if ($temp) {
-                    foreach ($temp as $m => $n) {
-                        $child[] = $n;
+        $sql = "DELETE FROM dev_branch_types WHERE pk_item_id IN (" . implode(',', $delete) . ")";
+        $deleted = $devdb->query($sql);
+
+        return $deleted;
+    }
+
+    function recur_deleteMenuItems($key, &$data) {
+        $child = array();
+        $child[] = $key;
+        if ($data) {
+            foreach ($data as $i => $v) {
+                if ($v['fk_item_id'] == $key) {
+                    $child[] = $v['pk_item_id'];
+                    $temp = $this->recur_deleteMenuItems($v['pk_item_id'], $data);
+                    if ($temp) {
+                        foreach ($temp as $m => $n) {
+                            $child[] = $n;
+                        }
                     }
                 }
             }
         }
+        return $child;
     }
-    return $child;
-}
-function get_each_items($parent, &$childs)
-{
-    $menu = '<ul>';
-    $childs_found = false;
-    foreach ($childs as $i => $v) {
-        if ($v['fk_item_id'] != $parent) continue;
-        $item_title = '';
-        $item_title = $v['item_title'];
 
-        $childs_found = true;
-        $menu .= '<li id="ID_' . $v['pk_item_id'] . '"><div class="item"><span class="sortHandle"><i class="fa fa-ellipsis-v"></i>&nbsp;<i class="fa fa-ellipsis-v"></i></span>&nbsp;&nbsp;<span class="title">' . $item_title . '</span><span class="pull-right"><a href="javascript:" class="btn btn-xs btn-primary mr5 show_item_detail"><i class="fa fa-edit"></i></a><a href="javascript:" class="remove_menu_item btn btn-xs btn-danger"><i class="icon fa fa-times-circle"></i></a></span></div>' . $this->menu_item_edit_form($v);
-        $menu .= $this->get_each_items($v['pk_item_id'], $childs) . '</li>';
+    function get_each_items($parent, &$childs) {
+        $menu = '<ul>';
+        $childs_found = false;
+        foreach ($childs as $i => $v) {
+            if ($v['fk_item_id'] != $parent)
+                continue;
+            $item_title = '';
+            $item_title = $v['item_title'];
+
+            $childs_found = true;
+            $menu .= '<li id="ID_' . $v['pk_item_id'] . '"><div class="item"><span class="sortHandle"><i class="fa fa-ellipsis-v"></i>&nbsp;<i class="fa fa-ellipsis-v"></i></span>&nbsp;&nbsp;<span class="title">' . $item_title . '</span><span class="pull-right"><a href="javascript:" class="btn btn-xs btn-primary mr5 show_item_detail"><i class="fa fa-edit"></i></a><a href="javascript:" class="remove_menu_item btn btn-xs btn-danger"><i class="icon fa fa-times-circle"></i></a></span></div>' . $this->menu_item_edit_form($v);
+            $menu .= $this->get_each_items($v['pk_item_id'], $childs) . '</li>';
+        }
+        $menu .= '</ul>';
+        if (!$childs_found)
+            $menu = '';
+        return $menu;
     }
-    $menu .= '</ul>';
-    if (!$childs_found) $menu = '';
-    return $menu;
-}
 
-function get_menuItems($data_only = false)
-{
-    global $devdb, $_config;
-    $result = $devdb->get_results("SELECT * FROM dev_branch_types WHERE 1 ORDER BY item_sort_order ASC");
+    function get_menuItems($data_only = false) {
+        global $devdb, $_config;
+        $result = $devdb->get_results("SELECT * FROM dev_branch_types WHERE 1 ORDER BY item_sort_order ASC");
 
-    if ($data_only) return $result;
+        if ($data_only)
+            return $result;
 
-    $nav_menu = '<ul class="sortable">';
-    foreach ($result as $g => $item) {
-        $item_title = '';
-        $item_title = $item['item_title'];
+        $nav_menu = '<ul class="sortable">';
+        foreach ($result as $g => $item) {
+            $item_title = '';
+            $item_title = $item['item_title'];
 
-        if ($item['fk_item_id']) continue;
-        $nav_menu .= '<li id="ID_' . $item['pk_item_id'] . '"><div class="item"><span class="sortHandle"><i class="fa fa-ellipsis-v"></i>&nbsp;<i class="fa fa-ellipsis-v"></i></span>&nbsp;&nbsp;<span class="title">' . $item_title . '</span><span class="pull-right"><a href="javascript:" class="btn btn-xs btn-primary mr5 show_item_detail"><i class="fa fa-edit"></i></a><a href="javascript:" class="remove_menu_item btn btn-xs btn-danger"><i class="icon fa fa-times-circle"></i></a></span></div>' . $this->menu_item_edit_form($item);
-        $nav_menu .= $this->get_each_items($item['pk_item_id'], $result) . '</li>';
+            if ($item['fk_item_id'])
+                continue;
+            $nav_menu .= '<li id="ID_' . $item['pk_item_id'] . '"><div class="item"><span class="sortHandle"><i class="fa fa-ellipsis-v"></i>&nbsp;<i class="fa fa-ellipsis-v"></i></span>&nbsp;&nbsp;<span class="title">' . $item_title . '</span><span class="pull-right"><a href="javascript:" class="btn btn-xs btn-primary mr5 show_item_detail"><i class="fa fa-edit"></i></a><a href="javascript:" class="remove_menu_item btn btn-xs btn-danger"><i class="icon fa fa-times-circle"></i></a></span></div>' . $this->menu_item_edit_form($item);
+            $nav_menu .= $this->get_each_items($item['pk_item_id'], $result) . '</li>';
+        }
+        $nav_menu .= '</ul>';
+
+        return $nav_menu;
     }
-    $nav_menu .= '</ul>';
-
-    return $nav_menu;
-}
 
 }
-
 new dev_branch_management();

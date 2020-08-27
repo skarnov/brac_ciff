@@ -2,7 +2,7 @@
 global $devdb;
 $edit = $_GET['edit'] ? $_GET['edit'] : null;
 
-if (!checkPermission($edit, 'add_story', 'edit_story')) {
+if (!checkPermission($edit, 'add_research_report', 'edit_research_report')) {
     add_notification('You don\'t have enough permission.', 'error');
     header('Location:' . build_url(NULL, array('edit', 'action')));
     exit();
@@ -14,7 +14,7 @@ if ($edit) {
     $pre_data = $this->get_knowledge(array('id' => $edit, 'single' => true));
 
     if (!$pre_data) {
-        add_notification('Invalid story, no data found.', 'error');
+        add_notification('Invalid research report, no data found.', 'error');
         header('Location:' . build_url(NULL, array('action', 'edit')));
         exit();
     }
@@ -28,17 +28,17 @@ if ($_POST) {
     $data['form_data'] = $_POST;
     $data['edit'] = $edit;
 
-    $ret = $this->add_edit_story($data);
+    $ret = $this->add_edit_research_report($data);
 
     if ($ret) {
-        $msg = "Story has been " . ($edit ? 'updated.' : 'saved.');
+        $msg = "Research Report has been " . ($edit ? 'updated.' : 'saved.');
         add_notification($msg);
         $activityType = $edit ? 'update' : 'create';
         user_activity::add_activity($msg, 'success', $activityType);
         if ($edit) {
-            header('location: ' . url('admin/dev_knowledge_management/manage_stories?action=add_edit_story&edit=' . $edit));
+            header('location: ' . url('admin/dev_knowledge_management/manage_research_reports?action=add_edit_research_report&edit=' . $edit));
         } else {
-            header('location: ' . url('admin/dev_knowledge_management/manage_stories'));
+            header('location: ' . url('admin/dev_knowledge_management/manage_research_reports'));
         }
         exit();
     } else {
@@ -47,7 +47,7 @@ if ($_POST) {
     }
 }
 
-$all_story_tags = $this->get_lookups('success_story');
+$all_research_report_tags = $this->get_lookups('success_research_report');
 
 doAction('render_start');
 
@@ -59,15 +59,15 @@ ob_start();
     }
 </style>
 <div class="page-header">
-    <h1><?php echo $edit ? 'Update ' : 'New ' ?> Story </h1>
+    <h1><?php echo $edit ? 'Update ' : 'New ' ?> Research Report </h1>
     <div class="oh">
         <div class="btn-group btn-group-sm">
             <?php
             echo linkButtonGenerator(array(
                 'href' => $myUrl,
                 'action' => 'list',
-                'text' => 'All Stories',
-                'title' => 'Manage Stories',
+                'text' => 'All Research Reports',
+                'title' => 'Manage Research Reports',
                 'icon' => 'icon_list',
                 'size' => 'sm'
             ));
@@ -85,7 +85,7 @@ ob_start();
                         <div class="options_holder radio">
                             <?php
                             $tags = explode(',', $pre_data['tags']);
-                            foreach ($all_story_tags['data'] as $tag) {
+                            foreach ($all_research_report_tags['data'] as $tag) {
                                 ?>
                                 <label><input class="px" type="checkbox" name="tags[]" value="<?php echo $tag['lookup_value'] ?>" <?php
                                     if (in_array($tag['lookup_value'], $tags)) {
@@ -127,7 +127,7 @@ ob_start();
             </div>
         </div>
         <div class="panel-footer tar">
-            <a href="<?php echo url('admin/dev_knowledge_management/manage_stories') ?>" class="btn btn-flat btn-labeled btn-danger"><span class="btn-label icon fa fa-times"></span>Cancel</a>
+            <a href="<?php echo url('admin/dev_knowledge_management/manage_research_reports') ?>" class="btn btn-flat btn-labeled btn-danger"><span class="btn-label icon fa fa-times"></span>Cancel</a>
             <?php
             echo submitButtonGenerator(array(
                 'action' => $edit ? 'update' : 'update',

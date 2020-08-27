@@ -3,7 +3,7 @@ $start = $_GET['start'] ? $_GET['start'] : 0;
 $per_page_items = 10;
 
 $args = array(
-    'type' => 'story',
+    'type' => 'organogram',
     'limit' => array(
         'start' => $start * $per_page_items,
         'count' => $per_page_items
@@ -21,16 +21,16 @@ doAction('render_start');
 ob_start();
 ?>
 <div class="page-header">
-    <h1>All Stories</h1>
+    <h1>All Organograms</h1>
     <div class="oh">
         <div class="btn-group btn-group-sm">
             <?php
             echo linkButtonGenerator(array(
-                'href' => $myUrl . '?action=add_edit_story',
+                'href' => $myUrl . '?action=add_edit_organogram',
                 'action' => 'add',
                 'icon' => 'icon_add',
-                'text' => 'New Story',
-                'title' => 'New Story',
+                'text' => 'New Organogram',
+                'title' => 'New Organogram',
             ));
             ?>
         </div>
@@ -51,27 +51,27 @@ ob_start();
         </thead>
         <tbody>
             <?php
-            foreach ($stories['data'] as $i => $story) {
+            foreach ($stories['data'] as $i => $organogram) {
                 ?>
                 <tr>
-                    <td><?php echo date('d-m-Y', strtotime($story['create_date'])) ?></td>
-                    <td><?php echo $story['name']; ?></td>
-                    <td><a href="<?php echo image_url($story['document_file']); ?>" target="_blank">Click Here</a></td>
+                    <td><?php echo date('d-m-Y', strtotime($organogram['create_date'])) ?></td>
+                    <td><?php echo $organogram['name']; ?></td>
+                    <td><a href="<?php echo image_url($organogram['document_file']); ?>" target="_blank">Click Here</a></td>
                     <td class="tar action_column">
-                        <?php if (has_permission('edit_story')): ?>
+                        <?php if (has_permission('edit_organogram')): ?>
                             <div class="btn-group btn-group-sm">
                                 <?php
                                 echo linkButtonGenerator(array(
-                                    'href' => build_url(array('action' => 'add_edit_story', 'edit' => $story['pk_knowledge_id'])),
+                                    'href' => build_url(array('action' => 'add_edit_organogram', 'edit' => $organogram['pk_knowledge_id'])),
                                     'action' => 'edit',
                                     'icon' => 'icon_edit',
                                     'text' => 'Edit',
-                                    'title' => 'Edit Story',
+                                    'title' => 'Edit Organogram',
                                 ));
                                 ?>
                             </div>
                         <?php endif; ?>
-                        <?php if (has_permission('delete_story')): ?>
+                        <?php if (has_permission('delete_organogram')): ?>
                             <div class="btn-group btn-group-sm">
                                 <?php
                                 echo buttonButtonGenerator(array(
@@ -79,7 +79,7 @@ ob_start();
                                     'icon' => 'icon_delete',
                                     'text' => 'Delete',
                                     'title' => 'Delete Record',
-                                    'attributes' => array('data-id' => $story['pk_knowledge_id']),
+                                    'attributes' => array('data-id' => $organogram['pk_knowledge_id']),
                                     'classes' => 'delete_single_record'));
                                 ?>
                             </div>
@@ -116,7 +116,7 @@ ob_start();
                     }],
                 callback: function (result) {
                     if (result == 'delete') {
-                        window.location.href = '?action=deleteStory&id=' + logId;
+                        window.location.href = '?action=deleteOrganogram&id=' + logId;
                     }
                     hide_button_overlay_working(thisCell);
                 }
