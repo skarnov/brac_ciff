@@ -129,7 +129,7 @@ class dev_branch_management {
 
         $sql .= $conditions . $orderBy . $limitBy;
         $count_sql .= $conditions;
-
+        
         $customers = sql_data_collector($sql, $count_sql, $param);
         return $customers;
     }
