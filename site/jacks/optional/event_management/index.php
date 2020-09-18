@@ -73,8 +73,8 @@ class dev_event_management {
             'jack' => $this->thsClass,
         );
         $params = array(
-            'label' => 'Targets',
-            'description' => 'Manage All Targets',
+            'label' => 'Activity',
+            'description' => 'Manage All Activities',
             'menu_group' => 'Events',
             'position' => 'default',
             'action' => 'manage_targets',
@@ -493,15 +493,9 @@ class dev_event_management {
 
         $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
 
-        if ($param['listing']) {
-            $from = "FROM dev_events 
-
+        $from = "FROM dev_events 
+                LEFT JOIN dev_users ON (dev_users.pk_user_id = dev_events.created_by)
             ";
-        } else {
-            $from = "FROM dev_events 
-
-            ";
-        }
 
         $where = " WHERE 1";
         $conditions = " ";
@@ -550,8 +544,10 @@ class dev_event_management {
             $events_data = array();
             $events_data['event_type'] = $params['form_data']['event_type'];
             $events_data['event_branch'] = $_config['user']['user_branch'];
-            $events_data['event_date'] = date('Y-m-d', strtotime($params['form_data']['event_date']));
+            $events_data['event_start_date'] = date('Y-m-d', strtotime($params['form_data']['event_start_date']));
             $events_data['event_start_time'] = $params['form_data']['event_start_time'];
+            $events_data['event_end_date'] = date('Y-m-d', strtotime($params['form_data']['event_end_date']));
+            $events_data['event_end_time'] = $params['form_data']['event_end_time'];
             $events_data['division'] = $params['form_data']['division'];
             $events_data['district'] = $params['form_data']['district'];
             $events_data['upazila'] = $params['form_data']['upazila'];
@@ -569,6 +565,7 @@ class dev_event_management {
             $events_data['logistical_arrangements'] = $params['form_data']['logistical_arrangements'];
             $events_data['relevancy_delivery'] = $params['form_data']['relevancy_delivery'];
             $events_data['participants_feedback'] = $params['form_data']['participants_feedback'];
+            $events_data['observation_score'] = $events_data['preparatory_work'] + events_data['time_management'] + $events_data['participants_attention'] + $events_data['logistical_arrangements'] + $events_data['relevancy_delivery'] + $events_data['participants_feedback'];
             $events_data['note'] = $params['form_data']['note'];
             if ($is_update) {
                 $events_data['update_date'] = date('Y-m-d');

@@ -3,7 +3,6 @@ $start = $_GET['start'] ? $_GET['start'] : 0;
 $per_page_items = 10;
 
 $args = array(
-    'listing' => TRUE,
     'limit' => array(
         'start' => $start * $per_page_items,
         'count' => $per_page_items
@@ -43,9 +42,13 @@ ob_start();
     <table class="table table-bordered table-condensed">
         <thead>
             <tr>
-                <th>Date</th>
+                <th>Event Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
                 <th>District</th>
                 <th>Upazila</th>
+                <th>Submitted By</th>
+                <th>Event Validation Count</th>
                 <th>Observation Score</th>
                 <th class="tar action_column">Actions</th>
             </tr>
@@ -55,10 +58,14 @@ ob_start();
             foreach ($events['data'] as $i => $event) {
                 ?>
                 <tr>
-                    <td><?php echo date('d-m-Y', strtotime($event['event_date'])) ?></td>
+                    <td><?php echo $event['event_type'] ?></td>
+                    <td><?php echo date('d-m-Y', strtotime($event['event_start_date'])) ?></td>
+                    <td><?php echo date('d-m-Y', strtotime($event['event_end_date'])) ?></td>
                     <td><?php echo $event['district']; ?></td>
                     <td><?php echo $event['upazila']; ?></td>
-                    <td><?php echo $event['participants_feedback']; ?></td>
+                    <td><?php echo $event['user_fullname']; ?></td>
+                    <td><?php echo $event['validation_count']; ?></td>
+                    <td><?php echo $event['observation_score']; ?></td>
                     <td class="tar action_column">
                         <?php if (has_permission('edit_event')): ?>
                             <div class="btn-group btn-group-sm">

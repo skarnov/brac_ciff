@@ -78,7 +78,7 @@ ob_start();
 <form id="theForm" onsubmit="return true;" method="post" action="" enctype="multipart/form-data">
     <div class="panel" id="fullForm" style="">
         <div class="panel-body">
-            <div class="col-md-3">
+            <div class="col-md-6">
                 <div class="form-group">
                     <label>Select Event Type</label>
                     <select class="form-control" name="event_type" >
@@ -91,9 +91,9 @@ ob_start();
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label>Event Date</label>
+                    <label>Event Start Date</label>
                     <div class="input-group">
-                        <input id="Datefirstmeeting" type="text" class="form-control" name="event_date" value="<?php echo $pre_data['event_date'] && $pre_data['event_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['event_date'])) : date('d-m-Y'); ?>">
+                        <input id="Datefirstmeeting" type="text" class="form-control" name="event_start_date" value="<?php echo $pre_data['event_start_date'] && $pre_data['event_start_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['event_start_date'])) : date('d-m-Y'); ?>">
                     </div>
                     <script type="text/javascript">
                         init.push(function () {
@@ -122,30 +122,89 @@ ob_start();
                     });
                 </script>
             </div>
+            <div class="col-md-6"></div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Event End Date</label>
+                    <div class="input-group">
+                        <input id="end_date" type="text" class="form-control" name="event_end_date" value="<?php echo $pre_data['event_end_date'] && $pre_data['event_end_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['event_end_date'])) : date('d-m-Y'); ?>">
+                    </div>
+                    <script type="text/javascript">
+                        init.push(function () {
+                            _datepicker('end_date');
+                        });
+                    </script>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group ">
+                    <label>Event End Time</label>
+                    <div class="input-group date">
+                        <input id="end_time" type="text" name="event_end_time" value="<?php echo $pre_data['event_end_time'] && $pre_data['event_end_time'] != '00-00-00' ? date('H:i:s', strtotime($pre_data['event_end_time'])) : date('H:i:s'); ?>"class="form-control" id="bs-timepicker-component"><span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                    </div>
+                </div>
+                <script>
+                    init.push(function () {
+                        var options2 = {
+                            minuteStep: 1,
+                            showSeconds: true,
+                            showMeridian: false,
+                            showInputs: false,
+                            orientation: $('body').hasClass('right-to-left') ? {x: 'right', y: 'auto'} : {x: 'auto', y: 'auto'}
+                        }
+                        $('#end_time').timepicker(options2);
+                    });
+                </script>
+            </div>
             <div class="col-md-12">
                 <fieldset class="scheduler-border">
                     <legend class="scheduler-border">Section 1: Basic Geographical Information</legend>
                     <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Division (*)</label>
-                            <div class="select2-primary">
-                                <select class="form-control" id="permanent_division" name="division" data-selected="<?php echo $pre_data['division'] ? $pre_data['division'] : '' ?>"></select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>District (*)</label>
-                            <div class="select2-success">
-                                <select class="form-control" id="permanent_district" name="district" data-selected="<?php echo $pre_data['district'] ? $pre_data['district'] : ''; ?>"></select>
-                            </div>
-                        </div>
+                        <!--                        <div class="form-group">
+                                                    <label>Division (*)</label>
+                                                    <div class="select2-primary">
+                                                        <select class="form-control" id="permanent_division" name="division" data-selected="<?php echo $pre_data['division'] ? $pre_data['division'] : '' ?>"></select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>District (*)</label>
+                                                    <div class="select2-success">
+                                                        <select class="form-control" id="permanent_district" name="district" data-selected="<?php echo $pre_data['district'] ? $pre_data['district'] : ''; ?>"></select>
+                                                    </div>
+                                                </div>-->
+
+                        <input class="form-control" type="hidden" name="division" value="khulna">
+                        <input class="form-control" type="hidden" name="district" value="jashore">
+
+
                         <label class="control-label input-label">Upazila</label>
                         <div class="form-group">
-                            <input class="form-control" type="text" name="upazila" value="<?php echo $pre_data['upazila'] ? $pre_data['upazila'] : ''; ?>">
+                            <select class="form-control" name="permanent_sub_district">
+                                <option value="">Select One</option>
+                                <option value="Jashore Sadar" <?php echo $pre_data && $pre_data['upazila'] == 'Jashore Sadar' ? 'selected' : '' ?>>Jashore Sadar</option>
+                                <option value="Jhikargacha" <?php echo $pre_data && $pre_data['upazila'] == 'Jhikargacha' ? 'selected' : '' ?>>Jhikargacha</option>
+                                <option value="Sharsha" <?php echo $pre_data && $pre_data['upazila'] == 'Sharsha' ? 'selected' : '' ?>>Sharsha</option>
+                                <option value="Chougachha" <?php echo $pre_data && $pre_data['upazila'] == 'Chougachha' ? 'selected' : '' ?>>Chougachha</option>
+                                <option value="Manirampur" <?php echo $pre_data && $pre_data['upazila'] == 'Manirampur' ? 'selected' : '' ?>>Manirampur</option>
+                                <option value="Bagherpara" <?php echo $pre_data && $pre_data['upazila'] == 'Bagherpara' ? 'selected' : '' ?>>Bagherpara</option>
+                                <option value="Keshabpur" <?php echo $pre_data && $pre_data['upazila'] == 'Keshabpur' ? 'selected' : '' ?>>Keshabpur</option>
+                                <option value="Abhaynagar" <?php echo $pre_data && $pre_data['upazila'] == 'Abhaynagar' ? 'selected' : '' ?>>Abhaynagar</option>
+                            </select>
                         </div>
+
+                        <!--                        <div class="form-group">
+                                                    <input class="form-control" type="text" name="upazila" value="<?php echo $pre_data['upazila'] ? $pre_data['upazila'] : ''; ?>">
+                                                </div>
+                        -->
+
                         <label class="control-label input-label">Union</label>
                         <div class="form-group">
                             <input class="form-control" type="text" name="event_union" value="<?php echo $pre_data['event_union'] ? $pre_data['event_union'] : ''; ?>">
                         </div>
+
+
+
+
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">

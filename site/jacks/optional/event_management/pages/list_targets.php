@@ -21,7 +21,7 @@ doAction('render_start');
 ob_start();
 ?>
 <div class="page-header">
-    <h1>All Targets</h1>
+    <h1>All Activities</h1>
     <div class="oh">
         <div class="btn-group btn-group-sm">
             <?php
@@ -29,8 +29,8 @@ ob_start();
                 'href' => $myUrl . '?action=add_edit_target',
                 'action' => 'add',
                 'icon' => 'icon_add',
-                'text' => 'New Target',
-                'title' => 'New Target',
+                'text' => 'New Activity',
+                'title' => 'New Activity',
             ));
             ?>
         </div>
@@ -38,15 +38,16 @@ ob_start();
 </div>
 <div class="table-primary table-responsive">
     <div class="table-header">
-        <?php echo searchResultText($targets['total'], $start, $per_page_items, count($targets['data']), 'targets') ?>
+        <?php echo searchResultText($targets['total'], $start, $per_page_items, count($targets['data']), 'activities') ?>
     </div>
     <table class="table table-bordered table-condensed">
         <thead>
             <tr>
                 <th>Month</th>
-                <th>Target Name</th>
-                <th>Target Value</th>
+                <th>Activity Name</th>
+                <th>Activity Target</th>
                 <th>Achievement</th>
+                <th>Variance</th>
                 <th>Remark</th>
                 <th class="tar action_column">Actions</th>
             </tr>
@@ -60,6 +61,7 @@ ob_start();
                     <td><?php echo $target['target_name']; ?></td>
                     <td><?php echo $target['target_value']; ?></td>
                     <td><?php echo $target['achievement_value']; ?></td>
+                    <td><?php echo $target['target_value'] - $target['achievement_value']; ?></td>
                     <td><?php echo $target['remark']; ?></td>
                     <td class="tar action_column">
                         <?php if (has_permission('edit_target')): ?>
