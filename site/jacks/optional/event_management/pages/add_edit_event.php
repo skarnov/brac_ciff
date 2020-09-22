@@ -8,10 +8,54 @@ if (!checkPermission($edit, 'add_event', 'edit_event')) {
     exit();
 }
 
+$activities = jack_obj('dev_misactivity_management');
+$all_activities = $activities->get_misactivities();
+
+$all_months = $activities->get_months();
+
+$branches = jack_obj('dev_branch_management');
+$all_branches = $branches->get_branches();
+
+$projects = jack_obj('dev_project_management');
+$all_projects = $projects->get_projects();
+
 $pre_data = array();
 
 if ($edit) {
-    $pre_data = $this->get_events(array('id' => $edit, 'single' => true));
+    $args = array(
+        'select_fields' => array(
+            'fk_branch_id' => 'dev_events.fk_branch_id',
+            'fk_project_id' => 'dev_events.fk_project_id',
+            'month' => 'dev_events.month',
+            'fk_activity_id' => 'dev_events.fk_activity_id',
+            'event_start_date' => 'dev_events.event_start_date',
+            'event_start_time' => 'dev_events.event_start_time',
+            'event_end_date' => 'dev_events.event_end_date',
+            'event_end_time' => 'dev_events.event_end_time',
+            'event_division' => 'dev_events.event_division',
+            'event_district' => 'dev_events.event_district',
+            'event_upazila' => 'dev_events.event_upazila',
+            'event_union' => 'dev_events.event_union',
+            'event_village' => 'dev_events.event_village',
+            'event_ward' => 'dev_events.event_ward',
+            'event_location' => 'dev_events.event_location',
+            'participant_boy' => 'dev_events.participant_boy',
+            'participant_girl' => 'dev_events.participant_girl',
+            'participant_male' => 'dev_events.participant_male',
+            'participant_female' => 'dev_events.participant_female',
+            'preparatory_work' => 'dev_events.preparatory_work',
+            'time_management' => 'dev_events.time_management',
+            'participants_attention' => 'dev_events.participants_attention',
+            'logistical_arrangements' => 'dev_events.logistical_arrangements',
+            'relevancy_delivery' => 'dev_events.relevancy_delivery',
+            'participants_feedback' => 'dev_events.participants_feedback',
+            'event_note' => 'dev_events.event_note',
+        ),
+        'id' => $edit,
+        'single' => true
+    );
+
+    $pre_data = $this->get_events($args);
 
     if (!$pre_data) {
         add_notification('Invalid event, no data found.', 'error');
@@ -47,8 +91,6 @@ if ($_POST) {
     }
 }
 
-$all_types = $this->get_event_types();
-
 doAction('render_start');
 
 ob_start();
@@ -80,11 +122,47 @@ ob_start();
         <div class="panel-body">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label>Select Event Type</label>
-                    <select class="form-control" name="event_type" >
+                    <label>Branch</label>
+                    <div class="select2-primary">
+                        <select class="form-control" name="branch_id" required>
+                            <option value="">Select One</option>
+                            <?php foreach ($all_branches['data'] as $branch) : ?>
+                                <option value="<?php echo $branch['pk_branch_id'] ?>" <?php echo ($branch['pk_branch_id'] == $pre_data['fk_branch_id']) ? 'selected' : '' ?>><?php echo $branch['branch_name'] ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Project</label>
+                    <div class="select2-primary">
+                        <select class="form-control" name="project_id" required>
+                            <option value="">Select One</option>
+                            <?php foreach ($all_projects['data'] as $project) : ?>
+                                <option value="<?php echo $project['pk_project_id'] ?>" <?php echo ($project['pk_project_id'] == $pre_data['fk_project_id']) ? 'selected' : '' ?>><?php echo $project['project_short_name'] ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Month</label>
+                    <div class="select2-primary">
+                        <select class="form-control" name="month" required>
+                            <option value="">Select One</option>
+                            <?php foreach ($all_months as $i => $value) :
+                                ?>
+                                <option value="<?php echo $i ?>" <?php echo ($i == $pre_data['month']) ? 'selected' : '' ?>><?php echo $value ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Select Activity</label>
+                    <select class="form-control" name="activity_id" required>
                         <option>Select One</option>
-                        <?php foreach ($all_types['data'] as $type) : ?>
-                            <option value="<?php echo $type['pk_event_type_id'] ?>"><?php echo $type['event_type'] ?></option>   
+                        <?php foreach ($all_activities['data'] as $activity) : ?>
+                            <option value="<?php echo $activity['pk_activity_id'] ?>" <?php echo ($activity['pk_project_id'] == $pre_data['fk_activity_id']) ? 'selected' : '' ?>><?php echo $activity['activity_name'] ?></option>   
                         <?php endforeach ?>
                     </select>
                 </div>
@@ -160,64 +238,39 @@ ob_start();
                 <fieldset class="scheduler-border">
                     <legend class="scheduler-border">Section 1: Basic Geographical Information</legend>
                     <div class="col-md-6">
-                        <!--                        <div class="form-group">
-                                                    <label>Division (*)</label>
-                                                    <div class="select2-primary">
-                                                        <select class="form-control" id="permanent_division" name="division" data-selected="<?php echo $pre_data['division'] ? $pre_data['division'] : '' ?>"></select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>District (*)</label>
-                                                    <div class="select2-success">
-                                                        <select class="form-control" id="permanent_district" name="district" data-selected="<?php echo $pre_data['district'] ? $pre_data['district'] : ''; ?>"></select>
-                                                    </div>
-                                                </div>-->
-
-                        <input class="form-control" type="hidden" name="division" value="khulna">
-                        <input class="form-control" type="hidden" name="district" value="jashore">
-
-
+                        <input class="form-control" type="hidden" name="event_division" value="khulna">
+                        <input class="form-control" type="hidden" name="event_district" value="jashore">
                         <label class="control-label input-label">Upazila</label>
                         <div class="form-group">
-                            <select class="form-control" name="permanent_sub_district">
+                            <select class="form-control" name="event_upazila">
                                 <option value="">Select One</option>
-                                <option value="Jashore Sadar" <?php echo $pre_data && $pre_data['upazila'] == 'Jashore Sadar' ? 'selected' : '' ?>>Jashore Sadar</option>
-                                <option value="Jhikargacha" <?php echo $pre_data && $pre_data['upazila'] == 'Jhikargacha' ? 'selected' : '' ?>>Jhikargacha</option>
-                                <option value="Sharsha" <?php echo $pre_data && $pre_data['upazila'] == 'Sharsha' ? 'selected' : '' ?>>Sharsha</option>
-                                <option value="Chougachha" <?php echo $pre_data && $pre_data['upazila'] == 'Chougachha' ? 'selected' : '' ?>>Chougachha</option>
-                                <option value="Manirampur" <?php echo $pre_data && $pre_data['upazila'] == 'Manirampur' ? 'selected' : '' ?>>Manirampur</option>
-                                <option value="Bagherpara" <?php echo $pre_data && $pre_data['upazila'] == 'Bagherpara' ? 'selected' : '' ?>>Bagherpara</option>
-                                <option value="Keshabpur" <?php echo $pre_data && $pre_data['upazila'] == 'Keshabpur' ? 'selected' : '' ?>>Keshabpur</option>
-                                <option value="Abhaynagar" <?php echo $pre_data && $pre_data['upazila'] == 'Abhaynagar' ? 'selected' : '' ?>>Abhaynagar</option>
+                                <option value="Jashore Sadar" <?php echo $pre_data && $pre_data['event_upazila'] == 'Jashore Sadar' ? 'selected' : '' ?>>Jashore Sadar</option>
+                                <option value="Jhikargacha" <?php echo $pre_data && $pre_data['event_upazila'] == 'Jhikargacha' ? 'selected' : '' ?>>Jhikargacha</option>
+                                <option value="Sharsha" <?php echo $pre_data && $pre_data['event_upazila'] == 'Sharsha' ? 'selected' : '' ?>>Sharsha</option>
+                                <option value="Chougachha" <?php echo $pre_data && $pre_data['event_upazila'] == 'Chougachha' ? 'selected' : '' ?>>Chougachha</option>
+                                <option value="Manirampur" <?php echo $pre_data && $pre_data['event_upazila'] == 'Manirampur' ? 'selected' : '' ?>>Manirampur</option>
+                                <option value="Bagherpara" <?php echo $pre_data && $pre_data['event_upazila'] == 'Bagherpara' ? 'selected' : '' ?>>Bagherpara</option>
+                                <option value="Keshabpur" <?php echo $pre_data && $pre_data['event_upazila'] == 'Keshabpur' ? 'selected' : '' ?>>Keshabpur</option>
+                                <option value="Abhaynagar" <?php echo $pre_data && $pre_data['event_upazila'] == 'Abhaynagar' ? 'selected' : '' ?>>Abhaynagar</option>
                             </select>
                         </div>
-
-                        <!--                        <div class="form-group">
-                                                    <input class="form-control" type="text" name="upazila" value="<?php echo $pre_data['upazila'] ? $pre_data['upazila'] : ''; ?>">
-                                                </div>
-                        -->
-
                         <label class="control-label input-label">Union</label>
                         <div class="form-group">
                             <input class="form-control" type="text" name="event_union" value="<?php echo $pre_data['event_union'] ? $pre_data['event_union'] : ''; ?>">
                         </div>
-
-
-
-
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Village</label>
-                            <input class="form-control" type="text" name="village" value="<?php echo $pre_data['village'] ? $pre_data['village'] : ''; ?>">
+                            <input class="form-control" type="text" name="event_village" value="<?php echo $pre_data['event_village'] ? $pre_data['event_village'] : ''; ?>">
                         </div>
                         <div class="form-group">
                             <label>Ward</label>
-                            <input class="form-control" type="text" name="ward" value="<?php echo $pre_data['ward'] ? $pre_data['ward'] : ''; ?>">
+                            <input class="form-control" type="text" name="event_ward" value="<?php echo $pre_data['event_ward'] ? $pre_data['event_ward'] : ''; ?>">
                         </div>
                         <div class="form-group">
-                            <label>Exact Location (Para, bazar or school)</label>
-                            <textarea class="form-control" type="text" name="location"><?php echo $pre_data['location'] ? $pre_data['location'] : ''; ?></textarea>
+                            <label>Exact Location (Para, Bazar or School)</label>
+                            <textarea class="form-control" type="text" name="event_location"><?php echo $pre_data['event_location'] ? $pre_data['event_location'] : ''; ?></textarea>
                         </div>
                     </div>
                 </fieldset>
@@ -228,15 +281,15 @@ ob_start();
                     <div class="col-md-6">
                         <label class="control-label input-label">Below 18</label>
                         <div class="form-group">
-                            <input class="form-control" type="text" name="below_male" value="<?php echo $pre_data['below_male'] ? $pre_data['below_male'] : ''; ?>" placeholder="Male"><br />
-                            <input class="form-control" type="text" name="below_female" value="<?php echo $pre_data['below_female'] ? $pre_data['below_female'] : ''; ?>" placeholder="Female">
+                            <input class="form-control" type="number" name="participant_boy" value="<?php echo $pre_data['participant_boy'] ? $pre_data['participant_boy'] : ''; ?>" placeholder="Boy"><br />
+                            <input class="form-control" type="number" name="participant_girl" value="<?php echo $pre_data['participant_girl'] ? $pre_data['participant_girl'] : ''; ?>" placeholder="Girl">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <label class="control-label input-label">Above 18</label>
                         <div class="form-group">
-                            <input class="form-control" type="text" name="above_male" value="<?php echo $pre_data['above_male'] ? $pre_data['above_male'] : ''; ?>" placeholder="Male"><br />
-                            <input class="form-control" type="text" name="above_female" value="<?php echo $pre_data['above_female'] ? $pre_data['above_female'] : ''; ?>" placeholder="Female">
+                            <input class="form-control" type="number" name="participant_male" value="<?php echo $pre_data['participant_male'] ? $pre_data['participant_male'] : ''; ?>" placeholder="Male"><br />
+                            <input class="form-control" type="number" name="participant_female" value="<?php echo $pre_data['participant_female'] ? $pre_data['participant_female'] : ''; ?>" placeholder="Female">
                         </div>
                     </div>
                 </fieldset>
@@ -272,7 +325,7 @@ ob_start();
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Participants' attention during the event was</label>
+                            <label>Participants attention during the event was</label>
                             <div class="select2-success">
                                 <select class="form-control" id="" name="participants_attention" >
                                     <option>Select One</option>
@@ -313,7 +366,7 @@ ob_start();
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Participants' feedback on the overall event was</label>
+                            <label>Participants feedback on the overall event was</label>
                             <div class="select2-success">
                                 <select class="form-control" id="" name="participants_feedback" >
                                     <option>Select One</option>
@@ -328,8 +381,8 @@ ob_start();
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label>Note</label>
-                            <textarea class="form-control" type="text" name="note"><?php echo $pre_data && $pre_data['note'] ?></textarea>
+                            <label>Event Note</label>
+                            <textarea class="form-control" name="event_note"><?php echo $pre_data['event_note'] ?></textarea>
                         </div>
                     </div>
                 </fieldset>
@@ -351,48 +404,7 @@ ob_start();
     </div>
 </form>
 <script type="text/javascript">
-    var BD_LOCATIONS = <?php echo getBDLocationJson(); ?>;
     init.push(function () {
-
-        $(document).on('click', '.delete_single_record', function () {
-            var ths = $(this);
-            var thisCell = ths.closest('td');
-            var logId = ths.attr('data-id');
-            if (!logId)
-                return false;
-
-            show_button_overlay_working(thisCell);
-            bootbox.prompt({
-                title: 'Delete Record!',
-                inputType: 'checkbox',
-                inputOptions: [{
-                        text: 'Click To Confirm Delete',
-                        value: 'delete'
-                    }],
-                callback: function (result) {
-                    if (result == 'delete') {
-                        window.location.href = '?action=deleteEvent&id=' + logId;
-                    }
-                    hide_button_overlay_working(thisCell);
-                }
-            });
-        });
-
-
-        new bd_new_location_selector({
-            'division': $('#permanent_division'),
-            'district': $('#permanent_district'),
-            'sub_district': $('#permanent_sub_district'),
-            'police_station': $('#permanent_police_station'),
-            'post_office': $('#permanent_post_office'),
-        });
-
-        var theForm = $('#theForm');
-        theForm.data('serialized', theForm.serialize());
-
-        theForm.on('change input', function () {
-            theForm.find('input:submit, button:submit').prop('disabled', theForm.serialize() == theForm.data('serialized'));
-        });
         theForm.find('input:submit, button:submit').prop('disabled', true);
     });
 </script>

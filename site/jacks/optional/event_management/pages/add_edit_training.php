@@ -78,6 +78,17 @@ ob_start();
         <div class="panel-body">
             <div class="col-md-6">
                 <div class="form-group">
+                    <label>Date</label>
+                    <div class="input-group">
+                        <input id="Date" type="text" class="form-control" name="date" value="<?php echo $pre_data['date'] && $pre_data['date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['date'])) : date('d-m-Y'); ?>">
+                    </div>
+                    <script type="text/javascript">
+                        init.push(function () {
+                            _datepicker('Date');
+                        });
+                    </script>
+                </div>
+                <div class="form-group">
                     <label for="inputId">Beneficiary ID</label>
                     <input type="text" class="form-control" id="BeneficiaryId" name="beneficiary_id" value="<?php echo $pre_data['beneficiary_id']; ?>">
                 </div>
@@ -87,8 +98,14 @@ ob_start();
                 </div>
                 <div class="form-group">
                     <label for="inputId">Age</label>
-                    <input type="text" class="form-control" id="Age" name="age" value="<?php echo $pre_data['age']; ?>">
+                    <input type="number" class="form-control" id="Age" name="age" value="<?php echo $pre_data['age']; ?>">
                 </div>
+                <div class="form-group">
+                    <label for="inputId">Profession</label>
+                    <input type="text" class="form-control" id="Profesion" name="profession" value="<?php echo $pre_data['profession']; ?>">
+                </div>
+            </div>
+            <div class="col-md-6">
                 <div class="form-group">
                     <label>Sex</label>
                     <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
@@ -113,26 +130,19 @@ ob_start();
                             $('#newGenderText').val('');
                         });
                     });
-                </script>           
-
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="inputId">Profession</label>
-                    <input type="text" class="form-control" id="Profesion" name="profession" value="<?php echo $pre_data['profession']; ?>">
-                </div>            
+                </script>        
                 <div class="form-group">
                     <label for="inputId">Training Name</label>
                     <input type="text" class="form-control" id="Profesion" name="training_name" value="<?php echo $pre_data['training_name']; ?>">
-                </div>            
-                <div class="form-group">
-                    <label for="inputId">Address</label>
-                    <textarea class="form-control" name="address"><?php echo $pre_data['address']; ?></textarea>
-                </div>            
+                </div>
                 <div class="form-group">
                     <label for="inputId">Mobile</label>
                     <input type="number" class="form-control" id="Mobile" name="mobile" value="<?php echo $pre_data['mobile']; ?>">
-                </div>  
+                </div>
+                <div class="form-group">
+                    <label for="inputId">Address</label>
+                    <textarea class="form-control" name="address"><?php echo $pre_data['address']; ?></textarea>
+                </div>
             </div>
         </div>
         <div class="panel-footer tar">

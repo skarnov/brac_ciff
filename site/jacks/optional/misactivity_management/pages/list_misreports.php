@@ -21,6 +21,7 @@ $args = array(
         'month' => 'dev_targets.month',
         'activity_name' => 'dev_activities.activity_name',
         'activity_target' => 'dev_targets.activity_target',
+        'activity_achievement' => 'dev_targets.activity_achievement',
     ),
     'month' => $filter_month,
     'branch_id' => $filter_branch_id,
@@ -63,16 +64,16 @@ $all_months = $this->get_months();
 doAction('render_start');
 ?>
 <div class="page-header">
-    <h1>All Targets</h1>
+    <h1>MIS Reports</h1>
     <div class="oh">
         <div class="btn-group btn-group-sm">
             <?php
             echo linkButtonGenerator(array(
-                'href' => $myUrl . '?action=add_edit_target',
-                'action' => 'add',
-                'icon' => 'icon_add',
-                'text' => 'New Target',
-                'title' => 'Add New Target',
+//                'href' => $myUrl . '?action=add_edit_target',
+                'action' => 'download',
+                'icon' => 'icon_download',
+                'text' => 'Download',
+                'title' => 'Download MIS',
             ));
             ?>
         </div>
@@ -149,65 +150,35 @@ filterForm($filterForm);
     <table class="table table-bordered table-condensed">
         <thead>
             <tr>
-                <th>Project</th>
-                <th>Branch</th>
-                <th>District</th>
-                <th>Sub-District</th>
-                <th>Month</th>
-                <th>Activity Name</th>
+                <th>SL No</th>
+                <th>Activity</th>
                 <th>Target</th>
-                <th>Actions</th>
+                <th>Achievement</th>
+                <th>Variance</th>
+                <th>Male</th>
+                <th>Female</th>
+                <th>Boy</th>
+                <th>Girl</th>
             </tr>
         </thead>
         <tbody>
             <?php
-            foreach ($results['data'] as $i => $value) {
+            $i = 1;
+            foreach ($results['data'] as $value) {
                 ?>
                 <tr>
-                    <td><?php echo $value['project_short_name']; ?></td>
-                    <td><?php echo $value['branch_name']; ?></td>
-                    <td><?php echo $value['branch_district']; ?></td>
-                    <td><?php echo $value['branch_sub_district']; ?></td>
-                    <td>
-                        <?php
-                        if ($value['month'] == '1') {
-                            echo 'January';
-                        } elseif ($value['month'] == '2') {
-                            echo 'February';
-                        } elseif ($value['month'] == '3') {
-                            echo 'March';
-                        } elseif ($value['month'] == '4') {
-                            echo 'April';
-                        } elseif ($value['month'] == '5') {
-                            echo 'May';
-                        } elseif ($value['month'] == '6') {
-                            echo 'June';
-                        } elseif ($value['month'] == '7') {
-                            echo 'July';
-                        } elseif ($value['month'] == '8') {
-                            echo 'August';
-                        } elseif ($value['month'] == '9') {
-                            echo 'September';
-                        } elseif ($value['month'] == '10') {
-                            echo 'October';
-                        } elseif ($value['month'] == '11') {
-                            echo 'November';
-                        } elseif ($value['month'] == '12') {
-                            echo 'December';
-                        }
-                        ?>
-                    </td>
+                    <td><?php echo $i; ?></td>
                     <td><?php echo $value['activity_name']; ?></td>
                     <td><?php echo $value['activity_target']; ?></td>
-                    <td>
-                        <?php if (has_permission('edit_target')): ?>
-                            <div class="btn-group">
-                                <a href="<?php echo url('admin/dev_misactivity_management/manage_targets?action=add_edit_mis_target&month='.$value['month'].'&project_id='.$value['fk_project_id'].'&branch_id='.$value['fk_branch_id'].'&edit=' . $value['pk_target_id']) ?>" class="btn btn-primary btn btn-sm"><i class="fa fa-pencil-square-o"></i> Edit</a>
-                            </div>                                
-                        <?php endif ?>
-                    </td>
+                    <td><?php echo $value['activity_achievement']; ?></td>
+                    <td><?php echo $value['activity_target'] - $value['activity_achievement']; ?></td>
+                    <td><?php echo $value['achievement_male']; ?></td>
+                    <td><?php echo $value['achievement_female']; ?></td>
+                    <td><?php echo $value['achievement_boy']; ?></td>
+                    <td><?php echo $value['achievement_girl']; ?></td>
                 </tr>
                 <?php
+                $i++;
             }
             ?>
         </tbody>

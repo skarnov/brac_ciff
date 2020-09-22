@@ -184,12 +184,6 @@ filterForm($filterForm);
 <script type="text/javascript">
     var BD_LOCATIONS = <?php echo getBDLocationJson() ?>;
 
-
-
-
-
-
-
     var can_add = <?php echo has_permission('add_branch') ? '1' : '0' ?>;
     var can_edit = <?php echo has_permission('edit_branch') ? '1' : '0' ?>;
 

@@ -58,11 +58,11 @@ ob_start();
             foreach ($events['data'] as $i => $event) {
                 ?>
                 <tr>
-                    <td><?php echo $event['event_type'] ?></td>
+                    <td><?php echo $event['activity_name'] ?></td>
                     <td><?php echo date('d-m-Y', strtotime($event['event_start_date'])) ?></td>
                     <td><?php echo date('d-m-Y', strtotime($event['event_end_date'])) ?></td>
-                    <td><?php echo $event['district']; ?></td>
-                    <td><?php echo $event['upazila']; ?></td>
+                    <td style="text-transform: capitalize"><?php echo $event['event_district']; ?></td>
+                    <td style="text-transform: capitalize"><?php echo $event['event_upazila']; ?></td>
                     <td><?php echo $event['user_fullname']; ?></td>
                     <td><?php echo $event['validation_count']; ?></td>
                     <td><?php echo $event['observation_score']; ?></td>

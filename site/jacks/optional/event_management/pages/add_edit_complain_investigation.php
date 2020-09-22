@@ -121,8 +121,18 @@ ob_start();
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label input-label">Select Municipality/Upazilla</label>
-                    <input class="form-control" type="text" name="upazila" value="<?php echo $pre_data['upazila'] ? $pre_data['upazila'] : ''; ?>">
+                    <label class="control-label input-label">Select Municipality/Upazila</label>
+                    <select class="form-control" name="upazila">
+                        <option value="">Select One</option>
+                        <option value="Jashore Sadar" <?php echo $pre_data && $pre_data['upazila'] == 'Jashore Sadar' ? 'selected' : '' ?>>Jashore Sadar</option>
+                        <option value="Jhikargacha" <?php echo $pre_data && $pre_data['upazila'] == 'Jhikargacha' ? 'selected' : '' ?>>Jhikargacha</option>
+                        <option value="Sharsha" <?php echo $pre_data && $pre_data['upazila'] == 'Sharsha' ? 'selected' : '' ?>>Sharsha</option>
+                        <option value="Chougachha" <?php echo $pre_data && $pre_data['upazila'] == 'Chougachha' ? 'selected' : '' ?>>Chougachha</option>
+                        <option value="Manirampur" <?php echo $pre_data && $pre_data['upazila'] == 'Manirampur' ? 'selected' : '' ?>>Manirampur</option>
+                        <option value="Bagherpara" <?php echo $pre_data && $pre_data['upazila'] == 'Bagherpara' ? 'selected' : '' ?>>Bagherpara</option>
+                        <option value="Keshabpur" <?php echo $pre_data && $pre_data['upazila'] == 'Keshabpur' ? 'selected' : '' ?>>Keshabpur</option>
+                        <option value="Abhaynagar" <?php echo $pre_data && $pre_data['upazila'] == 'Abhaynagar' ? 'selected' : '' ?>>Abhaynagar</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="police_station">Name of police station</label>

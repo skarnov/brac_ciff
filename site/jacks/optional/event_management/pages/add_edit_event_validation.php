@@ -66,7 +66,7 @@ ob_start();
         <div class="btn-group btn-group-sm">
             <?php
             echo linkButtonGenerator(array(
-                'href' => 'manage_event_validations?event_id='.$event_id,
+                'href' => 'manage_event_validations?event_id=' . $event_id,
                 'action' => 'list',
                 'text' => 'All Event Validations',
                 'title' => 'Manage Event Validations',
@@ -278,15 +278,7 @@ ob_start();
     </div>
 </form>
 <script type="text/javascript">
-    var BD_LOCATIONS = <?php echo getBDLocationJson(); ?>;
     init.push(function () {
-        new bd_new_location_selector({
-            'division': $('#division'),
-            'district': $('#district'),
-            'sub_district': $('#sub_district'),
-            'police_station': $('#police_station'),
-        });
-
         theForm.find('input:submit, button:submit').prop('disabled', true);
     });
 </script>

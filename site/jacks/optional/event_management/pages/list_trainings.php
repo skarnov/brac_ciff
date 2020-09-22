@@ -2,8 +2,14 @@
 $start = $_GET['start'] ? $_GET['start'] : 0;
 $per_page_items = 10;
 
+$filter_profession = $_GET['profession'] ? $_GET['profession'] : null;
+$filter_training_name = $_GET['training_name'] ? $_GET['training_name'] : null;
+$filter_entry_start_date = $_GET['entry_start_date'] ? $_GET['entry_start_date'] : null;
+$filter_entry_end_date = $_GET['entry_end_date'] ? $_GET['entry_end_date'] : null;
+
 $args = array(
-    'listing' => TRUE,
+    'profession' => $filter_profession,
+    'training_name' => $filter_training_name,
     'limit' => array(
         'start' => $start * $per_page_items,
         'count' => $per_page_items
@@ -14,11 +20,30 @@ $args = array(
     ),
 );
 
+if ($filter_entry_start_date && $filter_entry_start_date) {
+    $args['BETWEEN_INCLUSIVE'] = array(
+        'entry_date' => array(
+            'left' => date_to_db($filter_entry_start_date),
+            'right' => date_to_db($filter_entry_end_date),
+        ),
+    );
+}
+
 $trainings = $this->get_trainings($args);
 $pagination = pagination($trainings['total'], $per_page_items, $start);
 
+
+$filterString = array();
+if ($filter_id)
+    $filterString[] = 'Profession: ' . $filter_profession;
+if ($filter_name)
+    $filterString[] = 'Training Name: ' . $filter_training_name;
+if ($filter_entry_start_date)
+    $filterString[] = 'Start Date: ' . $filter_entry_start_date;
+if ($filter_entry_end_date)
+    $filterString[] = 'End Date: ' . $filter_entry_end_date;
+
 doAction('render_start');
-ob_start();
 ?>
 <div class="page-header">
     <h1>All Trainings</h1>
@@ -36,18 +61,59 @@ ob_start();
         </div>
     </div>
 </div>
+<?php
+ob_start();
+?>
+<div class="form-group col-sm-3">
+    <label>Entry Start Date</label>
+    <div class="input-group">
+        <input id="startDate" type="text" class="form-control" name="entry_start_date" value="<?php echo $filter_entry_start_date ?>">
+    </div>
+    <script type="text/javascript">
+        init.push(function () {
+            _datepicker('startDate');
+        });
+    </script>
+</div>
+<div class="form-group col-sm-3">
+    <label>Entry End Date</label>
+    <div class="input-group">
+        <input id="endDate" type="text" class="form-control" name="entry_end_date" value="<?php echo $filter_entry_end_date ?>">
+    </div>
+    <script type="text/javascript">
+        init.push(function () {
+            _datepicker('endDate');
+        });
+    </script>
+</div>
+<?php
+echo formProcessor::form_elements('name', 'profession', array(
+    'width' => 3, 'type' => 'text', 'label' => 'Profession',
+        ), $filter_profession);
+echo formProcessor::form_elements('name', 'training_name', array(
+    'width' => 3, 'type' => 'text', 'label' => 'Training Name',
+        ), $filter_training_name);
+$filterForm = ob_get_clean();
+filterForm($filterForm);
+?>
 <div class="table-primary table-responsive">
+    <?php if ($filterString): ?>
+        <div class="table-header">
+            Filtered With: <?php echo implode(', ', $filterString) ?>
+        </div>
+    <?php endif; ?>
     <div class="table-header">
         <?php echo searchResultText($trainings['total'], $start, $per_page_items, count($trainings['data']), 'trainings') ?>
     </div>
     <table class="table table-bordered table-condensed">
         <thead>
             <tr>
-                <th>Beneficiary ID</th>
+                <th>Date</th>
+                <th>Profession</th>
                 <th>Training Name</th>
                 <th>Participant Name</th>
                 <th>Mobile</th>
-                <th>Sex</th>
+                <th>Gender</th>
                 <th class="tar action_column">Actions</th>
             </tr>
         </thead>
@@ -56,11 +122,12 @@ ob_start();
             foreach ($trainings['data'] as $i => $training) {
                 ?>
                 <tr>
-                    <td><?php echo $training['beneficiary_id']; ?></td>
+                    <td><?php echo date('d-m-Y', strtotime($training['date'])) ?></td>
+                    <td><?php echo $training['profession']; ?></td>
                     <td><?php echo $training['training_name']; ?></td>
                     <td><?php echo $training['name']; ?></td>
                     <td><?php echo $training['mobile']; ?></td>
-                    <td><?php echo $training['gender']; ?></td>
+                    <td style="text-transform: capitalize"><?php echo $training['gender']; ?></td>
                     <td class="tar action_column">
                         <?php if (has_permission('edit_training')): ?>
                             <div class="btn-group btn-group-sm">

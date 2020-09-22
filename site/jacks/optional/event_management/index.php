@@ -12,21 +12,6 @@ class dev_event_management {
         $permissions = array(
             'group_name' => 'Events',
             'permissions' => array(
-                'manage_targets' => array(
-                    'add_target' => 'Add Target',
-                    'edit_target' => 'Edit Target',
-                    'delete_target' => 'Delete Target',
-                ),
-                'manage_achievements' => array(
-                    'add_achievement' => 'Add Achievement',
-                    'edit_achievement' => 'Edit Achievement',
-                    'delete_achievement' => 'Delete Achievement',
-                ),
-                'manage_event_types' => array(
-                    'add_event_type' => 'Add Event Type',
-                    'edit_event_type' => 'Edit Event Type',
-                    'delete_event_type' => 'Delete Event Type',
-                ),
                 'manage_events' => array(
                     'add_event' => 'Add Event',
                     'edit_event' => 'Edit Event',
@@ -72,29 +57,6 @@ class dev_event_management {
             'iconClass' => 'fa-building',
             'jack' => $this->thsClass,
         );
-        $params = array(
-            'label' => 'Activity',
-            'description' => 'Manage All Activities',
-            'menu_group' => 'Events',
-            'position' => 'default',
-            'action' => 'manage_targets',
-            'iconClass' => 'fa-binoculars',
-            'jack' => $this->thsClass,
-        );
-        if (has_permission('manage_targets'))
-            admenu_register($params);
-
-        $params = array(
-            'label' => 'Event Types',
-            'description' => 'Manage All Event Types',
-            'menu_group' => 'Events',
-            'position' => 'default',
-            'action' => 'manage_event_types',
-            'iconClass' => 'fa-binoculars',
-            'jack' => $this->thsClass,
-        );
-        if (has_permission('manage_event_types'))
-            admenu_register($params);
 
         $params = array(
             'label' => 'Event',
@@ -121,8 +83,8 @@ class dev_event_management {
             admenu_register($params);
 
         $params = array(
-            'label' => 'Complains',
-            'description' => 'Manage All Complains',
+            'label' => 'Community Service',
+            'description' => 'Manage All Community Services',
             'menu_group' => 'Events',
             'position' => 'default',
             'action' => 'manage_complains',
@@ -167,36 +129,6 @@ class dev_event_management {
         );
         if (has_permission('manage_trainings'))
             admenu_register($params);
-    }
-
-    function manage_targets() {
-        if (!has_permission('manage_targets'))
-            return true;
-        global $devdb, $_config;
-        $myUrl = jack_url($this->thsClass, 'manage_targets');
-
-        if ($_GET['action'] == 'add_edit_target')
-            include('pages/add_edit_target.php');
-        elseif ($_GET['action'] == 'deleteTarget')
-            include('pages/deleteTarget.php');
-        elseif ($_GET['action'] == 'add_edit_achievement')
-            include('pages/add_edit_achievement.php');
-        else
-            include('pages/list_targets.php');
-    }
-
-    function manage_event_types() {
-        if (!has_permission('manage_event_types'))
-            return true;
-        global $devdb, $_config;
-        $myUrl = jack_url($this->thsClass, 'manage_event_types');
-
-        if ($_GET['action'] == 'add_edit_event_type')
-            include('pages/add_edit_event_type.php');
-        elseif ($_GET['action'] == 'deleteEventType')
-            include('pages/deleteEventType.php');
-        else
-            include('pages/list_event_types.php');
     }
 
     function manage_events() {
@@ -299,201 +231,13 @@ class dev_event_management {
             include('pages/list_trainings.php');
     }
 
-    function get_targets($param = null) {
-        $param['single'] = $param['single'] ? $param['single'] : false;
-
-        $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
-
-        if ($param['listing']) {
-            $from = "FROM dev_targets 
-
-            ";
-        } else {
-            $from = "FROM dev_targets 
-
-            ";
-        }
-
-        $where = " WHERE 1";
-        $conditions = " ";
-        $sql = $select . $from . $where;
-        $count_sql = "SELECT COUNT(dev_targets.pk_target_id) AS TOTAL " . $from . $where;
-
-        $loopCondition = array(
-            'id' => 'dev_targets.pk_target_id',
-        );
-
-        $conditions .= sql_condition_maker($loopCondition, $param);
-
-        $orderBy = sql_order_by($param);
-        $limitBy = sql_limit_by($param);
-
-        $sql .= $conditions . $orderBy . $limitBy;
-        $count_sql .= $conditions;
-
-        $targets = sql_data_collector($sql, $count_sql, $param);
-        return $targets;
-    }
-
-    function add_edit_target($params = array()) {
-        global $devdb, $_config;
-
-        $ret = array('success' => array(), 'error' => array());
-        $is_update = $params['edit'] ? $params['edit'] : array();
-
-        $oldData = array();
-        if ($is_update) {
-            $oldData = $this->get_targets(array('id' => $edit, 'single' => true));
-            if (!$oldData) {
-                return array('error' => ['Invalid target id, no data found']);
-            }
-        }
-
-        if (!$ret['error']) {
-            $data = array();
-            $dateNow = date('Y-m-d');
-            $timeNow = date('H:i:s');
-
-            $data['fk_branch_id'] = $_config['user']['user_branch'];
-            $data['target_month'] = $params['form_data']['month'];
-            $data['target_name'] = $params['form_data']['target_name'];
-            $data['target_value'] = $params['form_data']['target_value'];
-            $data['achievement_value'] = $params['form_data']['achievement_value'];
-            $data['remark'] = $params['form_data']['remark'];
-
-            if ($is_update) {
-                $data['update_date'] = $dateNow;
-                $data['update_time'] = $timeNow;
-                $data['modified_by'] = $_config['user']['pk_user_id'];
-                $ret = $devdb->insert_update('dev_targets', $data, " pk_target_id  = '" . $is_update . "'");
-            } else {
-                $data['create_date'] = $dateNow;
-                $data['create_time'] = $timeNow;
-                $data['created_by'] = $_config['user']['pk_user_id'];
-                $ret = $devdb->insert_update('dev_targets', $data);
-            }
-        }
-        return $ret;
-    }
-
-    function get_achievements($param = null) {
-        $param['single'] = $param['single'] ? $param['single'] : false;
-
-        $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
-
-        if ($param['listing']) {
-            $from = "FROM dev_targets 
-
-            ";
-        } else {
-            $from = "FROM dev_targets 
-
-            ";
-        }
-
-        $where = " WHERE 1";
-        $conditions = " ";
-        $sql = $select . $from . $where;
-        $count_sql = "SELECT COUNT(dev_targets.pk_target_id) AS TOTAL " . $from . $where;
-
-        $loopCondition = array(
-            'id' => 'dev_targets.pk_target_id',
-        );
-
-        $conditions .= sql_condition_maker($loopCondition, $param);
-
-        $orderBy = sql_order_by($param);
-        $limitBy = sql_limit_by($param);
-
-        $sql .= $conditions . $orderBy . $limitBy;
-        $count_sql .= $conditions;
-
-        $targets = sql_data_collector($sql, $count_sql, $param);
-        return $targets;
-    }
-
-    function get_event_types($param = null) {
-        $param['single'] = $param['single'] ? $param['single'] : false;
-
-        $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
-
-        if ($param['listing']) {
-            $from = "FROM dev_event_types 
-
-            ";
-        } else {
-            $from = "FROM dev_event_types 
-
-            ";
-        }
-
-        $where = " WHERE 1";
-        $conditions = " ";
-        $sql = $select . $from . $where;
-        $count_sql = "SELECT COUNT(dev_event_types.pk_event_type_id) AS TOTAL " . $from . $where;
-
-        $loopCondition = array(
-            'id' => 'dev_event_types.pk_event_type_id',
-        );
-
-        $conditions .= sql_condition_maker($loopCondition, $param);
-
-        $orderBy = sql_order_by($param);
-        $limitBy = sql_limit_by($param);
-
-        $sql .= $conditions . $orderBy . $limitBy;
-        $count_sql .= $conditions;
-
-        $targets = sql_data_collector($sql, $count_sql, $param);
-        return $targets;
-    }
-
-    function add_edit_event_type($params = array()) {
-        global $devdb, $_config;
-
-        $ret = array('success' => array(), 'error' => array());
-        $is_update = $params['edit'] ? $params['edit'] : array();
-
-        $oldData = array();
-        if ($is_update) {
-            $oldData = $this->get_event_types(array('id' => $is_update, 'single' => true));
-            if (!$oldData) {
-                return array('error' => ['Invalid event type id, no data found']);
-            }
-        }
-
-        foreach ($params['required'] as $i => $v) {
-            if (isset($params['form_data'][$i]))
-                $temp = form_validator::required($params['form_data'][$i]);
-            if ($temp !== true) {
-                $ret['error'][] = $v . ' ' . $temp;
-            }
-        }
-
-        if (!$ret['error']) {
-            $data = array();
-            $data['event_type'] = $params['form_data']['event_type'];
-            if ($is_update) {
-                $data['update_date'] = date('Y-m-d');
-                $data['update_time'] = date('H:i:s');
-                $data['modified_by'] = $_config['user']['pk_user_id'];
-                $ret['event_types_update'] = $devdb->insert_update('dev_event_types', $data, " pk_event_type_id  = '" . $is_update . "'");
-            } else {
-                $data['create_date'] = date('Y-m-d');
-                $data['create_time'] = date('H:i:s');
-                $data['created_by'] = $_config['user']['pk_user_id'];
-                $ret['event_types_insert'] = $devdb->insert_update('dev_event_types', $data);
-            }
-        }
-        return $ret;
-    }
-
     function get_events($param = null) {
         $param['single'] = $param['single'] ? $param['single'] : false;
 
         $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
 
         $from = "FROM dev_events 
+                LEFT JOIN dev_activities ON (dev_activities.pk_activity_id = dev_events.fk_activity_id)
                 LEFT JOIN dev_users ON (dev_users.pk_user_id = dev_events.created_by)
             ";
 
@@ -542,41 +286,65 @@ class dev_event_management {
 
         if (!$ret['error']) {
             $events_data = array();
-            $events_data['event_type'] = $params['form_data']['event_type'];
-            $events_data['event_branch'] = $_config['user']['user_branch'];
+            $events_data['fk_branch_id'] = $params['form_data']['branch_id'];
+            $events_data['fk_project_id'] = $params['form_data']['project_id'];
+            $events_data['month'] = $params['form_data']['month'];
+            $events_data['fk_activity_id'] = $params['form_data']['activity_id'];
             $events_data['event_start_date'] = date('Y-m-d', strtotime($params['form_data']['event_start_date']));
             $events_data['event_start_time'] = $params['form_data']['event_start_time'];
             $events_data['event_end_date'] = date('Y-m-d', strtotime($params['form_data']['event_end_date']));
             $events_data['event_end_time'] = $params['form_data']['event_end_time'];
-            $events_data['division'] = $params['form_data']['division'];
-            $events_data['district'] = $params['form_data']['district'];
-            $events_data['upazila'] = $params['form_data']['upazila'];
+            $events_data['event_division'] = $params['form_data']['event_division'];
+            $events_data['event_district'] = $params['form_data']['event_district'];
+            $events_data['event_upazila'] = $params['form_data']['event_upazila'];
             $events_data['event_union'] = $params['form_data']['event_union'];
-            $events_data['village'] = $params['form_data']['village'];
-            $events_data['ward'] = $params['form_data']['ward'];
-            $events_data['location'] = $params['form_data']['location'];
-            $events_data['below_male'] = $params['form_data']['below_male'];
-            $events_data['below_female'] = $params['form_data']['below_female'];
-            $events_data['above_male'] = $params['form_data']['above_male'];
-            $events_data['above_female'] = $params['form_data']['above_female'];
+            $events_data['event_village'] = $params['form_data']['event_village'];
+            $events_data['event_ward'] = $params['form_data']['event_ward'];
+            $events_data['event_location'] = $params['form_data']['event_location'];
+            $events_data['participant_boy'] = $params['form_data']['participant_boy'];
+            $events_data['participant_girl'] = $params['form_data']['participant_girl'];
+            $events_data['participant_male'] = $params['form_data']['participant_male'];
+            $events_data['participant_female'] = $params['form_data']['participant_female'];
             $events_data['preparatory_work'] = $params['form_data']['preparatory_work'];
             $events_data['time_management'] = $params['form_data']['time_management'];
             $events_data['participants_attention'] = $params['form_data']['participants_attention'];
             $events_data['logistical_arrangements'] = $params['form_data']['logistical_arrangements'];
             $events_data['relevancy_delivery'] = $params['form_data']['relevancy_delivery'];
             $events_data['participants_feedback'] = $params['form_data']['participants_feedback'];
-            $events_data['observation_score'] = $events_data['preparatory_work'] + events_data['time_management'] + $events_data['participants_attention'] + $events_data['logistical_arrangements'] + $events_data['relevancy_delivery'] + $events_data['participants_feedback'];
-            $events_data['note'] = $params['form_data']['note'];
+            $events_data['observation_score'] = $events_data['preparatory_work'] + $events_data['time_management'] + $events_data['participants_attention'] + $events_data['logistical_arrangements'] + $events_data['relevancy_delivery'] + $events_data['participants_feedback'];
+            $events_data['event_note'] = $params['form_data']['event_note'];
             if ($is_update) {
                 $events_data['update_date'] = date('Y-m-d');
                 $events_data['update_time'] = date('H:i:s');
                 $events_data['modified_by'] = $_config['user']['pk_user_id'];
                 $ret['events_update'] = $devdb->insert_update('dev_events', $events_data, " pk_event_id  = '" . $is_update . "'");
+
+                $misactivity_data = array();
+                $misactivity_data['achievement_male'] = $events_data['participant_male'];
+                $misactivity_data['achievement_female'] = $events_data['participant_female'];
+                $misactivity_data['achievement_boy'] = $events_data['participant_boy'];
+                $misactivity_data['achievement_girl'] = $events_data['participant_girl'];
+                $misactivity_data['activity_achievement'] = $misactivity_data['achievement_male'] + $misactivity_data['achievement_female'] + $misactivity_data['achievement_boy'] + $misactivity_data['achievement_girl'];
+                $misactivity_data['update_date'] = date('Y-m-d');
+                $misactivity_data['update_time'] = date('H:i:s');
+                $misactivity_data['modified_by'] = $_config['user']['pk_user_id'];
+                $ret['misactivity_update'] = $devdb->insert_update('dev_targets', $misactivity_data, " fk_activity_id = '" . $events_data['fk_activity_id'] . "' AND fk_branch_id = '" . $events_data['fk_branch_id'] . "' AND fk_project_id = '" . $events_data['fk_project_id'] . "' AND month = '" . $events_data['month'] . "'");
             } else {
                 $events_data['create_date'] = date('Y-m-d');
                 $events_data['create_time'] = date('H:i:s');
                 $events_data['created_by'] = $_config['user']['pk_user_id'];
                 $ret['events_insert'] = $devdb->insert_update('dev_events', $events_data);
+
+                $misactivity_data = array();
+                $misactivity_data['achievement_male'] = $events_data['participant_male'];
+                $misactivity_data['achievement_female'] = $events_data['participant_female'];
+                $misactivity_data['achievement_boy'] = $events_data['participant_boy'];
+                $misactivity_data['achievement_girl'] = $events_data['participant_girl'];
+                $misactivity_data['activity_achievement'] = $misactivity_data['achievement_male'] + $misactivity_data['achievement_female'] + $misactivity_data['achievement_boy'] + $misactivity_data['achievement_girl'];
+                $misactivity_data['update_date'] = date('Y-m-d');
+                $misactivity_data['update_time'] = date('H:i:s');
+                $misactivity_data['modified_by'] = $_config['user']['pk_user_id'];
+                $ret['misactivity_update'] = $devdb->insert_update('dev_targets', $misactivity_data, " fk_activity_id = '" . $events_data['fk_activity_id'] . "' AND fk_branch_id = '" . $events_data['fk_branch_id'] . "' AND fk_project_id = '" . $events_data['fk_project_id'] . "' AND month = '" . $events_data['month'] . "'");
             }
         }
         return $ret;
@@ -688,6 +456,9 @@ class dev_event_management {
                 $data['create_time'] = date('H:i:s');
                 $data['created_by'] = $_config['user']['pk_user_id'];
                 $ret['event_validations_insert'] = $devdb->insert_update('dev_event_validations', $data);
+
+                $sql = "UPDATE dev_events SET validation_count = validation_count + 1";
+                $devdb->query($sql);
             }
         }
         return $ret;
@@ -790,15 +561,9 @@ class dev_event_management {
 
         $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
 
-        if ($param['listing']) {
-            $from = "FROM dev_complains 
+        $from = "FROM dev_complains 
 
             ";
-        } else {
-            $from = "FROM dev_complains
-
-            ";
-        }
 
         $where = " WHERE 1";
         $conditions = " ";
@@ -807,7 +572,15 @@ class dev_event_management {
 
         $loopCondition = array(
             'id' => 'dev_complains.pk_complain_id',
+            'gender' => 'dev_complains.gender',
+            'upazila' => 'dev_complains.upazila',
+            'type_recipient' => 'dev_complains.type_recipient',
+            'entry_date' => 'dev_complains.complain_register_date'
         );
+
+        if ($param['type_service']) {
+            $conditions .= " AND type_service LIKE '%" . $param['type_service'] . "%'";
+        }
 
         $conditions .= sql_condition_maker($loopCondition, $param);
 
@@ -845,19 +618,49 @@ class dev_event_management {
 
         if (!$ret['error']) {
             $complains_data = array();
-            $complains_data['fk_branch_id'] = $_config['user']['user_branch'];
-            $complains_data['name'] = $params['form_data']['name'];
-            $complains_data['type_recipient'] = $params['form_data']['type_recipient'];
-            $complains_data['type_service'] = $params['form_data']['type_service'];
-            $complains_data['know_service'] = $params['form_data']['know_service'];
             $complains_data['complain_register_date'] = date('Y-m-d', strtotime($params['form_data']['complain_register_date']));
+            $complains_data['fk_branch_id'] = $params['form_data']['branch_id'];
+            $complains_data['branch_district'] = $params['branch_district'];
+            $complains_data['branch_sub_district'] = $params['branch_sub_district'];
+            $complains_data['upazila'] = $params['form_data']['upazila'];
+            $complains_data['branch_union'] = $params['form_data']['union'];
+            $complains_data['village'] = $params['form_data']['village'];
+
+            $complains_data['name'] = $params['form_data']['name'];
             $complains_data['age'] = $params['form_data']['age'];
             if ($params['form_data']['new_gender']) {
                 $complains_data['gender'] = $params['form_data']['new_gender'];
             } else {
                 $complains_data['gender'] = $params['form_data']['gender'];
             }
-            $complains_data['address'] = $params['form_data']['address'];
+            $complains_data['type_recipient'] = $params['form_data']['type_recipient'];
+
+            if ($params['form_data']['new_type_service'] == NULL) {
+                $data_type = $params['form_data']['type_service'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $complains_data['type_service'] = $data_types;
+            } elseif ($params['form_data']['type_service'] == NULL) {
+                $complains_data['other_type_service'] = $params['form_data']['new_type_service'];
+            } elseif ($params['form_data']['type_service'] != NULL && $params['form_data']['new_type_service'] != NULL) {
+                $data_type = $params['form_data']['type_service'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $complains_data['type_service'] = $data_types;
+                $complains_data['other_type_service'] = $params['form_data']['new_type_service'];
+            }
+
+            if ($params['form_data']['new_know_service'] == NULL) {
+                $data_type = $params['form_data']['know_service'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $complains_data['know_service'] = $data_types;
+            } elseif ($params['form_data']['know_service'] == NULL) {
+                $complains_data['other_know_service'] = $params['form_data']['new_know_service'];
+            } elseif ($params['form_data']['know_service'] != NULL && $params['form_data']['new_know_service'] != NULL) {
+                $data_type = $params['form_data']['know_service'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $complains_data['know_service'] = $data_types;
+                $complains_data['other_know_service'] = $params['form_data']['new_know_service'];
+            }
+
             $complains_data['remark'] = $params['form_data']['remark'];
 
             if ($is_update) {
@@ -880,15 +683,7 @@ class dev_event_management {
 
         $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
 
-        if ($param['listing']) {
-            $from = "FROM dev_complain_fileds
-
-            ";
-        } else {
-            $from = "FROM dev_complain_fileds
-
-            ";
-        }
+        $from = "FROM dev_complain_fileds ";
 
         $where = " WHERE 1";
         $conditions = " ";
@@ -897,6 +692,10 @@ class dev_event_management {
 
         $loopCondition = array(
             'id' => 'dev_complain_fileds.pk_complain_filed_id',
+            'gender' => 'dev_complain_fileds.gender',
+            'type_case' => 'dev_complain_fileds.type_case',
+            'upazila' => 'dev_complain_fileds.upazila',
+            'entry_date' => 'dev_complain_fileds.complain_register_date'
         );
 
         $conditions .= sql_condition_maker($loopCondition, $param);
@@ -976,15 +775,9 @@ class dev_event_management {
 
         $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
 
-        if ($param['listing']) {
-            $from = "FROM dev_complain_investigations
+        $from = "FROM dev_complain_investigations 
 
             ";
-        } else {
-            $from = "FROM dev_complain_investigations 
-
-            ";
-        }
 
         $where = " WHERE 1";
         $conditions = " ";
@@ -993,6 +786,10 @@ class dev_event_management {
 
         $loopCondition = array(
             'id' => 'dev_complain_investigations.pk_complain_investigation_id',
+            'gender' => 'dev_complain_investigations.gender',
+            'type_case' => 'dev_complain_investigations.type_case',
+            'upazila' => 'dev_complain_investigations.upazila',
+            'entry_date' => 'dev_complain_investigations.complain_register_date'
         );
 
         $conditions .= sql_condition_maker($loopCondition, $param);
@@ -1072,15 +869,8 @@ class dev_event_management {
 
         $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
 
-        if ($param['listing']) {
-            $from = "FROM dev_trainings
-
+        $from = "FROM dev_trainings 
             ";
-        } else {
-            $from = "FROM dev_trainings 
-
-            ";
-        }
 
         $where = " WHERE 1";
         $conditions = " ";
@@ -1089,6 +879,9 @@ class dev_event_management {
 
         $loopCondition = array(
             'id' => 'dev_trainings.pk_training_id',
+            'profession' => 'dev_trainings.profession',
+            'training_name' => 'dev_trainings.training_name',
+            'entry_date' => 'dev_trainings.date',
         );
 
         $conditions .= sql_condition_maker($loopCondition, $param);
@@ -1127,6 +920,7 @@ class dev_event_management {
 
         if (!$ret['error']) {
             $training_data = array();
+            $training_data['date'] = date('Y-m-d', strtotime($params['form_data']['date']));
             $training_data['beneficiary_id'] = $params['form_data']['beneficiary_id'];
             $training_data['name'] = $params['form_data']['name'];
             if ($params['form_data']['new_gender']) {

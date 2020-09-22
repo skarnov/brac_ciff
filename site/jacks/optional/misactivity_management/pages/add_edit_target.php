@@ -40,29 +40,8 @@ if ($_POST) {
     }
     
     if (!$ret['error']) {
-        header('location: ' . url('admin/dev_misactivity_management/manage_targets?action=add_edit_mis_target&month='.$data['form_data']['month'].'&project_id='.$data['form_data']['project_id'].'&branch_id='.$data['form_data']['branch_id']));
+        header('location: ' . url('admin/dev_misactivity_management/manage_targets?action=add_edit_mis_target&month=' . $data['form_data']['month'] . '&project_id=' . $data['form_data']['project_id'] . '&branch_id=' . $data['form_data']['branch_id']));
     }
-
-
-
-//    $ret = $this->add_edit_target($data);
-//
-//    if ($ret) {
-//        $msg = "Activity has been " . ($edit ? 'updated.' : 'saved.');
-//        add_notification($msg);
-//        $activityType = $edit ? 'update' : 'create';
-//        user_activity::add_activity($msg, 'success', $activityType);
-//        if ($edit) {
-//            header('location: ' . url('admin/dev_misactivity_management/manage_targets'));
-//        } else {
-//            header('location: ' . url('admin/dev_misactivity_management/manage_targets'));
-//        }
-//        exit();
-//    } else {
-//        $pre_data = $_POST;
-//        print_errors($ret['error']);
-//    }
-//    
 }
 
 $projects = jack_obj('dev_project_management');
@@ -105,7 +84,7 @@ ob_start();
             <div class="col-md-6 col-md-offset-3">
                 <div class="form-group">
                     <label>Month</label>
-                    <select class="form-control" name="month">
+                    <select class="form-control" required name="month">
                         <option value="">Select One</option>
                         <?php foreach ($all_months as $i => $month) :
                             ?>
@@ -115,7 +94,7 @@ ob_start();
                 </div>
                 <div class="form-group">
                     <label>Project</label>
-                    <select class="form-control" name="project_id">
+                    <select class="form-control" required name="project_id">
                         <option value="">Select One</option>
                         <?php foreach ($all_projects['data'] as $project) : ?>
                             <option value="<?php echo $project['pk_project_id'] ?>" <?php echo ($project['pk_project_id'] == $filter_project_id) ? 'selected' : '' ?>><?php echo $project['project_short_name'] ?></option>
@@ -124,7 +103,7 @@ ob_start();
                 </div>
                 <div class="form-group">
                     <label>Branch</label>
-                    <select class="form-control" name="branch_id">
+                    <select class="form-control" required name="branch_id">
                         <option value="">Select One</option>
                         <?php foreach ($all_branches['data'] as $branch) : ?>
                             <option value="<?php echo $branch['pk_branch_id'] ?>" <?php echo ($branch['pk_branch_id'] == $filter_branch_id) ? 'selected' : '' ?>><?php echo $branch['branch_name'] ?></option>

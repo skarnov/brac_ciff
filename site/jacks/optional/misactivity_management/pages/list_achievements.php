@@ -21,6 +21,7 @@ $args = array(
         'month' => 'dev_targets.month',
         'activity_name' => 'dev_activities.activity_name',
         'activity_target' => 'dev_targets.activity_target',
+        'activity_achievement' => 'dev_targets.activity_achievement',
     ),
     'month' => $filter_month,
     'branch_id' => $filter_branch_id,
@@ -63,20 +64,7 @@ $all_months = $this->get_months();
 doAction('render_start');
 ?>
 <div class="page-header">
-    <h1>All Targets</h1>
-    <div class="oh">
-        <div class="btn-group btn-group-sm">
-            <?php
-            echo linkButtonGenerator(array(
-                'href' => $myUrl . '?action=add_edit_target',
-                'action' => 'add',
-                'icon' => 'icon_add',
-                'text' => 'New Target',
-                'title' => 'Add New Target',
-            ));
-            ?>
-        </div>
-    </div>
+    <h1>All Achievements</h1>
 </div>
 <?php
 ob_start();
@@ -156,7 +144,7 @@ filterForm($filterForm);
                 <th>Month</th>
                 <th>Activity Name</th>
                 <th>Target</th>
-                <th>Actions</th>
+                <th>Achievement</th>
             </tr>
         </thead>
         <tbody>
@@ -199,13 +187,7 @@ filterForm($filterForm);
                     </td>
                     <td><?php echo $value['activity_name']; ?></td>
                     <td><?php echo $value['activity_target']; ?></td>
-                    <td>
-                        <?php if (has_permission('edit_target')): ?>
-                            <div class="btn-group">
-                                <a href="<?php echo url('admin/dev_misactivity_management/manage_targets?action=add_edit_mis_target&month='.$value['month'].'&project_id='.$value['fk_project_id'].'&branch_id='.$value['fk_branch_id'].'&edit=' . $value['pk_target_id']) ?>" class="btn btn-primary btn btn-sm"><i class="fa fa-pencil-square-o"></i> Edit</a>
-                            </div>                                
-                        <?php endif ?>
-                    </td>
+                    <td><?php echo $value['activity_achievement']; ?></td>
                 </tr>
                 <?php
             }
