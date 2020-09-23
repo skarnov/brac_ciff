@@ -301,7 +301,7 @@ ob_start();
                         <div class="form-group">
                             <label>Preparatory work for the event was</label>
                             <div class="select2-success">
-                                <select class="form-control" id="" name="preparatory_work" >
+                                <select class="form-control" required name="preparatory_work" >
                                     <option value="">Select One</option>
                                     <option value="5" <?php echo $pre_data && $pre_data['preparatory_work'] == '5' ? 'selected' : '' ?>>Excellent</option>
                                     <option value="4" <?php echo $pre_data && $pre_data['preparatory_work'] == '4' ? 'selected' : '' ?>>Good</option>
@@ -314,7 +314,7 @@ ob_start();
                         <div class="form-group">
                             <label>Time management of the event was</label>
                             <div class="select2-success">
-                                <select class="form-control" id="" name="time_management" >
+                                <select class="form-control" required name="time_management" >
                                     <option>Select One</option>
                                     <option value="5" <?php echo $pre_data && $pre_data['time_management'] == '5' ? 'selected' : '' ?>>Excellent</option>
                                     <option value="4" <?php echo $pre_data && $pre_data['time_management'] == '4' ? 'selected' : '' ?>>Good</option>
@@ -327,7 +327,7 @@ ob_start();
                         <div class="form-group">
                             <label>Participants attention during the event was</label>
                             <div class="select2-success">
-                                <select class="form-control" id="" name="participants_attention" >
+                                <select class="form-control" required name="participants_attention" >
                                     <option>Select One</option>
                                     <option value="5" <?php echo $pre_data && $pre_data['participants_attention'] == '5' ? 'selected' : '' ?>>Excellent</option>
                                     <option value="4" <?php echo $pre_data && $pre_data['participants_attention'] == '4' ? 'selected' : '' ?>>Good</option>
@@ -342,7 +342,7 @@ ob_start();
                         <div class="form-group">
                             <label>Logistical arrangements (e.g. stationery, sitting arrangements, sound quality others) were</label>
                             <div class="select2-success">
-                                <select class="form-control" id="" name="logistical_arrangements" >
+                                <select class="form-control" required name="logistical_arrangements" >
                                     <option>Select One</option>
                                     <option value="5" <?php echo $pre_data && $pre_data['logistical_arrangements'] == '5' ? 'selected' : '' ?>>Excellent</option>
                                     <option value="4" <?php echo $pre_data && $pre_data['logistical_arrangements'] == '4' ? 'selected' : '' ?>>Good</option>
@@ -355,7 +355,7 @@ ob_start();
                         <div class="form-group">
                             <label>Relevancy of delivery of messages from the event was</label>
                             <div class="select2-success">
-                                <select class="form-control" id="" name="relevancy_delivery" >
+                                <select class="form-control" required name="relevancy_delivery" >
                                     <option>Select One</option>
                                     <option value="5" <?php echo $pre_data && $pre_data['participants_attention'] == '5' ? 'selected' : '' ?>>Excellent</option>
                                     <option value="4" <?php echo $pre_data && $pre_data['participants_attention'] == '4' ? 'selected' : '' ?>>Good</option>
@@ -368,7 +368,7 @@ ob_start();
                         <div class="form-group">
                             <label>Participants feedback on the overall event was</label>
                             <div class="select2-success">
-                                <select class="form-control" id="" name="participants_feedback" >
+                                <select class="form-control" required name="participants_feedback" >
                                     <option>Select One</option>
                                     <option value="5" <?php echo $pre_data && $pre_data['participants_feedback'] == '5' ? 'selected' : '' ?>>Excellent</option>
                                     <option value="4" <?php echo $pre_data && $pre_data['participants_feedback'] == '4' ? 'selected' : '' ?>>Good</option>
