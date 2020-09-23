@@ -86,8 +86,6 @@ if ($_POST) {
         $data['user_type'] = 'admin';
         $data['user_religion'] = '';
         $data['user_country'] = '';
-        $staffAttribute = $_POST['staff_attribute'] == 'migration_staff' ? ROLE_migration_staff_ID : ROLE_business_staff_ID;
-        $data['roles_list'] = array(ROLE_staff_ID, $staffAttribute);
         $data['edit'] = $edit ? $edit : NULL;
 
         $ret = $profileManager->add_edit_user($data);
@@ -223,13 +221,6 @@ doAction('render_start');
                     <div class="form-group">
                         <label>Email</label>
                         <input class="form-control char_limit" data-max-char="390" type="email" name="user_email" id="user_email" value="<?php echo $user ? $user['user_email'] : '' ?>" required/>
-                    </div>
-                    <div class="form-group">
-                        <label>Staff Attribute</label>
-                        <select class="form-control" name="staff_attribute">
-                            <option value="migration_staff" <?php if($staff_role[1] == 3) echo 'selected'; ?>>Migration</option>
-                            <option value="business_staff" <?php if($staff_role[1] == 4) echo 'selected'; ?>>Business</option>
-                        </select>
                     </div>
                 </div>
                 <div class="col-md-6">

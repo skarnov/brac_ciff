@@ -76,8 +76,6 @@ class dev_customer_management {
             include('pages/add_edit_satisfaction_scale.php');
         elseif ($_GET['action'] == 'deleteProfile')
             include('pages/deleteProfile.php');
-        elseif ($_GET['action'] == 'deleteProfileCase')
-            include('pages/deleteProfileCase.php');
         elseif ($_GET['action'] == 'deleteMigration')
             include('pages/deleteMigration.php');
         else

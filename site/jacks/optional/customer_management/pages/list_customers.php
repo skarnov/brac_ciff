@@ -354,19 +354,12 @@ filterForm($filterForm);
                 title: 'Delete Record!',
                 inputType: 'checkbox',
                 inputOptions: [{
-                        text: 'Delete Only Profile',
+                        text: 'Delete Participant Profile Information',
                         value: 'deleteProfile'
-                    },
-                    {
-                        text: 'Delete Profile With Case Management',
-                        value: 'deleteProfileCase'
                     }],
                 callback: function (result) {
                     if (result == 'deleteProfile') {
                         window.location.href = '?action=deleteProfile&id=' + logId;
-                    }
-                    if (result == 'deleteProfileCase') {
-                        window.location.href = '?action=deleteProfileCase&id=' + logId;
                     }
                     hide_button_overlay_working(thisCell);
                 }
