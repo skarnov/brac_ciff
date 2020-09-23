@@ -101,7 +101,6 @@ class dev_staff_management {
         $profileManager = jack_obj('dev_profile_management');
         
         $param['single'] = $param['single'] ? $param['single'] : false;
-        $param['visible'] = 1;
 
         global $devdb;
 
@@ -117,7 +116,7 @@ class dev_staff_management {
                         LEFT JOIN dev_lookups On (dev_users.user_designation = dev_lookups.pk_lookup_id) 
                         ";
 
-        $where = "WHERE 1 AND dev_users_roles_relation.fk_role_id = '".ROLE_staff_ID."'";
+        $where = "WHERE 1 AND user_roles IS NULL ";
         $conditions = "";
 
         $count_sql = "SELECT COUNT(pk_user_id) AS TOTAL ".$from.$where;
@@ -129,7 +128,6 @@ class dev_staff_management {
             'user_email' => 'dev_users.user_email',
             'user_status' => 'dev_users.user_status',
             'user_type' => 'dev_users.user_type',
-            'visible' => 'dev_users.user_is_visible',
             'meta_type' => 'dev_users.user_meta_type',
             'name' => 'dev_users.user_fullname',
             'branch' => 'dev_users.user_branch',

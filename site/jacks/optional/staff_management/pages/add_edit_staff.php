@@ -1,19 +1,11 @@
 <?php
-$rolePermissionManager = jack_obj('dev_role_permission_management');
 
 $edit = $_GET['edit'] ? $_GET['edit'] : NULL;
 $user = array();
-$userRoleAutoComplete = array();
 
 if (!checkPermission($edit, 'add_staff', 'edit_staff')) {
     add_notification('You don\'t have enough permission.', 'error');
     header('Location:' . build_url(NULL, array('edit','action')));
-    exit();
-}
-
-if (!defined('ROLE_staff_ID')) {
-    add_notification('Technical Problem, contact developer.', 'error');
-    header('Location:' . build_url(NULL, array('action')));
     exit();
 }
 

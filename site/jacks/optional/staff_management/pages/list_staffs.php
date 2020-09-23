@@ -1,16 +1,4 @@
 <?php
-if ($_GET['ajax_type']) {
-    $ret = array();
-
-    if ($_GET['ajax_type'] == 'get_staff_form') {
-        $ret = $this->get_staff_form($_POST['edit']);
-    } else if ($_GET['ajax_type'] == 'put_staff_form') {
-        $ret = $this->put_staff_form($_POST);
-    }
-
-    echo json_encode($ret);
-    exit();
-}
 
 $start = $_GET['start'] ? $_GET['start'] : 0;
 $per_page_items = 10;
@@ -22,18 +10,7 @@ $filter_division = $_GET['division'] ? $_GET['division'] : null;
 $filter_district = $_GET['district'] ? $_GET['district'] : null;
 $filter_sub_district = $_GET['sub_district'] ? $_GET['sub_district'] : null;
 
-if($_config['user']['user_roles'] == 6){
-    $user_role = array('2,3');
-}
-elseif($_config['user']['user_roles'] == 5){
-    $user_role = array('2,4');
-}
-else{
-    $user_role = NULL;
-}
-
 $args = array(
-    'user_role' => $user_role,
     'name' => $filter_name,
     'branch' => $filter_branch,
     'designation' => $filter_designation,

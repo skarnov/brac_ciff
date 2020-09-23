@@ -367,95 +367,99 @@ class dev_customer_management {
                 $ret['migration_update'] = $devdb->insert_update('dev_migrations', $migration_data, " fk_customer_id = '" . $is_update . "'");
 
                 $devdb->query("DELETE FROM dev_migration_documents WHERE fk_customer_id = '$is_update'");
-
-                $migration_documents = array();
+                
                 $document_name = $params['form_data']['document_name'];
-
-                $key = 0;
-                foreach ($document_name as $key => $value) {
-                    if ($_FILES['document_file']['name'][$key]) {
-                        $supported_ext = array('jpg', 'png');
-                        $max_filesize = 512000;
-                        $target_dir = _path('uploads', 'absolute') . "/";
-                        if (!file_exists($target_dir))
-                            mkdir($target_dir);
-                        $target_file = $target_dir . basename($_FILES['document_file']['name'][$key]);
-                        $fileinfo = pathinfo($target_file);
-                        $target_file = $target_dir . str_replace(' ', '_', $fileinfo['filename']) . '_' . time() . '.' . $fileinfo['extension'];
-                        $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
-                        if (in_array(strtolower($imageFileType), $supported_ext)) {
-                            if ($max_filesize && $_FILES['document_file']['size'][$key] <= $max_filesize) {
-                                if (!move_uploaded_file($_FILES['document_file']['tmp_name'][$key], $target_file)) {
-                                    $ret['error'][] = 'Customer Picture : File was not uploaded, please try again.';
-                                    $params['form_data']['document_file'] = '';
-                                } else {
-                                    $fileinfo = pathinfo($target_file);
-                                    $params['form_data']['document_file'] = $fileinfo['basename'];
-                                    @unlink(_path('uploads', 'absolute') . '/' . $params['form_data']['document_old_file'][$key]);
-                                }
+                if ($document_name) {
+                    $migration_documents = array();
+                    
+                    $key = 0;
+                    foreach ($document_name as $key => $value) {
+                        if ($_FILES['document_file']['name'][$key]) {
+                            $supported_ext = array('jpg', 'png');
+                            $max_filesize = 512000;
+                            $target_dir = _path('uploads', 'absolute') . "/";
+                            if (!file_exists($target_dir))
+                                mkdir($target_dir);
+                            $target_file = $target_dir . basename($_FILES['document_file']['name'][$key]);
+                            $fileinfo = pathinfo($target_file);
+                            $target_file = $target_dir . str_replace(' ', '_', $fileinfo['filename']) . '_' . time() . '.' . $fileinfo['extension'];
+                            $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
+                            if (in_array(strtolower($imageFileType), $supported_ext)) {
+                                if ($max_filesize && $_FILES['document_file']['size'][$key] <= $max_filesize) {
+                                    if (!move_uploaded_file($_FILES['document_file']['tmp_name'][$key], $target_file)) {
+                                        $ret['error'][] = 'Customer Picture : File was not uploaded, please try again.';
+                                        $params['form_data']['document_file'] = '';
+                                    } else {
+                                        $fileinfo = pathinfo($target_file);
+                                        $params['form_data']['document_file'] = $fileinfo['basename'];
+                                        @unlink(_path('uploads', 'absolute') . '/' . $params['form_data']['document_old_file'][$key]);
+                                    }
+                                } else
+                                    $ret['error'][] = 'Customer Picture : <strong>' . $_FILES['document_file']['size'][$key] . ' B</strong> is more than supported file size <strong>' . $max_filesize . ' B';
                             } else
-                                $ret['error'][] = 'Customer Picture : <strong>' . $_FILES['document_file']['size'][$key] . ' B</strong> is more than supported file size <strong>' . $max_filesize . ' B';
-                        } else
-                            $ret['error'][] = 'Customer Picture : <strong>.' . $imageFileType . '</strong> is not supported extension. Only supports .' . implode(', .', $supported_ext);
-                    } else {
-                        $params['form_data']['document_file'] = $params['form_data']['document_old_file'][$key];
+                                $ret['error'][] = 'Customer Picture : <strong>.' . $imageFileType . '</strong> is not supported extension. Only supports .' . implode(', .', $supported_ext);
+                        } else {
+                            $params['form_data']['document_file'] = $params['form_data']['document_old_file'][$key];
+                        }
+
+                        $migration_documents['fk_customer_id'] = $is_update;
+                        $migration_documents['document_name'] = $value;
+                        $migration_documents['document_file'] = $params['form_data']['document_file'];
+                        $migration_documents['modify_time'] = date('H:i:s');
+                        $migration_documents['modify_date'] = date('Y-m-d');
+                        $migration_documents['modified_by'] = $_config['user']['pk_user_id'];
+                        $ret['migration_document'] = $devdb->insert_update('dev_migration_documents', $migration_documents);
+
+                        $key++;
                     }
-
-                    $migration_documents['fk_customer_id'] = $is_update;
-                    $migration_documents['document_name'] = $value;
-                    $migration_documents['document_file'] = $params['form_data']['document_file'];
-                    $migration_documents['modify_time'] = date('H:i:s');
-                    $migration_documents['modify_date'] = date('Y-m-d');
-                    $migration_documents['modified_by'] = $_config['user']['pk_user_id'];
-                    $ret['migration_document'] = $devdb->insert_update('dev_migration_documents', $migration_documents);
-
-                    $key++;
                 }
             } else {
                 $ret['migration_new_insert'] = $devdb->insert_update('dev_migrations', $migration_data, " fk_customer_id = '" . $ret['customer_insert']['success'] . "'");
 
-                $migration_documents = array();
-                $migration_files = $params['form_data']['document_name'];
+                $document_name = $params['form_data']['document_name'];
 
-                $key = 0;
-                foreach ($document_name as $key => $value) {
-                    if ($_FILES['document_file']['name'][$key]) {
-                        $supported_ext = array('jpg', 'png');
-                        $max_filesize = 512000;
-                        $target_dir = _path('uploads', 'absolute') . "/";
-                        if (!file_exists($target_dir))
-                            mkdir($target_dir);
-                        $target_file = $target_dir . basename($_FILES['document_file']['name'][$key]);
-                        $fileinfo = pathinfo($target_file);
-                        $target_file = $target_dir . str_replace(' ', '_', $fileinfo['filename']) . '_' . time() . '.' . $fileinfo['extension'];
-                        $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
-                        if (in_array(strtolower($imageFileType), $supported_ext)) {
-                            if ($max_filesize && $_FILES['document_file']['size'][$key] <= $max_filesize) {
-                                if (!move_uploaded_file($_FILES['document_file']['tmp_name'][$key], $target_file)) {
-                                    $ret['error'][] = 'Customer Picture : File was not uploaded, please try again.';
-                                    $params['form_data']['document_file'] = '';
-                                } else {
-                                    $fileinfo = pathinfo($target_file);
-                                    $params['form_data']['document_file'] = $fileinfo['basename'];
-                                    @unlink(_path('uploads', 'absolute') . '/' . $params['form_data']['document_old_file'][$key]);
-                                }
+                if ($document_name) {
+                    $migration_documents = array();
+                    $key = 0;
+                    foreach ($document_name as $key => $value) {
+                        if ($_FILES['document_file']['name'][$key]) {
+                            $supported_ext = array('jpg', 'png');
+                            $max_filesize = 512000;
+                            $target_dir = _path('uploads', 'absolute') . "/";
+                            if (!file_exists($target_dir))
+                                mkdir($target_dir);
+                            $target_file = $target_dir . basename($_FILES['document_file']['name'][$key]);
+                            $fileinfo = pathinfo($target_file);
+                            $target_file = $target_dir . str_replace(' ', '_', $fileinfo['filename']) . '_' . time() . '.' . $fileinfo['extension'];
+                            $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
+                            if (in_array(strtolower($imageFileType), $supported_ext)) {
+                                if ($max_filesize && $_FILES['document_file']['size'][$key] <= $max_filesize) {
+                                    if (!move_uploaded_file($_FILES['document_file']['tmp_name'][$key], $target_file)) {
+                                        $ret['error'][] = 'Customer Picture : File was not uploaded, please try again.';
+                                        $params['form_data']['document_file'] = '';
+                                    } else {
+                                        $fileinfo = pathinfo($target_file);
+                                        $params['form_data']['document_file'] = $fileinfo['basename'];
+                                        @unlink(_path('uploads', 'absolute') . '/' . $params['form_data']['document_old_file'][$key]);
+                                    }
+                                } else
+                                    $ret['error'][] = 'Customer Picture : <strong>' . $_FILES['document_file']['size'][$key] . ' B</strong> is more than supported file size <strong>' . $max_filesize . ' B';
                             } else
-                                $ret['error'][] = 'Customer Picture : <strong>' . $_FILES['document_file']['size'][$key] . ' B</strong> is more than supported file size <strong>' . $max_filesize . ' B';
-                        } else
-                            $ret['error'][] = 'Customer Picture : <strong>.' . $imageFileType . '</strong> is not supported extension. Only supports .' . implode(', .', $supported_ext);
-                    } else {
-                        $params['form_data']['document_file'] = $params['form_data']['document_old_file'][$key];
+                                $ret['error'][] = 'Customer Picture : <strong>.' . $imageFileType . '</strong> is not supported extension. Only supports .' . implode(', .', $supported_ext);
+                        } else {
+                            $params['form_data']['document_file'] = $params['form_data']['document_old_file'][$key];
+                        }
+
+                        $migration_documents['fk_customer_id'] = $ret['customer_insert']['success'];
+                        $migration_documents['document_name'] = $value;
+                        $migration_documents['document_file'] = $params['form_data']['document_file'];
+                        $migration_documents['create_time'] = date('H:i:s');
+                        $migration_documents['create_date'] = date('Y-m-d');
+                        $migration_documents['created_by'] = $_config['user']['pk_user_id'];
+                        $ret['migration_document'] = $devdb->insert_update('dev_migration_documents', $migration_documents);
+
+                        $key++;
                     }
-
-                    $migration_documents['fk_customer_id'] = $ret['customer_insert']['success'];
-                    $migration_documents['document_name'] = $value;
-                    $migration_documents['document_file'] = $params['form_data']['document_file'];
-                    $migration_documents['create_time'] = date('H:i:s');
-                    $migration_documents['create_date'] = date('Y-m-d');
-                    $migration_documents['created_by'] = $_config['user']['pk_user_id'];
-                    $ret['migration_document'] = $devdb->insert_update('dev_migration_documents', $migration_documents);
-
-                    $key++;
                 }
             }
 
