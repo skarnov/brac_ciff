@@ -184,9 +184,9 @@ ob_start();
                 'action' => $edit ? 'update' : 'update',
                 'size' => '',
                 'id' => 'submit',
-                'title' => $edit ? 'Show Activities' : 'Show Activities',
+                'title' => $edit ? 'Save Target' : 'Save Target',
                 'icon' => $edit ? 'icon_update' : 'icon_save',
-                'text' => $edit ? 'Show Activities' : 'Show Activities'
+                'text' => $edit ? 'Save Target' : 'Save Target'
             ))
             ?>
         </div>

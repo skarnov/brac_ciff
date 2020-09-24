@@ -22,6 +22,11 @@ $args = array(
         'activity_name' => 'dev_activities.activity_name',
         'activity_target' => 'dev_targets.activity_target',
         'activity_achievement' => 'dev_targets.activity_achievement',
+        'achievement_male' => 'dev_targets.achievement_male',
+        'achievement_female' => 'dev_targets.achievement_female',
+        'achievement_boy' => 'dev_targets.achievement_boy',
+        'achievement_girl' => 'dev_targets.achievement_girl',
+        'achievement_total' => 'dev_targets.achievement_total',
     ),
     'month' => $filter_month,
     'branch_id' => $filter_branch_id,
@@ -159,6 +164,7 @@ filterForm($filterForm);
                 <th>Female</th>
                 <th>Boy</th>
                 <th>Girl</th>
+                <th>Total</th>
             </tr>
         </thead>
         <tbody>
@@ -176,6 +182,7 @@ filterForm($filterForm);
                     <td><?php echo $value['achievement_female']; ?></td>
                     <td><?php echo $value['achievement_boy']; ?></td>
                     <td><?php echo $value['achievement_girl']; ?></td>
+                    <td><?php echo $value['achievement_total']; ?></td>
                 </tr>
                 <?php
                 $i++;
