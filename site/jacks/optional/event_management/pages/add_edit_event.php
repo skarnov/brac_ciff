@@ -162,7 +162,7 @@ ob_start();
                     <select class="form-control" name="activity_id" required>
                         <option>Select One</option>
                         <?php foreach ($all_activities['data'] as $activity) : ?>
-                            <option value="<?php echo $activity['pk_activity_id'] ?>" <?php echo ($activity['pk_project_id'] == $pre_data['fk_activity_id']) ? 'selected' : '' ?>><?php echo $activity['activity_name'] ?></option>   
+                            <option value="<?php echo $activity['pk_activity_id'] ?>" <?php echo ($activity['pk_activity_id'] == $pre_data['fk_activity_id']) ? 'selected' : '' ?>><?php echo $activity['activity_name'] ?></option>   
                         <?php endforeach ?>
                     </select>
                 </div>
