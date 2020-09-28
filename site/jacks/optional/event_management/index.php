@@ -319,34 +319,34 @@ class dev_event_management {
                 $events_data['modified_by'] = $_config['user']['pk_user_id'];
                 $ret['events_update'] = $devdb->insert_update('dev_events', $events_data, " pk_event_id  = '" . $is_update . "'");
 
-                $misactivity_data = array();
-                $misactivity_data['achievement_male'] = $params['form_data']['participant_male'];
-                $misactivity_data['achievement_female'] = $params['form_data']['participant_female'];
-                $misactivity_data['achievement_boy'] = $params['form_data']['participant_boy'];
-                $misactivity_data['achievement_girl'] = $params['form_data']['participant_girl'];
-                $misactivity_data['achievement_total'] = $misactivity_data['achievement_male'] + $misactivity_data['achievement_female'] + $misactivity_data['achievement_boy'] + $misactivity_data['achievement_girl'];
-                $misactivity_data['activity_achievement'] = $misactivity_data['activity_achievement'] + 1;
-                $misactivity_data['update_date'] = date('Y-m-d');
-                $misactivity_data['update_time'] = date('H:i:s');
-                $misactivity_data['modified_by'] = $_config['user']['pk_user_id'];
-                $ret['misactivity_update'] = $devdb->insert_update('dev_targets', $misactivity_data, " fk_activity_id = '" . $events_data['fk_activity_id'] . "' AND fk_branch_id = '" . $events_data['fk_branch_id'] . "' AND fk_project_id = '" . $events_data['fk_project_id'] . "' AND month = '" . $events_data['month'] . "'");
+                $achievement_male = $params['form_data']['participant_male'];
+                $achievement_female = $params['form_data']['participant_female'];
+                $achievement_boy = $params['form_data']['participant_boy'];
+                $achievement_girl = $params['form_data']['participant_girl'];
+                $achievement_total = $achievement_male + $achievement_female + $achievement_boy + $achievement_girl;
+                $update_date = date('Y-m-d');
+                $update_time = date('H:i:s');
+                $modified_by = $_config['user']['pk_user_id'];
+
+                $sql = "UPDATE dev_targets SET achievement_male = '$achievement_male', achievement_female = '$achievement_female', achievement_boy = '$achievement_boy', achievement_girl = '$achievement_girl', achievement_total = '$achievement_total', update_date = '$update_date', update_time = '$update_time', modified_by = '$modified_by' WHERE fk_activity_id = '" . $events_data['fk_activity_id'] . "' AND fk_branch_id = '" . $events_data['fk_branch_id'] . "' AND fk_project_id = '" . $events_data['fk_project_id'] . "' AND month = '" . $events_data['month'] . "'";
+                $ret['misactivity_update'] = $devdb->query($sql);
             } else {
                 $events_data['create_date'] = date('Y-m-d');
                 $events_data['create_time'] = date('H:i:s');
                 $events_data['created_by'] = $_config['user']['pk_user_id'];
                 $ret['events_insert'] = $devdb->insert_update('dev_events', $events_data);
 
-                $misactivity_data = array();
-                $misactivity_data['achievement_male'] = $params['form_data']['participant_male'];
-                $misactivity_data['achievement_female'] = $params['form_data']['participant_female'];
-                $misactivity_data['achievement_boy'] = $params['form_data']['participant_boy'];
-                $misactivity_data['achievement_girl'] = $params['form_data']['participant_girl'];
-                $misactivity_data['achievement_total'] = $misactivity_data['achievement_male'] + $misactivity_data['achievement_female'] + $misactivity_data['achievement_boy'] + $misactivity_data['achievement_girl'];
-                $misactivity_data['activity_achievement'] = $misactivity_data['activity_achievement'] + 1;
-                $misactivity_data['update_date'] = date('Y-m-d');
-                $misactivity_data['update_time'] = date('H:i:s');
-                $misactivity_data['modified_by'] = $_config['user']['pk_user_id'];
-                $ret['misactivity_update'] = $devdb->insert_update('dev_targets', $misactivity_data, " fk_activity_id = '" . $events_data['fk_activity_id'] . "' AND fk_branch_id = '" . $events_data['fk_branch_id'] . "' AND fk_project_id = '" . $events_data['fk_project_id'] . "' AND month = '" . $events_data['month'] . "'");
+                $achievement_male = $params['form_data']['participant_male'];
+                $achievement_female = $params['form_data']['participant_female'];
+                $achievement_boy = $params['form_data']['participant_boy'];
+                $achievement_girl = $params['form_data']['participant_girl'];
+                $achievement_total = $achievement_male + $achievement_female + $achievement_boy + $achievement_girl;
+                $update_date = date('Y-m-d');
+                $update_time = date('H:i:s');
+                $modified_by = $_config['user']['pk_user_id'];
+
+                $sql = "UPDATE dev_targets SET achievement_male = '$achievement_male', achievement_female = '$achievement_female', achievement_boy = '$achievement_boy', achievement_girl = '$achievement_girl', achievement_total = '$achievement_total', activity_achievement = activity_achievement + 1, update_date = '$update_date', update_time = '$update_time', modified_by = '$modified_by' WHERE fk_activity_id = '" . $events_data['fk_activity_id'] . "' AND fk_branch_id = '" . $events_data['fk_branch_id'] . "' AND fk_project_id = '" . $events_data['fk_project_id'] . "' AND month = '" . $events_data['month'] . "'";
+                $ret['misactivity_update'] = $devdb->query($sql);
             }
         }
         return $ret;
