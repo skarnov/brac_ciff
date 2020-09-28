@@ -240,7 +240,7 @@ class dev_event_management {
                 LEFT JOIN dev_activities ON (dev_activities.pk_activity_id = dev_events.fk_activity_id)
                 LEFT JOIN dev_users ON (dev_users.pk_user_id = dev_events.created_by)
             ";
-
+        
         $where = " WHERE 1";
         $conditions = " ";
         $sql = $select . $from . $where;

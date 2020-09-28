@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 24, 2020 at 03:45 PM
+-- Generation Time: Sep 28, 2020 at 03:54 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.3
 
@@ -621,8 +621,15 @@ CREATE TABLE `dev_events` (
 
 INSERT INTO `dev_events` (`pk_event_id`, `fk_branch_id`, `month`, `fk_project_id`, `fk_activity_id`, `event_division`, `event_district`, `event_upazila`, `event_union`, `event_location`, `event_village`, `event_ward`, `event_start_date`, `event_start_time`, `event_end_date`, `event_end_time`, `participant_boy`, `participant_girl`, `participant_male`, `participant_female`, `validation_count`, `preparatory_work`, `time_management`, `participants_attention`, `logistical_arrangements`, `relevancy_delivery`, `participants_feedback`, `observation_score`, `event_note`, `create_time`, `create_date`, `created_by`, `update_time`, `update_date`, `modified_by`) VALUES
 (1, 50, 1, 1, 3, 'khulna', 'jashore', 'Jashore Sadar', '', '', '', '', '2020-09-23', '21:20:45', '2020-09-23', '21:20:45', 2, 2, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, '', '21:21:28', '2020-09-23', 2, NULL, NULL, NULL),
-(2, 50, 1, 1, 3, 'khulna', 'jashore', 'Jashore Sadar', '', '', '', '', '2020-09-23', '21:21:45', '2020-09-23', '21:21:45', 2, 2, 3, 3, 0, 5, 4, 3, 5, 4, 2, 23, '', '21:22:17', '2020-09-23', 2, NULL, NULL, NULL),
-(3, 1, 1, 1, 3, 'khulna', 'jashore', 'Jashore Sadar', '', '', '', '', '2020-09-24', '19:21:18', '2020-09-24', '19:21:18', 2, 2, 3, 3, 0, 5, 5, 4, 5, 5, 4, 28, '', '19:22:00', '2020-09-24', 1, NULL, NULL, NULL);
+(2, 50, 1, 1, 0, 'khulna', 'jashore', 'Jashore Sadar', '', '', '', '', '2020-09-23', '21:21:45', '2020-09-23', '21:21:45', 24, 2, 3, 3, 0, 5, 4, 3, 5, 3, 2, 22, '', '21:22:17', '2020-09-23', 2, '20:02:20', '2020-09-24', 1),
+(3, 1, 1, 1, 3, 'khulna', 'jashore', 'Jashore Sadar', '', '', '', '', '2020-09-24', '19:21:18', '2020-09-24', '19:21:18', 24, 2, 3, 3, 0, 5, 5, 4, 5, 4, 4, 27, '', '19:22:00', '2020-09-24', 1, '20:02:49', '2020-09-24', 1),
+(4, 1, 1, 1, 3, 'khulna', 'jashore', '', '', '', '', '', '2020-09-28', '14:57:12', '2020-09-28', '14:57:12', 3, 3, 3, -4, 0, 5, 4, 2, 5, 3, 4, 23, '', '14:58:14', '2020-09-28', 2, NULL, NULL, NULL),
+(5, 1, 1, 1, 3, 'khulna', 'jashore', '', '', '', '', '', '2020-09-28', '14:58:42', '2020-09-28', '14:58:42', 0, 0, 0, 0, 0, 5, 4, 3, 4, 2, 3, 21, '', '14:59:23', '2020-09-28', 2, NULL, NULL, NULL),
+(6, 1, 1, 1, 3, 'khulna', 'jashore', '', '', '', '', '', '2020-09-28', '15:26:17', '2020-09-28', '15:26:17', 4, 4, 4, 4, 0, 5, 4, 3, 4, 2, 3, 21, '', '15:26:30', '2020-09-28', 2, NULL, NULL, NULL),
+(7, 1, 1, 1, 2, 'khulna', 'jashore', '', '', '', '', '', '2020-09-28', '19:34:52', '2020-09-28', '19:34:52', 4, 4, 5, 5, 0, 4, 3, 3, 4, 2, 5, 21, '', '19:36:16', '2020-09-28', 2, NULL, NULL, NULL),
+(8, 1, 1, 1, 2, 'khulna', 'jashore', '', '', '', '', '', '2020-09-28', '19:38:40', '2020-09-28', '19:38:40', 0, 0, 0, 0, 0, 5, 3, 3, 4, 5, 3, 23, '', '19:39:21', '2020-09-28', 2, NULL, NULL, NULL),
+(9, 1, 1, 1, 1, 'khulna', 'jashore', '', '', '', '', '', '2020-09-28', '19:41:40', '2020-09-28', '19:41:40', 4, 4, 4, 4, 0, 5, 3, 3, 4, 5, 3, 23, '', '19:41:58', '2020-09-28', 2, NULL, NULL, NULL),
+(10, 1, 1, 1, 1, 'khulna', 'jashore', '', '', '', '', '', '2020-09-28', '19:41:40', '2020-09-28', '19:41:40', 4, 4, 4, 4, 0, 5, 3, 3, 4, 5, 3, 23, '', '19:42:40', '2020-09-28', 2, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1171,7 +1178,7 @@ CREATE TABLE `dev_targets` (
   `achievement_boy` int(3) DEFAULT NULL,
   `achievement_girl` int(3) DEFAULT NULL,
   `achievement_total` int(5) DEFAULT NULL,
-  `activity_achievement` int(5) DEFAULT NULL,
+  `activity_achievement` int(5) DEFAULT 0,
   `create_time` time DEFAULT NULL,
   `create_date` date DEFAULT NULL,
   `created_by` bigint(20) DEFAULT NULL,
@@ -1185,8 +1192,8 @@ CREATE TABLE `dev_targets` (
 --
 
 INSERT INTO `dev_targets` (`pk_target_id`, `fk_project_id`, `fk_branch_id`, `branch_district`, `branch_sub_district`, `month`, `fk_activity_id`, `activity_target`, `achievement_male`, `achievement_female`, `achievement_boy`, `achievement_girl`, `achievement_total`, `activity_achievement`, `create_time`, `create_date`, `created_by`, `update_time`, `update_date`, `modified_by`) VALUES
-(1, 1, 1, 'Tangail', '', '01', 1, 5, NULL, NULL, NULL, NULL, NULL, NULL, '19:19:29', '2020-09-24', 1, NULL, NULL, NULL),
-(2, 1, 1, 'Tangail', '', '01', 3, 5, 3, 3, 2, 2, 10, 1, '19:19:29', '2020-09-24', 1, '19:22:00', '2020-09-24', 1);
+(1, 1, 1, 'Tangail', '', '01', 1, 5, 4, 4, 4, 4, 16, 1, '19:19:29', '2020-09-24', 1, '19:41:58', '2020-09-28', 2),
+(2, 1, 1, 'Tangail', '', '01', 3, 5, 4, 4, 4, 4, 16, 5, '19:19:29', '2020-09-24', 1, '19:41:58', '2020-09-28', 2);
 
 -- --------------------------------------------------------
 
@@ -1320,7 +1327,17 @@ INSERT INTO `dev_user_activities` (`pk_activity_log`, `activity_msg`, `activity_
 (14, 'Demo User has logged in.', '', 'login', 'success', '2020-09-23 22:51:29', 2),
 (15, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-09-24 19:06:01', 1),
 (16, 'Information of target has been saved.', '', 'create', 'success', '2020-09-24 19:19:29', 1),
-(17, 'Event has been saved.', '', 'create', 'success', '2020-09-24 19:22:00', 1);
+(17, 'Event has been saved.', '', 'create', 'success', '2020-09-24 19:22:00', 1),
+(18, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-09-24 19:59:59', 1),
+(19, 'Event has been updated.', '', 'update', 'success', '2020-09-24 20:01:09', 1),
+(20, 'Event has been updated.', '', 'update', 'success', '2020-09-24 20:01:28', 1),
+(21, 'Event has been updated.', '', 'update', 'success', '2020-09-24 20:02:20', 1),
+(22, 'Event has been updated.', '', 'update', 'success', '2020-09-24 20:02:49', 1),
+(23, 'Demo User has logged in.', '', 'login', 'success', '2020-09-28 14:19:25', 2),
+(24, 'Demo User has logged in.', '', 'login', 'success', '2020-09-28 17:26:52', 2),
+(25, 'Demo User has logged in.', '', 'login', 'success', '2020-09-28 19:33:43', 2),
+(26, 'Event has been saved.', '', 'create', 'success', '2020-09-28 19:36:16', 2),
+(27, 'Event has been saved.', '', 'create', 'success', '2020-09-28 19:42:40', 2);
 
 -- --------------------------------------------------------
 
@@ -1690,7 +1707,7 @@ ALTER TABLE `dev_economic_supports`
 -- AUTO_INCREMENT for table `dev_events`
 --
 ALTER TABLE `dev_events`
-  MODIFY `pk_event_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `pk_event_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `dev_event_validations`
@@ -1828,7 +1845,7 @@ ALTER TABLE `dev_users_roles_relation`
 -- AUTO_INCREMENT for table `dev_user_activities`
 --
 ALTER TABLE `dev_user_activities`
-  MODIFY `pk_activity_log` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `pk_activity_log` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `dev_user_meta`
