@@ -22,6 +22,11 @@ class dev_customer_management {
                     'edit_case' => 'Edit Case',
                     'delete_case' => 'Delete Case',
                 ),
+                'manage_returnees' => array(
+                    'add_returnee' => 'Add Returnee',
+                    'edit_returnee' => 'Edit Returnee',
+                    'delete_returnee' => 'Delete Returnee',
+                ),
             ),
         );
 
@@ -59,6 +64,18 @@ class dev_customer_management {
             'jack' => $this->thsClass,
         );
         if (has_permission('manage_cases'))
+            admenu_register($params);
+
+        $params = array(
+            'label' => 'Returnee Management',
+            'description' => 'Manage All Returnee Management',
+            'menu_group' => 'Beneficiaries',
+            'position' => 'default',
+            'action' => 'manage_returnees',
+            'iconClass' => 'fa-binoculars',
+            'jack' => $this->thsClass,
+        );
+        if (has_permission('manage_returnees'))
             admenu_register($params);
     }
 
@@ -102,6 +119,20 @@ class dev_customer_management {
             include('pages/deleteCase.php');
         else
             include('pages/list_cases.php');
+    }
+
+    function manage_returnees() {
+        if (!has_permission('manage_returnees'))
+            return true;
+        global $devdb, $_config;
+        $myUrl = jack_url($this->thsClass, 'manage_returnees');
+
+        if ($_GET['action'] == 'add_edit_returnee')
+            include('pages/add_edit_returnee.php');
+        elseif ($_GET['action'] == 'deleteReturnee')
+            include('pages/deleteReturnee.php');
+        else
+            include('pages/list_returnees.php');
     }
 
     function get_customers($param = null) {
@@ -367,11 +398,11 @@ class dev_customer_management {
                 $ret['migration_update'] = $devdb->insert_update('dev_migrations', $migration_data, " fk_customer_id = '" . $is_update . "'");
 
                 $devdb->query("DELETE FROM dev_migration_documents WHERE fk_customer_id = '$is_update'");
-                
+
                 $document_name = $params['form_data']['document_name'];
                 if ($document_name) {
                     $migration_documents = array();
-                    
+
                     $key = 0;
                     foreach ($document_name as $key => $value) {
                         if ($_FILES['document_file']['name'][$key]) {
@@ -1442,6 +1473,127 @@ class dev_customer_management {
             else {
                 $psycho_followups_data['fk_customer_id'] = $params['customer_id'];
                 $ret = $devdb->insert_update('dev_psycho_followups', $psycho_followups_data);
+            }
+        }
+        return $ret;
+    }
+
+    function get_returnees($param = null) {
+        $param['single'] = $param['single'] ? $param['single'] : false;
+
+        $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
+
+        $from = "FROM dev_returnees ";
+
+        $where = " WHERE 1";
+        $conditions = " ";
+        $sql = $select . $from . $where;
+        $count_sql = "SELECT COUNT(dev_returnees.pk_returnee_id) AS TOTAL " . $from . $where;
+
+        $loopCondition = array(
+            'id' => 'pk_returnee_id',
+            'returnee_id' => 'returnee_id',
+            'name' => 'full_name',
+            'nid' => 'nid_number',
+            'passport' => 'passport_number',
+            'division' => 'permanent_division',
+            'district' => 'permanent_district',
+            'sub_district' => 'permanent_sub_district',
+        );
+
+        $conditions .= sql_condition_maker($loopCondition, $param);
+
+        $orderBy = sql_order_by($param);
+        $limitBy = sql_limit_by($param);
+
+        $sql .= $conditions . $orderBy . $limitBy;
+        $count_sql .= $conditions;
+
+        $returnees = sql_data_collector($sql, $count_sql, $param);
+        return $returnees;
+    }
+
+    function add_edit_returnee($params = array()) {
+        global $devdb, $_config;
+
+        $ret = array('success' => array(), 'error' => array());
+        $is_update = $params['edit'] ? $params['edit'] : array();
+
+        $oldData = array();
+        if ($is_update) {
+            $oldData = $this->get_returnees(array('id' => $is_update, 'single' => true));
+            if (!$oldData) {
+                return array('error' => ['Invalid returnee id, no data found']);
+            }
+        }
+
+        foreach ($params['required'] as $i => $v) {
+            if (isset($params['form_data'][$i]))
+                $temp = form_validator::required($params['form_data'][$i]);
+            if ($temp !== true) {
+                $ret['error'][] = $v . ' ' . $temp;
+            }
+        }
+
+        if (!$ret['error']) {
+            $returnee_data = array();
+            $returnee_data['fk_branch_id'] = $params['form_data']['branch_id'];
+            $returnee_data['returnee_id'] = $params['form_data']['returnee_id'];
+            $returnee_data['brac_info_id'] = $params['form_data']['brac_info_id'];
+            $returnee_data['collection_date'] = date('Y-m-d', strtotime($params['form_data']['collection_date']));
+            $returnee_data['person_type'] = $params['form_data']['person_type'];
+            $returnee_data['full_name'] = $params['form_data']['full_name'];
+            $returnee_data['returnee_gender'] = $params['form_data']['returnee_gender'];
+            $returnee_data['mobile_number'] = $params['form_data']['mobile_number'];
+            $returnee_data['emergency_mobile'] = $params['form_data']['emergency_mobile'];
+            $returnee_data['nid_number'] = $params['form_data']['nid_number'];
+            $returnee_data['birth_reg_number'] = $params['form_data']['birth_reg_number'];
+            $returnee_data['passport_number'] = $params['form_data']['passport_number'];
+            $returnee_data['father_name'] = $params['form_data']['father_name'];
+            $returnee_data['mother_name'] = $params['form_data']['mother_name'];
+            $returnee_data['returnee_spouse'] = $params['form_data']['returnee_spouse'];
+            $returnee_data['permanent_division'] = $params['form_data']['permanent_division'];
+            $returnee_data['permanent_district'] = $params['form_data']['permanent_district'];
+            $returnee_data['permanent_sub_district'] = $params['form_data']['permanent_sub_district'];
+            $returnee_data['permanent_union'] = $params['form_data']['permanent_union'];
+            $returnee_data['permanent_village'] = $params['form_data']['permanent_village'];
+            $returnee_data['return_date'] = date('Y-m-d', strtotime($params['form_data']['return_date']));
+            $returnee_data['destination_country'] = $params['form_data']['destination_country'];
+
+            if ($params['form_data']['new_legal_document'] == NULL) {
+                $data_type = $params['form_data']['legal_document'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $returnee_data['legal_document'] = $data_types;
+            } elseif ($params['form_data']['legal_document'] == NULL) {
+                $returnee_data['legal_document'] = $params['form_data']['new_legal_document'];
+            } elseif ($params['form_data']['legal_document'] != NULL && $params['form_data']['new_legal_document'] != NULL) {
+                $data_type = $params['form_data']['legal_document'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $returnee_data['legal_document'] = $params['form_data']['new_legal_document'] . ',' . $data_types;
+            }
+
+            $returnee_data['remigrate_intention'] = $params['form_data']['remigrate_intention'];
+
+            if ($params['form_data']['new_qualification']) {
+                $returnee_data['educational_qualification'] = $params['form_data']['new_qualification'];
+            } else {
+                $returnee_data['educational_qualification'] = $params['form_data']['educational_qualification'];
+            }
+
+            $returnee_data['destination_country_profession'] = $params['form_data']['destination_country_profession'];
+            $returnee_data['profile_selection'] = $params['form_data']['profile_selection'];
+            $returnee_data['remarks'] = $params['form_data']['remarks'];
+
+            if ($is_update) {
+                $returnee_data['modify_date'] = date('Y-m-d');
+                $returnee_data['modify_time'] = date('H:i:s');
+                $returnee_data['modified_by'] = $_config['user']['pk_user_id'];
+                $ret['returnee_update'] = $devdb->insert_update('dev_returnees', $returnee_data, " pk_returnee_id = '" . $is_update . "'");
+            } else {
+                $returnee_data['create_date'] = date('Y-m-d');
+                $returnee_data['create_time'] = date('H:i:s');
+                $returnee_data['created_by'] = $_config['user']['pk_user_id'];
+                $ret['returnee_insert'] = $devdb->insert_update('dev_returnees', $returnee_data);
             }
         }
         return $ret;

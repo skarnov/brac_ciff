@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 28, 2020 at 03:54 PM
+-- Generation Time: Oct 10, 2020 at 07:23 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.3
 
@@ -1096,6 +1096,57 @@ INSERT INTO `dev_reintegration_satisfaction_scale` (`pk_satisfaction_scale`, `fk
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `dev_returnees`
+--
+
+CREATE TABLE `dev_returnees` (
+  `pk_returnee_id` bigint(20) NOT NULL,
+  `fk_branch_id` bigint(20) DEFAULT NULL,
+  `returnee_id` char(20) DEFAULT NULL,
+  `full_name` varchar(200) DEFAULT NULL,
+  `father_name` varchar(200) DEFAULT NULL,
+  `mother_name` varchar(200) DEFAULT NULL,
+  `returnee_spouse` varchar(200) DEFAULT NULL,
+  `returnee_gender` varchar(50) DEFAULT NULL,
+  `educational_qualification` text DEFAULT NULL,
+  `mobile_number` varchar(20) DEFAULT NULL,
+  `emergency_mobile` varchar(20) DEFAULT NULL,
+  `nid_number` varchar(20) DEFAULT NULL,
+  `birth_reg_number` varchar(25) DEFAULT NULL,
+  `passport_number` varchar(20) DEFAULT NULL,
+  `permanent_village` varchar(100) DEFAULT NULL,
+  `permanent_union` varchar(100) DEFAULT NULL,
+  `permanent_sub_district` varchar(100) DEFAULT NULL,
+  `permanent_district` varchar(100) DEFAULT NULL,
+  `permanent_division` varchar(30) DEFAULT NULL,
+  `brac_info_id` varchar(30) DEFAULT NULL,
+  `collection_date` date DEFAULT NULL,
+  `person_type` enum('trafficked_survivor','returnee_migrant') DEFAULT NULL,
+  `return_date` date DEFAULT NULL,
+  `destination_country` varchar(100) DEFAULT NULL,
+  `legal_document` text DEFAULT NULL,
+  `remigrate_intention` enum('yes','no') DEFAULT NULL,
+  `destination_country_profession` text DEFAULT NULL,
+  `profile_selection` enum('yes','no') DEFAULT NULL,
+  `remarks` text DEFAULT NULL,
+  `create_time` time DEFAULT NULL,
+  `create_date` date DEFAULT NULL,
+  `created_by` bigint(20) DEFAULT NULL,
+  `modify_time` time DEFAULT NULL,
+  `modify_date` date DEFAULT NULL,
+  `modified_by` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `dev_returnees`
+--
+
+INSERT INTO `dev_returnees` (`pk_returnee_id`, `fk_branch_id`, `returnee_id`, `full_name`, `father_name`, `mother_name`, `returnee_spouse`, `returnee_gender`, `educational_qualification`, `mobile_number`, `emergency_mobile`, `nid_number`, `birth_reg_number`, `passport_number`, `permanent_village`, `permanent_union`, `permanent_sub_district`, `permanent_district`, `permanent_division`, `brac_info_id`, `collection_date`, `person_type`, `return_date`, `destination_country`, `legal_document`, `remigrate_intention`, `destination_country_profession`, `profile_selection`, `remarks`, `create_time`, `create_date`, `created_by`, `modify_time`, `modify_date`, `modified_by`) VALUES
+(1, 2, '24214', 'Full Name', 'Father Name', 'Mother Name', 'REW', 'male', 'sign', '23432', '3423', '234', '2342', '23423', 'Village', 'Union/Pourashava', 'Jhikargacha', 'Bogura', 'Rajshahi', 'DSDS', '2020-10-09', 'trafficked_survivor', '2020-10-09', 'SDASD', 'Passport', 'yes', 'SDASD', 'yes', 'SADASDA', '20:53:06', '2020-10-09', 1, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `dev_sharing_sessions`
 --
 
@@ -1337,7 +1388,15 @@ INSERT INTO `dev_user_activities` (`pk_activity_log`, `activity_msg`, `activity_
 (24, 'Demo User has logged in.', '', 'login', 'success', '2020-09-28 17:26:52', 2),
 (25, 'Demo User has logged in.', '', 'login', 'success', '2020-09-28 19:33:43', 2),
 (26, 'Event has been saved.', '', 'create', 'success', '2020-09-28 19:36:16', 2),
-(27, 'Event has been saved.', '', 'create', 'success', '2020-09-28 19:42:40', 2);
+(27, 'Event has been saved.', '', 'create', 'success', '2020-09-28 19:42:40', 2),
+(28, 'Demo User has logged in.', '', 'login', 'success', '2020-09-29 18:06:58', 2),
+(29, 'Demo User has logged in.', '', 'login', 'success', '2020-09-29 19:18:09', 2),
+(30, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-10-01 17:56:24', 1),
+(31, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-10-06 12:26:09', 1),
+(32, 'Jack (ID: immediate_support) has been turned on', '', 'update', 'success', '2020-10-06 16:30:17', 1),
+(33, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-10-08 19:33:01', 1),
+(34, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-10-09 12:37:50', 1),
+(35, 'Basic information of returnee profile Full Name (ID: 24214) has been saved.', '', 'create', 'success', '2020-10-09 20:53:06', 1);
 
 -- --------------------------------------------------------
 
@@ -1563,6 +1622,12 @@ ALTER TABLE `dev_reintegration_plan`
 --
 ALTER TABLE `dev_reintegration_satisfaction_scale`
   ADD PRIMARY KEY (`pk_satisfaction_scale`);
+
+--
+-- Indexes for table `dev_returnees`
+--
+ALTER TABLE `dev_returnees`
+  ADD PRIMARY KEY (`pk_returnee_id`);
 
 --
 -- Indexes for table `dev_sharing_sessions`
@@ -1806,6 +1871,12 @@ ALTER TABLE `dev_reintegration_satisfaction_scale`
   MODIFY `pk_satisfaction_scale` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `dev_returnees`
+--
+ALTER TABLE `dev_returnees`
+  MODIFY `pk_returnee_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `dev_sharing_sessions`
 --
 ALTER TABLE `dev_sharing_sessions`
@@ -1845,7 +1916,7 @@ ALTER TABLE `dev_users_roles_relation`
 -- AUTO_INCREMENT for table `dev_user_activities`
 --
 ALTER TABLE `dev_user_activities`
-  MODIFY `pk_activity_log` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `pk_activity_log` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `dev_user_meta`
