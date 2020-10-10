@@ -1,7 +1,4 @@
 <?php
-
-
-
 global $devdb;
 $edit = $_GET['edit'] ? $_GET['edit'] : null;
 
@@ -111,10 +108,11 @@ if ($_POST) {
     $data['edit'] = $edit;
 
     $msg = array();
+
     if ($data['form_data']['nid_number']) {
         $sql = "SELECT pk_returnee_id FROM dev_returnees WHERE nid_number = '" . $data['form_data']['nid_number'] . "'";
         if ($edit) {
-            $sql .= " AND returnee_status = 'active' AND NOT pk_returnee_id = '$edit'";
+            $sql .= " AND NOT pk_returnee_id = '$edit'";
         }
         $sql .= " LIMIT 1";
         $ret = $devdb->get_row($sql);
@@ -125,12 +123,45 @@ if ($_POST) {
     if ($data['form_data']['birth_reg_number']) {
         $sql = "SELECT pk_returnee_id FROM dev_returnees WHERE birth_reg_number = '" . $data['form_data']['birth_reg_number'] . "'";
         if ($edit) {
-            $sql .= " AND returnee_status = 'active' AND NOT pk_returnee_id = '$edit'";
+            $sql .= " AND NOT pk_returnee_id = '$edit'";
         }
         $sql .= " LIMIT 1";
         $ret = $devdb->get_row($sql);
         if ($ret) {
             $msg['birth'] = "This Birth Registration holder is already in our Database";
+        }
+    }
+    if ($data['form_data']['passport_number']) {
+        $sql = "SELECT pk_returnee_id FROM dev_returnees WHERE passport_number = '" . $data['form_data']['passport_number'] . "'";
+        if ($edit) {
+            $sql .= " AND NOT pk_returnee_id = '$edit'";
+        }
+        $sql .= " LIMIT 1";
+        $ret = $devdb->get_row($sql);
+        if ($ret) {
+            $msg['passport'] = "This Passport holder is already in our Database";
+        }
+    }
+    if ($data['form_data']['mobile_number']) {
+        $sql = "SELECT pk_returnee_id FROM dev_returnees WHERE mobile_number = '" . $data['form_data']['mobile_number'] . "'";
+        if ($edit) {
+            $sql .= " AND NOT pk_returnee_id = '$edit'";
+        }
+        $sql .= " LIMIT 1";
+        $ret = $devdb->get_row($sql);
+        if ($ret) {
+            $msg['mobile'] = "This mobile holder is already in our Database";
+        }
+    }
+    if ($data['form_data']['emergency_mobile']) {
+        $sql = "SELECT pk_returnee_id FROM dev_returnees WHERE emergency_mobile = '" . $data['form_data']['emergency_mobile'] . "'";
+        if ($edit) {
+            $sql .= " AND NOT pk_returnee_id = '$edit'";
+        }
+        $sql .= " LIMIT 1";
+        $ret = $devdb->get_row($sql);
+        if ($ret) {
+            $msg['mobile'] = "This emergency mobile holder is already in our Database";
         }
     }
 

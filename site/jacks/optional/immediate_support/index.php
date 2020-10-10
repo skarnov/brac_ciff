@@ -80,7 +80,7 @@ class immediate_support {
         if (!has_permission('manage_access_to_pp'))
             return true;
         global $devdb, $_config;
-        $myUrl = jack_url($this->thsClass, 'manage_cases');
+        $myUrl = jack_url($this->thsClass, 'manage_access_to_pp');
 
         if ($_GET['action'] == 'add_edit_access_to_pp')
             include('pages/add_edit_access_to_pp.php');
@@ -170,7 +170,7 @@ class immediate_support {
 
         if (!$ret['error']) {
             $data = array();
-            
+
             $data['is_participant'] = $params['form_data']['is_participant'];
 
             if ($params['form_data']['new_evaluate_services'] == NULL) {
@@ -218,9 +218,9 @@ class immediate_support {
 
         $oldData = array();
         if ($is_update) {
-            $oldData = $this->get_access_to_pp(array('customer_id' => $is_update, 'single' => true));
+            $oldData = $this->get_access_to_pp(array('id' => $is_update, 'single' => true));
             if (!$oldData) {
-                return array('error' => ['Invalid evaluation id, no data found']);
+                return array('error' => ['Invalid id, no data found']);
             }
         }
 
@@ -234,45 +234,71 @@ class immediate_support {
 
         if (!$ret['error']) {
             $data = array();
-            $data['is_participant'] = $params['form_data']['is_participant'];
+            $data['fk_project_id'] = $params['form_data']['project_id'];
+            $data['brac_info_id'] = $params['form_data']['brac_info_id'];
+            $data['full_name'] = $params['form_data']['full_name'];
+            $data['gender'] = $params['form_data']['gender'];
+            $data['disability'] = $params['form_data']['disability'];
+            $data['mobile'] = $params['form_data']['mobile_number'];
+            $data['division'] = $params['form_data']['division'];
+            $data['district'] = $params['form_data']['district'];
+            $data['upazilla'] = $params['form_data']['upazilla'];
+            $data['user_union'] = $params['form_data']['union'];
+            $data['village'] = $params['form_data']['village'];
 
-            if ($params['form_data']['new_evaluate_services'] == NULL) {
-                $data_type = $params['form_data']['evaluate_services'];
+            if ($params['form_data']['new_service_type'] == NULL) {
+                $data_type = $params['form_data']['service_type'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $evaluate_services = $data_types;
-            } elseif ($params['form_data']['evaluate_services'] == NULL) {
-                $evaluate_services = $params['form_data']['new_evaluate_services'];
-            } elseif ($params['form_data']['evaluate_services'] != NULL && $params['form_data']['new_evaluate_services'] != NULL) {
-                $data_type = $params['form_data']['evaluate_services'];
+                $data['service_type'] = $data_types;
+            } elseif ($params['form_data']['service_type'] == NULL) {
+                $migration_data['other_service_type'] = $params['form_data']['new_service_type'];
+            } elseif ($params['form_data']['service_type'] != NULL && $params['form_data']['new_service_type'] != NULL) {
+                $data_type = $params['form_data']['service_type'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $evaluate_services = $params['form_data']['new_evaluate_services'] . ',' . $data_types;
+                $data['service_type'] = $data_types;
+                $data['other_service_type'] = $params['form_data']['new_service_type'];
+            }
+            
+            if ($params['form_data']['new_rescue']) {
+                $data['rescue_reason'] = $params['form_data']['new_rescue'];
+            } else {
+                $data['rescue_reason'] = $params['form_data']['rescue_reason'];
             }
 
-            $plan = array();
-            if ($evaluate_services) {
-                $plan['evaluate_services'] = $evaluate_services;
-                if ($params['form_data']['new_social_protection']) {
-                    $plan['social_protection'] = $params['form_data']['new_social_protection'];
-                }
-                if ($params['form_data']['new_security_measures']) {
-                    $plan['security_measures'] = $params['form_data']['new_security_measures'];
-                }
+            $data['destination_country'] = $params['form_data']['destination_country'];
+            $data['support_date'] = date('Y-m-d', strtotime($params['form_data']['support_date']));
+
+            if ($params['form_data']['new_complain_to'] == NULL) {
+                $data_type = $params['form_data']['complain_to'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $data['complain_to'] = $data_types;
+            } elseif ($params['form_data']['complain_to'] == NULL) {
+                $data['other_complain_to'] = $params['form_data']['new_complain_to'];
+            } elseif ($params['form_data']['complain_to'] != NULL && $params['form_data']['new_complain_to'] != NULL) {
+                $data_type = $params['form_data']['complain_to'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $data['complain_to'] = $data_types;
+                $data['other_complain_to'] = $params['form_data']['new_complain_to'];
             }
 
-            $data['evaluate_services'] = implode(',', $plan);
+            $data['service_result'] = $params['form_data']['service_result'];
+            $data['return_date'] = date('Y-m-d', strtotime($params['form_data']['return_date']));
+            $data['comment'] = $params['form_data']['comment'];
 
             if ($is_update) {
-                $data['update_date'] = date('Y-m-d');
-                $data['update_time'] = date('H:i:s');
+                $data['modify_date'] = date('Y-m-d');
+                $data['modify_time'] = date('H:i:s');
                 $data['modified_by'] = $_config['user']['pk_user_id'];
-                $ret['evaluation_update'] = $devdb->insert_update('dev_access_to_pp', $data, " fk_customer_id = '" . $is_update . "'");
+                $ret = $devdb->insert_update('dev_access_to_pp', $data, " pk_access_id = '" . $is_update . "'");
             } else {
-                $ret['evaluation_insert'] = $devdb->insert_update('dev_access_to_pp', $data);
+                $data['create_date'] = date('Y-m-d');
+                $data['create_time'] = date('H:i:s');
+                $data['created_by'] = $_config['user']['pk_user_id'];
+                $ret = $devdb->insert_update('dev_access_to_pp', $data);
             }
         }
         return $ret;
     }
-
 }
 
 new immediate_support();

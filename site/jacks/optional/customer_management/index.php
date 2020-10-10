@@ -1571,7 +1571,20 @@ class dev_customer_management {
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
                 $returnee_data['legal_document'] = $params['form_data']['new_legal_document'] . ',' . $data_types;
             }
-
+            
+            if ($params['form_data']['new_legal_document'] == NULL) {
+                $data_type = $params['form_data']['legal_document'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $returnee_data['legal_document'] = $data_types;
+            } elseif ($params['form_data']['legal_document'] == NULL) {
+                $returnee_data['other_legal_document'] = $params['form_data']['new_legal_document'];
+            } elseif ($params['form_data']['legal_document'] != NULL && $params['form_data']['new_legal_document'] != NULL) {
+                $data_type = $params['form_data']['legal_document'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $returnee_data['legal_document'] = $data_types;
+                $returnee_data['other_legal_document'] = $params['form_data']['new_legal_document'];
+            }
+            
             $returnee_data['remigrate_intention'] = $params['form_data']['remigrate_intention'];
 
             if ($params['form_data']['new_qualification']) {
