@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 10, 2020 at 07:23 AM
+-- Generation Time: Oct 11, 2020 at 03:24 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.3
 
@@ -21,6 +21,43 @@ SET time_zone = "+00:00";
 --
 -- Database: `db_bracciff`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dev_access_to_pp`
+--
+
+CREATE TABLE `dev_access_to_pp` (
+  `pk_access_id` bigint(20) NOT NULL,
+  `fk_project_id` int(10) DEFAULT NULL,
+  `brac_info_id` varchar(30) DEFAULT NULL,
+  `full_name` varchar(100) DEFAULT NULL,
+  `gender` enum('male','female') DEFAULT NULL,
+  `disability` enum('yes','no') DEFAULT NULL,
+  `mobile` varchar(20) DEFAULT NULL,
+  `division` varchar(50) DEFAULT NULL,
+  `district` varchar(50) DEFAULT NULL,
+  `upazilla` varchar(100) DEFAULT NULL,
+  `user_union` varchar(100) DEFAULT NULL,
+  `village` varchar(100) DEFAULT NULL,
+  `service_type` text DEFAULT NULL,
+  `other_service_type` text DEFAULT NULL,
+  `rescue_reason` text DEFAULT NULL,
+  `destination_country` varchar(50) DEFAULT NULL,
+  `support_date` date DEFAULT NULL,
+  `complain_to` text DEFAULT NULL,
+  `other_complain_to` text DEFAULT NULL,
+  `service_result` varchar(30) DEFAULT NULL,
+  `return_date` date DEFAULT NULL,
+  `comment` text NOT NULL,
+  `create_time` time DEFAULT NULL,
+  `create_date` date DEFAULT NULL,
+  `created_by` bigint(20) DEFAULT NULL,
+  `modify_time` time DEFAULT NULL,
+  `modify_date` date DEFAULT NULL,
+  `modified_by` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -48,6 +85,42 @@ INSERT INTO `dev_activities` (`pk_activity_id`, `fk_project_id`, `activity_name`
 (1, 1, 'Activity II', NULL, NULL, NULL, '14:15:50', '2020-09-20', 1),
 (2, 5, 'Activity II', '11:47:56', '2020-09-17', 1, '14:15:35', '2020-09-20', 1),
 (3, 1, 'Activity I', NULL, NULL, NULL, '14:15:13', '2020-09-20', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dev_airport_land_supports`
+--
+
+CREATE TABLE `dev_airport_land_supports` (
+  `pk_support_id` bigint(20) NOT NULL,
+  `fk_project_id` int(10) DEFAULT NULL,
+  `brac_info_id` varchar(30) DEFAULT NULL,
+  `return_route` enum('land','air','sea') DEFAULT NULL,
+  `arrival_date` date DEFAULT NULL,
+  `person_type` enum('trafficked_survivor','returnee_migrant_worker') DEFAULT NULL,
+  `full_name` varchar(100) DEFAULT NULL,
+  `gender` enum('male','female') DEFAULT NULL,
+  `is_disable` enum('yes','no') DEFAULT NULL,
+  `passport_number` varchar(30) DEFAULT NULL,
+  `travel_pass` varchar(30) DEFAULT NULL,
+  `mobile_number` varchar(20) DEFAULT NULL,
+  `emergency_mobile` varchar(20) DEFAULT NULL,
+  `division` varchar(50) DEFAULT NULL,
+  `district` varchar(50) DEFAULT NULL,
+  `upazilla` varchar(50) DEFAULT NULL,
+  `user_union` varchar(50) DEFAULT NULL,
+  `village` varchar(50) DEFAULT NULL,
+  `destination_country` varchar(50) DEFAULT NULL,
+  `service_received` text DEFAULT NULL,
+  `other_service_received` text DEFAULT NULL,
+  `create_time` time DEFAULT NULL,
+  `create_date` date DEFAULT NULL,
+  `created_by` bigint(20) DEFAULT NULL,
+  `modify_time` time DEFAULT NULL,
+  `modify_date` date DEFAULT NULL,
+  `modified_by` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1101,11 +1174,13 @@ INSERT INTO `dev_reintegration_satisfaction_scale` (`pk_satisfaction_scale`, `fk
 
 CREATE TABLE `dev_returnees` (
   `pk_returnee_id` bigint(20) NOT NULL,
+  `fk_project_id` int(10) DEFAULT NULL,
   `fk_branch_id` bigint(20) DEFAULT NULL,
   `returnee_id` char(20) DEFAULT NULL,
   `full_name` varchar(200) DEFAULT NULL,
   `father_name` varchar(200) DEFAULT NULL,
   `mother_name` varchar(200) DEFAULT NULL,
+  `marital_status` enum('single','married','divorced','widowed','separated') DEFAULT NULL,
   `returnee_spouse` varchar(200) DEFAULT NULL,
   `returnee_gender` varchar(50) DEFAULT NULL,
   `educational_qualification` text DEFAULT NULL,
@@ -1125,6 +1200,7 @@ CREATE TABLE `dev_returnees` (
   `return_date` date DEFAULT NULL,
   `destination_country` varchar(100) DEFAULT NULL,
   `legal_document` text DEFAULT NULL,
+  `other_legal_document` text DEFAULT NULL,
   `remigrate_intention` enum('yes','no') DEFAULT NULL,
   `destination_country_profession` text DEFAULT NULL,
   `profile_selection` enum('yes','no') DEFAULT NULL,
@@ -1141,8 +1217,8 @@ CREATE TABLE `dev_returnees` (
 -- Dumping data for table `dev_returnees`
 --
 
-INSERT INTO `dev_returnees` (`pk_returnee_id`, `fk_branch_id`, `returnee_id`, `full_name`, `father_name`, `mother_name`, `returnee_spouse`, `returnee_gender`, `educational_qualification`, `mobile_number`, `emergency_mobile`, `nid_number`, `birth_reg_number`, `passport_number`, `permanent_village`, `permanent_union`, `permanent_sub_district`, `permanent_district`, `permanent_division`, `brac_info_id`, `collection_date`, `person_type`, `return_date`, `destination_country`, `legal_document`, `remigrate_intention`, `destination_country_profession`, `profile_selection`, `remarks`, `create_time`, `create_date`, `created_by`, `modify_time`, `modify_date`, `modified_by`) VALUES
-(1, 2, '24214', 'Full Name', 'Father Name', 'Mother Name', 'REW', 'male', 'sign', '23432', '3423', '234', '2342', '23423', 'Village', 'Union/Pourashava', 'Jhikargacha', 'Bogura', 'Rajshahi', 'DSDS', '2020-10-09', 'trafficked_survivor', '2020-10-09', 'SDASD', 'Passport', 'yes', 'SDASD', 'yes', 'SADASDA', '20:53:06', '2020-10-09', 1, NULL, NULL, NULL);
+INSERT INTO `dev_returnees` (`pk_returnee_id`, `fk_project_id`, `fk_branch_id`, `returnee_id`, `full_name`, `father_name`, `mother_name`, `marital_status`, `returnee_spouse`, `returnee_gender`, `educational_qualification`, `mobile_number`, `emergency_mobile`, `nid_number`, `birth_reg_number`, `passport_number`, `permanent_village`, `permanent_union`, `permanent_sub_district`, `permanent_district`, `permanent_division`, `brac_info_id`, `collection_date`, `person_type`, `return_date`, `destination_country`, `legal_document`, `other_legal_document`, `remigrate_intention`, `destination_country_profession`, `profile_selection`, `remarks`, `create_time`, `create_date`, `created_by`, `modify_time`, `modify_date`, `modified_by`) VALUES
+(1, 0, 2, '24214', 'Full Name', 'Father Name', 'Mother Name', NULL, 'REW', 'male', 'sign', '23432', '3423', '234', '2342', '23423', 'Village', 'Union/Pourashava', 'Jhikargacha', 'Bogura', 'Rajshahi', 'DSDS', '2020-10-09', 'trafficked_survivor', '2020-10-09', 'SDASD', 'Passport', NULL, 'yes', 'SDASD', 'yes', 'SADASDA', '20:53:06', '2020-10-09', 1, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1396,7 +1472,23 @@ INSERT INTO `dev_user_activities` (`pk_activity_log`, `activity_msg`, `activity_
 (32, 'Jack (ID: immediate_support) has been turned on', '', 'update', 'success', '2020-10-06 16:30:17', 1),
 (33, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-10-08 19:33:01', 1),
 (34, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-10-09 12:37:50', 1),
-(35, 'Basic information of returnee profile Full Name (ID: 24214) has been saved.', '', 'create', 'success', '2020-10-09 20:53:06', 1);
+(35, 'Basic information of returnee profile Full Name (ID: 24214) has been saved.', '', 'create', 'success', '2020-10-09 20:53:06', 1),
+(36, 'Access To Public And Private Support information has been saved.', '', 'create', 'success', '2020-10-10 18:43:21', 1),
+(37, 'Access To Public And Private Support information has been saved.', '', 'create', 'success', '2020-10-10 18:44:03', 1),
+(38, 'Access To Public And Private Support information has been saved.', '', 'create', 'success', '2020-10-10 18:45:27', 1),
+(39, 'Access To Public And Private Support information has been saved.', '', 'create', 'success', '2020-10-10 18:49:27', 1),
+(40, 'Access To Public And Private Support information has been updated.', '', 'update', 'success', '2020-10-10 19:21:33', 1),
+(41, 'Access To Public And Private Support information has been updated.', '', 'update', 'success', '2020-10-10 19:22:04', 1),
+(42, 'Access To Public And Private Support information has been updated.', '', 'update', 'success', '2020-10-10 19:22:53', 1),
+(43, 'Access To Public And Private Support information has been updated.', '', 'update', 'success', '2020-10-10 19:25:25', 1),
+(44, 'Access To Public And Private Support information has been updated.', '', 'update', 'success', '2020-10-10 19:25:42', 1),
+(45, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-10-11 15:03:23', 1),
+(46, 'Immediate assistance after arrival information has been saved.', '', 'create', 'success', '2020-10-11 19:10:22', 1),
+(47, 'Immediate assistance after arrival information has been updated.', '', 'update', 'success', '2020-10-11 19:11:50', 1),
+(48, 'Immediate assistance after arrival information has been updated.', '', 'update', 'success', '2020-10-11 19:12:19', 1),
+(49, 'Immediate assistance after arrival information has been updated.', '', 'update', 'success', '2020-10-11 19:13:46', 1),
+(50, 'Immediate assistance after arrival information has been updated.', '', 'update', 'success', '2020-10-11 19:16:06', 1),
+(51, 'Immediate assistance after arrival information has been updated.', '', 'update', 'success', '2020-10-11 19:16:28', 1);
 
 -- --------------------------------------------------------
 
@@ -1437,10 +1529,22 @@ INSERT INTO `dev_user_roles` (`pk_role_id`, `role_slug`, `role_name`, `role_desc
 --
 
 --
+-- Indexes for table `dev_access_to_pp`
+--
+ALTER TABLE `dev_access_to_pp`
+  ADD PRIMARY KEY (`pk_access_id`);
+
+--
 -- Indexes for table `dev_activities`
 --
 ALTER TABLE `dev_activities`
   ADD PRIMARY KEY (`pk_activity_id`);
+
+--
+-- Indexes for table `dev_airport_land_supports`
+--
+ALTER TABLE `dev_airport_land_supports`
+  ADD PRIMARY KEY (`pk_support_id`);
 
 --
 -- Indexes for table `dev_branches`
@@ -1691,10 +1795,22 @@ ALTER TABLE `dev_user_roles`
 --
 
 --
+-- AUTO_INCREMENT for table `dev_access_to_pp`
+--
+ALTER TABLE `dev_access_to_pp`
+  MODIFY `pk_access_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `dev_activities`
 --
 ALTER TABLE `dev_activities`
   MODIFY `pk_activity_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `dev_airport_land_supports`
+--
+ALTER TABLE `dev_airport_land_supports`
+  MODIFY `pk_support_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_branches`
@@ -1916,7 +2032,7 @@ ALTER TABLE `dev_users_roles_relation`
 -- AUTO_INCREMENT for table `dev_user_activities`
 --
 ALTER TABLE `dev_user_activities`
-  MODIFY `pk_activity_log` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `pk_activity_log` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT for table `dev_user_meta`

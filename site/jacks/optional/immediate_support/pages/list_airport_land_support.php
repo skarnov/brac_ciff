@@ -19,12 +19,12 @@ $args = array(
         'count' => $per_page_items
     ),
     'order_by' => array(
-        'col' => 'pk_access_id',
+        'col' => 'pk_support_id',
         'order' => 'DESC'
     ),
 );
 
-$results = $this->get_access_to_pp($args);
+$results = $this->get_airport_land_supports($args);
 $pagination = pagination($results['total'], $per_page_items, $start);
 
 $filterString = array();
@@ -42,16 +42,16 @@ if ($filter_sub_district)
 doAction('render_start');
 ?>
 <div class="page-header">
-    <h1>All Access To Public And Private Supports</h1>
+    <h1>All Immediate Assistance after Arrival</h1>
     <div class="oh">
         <div class="btn-group btn-group-sm">
             <?php
             echo linkButtonGenerator(array(
-                'href' => $myUrl . '?action=add_edit_access_to_pp',
+                'href' => $myUrl . '?action=add_edit_airport_land_support',
                 'action' => 'add',
                 'icon' => 'icon_add',
-                'text' => 'New Access To Public And Private Support',
-                'title' => 'New Access To Public And Private Support',
+                'text' => 'New Immediate Assistance after Arrival',
+                'title' => 'New Immediate Assistance after Arrival',
             ));
             ?>
         </div>
@@ -99,7 +99,7 @@ filterForm($filterForm);
         </div>
     <?php endif; ?>
     <div class="table-header">
-        <?php echo searchResultText($results['total'], $start, $per_page_items, count($results['data']), 'Access To Public And Private Support') ?>
+        <?php echo searchResultText($results['total'], $start, $per_page_items, count($results['data']), 'Immediate Assistance after Arrival') ?>
     </div>
     <table class="table table-bordered table-condensed">
         <thead>
@@ -118,15 +118,15 @@ filterForm($filterForm);
                 <tr>
                     <td><?php echo $value['brac_info_id']; ?></td>
                     <td><?php echo $value['full_name']; ?></td>
-                    <td><?php echo $value['mobile']; ?></td>
+                    <td><?php echo $value['mobile_number']; ?></td>
                     <td><?php echo '<b>Division - </b>' . $value['division'] . ',<br><b>District - </b>' . $value['district'] . ',<br><b>Sub-District - </b>' . $value['sub_district'] ?></td>
                     <td>
-                        <?php if (has_permission('edit_access_to_pp')): ?>
+                        <?php if (has_permission('edit_airport_land_support')): ?>
                             <div class="btn-group">
-                                <a href="<?php echo url('admin/immediate_support/manage_access_to_pp?action=add_edit_access_to_pp&edit=' . $value['pk_access_id']) ?>" class="btn btn-flat btn-labeled btn-sm btn btn-primary"><i class="fa fa-pencil-square-o"></i> Edit</a>
+                                <a href="<?php echo url('admin/immediate_support/manage_airport_land_support?action=add_edit_airport_land_support&edit=' . $value['pk_support_id']) ?>" class="btn btn-flat btn-labeled btn-sm btn btn-primary"><i class="fa fa-pencil-square-o"></i> Edit</a>
                             </div>                                
                         <?php endif ?>
-                        <?php if (has_permission('delete_access_to_pp')): ?>
+                        <?php if (has_permission('delete_airport_land_support')): ?>
                             <div class="btn-group btn-group-sm">
                                 <?php
                                 echo buttonButtonGenerator(array(
@@ -134,7 +134,7 @@ filterForm($filterForm);
                                     'icon' => 'icon_delete',
                                     'text' => 'Delete',
                                     'title' => 'Delete Record',
-                                    'attributes' => array('data-id' => $value['pk_access_id']),
+                                    'attributes' => array('data-id' => $value['pk_support_id']),
                                     'classes' => 'delete_single_record'));
                                 ?>
                             </div>
@@ -176,12 +176,12 @@ filterForm($filterForm);
                 title: 'Delete Record!',
                 inputType: 'checkbox',
                 inputOptions: [{
-                        text: 'Delete Access To Public And Private Supports',
-                        value: 'deleteAccessToPP'
+                        text: 'Delete Immediate Assistance after Arrival',
+                        value: 'deleteAirportLandSupport'
                     }],
                 callback: function (result) {
-                    if (result == 'deleteAccessToPP') {
-                        window.location.href = '?action=deleteAccessToPP&id=' + logId;
+                    if (result == 'deleteAirportLandSupport') {
+                        window.location.href = '?action=deleteAirportLandSupport&id=' + logId;
                     }
                     hide_button_overlay_working(thisCell);
                 }

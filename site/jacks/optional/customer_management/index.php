@@ -1538,6 +1538,7 @@ class dev_customer_management {
         if (!$ret['error']) {
             $returnee_data = array();
             $returnee_data['fk_branch_id'] = $params['form_data']['branch_id'];
+            $returnee_data['fk_project_id'] = $params['form_data']['project_id'];
             $returnee_data['returnee_id'] = $params['form_data']['returnee_id'];
             $returnee_data['brac_info_id'] = $params['form_data']['brac_info_id'];
             $returnee_data['collection_date'] = date('Y-m-d', strtotime($params['form_data']['collection_date']));
@@ -1551,6 +1552,7 @@ class dev_customer_management {
             $returnee_data['passport_number'] = $params['form_data']['passport_number'];
             $returnee_data['father_name'] = $params['form_data']['father_name'];
             $returnee_data['mother_name'] = $params['form_data']['mother_name'];
+            $returnee_data['marital_status'] = $params['form_data']['marital_status'];
             $returnee_data['returnee_spouse'] = $params['form_data']['returnee_spouse'];
             $returnee_data['permanent_division'] = $params['form_data']['permanent_division'];
             $returnee_data['permanent_district'] = $params['form_data']['permanent_district'];

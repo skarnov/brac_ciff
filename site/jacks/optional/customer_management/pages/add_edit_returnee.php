@@ -11,6 +11,9 @@ if (!checkPermission($edit, 'add_returnee', 'edit_returnee')) {
 $branches = jack_obj('dev_branch_management');
 $all_branches = $branches->get_branches();
 
+$projects = jack_obj('dev_project_management');
+$all_projects = $projects->get_projects();
+
 $pre_data = array();
 
 if ($edit) {
@@ -242,6 +245,17 @@ ob_start();
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label>Project</label>
+                                <div class="select2-primary">
+                                    <select class="form-control" name="project_id" required>
+                                        <option value="">Select One</option>
+                                        <?php foreach ($all_projects['data'] as $project) : ?>
+                                            <option value="<?php echo $project['pk_project_id'] ?>" <?php echo ($project['pk_project_id'] == $pre_data['fk_project_id']) ? 'selected' : '' ?>><?php echo $project['project_short_name'] ?></option>
+                                        <?php endforeach ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label>ID (*)</label>
                                 <input class="form-control" type="text" required name="returnee_id" value="<?php echo $pre_data['returnee_id'] ? $pre_data['returnee_id'] : ''; ?>">
                             </div>
@@ -282,6 +296,38 @@ ob_start();
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label>Marital Status (*)</label>
+                                <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
+                                    <div class="options_holder radio">
+                                        <label><input class="px notMarried" type="radio" name="marital_status" value="single" <?php echo $pre_data && $pre_data['marital_status'] == 'single' ? 'checked' : '' ?>><span class="lbl">Unmarried</span></label>
+                                        <label><input class="px" id="isMarried" type="radio" name="marital_status" value="married" <?php echo $pre_data && $pre_data['marital_status'] == 'married' ? 'checked' : '' ?>><span class="lbl">Married</span></label>
+                                        <label><input class="px notMarried" type="radio" name="marital_status" value="divorced" <?php echo $pre_data && $pre_data['marital_status'] == 'divorced' ? 'checked' : '' ?>><span class="lbl">Divorced/Separated</span></label>
+                                        <label><input class="px notMarried" type="radio" name="marital_status" value="widowed" <?php echo $pre_data && $pre_data['marital_status'] == 'widowed' ? 'checked' : '' ?>><span class="lbl">Widowed</span></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="spouse" style="display: none; margin-bottom: 1em;">
+                                <input class="form-control" placeholder="Enter Spouse Name" type="text" id="customerSpouse" name="customer_spouse" value="<?php echo $pre_data['customer_spouse'] ? $pre_data['customer_spouse'] : ''; ?>">
+                            </div>
+                            <script>
+                                init.push(function () {
+                                    var isChecked = $('#isMarried').is(':checked');
+
+                                    if (isChecked == true) {
+                                        $('#spouse').show();
+                                    }
+
+                                    $("#isMarried").on("click", function () {
+                                        $('#spouse').show();
+                                    });
+
+                                    $(".notMarried").on("click", function () {
+                                        $('#spouse').hide();
+                                        $('#customerSpouse').val('');
+                                    });
+                                });
+                            </script>
                             <div class="form-group">
                                 <label>Mobile Number</label>
                                 <div class="input-group">
