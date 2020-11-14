@@ -46,6 +46,8 @@
         <script type="text/javascript"> window.jQuery || document.write('<script src="<?php echo theme_path() . '/assets/javascripts/jquery-1.8.3.min.js' ?>">'+"<"+"/script>"); </script>
         <![endif]-->
 
+                <script src="<?php echo theme_path() . '/assets/javascripts/jquery.validate.min.js' ?>"></script>
+                
 		<!-- Pixel Admin's javascripts -->
 		<?php
         minify_handler::$jsBundle['thirdParty'] = array(

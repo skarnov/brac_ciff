@@ -2,7 +2,14 @@
 $start = $_GET['start'] ? $_GET['start'] : 0;
 $per_page_items = 10;
 
+$filter_name = $_GET['name'] ? $_GET['name'] : null;
+$filter_tag = $_GET['tag'] ? $_GET['tag'] : null;
+$filter_start_date = $_GET['start_date'] ? $_GET['start_date'] : null;
+$filter_end_date = $_GET['end_date'] ? $_GET['end_date'] : null;
+
 $args = array(
+    'name' => $filter_name,
+    'tag' => $filter_tag,
     'type' => 'story',
     'limit' => array(
         'start' => $start * $per_page_items,
@@ -14,11 +21,29 @@ $args = array(
     ),
 );
 
+if ($filter_start_date && $filter_end_date) {
+    $args['BETWEEN_INCLUSIVE'] = array(
+        'create_date' => array(
+            'left' => date_to_db($filter_start_date),
+            'right' => date_to_db($filter_end_date),
+        ),
+    );
+}
+
 $stories = $this->get_knowledge($args);
 $pagination = pagination($stories['total'], $per_page_items, $start);
 
+$filterString = array();
+if ($filter_name)
+    $filterString[] = 'Name: ' . $filter_name;
+if ($filter_tag)
+    $filterString[] = 'Tag: ' . $filter_tag;
+if ($filter_start_date)
+    $filterString[] = 'Start Date: ' . $filter_start_date;
+if ($filter_end_date)
+    $filterString[] = 'End Date: ' . $filter_end_date;
+
 doAction('render_start');
-ob_start();
 ?>
 <div class="page-header">
     <h1>All Stories</h1>
@@ -36,7 +61,47 @@ ob_start();
         </div>
     </div>
 </div>
+<?php
+ob_start();
+echo formProcessor::form_elements('name', 'name', array(
+    'width' => 2, 'type' => 'text', 'label' => 'Name',
+        ), $filter_name);
+echo formProcessor::form_elements('nid', 'nid', array(
+    'width' => 2, 'type' => 'text', 'label' => 'NID',
+        ), $filter_nid);
+?>
+<div class="form-group col-sm-2">
+    <label>Entry Start Date</label>
+    <div class="input-group">
+        <input id="startDate" type="text" class="form-control" name="entry_start_date" value="<?php echo $filter_entry_start_date ?>">
+    </div>
+    <script type="text/javascript">
+        init.push(function () {
+            _datepicker('startDate');
+        });
+    </script>
+</div>
+<div class="form-group col-sm-2">
+    <label>Entry End Date</label>
+    <div class="input-group">
+        <input id="endDate" type="text" class="form-control" name="entry_end_date" value="<?php echo $filter_entry_end_date ?>">
+    </div>
+    <script type="text/javascript">
+        init.push(function () {
+            _datepicker('endDate');
+        });
+    </script>
+</div>
+<?php
+$filterForm = ob_get_clean();
+filterForm($filterForm);
+?>
 <div class="table-primary table-responsive">
+    <?php if ($filterString): ?>
+        <div class="table-header">
+            Filtered With: <?php echo implode(', ', $filterString) ?>
+        </div>
+    <?php endif; ?>
     <div class="table-header">
         <?php echo searchResultText($stories['total'], $start, $per_page_items, count($stories['data']), 'stories') ?>
     </div>

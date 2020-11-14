@@ -108,10 +108,41 @@ doAction('render_start');
                         <label>Place of Family Counseling</label>
                         <input class="form-control" type="text" id="session_place" name="session_place" value="<?php echo $pre_data['session_place'] ? $pre_data['session_place'] : ''; ?>">
                     </div>
-                    <div class="form-group">
-                        <label>No of Family Members Counseled</label>
-                        <input class="form-control" type="number" id="members_counseled" name="members_counseled" value="<?php echo $pre_data['members_counseled'] ? $pre_data['members_counseled'] : ''; ?>">
-                    </div>
+                    <fieldset class="scheduler-border">
+                        <legend class="scheduler-border">No of Family Members Counseled</legend>
+                        <div class="col-sm-4">   
+                            <label class="control-label input-label">Male</label>
+                            <div class="form-group">
+                                <input type="number" class="filter form-control" id="maleMember" name="male_household_member" value="<?php echo $pre_data['male_household_member'] ? $pre_data['male_household_member'] : ''; ?>" />
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="control-label input-label">Female</label>
+                            <div class="form-group">
+                                <input class="filter form-control" id="femaleMember" type="number" name="female_household_member" value="<?php echo $pre_data['female_household_member'] ? $pre_data['female_household_member'] : ''; ?>">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">   
+                            <label class="control-label input-label">Total</label>
+                            <div class="form-group">
+                                <input class="form-control" id="totalMember" type="number" value="<?php echo $pre_data['male_household_member'] + $pre_data['female_household_member'] ?>">
+                            </div>
+                        </div>
+                    </fieldset>
+                    <script>
+                        init.push(function () {
+                            var $form = $('#theForm'),
+                                    hideShow = function () {
+                                        var maleMember = $('#maleMember').val();
+                                        var femaleMember = $('#femaleMember').val();
+
+                                        var total = Number(maleMember) + Number(femaleMember);
+                                        $('#totalMember').val(total);
+                                    };
+
+                            $form.find('.filter').on('keyup', hideShow);
+                        });
+                    </script>
                 </div>
                 <div class="col-sm-12">
                     <div class="form-group">

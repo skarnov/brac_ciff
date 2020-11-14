@@ -62,6 +62,20 @@ $args = array(
 
 $psychosocial_followups = $this->get_psychosocial_followup($args);
 
+$args = array(
+    'customer_id' => $edit,
+    'limit' => array(
+        'start' => $start * $per_page_items,
+        'count' => $per_page_items
+    ),
+    'order_by' => array(
+        'col' => 'pk_followup_id',
+        'order' => 'DESC'
+    ),
+);
+
+$reviews = $this->get_case_review($args);
+
 $pre_data = array();
 if ($edit) {
     $args = array(
@@ -70,6 +84,8 @@ if ($edit) {
             'fk_staff_id' => 'dev_immediate_supports.fk_staff_id',
             'fk_customer_id' => 'dev_immediate_supports.fk_customer_id',
             'immediate_support' => 'dev_immediate_supports.immediate_support',
+            'entry_date' => 'dev_immediate_supports.entry_date AS entry_date',
+            'arrival_place' => 'dev_immediate_supports.arrival_place',
             'reintegration_financial_service' => 'dev_reintegration_plan.reintegration_financial_service',
             'service_requested' => 'dev_reintegration_plan.service_requested',
             'other_service_requested' => 'dev_reintegration_plan.other_service_requested',
@@ -77,13 +93,9 @@ if ($edit) {
             'security_measure' => 'dev_reintegration_plan.security_measure',
             'service_requested_note' => 'dev_reintegration_plan.service_requested_note',
             'first_meeting' => 'dev_psycho_supports.first_meeting',
-            'is_home_visit' => 'dev_psycho_supports.is_home_visit',
-            'issue_discussed' => 'dev_psycho_supports.issue_discussed',
-            'other_issue_discussed' => 'dev_psycho_supports.other_issue_discussed',
             'problem_identified' => 'dev_psycho_supports.problem_identified',
             'problem_description' => 'dev_psycho_supports.problem_description',
             'initial_plan' => 'dev_psycho_supports.initial_plan',
-            'is_family_counceling' => 'dev_psycho_supports.is_family_counceling',
             'family_counseling' => 'dev_psycho_supports.family_counseling',
             'session_place' => 'dev_psycho_supports.session_place',
             'session_number' => 'dev_psycho_supports.session_number',
@@ -97,8 +109,7 @@ if ($edit) {
             'full_name' => 'dev_customers.full_name',
             'inkind_project' => 'dev_economic_supports.inkind_project',
             'other_inkind_project' => 'dev_economic_supports.other_inkind_project',
-            'inkind_received' => 'dev_economic_supports.inkind_received',
-            'training_duration' => 'dev_economic_supports.training_duration',
+            'entry_date' => 'dev_economic_supports.entry_date AS economic_reintegration_date',
             'is_certification_received' => 'dev_economic_supports.is_certification_received',
             'training_used' => 'dev_economic_supports.training_used',
             'economic_other_comments' => 'dev_economic_supports.other_comments AS economic_other_comments',
@@ -110,15 +121,18 @@ if ($edit) {
             'place_traning' => 'dev_economic_supports.place_traning',
             'duration_traning' => 'dev_economic_supports.duration_traning',
             'training_status' => 'dev_economic_supports.training_status',
-            'received_vocational_training' => 'dev_economic_supports.received_vocational_training',
-            'other_received_vocational_training' => 'dev_economic_supports.other_received_vocational_training',
-            'training_start_date' => 'dev_economic_supports.training_start_date',
-            'training_end_date' => 'dev_economic_supports.training_end_date',
+            'financial_literacy_date' => 'dev_economic_supports.financial_literacy_date',
+            'business_development_date' => 'dev_economic_supports.business_development_date',
+            'product_development_date' => 'dev_economic_supports.product_development_date',
+            'entrepreneur_training_date' => 'dev_economic_supports.entrepreneur_training_date',
+            'other_financial_training_name' => 'dev_economic_supports.other_financial_training_name',
+            'other_financial_training_date' => 'dev_economic_supports.other_financial_training_date',
+            'entry_date' => 'dev_economic_reintegration_referrals.entry_date AS economic_reintegration_referral_date',
             'is_vocational_training' => 'dev_economic_reintegration_referrals.is_vocational_training',
+            'received_vocational_training' => 'dev_economic_reintegration_referrals.received_vocational_training',
+            'other_received_vocational_training' => 'dev_economic_reintegration_referrals.other_received_vocational_training',
             'received_vocational' => 'dev_economic_reintegration_referrals.received_vocational',
             'other_received_vocational' => 'dev_economic_reintegration_referrals.other_received_vocational',
-            'is_certificate_received' => 'dev_economic_reintegration_referrals.is_certificate_received',
-            'used_far' => 'dev_economic_reintegration_referrals.used_far',
             'economic_referrals_other_comments' => 'dev_economic_reintegration_referrals.other_comments AS economic_referrals_other_comments',
             'is_economic_services' => 'dev_economic_reintegration_referrals.is_economic_services',
             'economic_financial_service' => 'dev_economic_reintegration_referrals.economic_financial_service',
@@ -132,6 +146,8 @@ if ($edit) {
             'duration_training' => 'dev_economic_reintegration_referrals.duration_training',
             'status_traning' => 'dev_economic_reintegration_referrals.status_traning',
             'assistance_utilized' => 'dev_economic_reintegration_referrals.assistance_utilized',
+            'job_placement_date' => 'dev_economic_reintegration_referrals.job_placement_date',
+            'financial_services_date' => 'dev_economic_reintegration_referrals.financial_services_date',
             'reintegration_economic' => 'dev_social_supports.reintegration_economic',
             'other_reintegration_economic' => 'dev_social_supports.other_reintegration_economic',
             'soical_date' => 'dev_social_supports.soical_date',
@@ -139,39 +155,17 @@ if ($edit) {
             'date_education' => 'dev_social_supports.date_education',
             'date_housing' => 'dev_social_supports.date_housing',
             'date_legal' => 'dev_social_supports.date_legal',
-            'attended_ipt' => 'dev_social_supports.attended_ipt',
-            'learn_show' => 'dev_social_supports.learn_show',
-            'is_per_community_video' => 'dev_social_supports.is_per_community_video',
-            'learn_video' => 'dev_social_supports.learn_video',
             'support_referred' => 'dev_social_supports.support_referred',
             'other_support_referred' => 'dev_social_supports.other_support_referred',
-            'casedropped' => 'dev_followups.casedropped',
-            'reason_dropping' => 'dev_followups.reason_dropping',
-            'other_reason_dropping' => 'dev_followups.other_reason_dropping',
-            'confirm_services' => 'dev_followups.confirm_services',
-            'financial_service' => 'dev_followups.financial_service AS followup_financial_service',
-            'social_protection' => 'dev_followups.social_protection',
-            'special_security' => 'dev_followups.special_security',
-            'comment_psychosocial' => 'dev_followups.comment_psychosocial',
-            'comment_economic' => 'dev_followups.comment_economic',
-            'comment_social' => 'dev_followups.comment_social',
-            'complete_income' => 'dev_followups.complete_income',
-            'monthly_income' => 'dev_followups.monthly_income',
-            'challenges' => 'dev_followups.challenges',
-            'actions_taken' => 'dev_followups.actions_taken',
-            'remark_participant' => 'dev_followups.remark_participant',
-            'comment_brac' => 'dev_followups.comment_brac',
-            'remark_district' => 'dev_followups.remark_district',
         ),
         'id' => $edit,
         'single' => true
     );
 
     $pre_data = $this->get_cases($args);
-    
+
     $immediate_support = explode(',', $pre_data['immediate_support']);
     $service_requested = explode(',', $pre_data['service_requested']);
-    $issue_discussed = explode(',', $pre_data['issue_discussed']);
     $problem_identified = explode(',', $pre_data['problem_identified']);
     $reason_for_reffer = explode(',', $pre_data['reason_for_reffer']);
     $inkind_project = explode(',', $pre_data['inkind_project']);
@@ -180,8 +174,6 @@ if ($edit) {
     $economic_support = explode(',', $pre_data['economic_support']);
     $reintegration_economic = explode(',', $pre_data['reintegration_economic']);
     $support_referred = explode(',', $pre_data['support_referred']);
-    $reason_dropping = explode(',', $pre_data['reason_dropping']);
-    $confirm_services = explode(',', $pre_data['confirm_services']);
 
     if (!$pre_data) {
         add_notification('Invalid case, no data found.', 'error');
@@ -257,7 +249,7 @@ doAction('render_start');
             <div class="side_aligned_tab">
                 <ul id="uidemo-tabs-default-demo" class="nav nav-tabs">
                     <li class="active">
-                        <a href="#SupportProvided" data-toggle="tab">Section 1: Support Provided</a>
+                        <a href="#SupportProvided" data-toggle="tab">Section 1: Immediate Support Provided After Arrival</a>
                     </li>
                     <li class="">
                         <a href="#PreferredServices" data-toggle="tab">Section 2: Preferred Services and Reintegration Plan</a>
@@ -293,9 +285,24 @@ doAction('render_start');
                 <div class="tab-content tab-content-bordered">
                     <div class="tab-pane fade active in" id="SupportProvided">
                         <fieldset>
-                            <legend>Section 1: Support Provided</legend>
+                            <legend>Section 1: Immediate Support Provided After Arrival</legend>
                             <div class="row">
-                                <div class="col-sm-4">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Support Date</label>
+                                        <div class="input-group">
+                                            <input id="supportDate" type="text" class="form-control" name="support_date" value="<?php echo $pre_data['support_date'] && $pre_data['support_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['support_date'])) : ''; ?>">
+                                        </div>
+                                        <script type="text/javascript">
+                                            init.push(function () {
+                                                _datepicker('supportDate');
+                                            });
+                                        </script>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Arrival Place</label>
+                                        <input type="text" class="form-control" name="arrival_place" value="<?php echo $pre_data['arrival_place'] ? $pre_data['arrival_place'] : ''; ?>" />
+                                    </div>
                                     <div class="form-group">
                                         <label>Select Case Manager (*)</label>
                                         <select class="form-control" name="fk_staff_id">
@@ -309,65 +316,61 @@ doAction('render_start');
                                 <?php
                                 $immediate_support = $immediate_support ? $immediate_support : array($immediate_support);
                                 ?>   
-                                <div class="col-sm-8">
-                                    <fieldset class="scheduler-border">
-                                        <legend class="scheduler-border">Immediate support services received</legend>
-                                        <div class="form-group">
-                                            <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
-                                                <div class="options_holder radio">
-                                                    <div class="col-sm-6">   
-                                                        <label><input class="px" type="checkbox" name="immediate_support[]" value="Meet and greet at port of entry" <?php
-                                                            if (in_array('Meet and greet at port of entry', $immediate_support)) {
-                                                                echo 'checked';
-                                                            }
-                                                            ?>><span class="lbl">Meet and greet at port of entry</span></label>
-                                                        <label><input class="px" type="checkbox" name="immediate_support[]" value="Information provision" <?php
-                                                            if (in_array('Information provision', $immediate_support)) {
-                                                                echo 'checked';
-                                                            }
-                                                            ?>><span class="lbl">Information provision</span></label>
-                                                        <label><input class="px" type="checkbox" name="immediate_support[]" value="Pocket money" <?php
-                                                            if (in_array('Pocket money', $immediate_support)) {
-                                                                echo 'checked';
-                                                            }
-                                                            ?>><span class="lbl">Pocket money</span></label>
-                                                        <label><input class="px" type="checkbox" name="immediate_support[]" value="Shelter and accommodation" <?php
-                                                            if (in_array('Shelter and accommodation', $immediate_support)) {
-                                                                echo 'checked';
-                                                            }
-                                                            ?>><span class="lbl">Shelter and accommodation</span></label>
-                                                        <label><input class="px" type="checkbox" name="immediate_support[]" value="Onward transportation" <?php
-                                                            if (in_array('Onward transportation', $immediate_support)) {
-                                                                echo 'checked';
-                                                            }
-                                                            ?>><span class="lbl">Onward transportation</span></label>
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <label><input class="px" type="checkbox" name="immediate_support[]" value="Health assessment and health assistance" <?php
-                                                            if (in_array('Health assessment and health assistance', $immediate_support)) {
-                                                                echo 'checked';
-                                                            }
-                                                            ?>><span class="lbl">Health assessment and health assistance</span></label>
-                                                        <label><input class="px" type="checkbox" name="immediate_support[]" value="Food and nutrition" <?php
-                                                            if (in_array('Food and nutrition', $immediate_support)) {
-                                                                echo 'checked';
-                                                            }
-                                                            ?>><span class="lbl">Food and nutrition</span></label>
-                                                        <label><input class="px" type="checkbox" name="immediate_support[]" value="Non-Food Items (hygiene kits, etc.)" <?php
-                                                            if (in_array('Non-Food Items (hygiene kits, etc.)', $immediate_support)) {
-                                                                echo 'checked';
-                                                            }
-                                                            ?>><span class="lbl">Non-Food Items (hygiene kits, etc.)</span></label>
-                                                        <label><input class="px" type="checkbox" name="immediate_support[]" value="Psychosocial Conseling" <?php
-                                                            if (in_array('Psychosocial Conseling', $immediate_support)) {
-                                                                echo 'checked';
-                                                            }
-                                                            ?>><span class="lbl">Psychosocial Conseling</span></label>
-                                                    </div>
-                                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Immediate support services received</label>
+                                        <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
+                                            <div class="options_holder radio">
+
+                                                <label><input class="px" type="checkbox" name="immediate_support[]" value="Meet and greet at port of entry" <?php
+                                                    if (in_array('Meet and greet at port of entry', $immediate_support)) {
+                                                        echo 'checked';
+                                                    }
+                                                    ?>><span class="lbl">Meet and greet at port of entry</span></label>
+                                                <label><input class="px" type="checkbox" name="immediate_support[]" value="Information provision" <?php
+                                                    if (in_array('Information provision', $immediate_support)) {
+                                                        echo 'checked';
+                                                    }
+                                                    ?>><span class="lbl">Information provision</span></label>
+                                                <label><input class="px" type="checkbox" name="immediate_support[]" value="Pocket money" <?php
+                                                    if (in_array('Pocket money', $immediate_support)) {
+                                                        echo 'checked';
+                                                    }
+                                                    ?>><span class="lbl">Pocket money</span></label>
+                                                <label><input class="px" type="checkbox" name="immediate_support[]" value="Shelter and accommodation" <?php
+                                                    if (in_array('Shelter and accommodation', $immediate_support)) {
+                                                        echo 'checked';
+                                                    }
+                                                    ?>><span class="lbl">Shelter and accommodation</span></label>
+                                                <label><input class="px" type="checkbox" name="immediate_support[]" value="Onward transportation" <?php
+                                                    if (in_array('Onward transportation', $immediate_support)) {
+                                                        echo 'checked';
+                                                    }
+                                                    ?>><span class="lbl">Onward transportation</span></label>
+
+                                                <label><input class="px" type="checkbox" name="immediate_support[]" value="Health assessment and health assistance" <?php
+                                                    if (in_array('Health assessment and health assistance', $immediate_support)) {
+                                                        echo 'checked';
+                                                    }
+                                                    ?>><span class="lbl">Health assessment and health assistance</span></label>
+                                                <label><input class="px" type="checkbox" name="immediate_support[]" value="Food and nutrition" <?php
+                                                    if (in_array('Food and nutrition', $immediate_support)) {
+                                                        echo 'checked';
+                                                    }
+                                                    ?>><span class="lbl">Food and nutrition</span></label>
+                                                <label><input class="px" type="checkbox" name="immediate_support[]" value="Non-Food Items (hygiene kits, etc.)" <?php
+                                                    if (in_array('Non-Food Items (hygiene kits, etc.)', $immediate_support)) {
+                                                        echo 'checked';
+                                                    }
+                                                    ?>><span class="lbl">Non-Food Items (hygiene kits, etc.)</span></label>
+                                                <label><input class="px" type="checkbox" name="immediate_support[]" value="Psychosocial Conseling" <?php
+                                                    if (in_array('Psychosocial Conseling', $immediate_support)) {
+                                                        echo 'checked';
+                                                    }
+                                                    ?>><span class="lbl">Psychosocial Conseling</span></label>
                                             </div>
                                         </div>
-                                    </fieldset>
+                                    </div>
                                 </div>
                             </div>
                         </fieldset>
@@ -380,249 +383,357 @@ doAction('render_start');
                             <legend>Section 2: Preferred Services and Reintegration Plan</legend>
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <fieldset class="scheduler-border">
-                                        <legend class="scheduler-border">Type of Services Requested</legend>
+                                    <div class="col-sm-6">
                                         <div class="form-group">
-                                            <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
-                                                <div class="options_holder radio">
-                                                    <div class="col-sm-6">   
-                                                        <label class="col-sm-12"><input class="px" type="checkbox" name="service_requested[]" value="Child Care" <?php
-                                                            if (in_array('Child Care', $service_requested)) {
-                                                                echo 'checked';
-                                                            }
-                                                            ?>><span class="lbl">Child Care</span></label>
-                                                        <label class="col-sm-4"><input class="px" type="checkbox" name="service_requested[]" value="Education" <?php
-                                                            if (in_array('Education', $service_requested)) {
-                                                                echo 'checked';
-                                                            }
-                                                            ?>><span class="lbl">Education</span></label>
-                                                        <div class="form-group col-sm-8">
-                                                            <div class="options_holder radio">
-                                                                <label><input class="px" type="checkbox" name="service_requested[]" value="Admission" <?php
-                                                                    if (in_array('Admission', $service_requested)) {
-                                                                        echo 'checked';
-                                                                    }
-                                                                    ?>><span class="lbl">Admission</span></label>
-                                                                <label><input class="px" type="checkbox" name="service_requested[]" value="Scholarship/Stipend" <?php
-                                                                    if (in_array('Scholarship/Stipend', $service_requested)) {
-                                                                        echo 'checked';
-                                                                    }
-                                                                    ?>><span class="lbl">Scholarship/Stipend</span></label>
-                                                            </div>
-                                                        </div>
-                                                        <label class="col-sm-4"><input class="px" type="checkbox" name="service_requested[]" value="Financial Service" <?php
-                                                            if (in_array('Financial Service', $service_requested)) {
-                                                                echo 'checked';
-                                                            }
-                                                            ?>><span class="lbl">Financial Services</span></label>
-                                                        <div class="form-group col-sm-8">
-                                                            <div class="options_holder radio">
-                                                                <label><input class="px" type="checkbox" name="service_requested[]" value="Loan" <?php
-                                                                    if (in_array('Loan', $service_requested)) {
-                                                                        echo 'checked';
-                                                                    }
-                                                                    ?>><span class="lbl">Loan</span></label>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label>Other Financial Service</label>
-                                                                <input class="form-control" placeholder="Other financial service" type="text" name="reintegration_financial_service" value="<?php echo $pre_data['reintegration_financial_service'] ? $pre_data['reintegration_financial_service'] : ''; ?>">
-                                                            </div>
-                                                        </div>
-                                                        <label class="col-sm-4"><input class="px" type="checkbox" name="service_requested[]" value="Housing" <?php
-                                                            if (in_array('Housing', $service_requested)) {
-                                                                echo 'checked';
-                                                            }
-                                                            ?>><span class="lbl">Housing</span></label>
-                                                        <div class="form-group col-sm-8">
-                                                            <div class="options_holder radio">
-                                                                <label><input class="px" type="checkbox" name="service_requested[]" value="Allocation for khas land" <?php
-                                                                    if (in_array('Allocation for khas land', $service_requested)) {
-                                                                        echo 'checked';
-                                                                    }
-                                                                    ?>><span class="lbl">Allocation for khas land</span></label>
-                                                                <label><input class="px" type="checkbox" name="service_requested[]" value="Support for land allocation" <?php
-                                                                    if (in_array('Support for land allocation', $service_requested)) {
-                                                                        echo 'checked';
-                                                                    }
-                                                                    ?>><span class="lbl">Support for land allocation</span></label>
-                                                            </div>
-                                                        </div>
-                                                        <label class="col-sm-12"><input class="px" type="checkbox" name="service_requested[]" value="Job Placement" <?php
-                                                            if (in_array('Job Placement', $service_requested)) {
-                                                                echo 'checked';
-                                                            }
-                                                            ?>><span class="lbl">Job Placement</span></label>
-                                                        <label class="col-sm-4"><input class="px" type="checkbox" name="service_requested[]" value="Legal Services" <?php
-                                                            if (in_array('Legal Services', $service_requested)) {
-                                                                echo 'checked';
-                                                            }
-                                                            ?>><span class="lbl">Legal Services</span></label>
-                                                        <div class="form-group col-sm-8">
-                                                            <div class="options_holder radio">
-                                                                <label><input class="px" type="checkbox" name="service_requested[]" value="Legal Aid" <?php
-                                                                    if (in_array('Legal Aid"', $service_requested)) {
-                                                                        echo 'checked';
-                                                                    }
-                                                                    ?>><span class="lbl">Legal Aid</span></label>
-                                                                <label><input class="px" type="checkbox" name="service_requested[]" value="Claiming Compensation" <?php
-                                                                    if (in_array('Claiming Compensation', $service_requested)) {
-                                                                        echo 'checked';
-                                                                    }
-                                                                    ?>><span class="lbl">Claiming Compensation</span></label>
-                                                                <label><input class="px" type="checkbox" name="service_requested[]" value="Assistance in resolving family dispute" <?php
-                                                                    if (in_array('Assistance in resolving family dispute', $service_requested)) {
-                                                                        echo 'checked';
-                                                                    }
-                                                                    ?>><span class="lbl">Assistance in resolving family dispute</span></label>
-                                                            </div>
-                                                        </div>
-                                                        <label class="col-sm-4"><input class="px" type="checkbox" name="service_requested[]" value="Training" <?php
-                                                            if (in_array('Training', $service_requested)) {
-                                                                echo 'checked';
-                                                            }
-                                                            ?>><span class="lbl">Training</span></label>
-                                                        <div class="form-group col-sm-8">
-                                                            <div class="options_holder radio">
-                                                                <label><input class="px" type="checkbox" name="service_requested[]" value="Financial Literacy Training" <?php
-                                                                    if (in_array('Financial Literacy Training', $service_requested)) {
-                                                                        echo 'checked';
-                                                                    }
-                                                                    ?>><span class="lbl">Financial Literacy Training</span></label>
-                                                                <label><input class="px" type="checkbox" name="service_requested[]" value="Advance training from project" <?php
-                                                                    if (in_array('Advance training from project', $service_requested)) {
-                                                                        echo 'checked';
-                                                                    }
-                                                                    ?>><span class="lbl">Advance training from project</span></label>
-                                                                <label><input class="px" type="checkbox" name="service_requested[]" value="Advance training through referrals" <?php
-                                                                    if (in_array('Advance training through referrals', $service_requested)) {
-                                                                        echo 'checked';
-                                                                    }
-                                                                    ?>><span class="lbl">Advance training through referrals</span></label>
-                                                            </div>
-                                                        </div>
-                                                        <label class="col-sm-4"><input class="px" type="checkbox" name="service_requested[]" value="Material Assistance" <?php
-                                                            if (in_array('Material Assistance', $service_requested)) {
-                                                                echo 'checked';
-                                                            }
-                                                            ?>><span class="lbl">Material Assistance</span></label>
-                                                        <div class="form-group col-sm-8">
-                                                            <div class="options_holder radio">
-                                                                <label><input class="px" type="checkbox" name="service_requested[]" value="Business equipment/tools" <?php
-                                                                    if (in_array('Business equipment/tools', $service_requested)) {
-                                                                        echo 'checked';
-                                                                    }
-                                                                    ?>><span class="lbl">Business equipment/tools</span></label>
-                                                                <label><input class="px" type="checkbox" name="service_requested[]" value="Allocation of land or pond for business" <?php
-                                                                    if (in_array('Allocation of land or pond for business', $service_requested)) {
-                                                                        echo 'checked';
-                                                                    }
-                                                                    ?>><span class="lbl">Allocation of land or pond for business</span></label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-6">   
-                                                        <label class="col-sm-4"><input class="px" type="checkbox" name="service_requested[]" value="Medical Support" <?php
-                                                            if (in_array('Medical Support', $service_requested)) {
-                                                                echo 'checked';
-                                                            }
-                                                            ?>><span class="lbl">Medical Support</span></label>
-                                                        <div class="form-group col-sm-8">
-                                                            <div class="options_holder radio">
-                                                                <label><input class="px" type="checkbox" name="service_requested[]" value=">Medical treatment" <?php
-                                                                    if (in_array('Medical treatment', $service_requested)) {
-                                                                        echo 'checked';
-                                                                    }
-                                                                    ?>><span class="lbl">Medical treatment</span></label>
-                                                                <label><input class="px" type="checkbox" name="service_requested[]" value="Psychiatric treatment" <?php
-                                                                    if (in_array('Psychiatric treatment', $service_requested)) {
-                                                                        echo 'checked';
-                                                                    }
-                                                                    ?>><span class="lbl">Psychiatric treatment</span></label>
-                                                            </div>
-                                                        </div>
-                                                        <label class="col-sm-4"><input class="px" type="checkbox" name="service_requested[]" value="Microbusiness" <?php
-                                                            if (in_array('Microbusiness', $service_requested)) {
-                                                                echo 'checked';
-                                                            }
-                                                            ?>><span class="lbl">Microbusiness</span></label>
-                                                        <div class="form-group col-sm-8">
-                                                            <div class="options_holder radio">
-                                                                <label><input class="px" type="checkbox" name="service_requested[]" value="Business grant" <?php
-                                                                    if (in_array('Business grant', $service_requested)) {
-                                                                        echo 'checked';
-                                                                    }
-                                                                    ?>><span class="lbl">Business grant</span></label>
-                                                            </div>
-                                                        </div>
-                                                        <label class="col-sm-4"><input class="px" type="checkbox" name="service_requested[]" value="Psychosocial Support" <?php
-                                                            if (in_array('Psychosocial Support', $service_requested)) {
-                                                                echo 'checked';
-                                                            }
-                                                            ?>><span class="lbl">Psychosocial Support</span></label>
-                                                        <div class="form-group col-sm-8">
-                                                            <div class="options_holder radio">
-                                                                <label><input class="px" type="checkbox" name="service_requested[]" value="Individual Counselling" <?php
-                                                                    if (in_array('Individual Counselling', $service_requested)) {
-                                                                        echo 'checked';
-                                                                    }
-                                                                    ?>><span class="lbl">Individual Counselling</span></label>
-                                                                <label><input class="px" type="checkbox" name="service_requested[]" value="Family counselling" <?php
-                                                                    if (in_array('Family counselling', $service_requested)) {
-                                                                        echo 'checked';
-                                                                    }
-                                                                    ?>><span class="lbl">Family counselling</span></label>
-                                                                <label><input class="px" type="checkbox" name="service_requested[]" value="Trauma Counseling" <?php
-                                                                    if (in_array('Trauma Counseling', $service_requested)) {
-                                                                        echo 'checked';
-                                                                    }
-                                                                    ?>><span class="lbl">Trauma Counseling</span></label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label><input class="px" type="checkbox" value="Social Protection Schemes" <?php echo $pre_data && $pre_data['social_protection'] != NULL ? 'checked' : '' ?>><span class="lbl">Social Protection Schemes</span></label>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <input class="form-control" placeholder="Specify the services" type="text" name="new_social_protection" value="<?php echo $pre_data['social_protection'] ? $pre_data['social_protection'] : ''; ?>">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label><input class="px" type="checkbox" value="Special Security Measures" <?php echo $pre_data && $pre_data['security_measure'] != NULL ? 'checked' : '' ?>><span class="lbl">Special Security Measures</span></label>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <input class="form-control" placeholder="Specify the services" type="text" name="new_security_measures" value="<?php echo $pre_data['security_measure'] ? $pre_data['security_measure'] : ''; ?>">
-                                                        </div>
-                                                        <div class="form-group ">
-                                                            <label>Other Services Requested</label>
-                                                            <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
+                                            <label>Plan Date</label>
+                                            <div class="input-group">
+                                                <input id="planDate" type="text" class="form-control" name="plan_date" value="<?php echo $pre_data['plan_date'] && $pre_data['plan_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['plan_date'])) : ''; ?>">
+                                            </div>
+                                            <script type="text/javascript">
+                                                init.push(function () {
+                                                    _datepicker('planDate');
+                                                });
+                                            </script>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <fieldset class="scheduler-border">
+                                            <legend class="scheduler-border">Type of Services Requested</legend>
+                                            <div class="form-group">
+                                                <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
+                                                    <div class="options_holder radio">
+                                                        <div class="col-sm-6">   
+                                                            <label class="col-sm-12"><input class="px" type="checkbox" name="service_requested[]" value="Child Care" <?php
+                                                                if (in_array('Child Care', $service_requested)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Child Care</span></label>
+                                                            <label class="col-sm-6"><input class="px" type="checkbox" id="education" name="service_requested[]" value="Education" <?php
+                                                                if (in_array('Education', $service_requested)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Education</span></label>
+                                                            <div id="educationAttr" class="form-group col-sm-8">
                                                                 <div class="options_holder radio">
-                                                                    <label><input class="px col-sm-12" type="checkbox" id="newServiceRequested" <?php echo $pre_data && $pre_data['other_service_requested'] != NULL ? 'checked' : '' ?>><span class="lbl">Others</span></label>
+                                                                    <label><input class="px" type="checkbox" name="service_requested[]" value="Admission" <?php
+                                                                        if (in_array('Admission', $service_requested)) {
+                                                                            echo 'checked';
+                                                                        }
+                                                                        ?>><span class="lbl">Admission</span></label>
+                                                                    <label><input class="px" type="checkbox" name="service_requested[]" value="Scholarship/Stipend" <?php
+                                                                        if (in_array('Scholarship/Stipend', $service_requested)) {
+                                                                            echo 'checked';
+                                                                        }
+                                                                        ?>><span class="lbl">Scholarship/Stipend</span></label>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div id="newServiceRequestedTypes" style="display: none; margin-bottom: 1em;">
-                                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_service_requested" value="<?php echo $pre_data['other_service_requested'] ? $pre_data['other_service_requested'] : ''; ?>">
-                                                        </div>
-                                                        <script>
-                                                            init.push(function () {
-                                                                var isChecked = $('#newServiceRequested').is(':checked');
+                                                            <script>
+                                                                init.push(function () {
+                                                                    $('#educationAttr').hide();
 
-                                                                if (isChecked == true) {
-                                                                    $('#newServiceRequestedTypes').show();
-                                                                }
-
-                                                                $("#newServiceRequested").on("click", function () {
-                                                                    $('#newServiceRequestedTypes').toggle();
+                                                                    $("#education").on("click", function () {
+                                                                        $('#educationAttr').toggle();
+                                                                    });
                                                                 });
-                                                            });
-                                                        </script>
-                                                        <div class="form-group">
-                                                            <label>Note (If any)</label>
-                                                            <textarea class="form-control" name="service_requested_note" rows="5" placeholder="Note"><?php echo $pre_data['service_requested_note'] ? $pre_data['service_requested_note'] : ''; ?></textarea>
+                                                            </script>
+                                                            <label class="col-sm-12"><input class="px" id="financialService" type="checkbox" name="service_requested[]" value="Financial Service" <?php
+                                                                if (in_array('Financial Service', $service_requested)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Financial Services</span></label>
+                                                            <div id="financialServiceAttr" class="form-group col-sm-12">
+                                                                <div class="options_holder radio">
+                                                                    <label><input class="px" type="checkbox" name="service_requested[]" value="Loan" <?php
+                                                                        if (in_array('Loan', $service_requested)) {
+                                                                            echo 'checked';
+                                                                        }
+                                                                        ?>><span class="lbl">Loan</span></label>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Other Financial Service</label>
+                                                                    <input class="form-control" placeholder="Other financial service" type="text" name="reintegration_financial_service" value="<?php echo $pre_data['reintegration_financial_service'] ? $pre_data['reintegration_financial_service'] : ''; ?>">
+                                                                </div>
+                                                            </div>
+                                                            <script>
+                                                                init.push(function () {
+                                                                    $('#financialServiceAttr').hide();
+
+                                                                    $("#financialService").on("click", function () {
+                                                                        $('#financialServiceAttr').toggle();
+                                                                    });
+                                                                });
+                                                            </script>
+                                                            <label class="col-sm-6"><input class="px" id="housing" type="checkbox" name="service_requested[]" value="Housing" <?php
+                                                                if (in_array('Housing', $service_requested)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Housing</span></label>
+                                                            <div id="housingAttr" class="form-group col-sm-12">
+                                                                <div class="options_holder radio">
+                                                                    <label><input class="px" type="checkbox" name="service_requested[]" value="Allocation for khas land" <?php
+                                                                        if (in_array('Allocation for khas land', $service_requested)) {
+                                                                            echo 'checked';
+                                                                        }
+                                                                        ?>><span class="lbl">Allocation for khas land</span></label>
+                                                                    <label><input class="px" type="checkbox" name="service_requested[]" value="Support for land allocation" <?php
+                                                                        if (in_array('Support for land allocation', $service_requested)) {
+                                                                            echo 'checked';
+                                                                        }
+                                                                        ?>><span class="lbl">Support for land allocation</span></label>
+                                                                </div>
+                                                            </div>
+                                                            <script>
+                                                                init.push(function () {
+                                                                    $('#housingAttr').hide();
+
+                                                                    $("#housing").on("click", function () {
+                                                                        $('#housingAttr').toggle();
+                                                                    });
+                                                                });
+                                                            </script>
+                                                            <label class="col-sm-12"><input class="px" type="checkbox" name="service_requested[]" value="Job Placement" <?php
+                                                                if (in_array('Job Placement', $service_requested)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Job Placement</span></label>
+                                                            <label class="col-sm-12"><input class="px" id="legalServices" type="checkbox" name="service_requested[]" value="Legal Services" <?php
+                                                                if (in_array('Legal Services', $service_requested)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Legal Services</span></label>
+                                                            <div id="legalServicesAttr" class="form-group col-sm-12">
+                                                                <div class="options_holder radio">
+                                                                    <label><input class="px" type="checkbox" name="service_requested[]" value="Legal Aid" <?php
+                                                                        if (in_array('Legal Aid"', $service_requested)) {
+                                                                            echo 'checked';
+                                                                        }
+                                                                        ?>><span class="lbl">Legal Aid</span></label>
+                                                                    <label><input class="px" type="checkbox" name="service_requested[]" value="Claiming Compensation" <?php
+                                                                        if (in_array('Claiming Compensation', $service_requested)) {
+                                                                            echo 'checked';
+                                                                        }
+                                                                        ?>><span class="lbl">Claiming Compensation</span></label>
+                                                                    <label><input class="px" type="checkbox" name="service_requested[]" value="Assistance in resolving family dispute" <?php
+                                                                        if (in_array('Assistance in resolving family dispute', $service_requested)) {
+                                                                            echo 'checked';
+                                                                        }
+                                                                        ?>><span class="lbl">Assistance in resolving family dispute</span></label>
+                                                                </div>
+                                                            </div>
+                                                            <script>
+                                                                init.push(function () {
+                                                                    $('#legalServicesAttr').hide();
+
+                                                                    $("#legalServices").on("click", function () {
+                                                                        $('#legalServicesAttr').toggle();
+                                                                    });
+                                                                });
+                                                            </script>
+                                                            <label class="col-sm-12"><input class="px" id="training" type="checkbox" name="service_requested[]" value="Training" <?php
+                                                                if (in_array('Training', $service_requested)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Training</span></label>
+                                                            <div id="trainingAttr" class="form-group col-sm-12">
+                                                                <div class="options_holder radio">
+                                                                    <label><input class="px" type="checkbox" name="service_requested[]" value="Financial Literacy Training" <?php
+                                                                        if (in_array('Financial Literacy Training', $service_requested)) {
+                                                                            echo 'checked';
+                                                                        }
+                                                                        ?>><span class="lbl">Financial Literacy Training</span></label>
+                                                                    <label><input class="px" type="checkbox" name="service_requested[]" value="Advance training from project" <?php
+                                                                        if (in_array('Advance training from project', $service_requested)) {
+                                                                            echo 'checked';
+                                                                        }
+                                                                        ?>><span class="lbl">Advance training from project</span></label>
+                                                                    <label><input class="px" type="checkbox" name="service_requested[]" value="Advance training through referrals" <?php
+                                                                        if (in_array('Advance training through referrals', $service_requested)) {
+                                                                            echo 'checked';
+                                                                        }
+                                                                        ?>><span class="lbl">Advance training through referrals</span></label>
+                                                                </div>
+                                                            </div>
+                                                            <script>
+                                                                init.push(function () {
+                                                                    $('#trainingAttr').hide();
+
+                                                                    $("#training").on("click", function () {
+                                                                        $('#trainingAttr').toggle();
+                                                                    });
+                                                                });
+                                                            </script>
+                                                            <label class="col-sm-12"><input class="px" type="checkbox" id="materialAssistance" name="service_requested[]" value="Material Assistance" <?php
+                                                                if (in_array('Material Assistance', $service_requested)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Material Assistance</span></label>
+                                                            <div id="materialAssistanceAttr" class="form-group col-sm-12">
+                                                                <div class="options_holder radio">
+                                                                    <label><input class="px" type="checkbox" name="service_requested[]" value="Business equipment/tools" <?php
+                                                                        if (in_array('Business equipment/tools', $service_requested)) {
+                                                                            echo 'checked';
+                                                                        }
+                                                                        ?>><span class="lbl">Business equipment/tools</span></label>
+                                                                    <label><input class="px" type="checkbox" name="service_requested[]" value="Allocation of land or pond for business" <?php
+                                                                        if (in_array('Allocation of land or pond for business', $service_requested)) {
+                                                                            echo 'checked';
+                                                                        }
+                                                                        ?>><span class="lbl">Allocation of land or pond for business</span></label>
+                                                                </div>
+                                                            </div>
+                                                            <script>
+                                                                init.push(function () {
+                                                                    $('#materialAssistanceAttr').hide();
+
+                                                                    $("#materialAssistance").on("click", function () {
+                                                                        $('#materialAssistanceAttr').toggle();
+                                                                    });
+                                                                });
+                                                            </script>
+                                                            <label class="col-sm-12"><input class="px" id="medicalSupport" type="checkbox" name="service_requested[]" value="Medical Support" <?php
+                                                                if (in_array('Medical Support', $service_requested)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Medical Support</span></label>
+                                                            <div id="medicalSupportAttr" class="form-group col-sm-12">
+                                                                <div class="options_holder radio">
+                                                                    <label><input class="px" type="checkbox" name="service_requested[]" value=">Medical treatment" <?php
+                                                                        if (in_array('Medical treatment', $service_requested)) {
+                                                                            echo 'checked';
+                                                                        }
+                                                                        ?>><span class="lbl">Medical treatment</span></label>
+                                                                    <label><input class="px" type="checkbox" name="service_requested[]" value="Psychiatric treatment" <?php
+                                                                        if (in_array('Psychiatric treatment', $service_requested)) {
+                                                                            echo 'checked';
+                                                                        }
+                                                                        ?>><span class="lbl">Psychiatric treatment</span></label>
+                                                                </div>
+                                                            </div>
+                                                            <script>
+                                                                init.push(function () {
+                                                                    $('#medicalSupportAttr').hide();
+
+                                                                    $("#medicalSupport").on("click", function () {
+                                                                        $('#medicalSupportAttr').toggle();
+                                                                    });
+                                                                });
+                                                            </script>
+                                                            <label class="col-sm-12"><input class="px" id="microbusiness" type="checkbox" name="service_requested[]" value="Microbusiness" <?php
+                                                                if (in_array('Microbusiness', $service_requested)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Microbusiness</span></label>
+                                                            <div id="microbusinessAttr" class="form-group col-sm-12">
+                                                                <div class="options_holder radio">
+                                                                    <label><input class="px" type="checkbox" name="service_requested[]" value="Business grant" <?php
+                                                                        if (in_array('Business grant', $service_requested)) {
+                                                                            echo 'checked';
+                                                                        }
+                                                                        ?>><span class="lbl">Business grant</span></label>
+                                                                </div>
+                                                            </div>
+                                                            <script>
+                                                                init.push(function () {
+                                                                    $('#microbusinessAttr').hide();
+
+                                                                    $("#microbusiness").on("click", function () {
+                                                                        $('#microbusinessAttr').toggle();
+                                                                    });
+                                                                });
+                                                            </script>
+                                                            <label class="col-sm-12"><input class="px" id="psychosocialSupport" type="checkbox" name="service_requested[]" value="Psychosocial Support" <?php
+                                                                if (in_array('Psychosocial Support', $service_requested)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Psychosocial Support</span></label>
+                                                            <div id="psychosocialSupportAttr" class="form-group col-sm-12">
+                                                                <div class="options_holder radio">
+                                                                    <label><input class="px" type="checkbox" name="service_requested[]" value="Individual Counselling" <?php
+                                                                        if (in_array('Individual Counselling', $service_requested)) {
+                                                                            echo 'checked';
+                                                                        }
+                                                                        ?>><span class="lbl">Individual Counselling</span></label>
+                                                                    <label><input class="px" type="checkbox" name="service_requested[]" value="Family counselling" <?php
+                                                                        if (in_array('Family counselling', $service_requested)) {
+                                                                            echo 'checked';
+                                                                        }
+                                                                        ?>><span class="lbl">Family counselling</span></label>
+                                                                    <label><input class="px" type="checkbox" name="service_requested[]" value="Trauma Counseling" <?php
+                                                                        if (in_array('Trauma Counseling', $service_requested)) {
+                                                                            echo 'checked';
+                                                                        }
+                                                                        ?>><span class="lbl">Trauma Counseling</span></label>
+                                                                </div>
+                                                            </div>
+                                                            <script>
+                                                                init.push(function () {
+                                                                    $('#psychosocialSupportAttr').hide();
+
+                                                                    $("#psychosocialSupport").on("click", function () {
+                                                                        $('#psychosocialSupportAttr').toggle();
+                                                                    });
+                                                                });
+                                                            </script>
+                                                        </div>
+                                                        <div class="col-sm-6">   
+                                                            <div class="form-group">
+                                                                <label><input class="px" id="socialProtection" type="checkbox" value="Social Protection Schemes" <?php echo $pre_data && $pre_data['social_protection'] != NULL ? 'checked' : '' ?>><span class="lbl">Social Protection Schemes</span></label>
+                                                            </div>
+                                                            <div id="socialProtectionAttr" class="form-group">
+                                                                <input class="form-control" placeholder="Specify Social Protection Schemes" type="text" name="new_social_protection" value="<?php echo $pre_data['social_protection'] ? $pre_data['social_protection'] : ''; ?>">
+                                                            </div>
+                                                            <script>
+                                                                init.push(function () {
+                                                                    $('#socialProtectionAttr').hide();
+
+                                                                    $("#socialProtection").on("click", function () {
+                                                                        $('#socialProtectionAttr').toggle();
+                                                                    });
+                                                                });
+                                                            </script>
+                                                            <div class="form-group">
+                                                                <label><input class="px" id="securityMeasures" type="checkbox" value="Special Security Measures" <?php echo $pre_data && $pre_data['security_measure'] != NULL ? 'checked' : '' ?>><span class="lbl">Special Security Measures</span></label>
+                                                            </div>
+                                                            <div id="securityMeasuresAttr" class="form-group">
+                                                                <input class="form-control" placeholder="Specify Security Measures" type="text" name="new_security_measures" value="<?php echo $pre_data['security_measure'] ? $pre_data['security_measure'] : ''; ?>">
+                                                            </div>
+                                                            <script>
+                                                                init.push(function () {
+                                                                    $('#securityMeasuresAttr').hide();
+
+                                                                    $("#securityMeasures").on("click", function () {
+                                                                        $('#securityMeasuresAttr').toggle();
+                                                                    });
+                                                                });
+                                                            </script>
+                                                            <div class="form-group">
+                                                                <label><input class="px" id="servicesRequested" type="checkbox" value="Other Services Requested" <?php echo $pre_data && $pre_data['other_service_requested'] != NULL ? 'checked' : '' ?>><span class="lbl">Other Services Requested</span></label>
+                                                            </div>
+                                                            <div id="servicesRequestedAttr" class="form-group">
+                                                                <input class="form-control" placeholder="Specify Services Requested" type="text" name="new_service_requested" value="<?php echo $pre_data['other_service_requested'] ? $pre_data['other_service_requested'] : ''; ?>">
+                                                            </div>
+                                                            <script>
+                                                                init.push(function () {
+                                                                    $('#servicesRequestedAttr').hide();
+
+                                                                    $("#servicesRequested").on("click", function () {
+                                                                        $('#servicesRequestedAttr').toggle();
+                                                                    });
+                                                                });
+                                                            </script>
+                                                            <div class="form-group">
+                                                                <label>Note (If any)</label>
+                                                                <textarea class="form-control" name="service_requested_note" rows="5" placeholder="Note"><?php echo $pre_data['service_requested_note'] ? $pre_data['service_requested_note'] : ''; ?></textarea>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </fieldset>
+                                        </fieldset>
+                                    </div>
                                 </div>
                             </div>
                         </fieldset>
@@ -635,7 +746,7 @@ doAction('render_start');
                                     <div class="form-group">
                                         <label>Date of first meeting</label>
                                         <div class="input-group">
-                                            <input id="Datefirstmeeting" type="text" class="form-control" name="first_meeting" value="<?php echo $pre_data['first_meeting'] && $pre_data['first_meeting'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['first_meeting'])) : date('d-m-Y'); ?>">
+                                            <input id="Datefirstmeeting" type="text" class="form-control" name="first_meeting" value="<?php echo $pre_data['first_meeting'] && $pre_data['first_meeting'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['first_meeting'])) : ''; ?>">
                                         </div>
                                         <script type="text/javascript">
                                             init.push(function () {
@@ -643,56 +754,6 @@ doAction('render_start');
                                             });
                                         </script>
                                     </div>
-                                    <div class="form-group">
-                                        <label>Counsellor’s Home Visits</label>
-                                        <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
-                                            <div class="options_holder radio">
-                                                <label><input class="px" type="radio" id="HomeVisitlYes" name="is_home_visit" value="yes" <?php echo $pre_data && $pre_data['is_home_visit'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
-                                                <label><input class="px" type="radio" id="HomeVisitlNo" name="is_home_visit" value="no" <?php echo $pre_data && $pre_data['is_home_visit'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <?php
-                                    $issue_discussed = $issue_discussed ? $issue_discussed : array($issue_discussed);
-                                    ?> 
-                                    <div class="form-group">
-                                        <label>Issues Discussed (*)</label>
-                                        <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
-                                            <div class="options_holder radio">
-                                                <label><input class="px" type="checkbox" name="issue_discussed[]" value="Referral Services"  <?php
-                                                    if (in_array('Referral Services', $issue_discussed)) {
-                                                        echo 'checked';
-                                                    }
-                                                    ?>><span class="lbl">Referral Services</span></label>
-                                                <label><input class="px" type="checkbox" name="issue_discussed[]" value="Information" <?php
-                                                    if (in_array('Information', $issue_discussed)) {
-                                                        echo 'checked';
-                                                    }
-                                                    ?>><span class="lbl">Information</span></label>
-                                                <label><input class="px" type="checkbox" value="Other"  <?php
-                                                    if (in_array('Other', $issue_discussed)) {
-                                                        echo 'checked';
-                                                    }
-                                                    ?> name="issue_discussed[]" id="newIssues" <?php echo $pre_data && $pre_data['other_issue_discussed'] != NULL ? 'checked' : '' ?>><span class="lbl">Others</span></label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="newIssuesType" style="display: none; margin-bottom: 1em;">
-                                        <input class="form-control" placeholder="Please Specity" type="text" name="new_issue_discussed" value="<?php echo $pre_data['other_issue_discussed'] ? $pre_data['other_issue_discussed'] : ''; ?>">
-                                    </div>
-                                    <script>
-                                        init.push(function () {
-                                            var isChecked = $('#newIssues').is(':checked');
-
-                                            if (isChecked == true) {
-                                                $('#newIssuesType').show();
-                                            }
-
-                                            $("#newIssues").on("click", function () {
-                                                $('#newIssuesType').toggle();
-                                            });
-                                        });
-                                    </script>
                                     <?php
                                     $problem_identified = $problem_identified ? $problem_identified : array($problem_identified);
                                     ?> 
@@ -783,15 +844,6 @@ doAction('render_start');
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>Presence of Family members</label>
-                                        <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
-                                            <div class="options_holder radio">
-                                                <label><input class="px" type="radio" id="yesFamilymembers" name="is_family_counceling" value="yes" <?php echo $pre_data && $pre_data['is_family_counceling'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
-                                                <label><input class="px" type="radio" id="noFamilymembers" name="is_family_counceling" value="no" <?php echo $pre_data && $pre_data['is_family_counceling'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="form-group Familymembers" style="display:none">
                                         <label>If yes, how many?</label>
                                         <input class="form-control" type="number" name="family_counseling" value="<?php echo $pre_data['family_counseling'] ? $pre_data['family_counseling'] : ''; ?>">
@@ -1032,17 +1084,28 @@ doAction('render_start');
                             <legend>Section 4: Economic Reintegration Support</legend>
                             <div class="row">
                                 <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Date</label>
+                                        <div class="input-group">
+                                            <input id="EconomicReintegrationDate" type="text" class="form-control" name="economic_reintegration_date" value="<?php echo $pre_data['economic_reintegration_date'] && $pre_data['economic_reintegration_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['economic_reintegration_date'])) : ''; ?>">
+                                        </div>
+                                        <script type="text/javascript">
+                                            init.push(function () {
+                                                _datepicker('EconomicReintegrationDate');
+                                            });
+                                        </script>
+                                    </div>
                                     <fieldset class="scheduler-border">
                                         <legend class="scheduler-border">In-kind Support from Project</legend>
                                         <div class="form-group ">
                                             <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                                 <div class="options_holder radio">
-                                                    <label class="col-sm-4"><input class="px" type="checkbox" name="inkind_project[]" value="Microbusiness" <?php
+                                                    <label class="col-sm-12"><input class="px" id="inkindMicro" type="checkbox" name="inkind_project[]" value="Microbusiness" <?php
                                                         if (in_array('Microbusiness', $inkind_project)) {
                                                             echo 'checked';
                                                         }
                                                         ?>><span class="lbl">Microbusiness</span></label>
-                                                    <div class="form-group col-sm-8">
+                                                    <div id="inkindMicroAttr" class="form-group col-sm-12">
                                                         <div class="options_holder radio">
                                                             <label><input class="px" type="checkbox" name="inkind_project[]" value="Business grant from project" <?php
                                                                 if (in_array('Business grant from project', $inkind_project)) {
@@ -1056,48 +1119,72 @@ doAction('render_start');
                                                                 ?>><span class="lbl">Enrolled in community enterprise</span></label>
                                                         </div>
                                                     </div>
-                                                    <label class="col-sm-4"><input class="px" type="checkbox" name="inkind_project[]" value="Material Assistance" <?php
+                                                    <script>
+                                                        init.push(function () {
+                                                            $('#inkindMicroAttr').hide();
+
+                                                            var isChecked = $('#inkindMicro').is(':checked');
+
+                                                            if (isChecked == true) {
+                                                                $('#inkindMicroAttr').show();
+                                                            }
+
+                                                            $("#inkindMicro").on("click", function () {
+                                                                $('#inkindMicroAttr').toggle();
+                                                            });
+                                                        });
+                                                    </script>
+                                                    <label class="col-sm-12"><input class="px" id="inkindMaterial" type="checkbox" name="inkind_project[]" value="Material Assistance" <?php
                                                         if (in_array('Want to leave home', $inkind_project)) {
                                                             echo 'checked';
                                                         }
-                                                        ?>
-                                                                                   ><span class="lbl">Material Assistance</span></label>
-                                                    <div class="form-group col-sm-8">
+                                                        ?>><span class="lbl">Material Assistance</span></label>
+                                                    <div id="inkindMaterialAttr" class="form-group col-sm-12">
                                                         <div class="options_holder radio">
                                                             <label><input class="px" type="checkbox" name="inkind_project[]" value="Business equipment/tools"
                                                                 <?php
                                                                 if (in_array('Business equipment/tools', $inkind_project)) {
                                                                     echo 'checked';
                                                                 }
-                                                                ?>
-                                                                          ><span class="lbl">Business equipment/tools</span></label>
+                                                                ?>><span class="lbl">Business equipment/tools</span></label>
                                                             <label><input class="px" type="checkbox" name="inkind_project[]" value="Lease land or pond for business"
                                                                 <?php
                                                                 if (in_array('Lease land or pond for business', $inkind_project)) {
                                                                     echo 'checked';
                                                                 }
-                                                                ?>
-                                                                          ><span class="lbl">Lease land or pond for business</span></label>
+                                                                ?>><span class="lbl">Lease land or pond for business</span></label>
                                                         </div>
                                                     </div>
+                                                    <script>
+                                                        init.push(function () {
+                                                            $('#inkindMaterialAttr').hide();
+
+                                                            var isChecked = $('#inkindMaterial').is(':checked');
+
+                                                            if (isChecked == true) {
+                                                                $('#inkindMaterialAttr').show();
+                                                            }
+
+                                                            $("#inkindMaterial").on("click", function () {
+                                                                $('#inkindMaterialAttr').toggle();
+                                                            });
+                                                        });
+                                                    </script>
                                                     <label class="col-sm-12"><input class="px" type="checkbox" name="inkind_project[]" value="Training (Financial Literacy Training)" <?php
                                                         if (in_array('Training (Financial Literacy Training)', $inkind_project)) {
                                                             echo 'checked';
                                                         }
-                                                        ?>
-                                                                                    ><span class="lbl">Training (Financial Literacy Training)</span></label>
+                                                        ?>><span class="lbl">Training (Financial Literacy Training)</span></label>
                                                     <label class="col-sm-12"><input class="px" type="checkbox" name="inkind_project[]" value="Advance Training" <?php
                                                         if (in_array('Advance Training', $inkind_project)) {
                                                             echo 'checked';
                                                         }
-                                                        ?>
-                                                                                    ><span class="lbl">Advance Training</span></label>
+                                                        ?>><span class="lbl">Advance Training</span></label>
                                                     <label class="col-sm-12"><input class="px" type="checkbox" name="inkind_project[]" value="Safe Migration" <?php
                                                         if (in_array('Safe Migration', $inkind_project)) {
                                                             echo 'checked';
                                                         }
-                                                        ?>
-                                                                                    ><span class="lbl">Safe Migration</span></label>
+                                                        ?>><span class="lbl">Safe Migration</span></label>
                                                     <label class="col-sm-12"><input class="px col-sm-12" type="checkbox" name="inkind_project[]" id="newInkind" <?php echo $pre_data && $pre_data['other_inkind_project'] != NULL ? 'checked' : '' ?>><span class="lbl">Others</span></label>
                                                 </div>
                                             </div>
@@ -1119,35 +1206,6 @@ doAction('render_start');
                                             });
                                         </script>
                                     </fieldset>
-                                    <div class="form-group">
-                                        <label>Received Financial Literacy Training ?</label>
-                                        <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
-                                            <div class="options_holder radio">
-                                                <label><input class="px" type="radio" id="InkindReceived" name="inkind_received" value="yes" <?php echo $pre_data && $pre_data['inkind_received'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
-                                                <label><input class="px" type="radio" id="noInkindReceived" name="inkind_received" value="no" <?php echo $pre_data && $pre_data['inkind_received'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group" id="training_duration" style="display:none">
-                                        <input class="form-control" type="text" name="training_duration" placeholder="Duration of training" value="<?php echo $pre_data['training_duration'] ? $pre_data['training_duration'] : ''; ?>">
-                                    </div>
-                                    <script>
-                                        init.push(function () {
-                                            var isChecked = $('#InkindReceived').is(':checked');
-
-                                            if (isChecked == true) {
-                                                $('#training_duration').show();
-                                            }
-
-                                            $("#InkindReceived").on("click", function () {
-                                                $('#training_duration').show();
-                                            });
-
-                                            $("#noInkindReceived").on("click", function () {
-                                                $('#training_duration').hide();
-                                            });
-                                        });
-                                    </script>
                                     <div class="form-group">
                                         <label>Training Certificate Received</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
@@ -1225,7 +1283,7 @@ doAction('render_start');
                                     <div class="form-group FamilyTraining" style="display:none">
                                         <label>Date of Training</label>
                                         <div class="input-group">
-                                            <input id="FamilyTrainingDATE" type="text" class="form-control" name="traning_entry_date" value="<?php echo $pre_data['traning_entry_date'] && $pre_data['traning_entry_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['traning_entry_date'])) : date('d-m-Y'); ?>">
+                                            <input id="FamilyTrainingDATE" type="text" class="form-control" name="traning_entry_date" value="<?php echo $pre_data['traning_entry_date'] && $pre_data['traning_entry_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['traning_entry_date'])) : ''; ?>">
                                         </div></br>
                                         <script type="text/javascript">
                                             init.push(function () {
@@ -1262,10 +1320,227 @@ doAction('render_start');
                                         </div>
                                     </div>
                                 </div>
-                                <?php
-                                $received_vocational_training = $received_vocational_training ? $received_vocational_training : array($received_vocational_training);
-                                ?> 
                                 <div class="col-sm-6">
+                                    <fieldset class="scheduler-border">
+                                        <legend class="scheduler-border">Name of Trainings</legend>
+                                        <div class="form-group ">
+                                            <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
+                                                <div class="options_holder radio">
+                                                    <label class="col-sm-12">
+                                                        <input class="px col-sm-12" type="checkbox" <?php echo $pre_data && $pre_data['financial_literacy_date'] != NULL ? 'checked' : '' ?> id="financialLiteracy">
+                                                        <span class="lbl">Financial Literacy</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="financialLiteracyDate" style="display: none; margin-bottom: 1em;">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label>Financial Literacy Date</label>
+                                                    <div class="input-group">
+                                                        <input id="financialDate" type="text" class="form-control" name="financial_literacy_date" value="<?php echo $pre_data['financial_literacy_date'] && $pre_data['financial_literacy_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['financial_literacy_date'])) : ''; ?>">
+                                                    </div>
+                                                    <script type="text/javascript">
+                                                        init.push(function () {
+                                                            _datepicker('financialDate');
+                                                        });
+                                                    </script>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <script>
+                                            init.push(function () {
+                                                var isChecked = $('#financialLiteracy').is(':checked');
+
+                                                if (isChecked == true) {
+                                                    $('#financialLiteracyDate').show();
+                                                }
+
+                                                $("#financialLiteracy").on("click", function () {
+                                                    $('#financialLiteracyDate').toggle();
+                                                });
+                                            });
+                                        </script>
+                                        <div class="form-group ">
+                                            <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
+                                                <div class="options_holder radio">
+                                                    <label class="col-sm-12">
+                                                        <input class="px col-sm-12" type="checkbox" <?php echo $pre_data && $pre_data['business_development_date'] != NULL ? 'checked' : '' ?> id="businessDevelopment">
+                                                        <span class="lbl">Business Development</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="businessDevelopmentDate" style="display: none; margin-bottom: 1em;">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label>Business Development Date</label>
+                                                    <div class="input-group">
+                                                        <input id="businessDate" type="text" class="form-control" name="business_development_date" value="<?php echo $pre_data['business_development_date'] && $pre_data['business_development_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['business_development_date'])) : ''; ?>">
+                                                    </div>
+                                                    <script type="text/javascript">
+                                                        init.push(function () {
+                                                            _datepicker('businessDate');
+                                                        });
+                                                    </script>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <script>
+                                            init.push(function () {
+                                                var isChecked = $('#businessDevelopment').is(':checked');
+
+                                                if (isChecked == true) {
+                                                    $('#businessDevelopmentDate').show();
+                                                }
+
+                                                $("#businessDevelopment").on("click", function () {
+                                                    $('#businessDevelopmentDate').toggle();
+                                                });
+                                            });
+                                        </script>
+                                        <div class="form-group ">
+                                            <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
+                                                <div class="options_holder radio">
+                                                    <label class="col-sm-12">
+                                                        <input class="px col-sm-12" type="checkbox" <?php echo $pre_data && $pre_data['product_development_date'] != NULL ? 'checked' : '' ?>  id="productDevelopment">
+                                                        <span class="lbl">Product Development</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="productDevelopmentDate" style="display: none; margin-bottom: 1em;">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label>Product Development Date</label>
+                                                    <div class="input-group">
+                                                        <input id="productDate" type="text" class="form-control" name="product_development_date" value="<?php echo $pre_data['product_development_date'] && $pre_data['product_development_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['product_development_date'])) : ''; ?>">
+                                                    </div>
+                                                    <script type="text/javascript">
+                                                        init.push(function () {
+                                                            _datepicker('productDate');
+                                                        });
+                                                    </script>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <script>
+                                            init.push(function () {
+                                                var isChecked = $('#productDevelopment').is(':checked');
+
+                                                if (isChecked == true) {
+                                                    $('#productDevelopmentDate').show();
+                                                }
+
+                                                $("#productDevelopment").on("click", function () {
+                                                    $('#productDevelopmentDate').toggle();
+                                                });
+                                            });
+                                        </script>
+                                        <div class="form-group ">
+                                            <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
+                                                <div class="options_holder radio">
+                                                    <label class="col-sm-12">
+                                                        <input class="px col-sm-12" type="checkbox" <?php echo $pre_data && $pre_data['entrepreneur_training_date'] != NULL ? 'checked' : '' ?> id="entrepreneurTraining">
+                                                        <span class="lbl">Entrepreneur Training</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="entrepreneurTrainingDate" style="display: none; margin-bottom: 1em;">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label>Entrepreneur Training Date</label>
+                                                    <div class="input-group">
+                                                        <input id="entrepreneur" type="text" class="form-control" name="entrepreneur_training_date" value="<?php echo $pre_data['entrepreneur_training_date'] && $pre_data['entrepreneur_training_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['entrepreneur_training_date'])) : ''; ?>">
+                                                    </div>
+                                                    <script type="text/javascript">
+                                                        init.push(function () {
+                                                            _datepicker('entrepreneur');
+                                                        });
+                                                    </script>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <script>
+                                            init.push(function () {
+                                                var isChecked = $('#entrepreneurTraining').is(':checked');
+
+                                                if (isChecked == true) {
+                                                    $('#entrepreneurTrainingDate').show();
+                                                }
+
+                                                $("#entrepreneurTraining").on("click", function () {
+                                                    $('#entrepreneurTrainingDate').toggle();
+                                                });
+                                            });
+                                        </script>
+                                        <div class="form-group ">
+                                            <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
+                                                <div class="options_holder radio">
+                                                    <label class="col-sm-12">
+                                                        <input class="px col-sm-12" type="checkbox" <?php echo $pre_data && $pre_data['other_financial_training_name'] != NULL ? 'checked' : '' ?> id="otherFinancialTraining">
+                                                        <span class="lbl">Other Training</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="otherFinancialTrainingAtr" style="display: none; margin-bottom: 1em;">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label>Training Name</label>
+                                                    <input type="text" name="other_financial_training_name" value="<?php echo $pre_data && $pre_data['other_financial_training_name'] ?>" class="form-control">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Training Start Date</label>
+                                                    <div class="input-group">
+                                                        <input id="trainingDate" type="text" class="form-control" name="other_financial_training_date" value="<?php echo $pre_data['other_financial_training_date'] && $pre_data['other_financial_training_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['other_financial_training_date'])) : '' ?>">
+                                                    </div>
+                                                    <script type="text/javascript">
+                                                        init.push(function () {
+                                                            _datepicker('trainingDate');
+                                                        });
+                                                    </script>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <script>
+                                            init.push(function () {
+                                                var isChecked = $('#otherFinancialTraining').is(':checked');
+
+                                                if (isChecked == true) {
+                                                    $('#otherFinancialTrainingAtr').show();
+                                                }
+
+                                                $("#otherFinancialTraining").on("click", function () {
+                                                    $('#otherFinancialTrainingAtr').toggle();
+                                                });
+                                            });
+                                        </script>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="tab-pane fade" id="EconomicReferrals">
+                        <fieldset>
+                            <legend>Section 4.1: Economic Reintegration Referrals</legend>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Date</label>
+                                        <div class="input-group">
+                                            <input id="EconomicReintegrationReferrals" type="text" class="form-control" name="economic_reintegration_referral_date" value="<?php echo $pre_data['economic_reintegration_referral_date'] && $pre_data['economic_reintegration_referral_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['economic_reintegration_referral_date'])) : ''; ?>">
+                                        </div>
+                                        <script type="text/javascript">
+                                            init.push(function () {
+                                                _datepicker('EconomicReintegrationReferrals');
+                                            });
+                                        </script>
+                                    </div>
+                                    <?php
+                                    $received_vocational_training = $received_vocational_training ? $received_vocational_training : array($received_vocational_training);
+                                    ?> 
                                     <fieldset class="scheduler-border">
                                         <legend class="scheduler-border">Name of the Vocational Training Received</legend>
                                         <div class="form-group ">
@@ -1418,7 +1693,7 @@ doAction('render_start');
                                         <div class="form-group">
                                             <label>Start Date of Training</label>
                                             <div class="input-group">
-                                                <input id="StartDateTraining" type="text" class="form-control" name="training_start_date" value="<?php echo $pre_data['training_start_date'] && $pre_data['training_start_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['training_start_date'])) : date('d-m-Y'); ?>">
+                                                <input id="StartDateTraining" type="text" class="form-control" name="training_start_date" value="<?php echo $pre_data['training_start_date'] && $pre_data['training_start_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['training_start_date'])) : ''; ?>">
                                             </div>
                                         </div>
                                         <script type="text/javascript">
@@ -1429,7 +1704,7 @@ doAction('render_start');
                                         <div class="form-group">
                                             <label>End Date of Training</label>
                                             <div class="input-group">
-                                                <input id="EndDateTraining" type="text" class="form-control" name="training_end_date" value="<?php echo $pre_data['training_end_date'] && $pre_data['training_end_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['training_end_date'])) : date('d-m-Y'); ?>">
+                                                <input id="EndDateTraining" type="text" class="form-control" name="training_end_date" value="<?php echo $pre_data['training_end_date'] && $pre_data['training_end_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['training_end_date'])) : ''; ?>">
                                             </div>
                                         </div>
                                         <script type="text/javascript">
@@ -1438,15 +1713,6 @@ doAction('render_start');
                                             });
                                         </script>
                                     </fieldset>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </div>
-                    <div class="tab-pane fade" id="EconomicReferrals">
-                        <fieldset>
-                            <legend>Section 4.1: Economic Reintegration Referrals</legend>
-                            <div class="row">
-                                <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Referrals done for Vocational Training</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
@@ -1628,39 +1894,6 @@ doAction('render_start');
                                         </script>
                                     </fieldset>
                                     <div class="form-group">
-                                        <label>Training Certificate Received</label>
-                                        <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
-                                            <div class="options_holder radio">
-                                                <label><input class="px" type="radio" id="is_Yes_certificate_received" name="is_certificate_received" value="yes" <?php echo $pre_data && $pre_data['is_certificate_received'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
-                                                <label><input class="px" type="radio" id="is_No_certificate_received" name="is_certificate_received" value="no" <?php echo $pre_data && $pre_data['is_certificate_received'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="usedfar" style="display: none;">
-                                        <div class="form-group">
-                                            <label>How has the training been used so far?</label>
-                                            <textarea class="form-control" name="used_far" rows="2" placeholder=""></textarea>
-                                        </div>
-                                        <script>
-                                            init.push(function () {
-                                                $('#is_Yes_certificate_received').change(function () {
-                                                    if (this.checked) {
-                                                        $('#usedfar').show();
-                                                    } else {
-                                                        $('#usedfar').show();
-                                                    }
-                                                });
-                                                $('#is_No_certificate_received').change(function () {
-                                                    if (this.checked) {
-                                                        $('#usedfar').hide();
-                                                    } else {
-                                                        $('#usedfar').show();
-                                                    }
-                                                });
-                                            });
-                                        </script> 
-                                    </div>
-                                    <div class="form-group">
                                         <label>Referrals done for economic services</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                             <div class="options_holder radio">
@@ -1695,12 +1928,12 @@ doAction('render_start');
                                         <div class="form-group">
                                             <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                                 <div class="options_holder radio">
-                                                    <label class="col-sm-4"><input class="px" type="checkbox" name="economic_support[]" value="Microbusiness" <?php
+                                                    <label class="col-sm-12"><input class="px" id="microEco" type="checkbox" name="economic_support[]" value="Microbusiness" <?php
                                                         if (in_array('Microbusiness', $economic_support)) {
                                                             echo 'checked';
                                                         }
                                                         ?>><span class="lbl">Microbusiness</span></label>
-                                                    <div class="form-group col-sm-8">
+                                                    <div id="microEcoAttr" class="form-group col-sm-12">
                                                         <div class="options_holder radio">
                                                             <label><input class="px" type="checkbox" name="economic_support[]" value="Business grant from project" <?php
                                                                 if (in_array('Business grant from project', $economic_support)) {
@@ -1714,12 +1947,27 @@ doAction('render_start');
                                                                 ?>><span class="lbl">Enrolled in community enterprise</span></label>
                                                         </div>
                                                     </div>
-                                                    <label class="col-sm-4"><input class="px" type="checkbox" name="economic_support[]" value="Financial Services" <?php
+                                                    <script>
+                                                        init.push(function () {
+                                                            $('#microEcoAttr').hide();
+
+                                                            var isChecked = $('#microEco').is(':checked');
+
+                                                            if (isChecked == true) {
+                                                                $('#microEcoAttr').show();
+                                                            }
+
+                                                            $("#microEco").on("click", function () {
+                                                                $('#microEcoAttr').toggle();
+                                                            });
+                                                        });
+                                                    </script>
+                                                    <label class="col-sm-12"><input class="px" id="finService" type="checkbox" name="economic_support[]" value="Financial Services" <?php
                                                         if (in_array('Financial Services', $economic_support)) {
                                                             echo 'checked';
                                                         }
                                                         ?>><span class="lbl">Financial Services</span></label>
-                                                    <div class="form-group col-sm-8">
+                                                    <div id="finServiceAttr" class="form-group col-sm-12">
                                                         <div class="options_holder radio">
                                                             <label><input class="px" type="checkbox" name="economic_support[]" value="Loan" <?php
                                                                 if (in_array('Loan', $economic_support)) {
@@ -1732,17 +1980,32 @@ doAction('render_start');
                                                             <input class="form-control" placeholder="Other financial service" type="text" name="economic_financial_service" value="<?php echo $pre_data['economic_financial_service'] ? $pre_data['economic_financial_service'] : ''; ?>">
                                                         </div>
                                                     </div>
+                                                    <script>
+                                                        init.push(function () {
+                                                            $('#finServiceAttr').hide();
+
+                                                            var isChecked = $('#finService').is(':checked');
+
+                                                            if (isChecked == true) {
+                                                                $('#finServiceAttr').show();
+                                                            }
+
+                                                            $("#finService").on("click", function () {
+                                                                $('#finServiceAttr').toggle();
+                                                            });
+                                                        });
+                                                    </script>
                                                     <label class="col-sm-12"><input class="px" type="checkbox" name="economic_support[]" value="Job Placement" <?php
                                                         if (in_array('Job Placement', $economic_support)) {
                                                             echo 'checked';
                                                         }
                                                         ?>><span class="lbl">Job Placement</span></label>
-                                                    <label class="col-sm-4"><input class="px" type="checkbox" name="economic_support[]" value="Material Assistance" <?php
+                                                    <label class="col-sm-4"><input class="px" id="materialAssist" type="checkbox" name="economic_support[]" value="Material Assistance" <?php
                                                         if (in_array('Material Assistance', $economic_support)) {
                                                             echo 'checked';
                                                         }
                                                         ?>><span class="lbl">Material Assistance</span></label>
-                                                    <div class="form-group col-sm-8">
+                                                    <div id="materialAssistAttr" class="form-group col-sm-12">
                                                         <div class="options_holder radio">
                                                             <label><input class="px" type="checkbox" name="economic_support[]" value="Business equipment/tools" <?php
                                                                 if (in_array('Business equipment/tools', $economic_support)) {
@@ -1756,6 +2019,21 @@ doAction('render_start');
                                                                 ?>><span class="lbl">Lease land or pond for business</span></label>
                                                         </div>
                                                     </div>
+                                                    <script>
+                                                        init.push(function () {
+                                                            $('#materialAssistAttr').hide();
+
+                                                            var isChecked = $('#materialAssist').is(':checked');
+
+                                                            if (isChecked == true) {
+                                                                $('#materialAssistAttr').show();
+                                                            }
+
+                                                            $("#materialAssist").on("click", function () {
+                                                                $('#materialAssistAttr').toggle();
+                                                            });
+                                                        });
+                                                    </script>
                                                     <label class="col-sm-12"><input class="px" type="checkbox" name="economic_support[]" value="Advance Training" <?php
                                                         if (in_array('Advance Training', $economic_support)) {
                                                             echo 'checked';
@@ -1793,13 +2071,92 @@ doAction('render_start');
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
+                                    <fieldset class="scheduler-border">
+                                        <legend class="scheduler-border">Date Wise Support</legend>
+                                        <div class="form-group ">
+                                            <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
+                                                <div class="options_holder radio">
+                                                    <label class="col-sm-12">
+                                                        <input class="px col-sm-12" type="checkbox" <?php echo $pre_data && $pre_data['job_placement_date'] != NULL ? 'checked' : '' ?> id="jobPlacement">
+                                                        <span class="lbl">Job Placement</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="jobPlacementDate" style="display: none; margin-bottom: 1em;">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label>Job Placement Date</label>
+                                                    <div class="input-group">
+                                                        <input id="placementDate" type="text" class="form-control" name="job_placement_date" value="<?php echo $pre_data['job_placement_date'] && $pre_data['job_placement_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['job_placement_date'])) : ''; ?>">
+                                                    </div>
+                                                    <script type="text/javascript">
+                                                        init.push(function () {
+                                                            _datepicker('placementDate');
+                                                        });
+                                                    </script>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <script>
+                                            init.push(function () {
+                                                var isChecked = $('#jobPlacement').is(':checked');
+
+                                                if (isChecked == true) {
+                                                    $('#jobPlacementDate').show();
+                                                }
+
+                                                $("#jobPlacement").on("click", function () {
+                                                    $('#jobPlacementDate').toggle();
+                                                });
+                                            });
+                                        </script>
+                                        <div class="form-group ">
+                                            <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
+                                                <div class="options_holder radio">
+                                                    <label class="col-sm-12">
+                                                        <input class="px col-sm-12" type="checkbox" <?php echo $pre_data && $pre_data['financial_services_date'] != NULL ? 'checked' : '' ?> id="financialServices">
+                                                        <span class="lbl">Financial Services</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="financialServicesDate" style="display: none; margin-bottom: 1em;">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label>Financial Services Date</label>
+                                                    <div class="input-group">
+                                                        <input id="servicesFinancialDate" type="text" class="form-control" name="financial_services_date" value="<?php echo $pre_data['financial_services_date'] && $pre_data['financial_services_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['financial_services_date'])) : ''; ?>">
+                                                    </div>
+                                                    <script type="text/javascript">
+                                                        init.push(function () {
+                                                            _datepicker('servicesFinancialDate');
+                                                        });
+                                                    </script>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <script>
+                                            init.push(function () {
+                                                var isChecked = $('#financialServices').is(':checked');
+
+                                                if (isChecked == true) {
+                                                    $('#financialServicesDate').show();
+                                                }
+
+                                                $("#financialServices").on("click", function () {
+                                                    $('#financialServicesDate').toggle();
+                                                });
+                                            });
+                                        </script>
+                                    </fieldset>
                                     <div class="form-group">
                                         <label>Referred To</label>
                                         <input class="form-control" type="text" name="refferd_to" placeholder="Name" value="<?php echo $pre_data['refferd_to'] ? $pre_data['refferd_to'] : ''; ?>"><br />
                                         <input class="form-control" type="text" name="refferd_address" placeholder="Address" value="<?php echo $pre_data['refferd_address'] ? $pre_data['refferd_address'] : ''; ?>"><br />
                                         <label>Date of Training</label>
                                         <div class="input-group">
-                                            <input id="DatofTraining" type="text" class="form-control" name="trianing_date" value="<?php echo $pre_data['trianing_date'] && $pre_data['trianing_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['trianing_date'])) : date('d-m-Y'); ?>">
+                                            <input id="DatofTraining" type="text" class="form-control" name="trianing_date" value="<?php echo $pre_data['trianing_date'] && $pre_data['trianing_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['trianing_date'])) : ''; ?>">
                                         </div><br />
                                         <script type="text/javascript">
                                             init.push(function () {
@@ -1839,17 +2196,17 @@ doAction('render_start');
                             <div class="row">
                                 <div class="col-sm-12">
                                     <fieldset class="scheduler-border">
-                                        <legend class="scheduler-border">Types of Economic Support</legend>
+                                        <legend class="scheduler-border">Types of Social Reintegration Support</legend>
                                         <div class="col-sm-8">
                                             <div class="form-group">
                                                 <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                                     <div class="options_holder radio">
-                                                        <label class="col-sm-4"><input class="px" type="checkbox" name="reintegration_economic[]" value="Social Protection Schemes(Place to access to public services & Social Protection)" <?php
+                                                        <label class="col-sm-12"><input class="px" id="reintegrationEconomic" type="checkbox" name="reintegration_economic[]" value="Social Protection Schemes(Place to access to public services & Social Protection)" <?php
                                                             if (in_array('Social Protection Schemes(Place to access to public services & Social Protection)', $reintegration_economic)) {
                                                                 echo 'checked';
                                                             }
                                                             ?>><span class="lbl">Social Protection Schemes(Place to access to public services & Social Protection)</span></label>
-                                                        <div class="form-group col-sm-8">
+                                                        <div id="reintegrationEconomicAttr" class="form-group col-sm-12">
                                                             <div class="options_holder radio">
                                                                 <label><input class="px" type="checkbox" name="reintegration_economic[]" value="Union Parished" <?php
                                                                     if (in_array('Union Parished"', $reintegration_economic)) {
@@ -1883,12 +2240,27 @@ doAction('render_start');
                                                                     ?>><span class="lbl">Private/ NGO</span></label>
                                                             </div>
                                                         </div>
-                                                        <label class="col-sm-4"><input class="px" type="checkbox" name="reintegration_economic[]" value="Medical Support" <?php
+                                                        <script>
+                                                            init.push(function () {
+                                                                $('#reintegrationEconomicAttr').hide();
+
+                                                                var isChecked = $('#reintegrationEconomic').is(':checked');
+
+                                                                if (isChecked == true) {
+                                                                    $('#reintegrationEconomicAttr').show();
+                                                                }
+
+                                                                $("#reintegrationEconomic").on("click", function () {
+                                                                    $('#reintegrationEconomicAttr').toggle();
+                                                                });
+                                                            });
+                                                        </script>
+                                                        <label class="col-sm-12"><input class="px" id="socialMedicalSupport" type="checkbox" name="reintegration_economic[]" value="Medical Support" <?php
                                                             if (in_array('Medical Support', $reintegration_economic)) {
                                                                 echo 'checked';
                                                             }
                                                             ?>><span class="lbl">Medical Support</span></label>
-                                                        <div class="form-group col-sm-8">
+                                                        <div id="socialMedicalSupportAttr" class="form-group col-sm-8">
                                                             <div class="options_holder radio">
                                                                 <label><input class="px" type="checkbox" name="reintegration_economic[]" value="Project" <?php
                                                                     if (in_array('Project', $reintegration_economic)) {
@@ -1907,12 +2279,27 @@ doAction('render_start');
                                                                     ?>><span class="lbl">Private/ NGO operated health service centre</span></label>
                                                             </div>
                                                         </div>
-                                                        <label class="col-sm-4"><input class="px" type="checkbox" name="reintegration_economic[]" value="Education" <?php
+                                                        <script>
+                                                            init.push(function () {
+                                                                $('#socialMedicalSupportAttr').hide();
+
+                                                                var isChecked = $('#socialMedicalSupport').is(':checked');
+
+                                                                if (isChecked == true) {
+                                                                    $('#socialMedicalSupportAttr').show();
+                                                                }
+
+                                                                $("#socialMedicalSupport").on("click", function () {
+                                                                    $('#socialMedicalSupportAttr').toggle();
+                                                                });
+                                                            });
+                                                        </script>
+                                                        <label class="col-sm-12"><input class="px" id="socialEducation" type="checkbox" name="reintegration_economic[]" value="Education" <?php
                                                             if (in_array('Education', $reintegration_economic)) {
                                                                 echo 'checked';
                                                             }
                                                             ?>><span class="lbl">Education</span></label>
-                                                        <div class="form-group col-sm-8">
+                                                        <div id="socialEducationAttr" class="form-group col-sm-12">
                                                             <div class="options_holder radio">
                                                                 <label><input class="px" type="checkbox" name="reintegration_economic[]" value="Admission" <?php
                                                                     if (in_array('Admission', $reintegration_economic)) {
@@ -1926,12 +2313,27 @@ doAction('render_start');
                                                                     ?>><span class="lbl">Stipend/ Scholarship</span></label>
                                                             </div>
                                                         </div>
-                                                        <label class="col-sm-4"><input class="px" type="checkbox" name="reintegration_economic[]" value="Housing" <?php
+                                                        <script>
+                                                            init.push(function () {
+                                                                $('#socialEducationAttr').hide();
+
+                                                                var isChecked = $('#socialEducation').is(':checked');
+
+                                                                if (isChecked == true) {
+                                                                    $('#socialEducationAttr').show();
+                                                                }
+
+                                                                $("#socialEducation").on("click", function () {
+                                                                    $('#socialEducationAttr').toggle();
+                                                                });
+                                                            });
+                                                        </script>
+                                                        <label class="col-sm-12"><input class="px" id="socialHousing" type="checkbox" name="reintegration_economic[]" value="Housing" <?php
                                                             if (in_array('Housing', $reintegration_economic)) {
                                                                 echo 'checked';
                                                             }
                                                             ?>><span class="lbl">Housing</span></label>
-                                                        <div class="form-group col-sm-8">
+                                                        <div id="socialHousingAttr" class="form-group col-sm-12">
                                                             <div class="options_holder radio">
                                                                 <label><input class="px" type="checkbox" name="reintegration_economic[]" value="Allocation of Khas land" <?php
                                                                     if (in_array('Allocation of Khas land', $reintegration_economic)) {
@@ -1945,12 +2347,27 @@ doAction('render_start');
                                                                     ?>><span class="lbl">Support for housing loan</span></label>
                                                             </div>
                                                         </div>
-                                                        <label class="col-sm-4"><input class="px" type="checkbox" name="reintegration_economic[]" value="Legal Services" <?php
+                                                        <script>
+                                                            init.push(function () {
+                                                                $('#socialHousingAttr').hide();
+
+                                                                var isChecked = $('#socialHousing').is(':checked');
+
+                                                                if (isChecked == true) {
+                                                                    $('#socialEducationAttr').show();
+                                                                }
+
+                                                                $("#socialHousing").on("click", function () {
+                                                                    $('#socialHousingAttr').toggle();
+                                                                });
+                                                            });
+                                                        </script>
+                                                        <label class="col-sm-12"><input class="px" id="socialLegal" type="checkbox" name="reintegration_economic[]" value="Legal Services" <?php
                                                             if (in_array('Legal Services', $reintegration_economic)) {
                                                                 echo 'checked';
                                                             }
                                                             ?>><span class="lbl">Legal Services</span></label>
-                                                        <div class="form-group col-sm-8">
+                                                        <div id="socialLegalAttr" class="form-group col-sm-12">
                                                             <div class="options_holder radio">
                                                                 <label><input class="px" type="checkbox" name="reintegration_economic[]" value="Legal Aid" <?php
                                                                     if (in_array('Legal Aid"', $reintegration_economic)) {
@@ -1969,6 +2386,21 @@ doAction('render_start');
                                                                     ?>><span class="lbl">Assistance in resolving family dispute</span></label>
                                                             </div>
                                                         </div>
+                                                        <script>
+                                                            init.push(function () {
+                                                                $('#socialLegalAttr').hide();
+
+                                                                var isChecked = $('#socialLegal').is(':checked');
+
+                                                                if (isChecked == true) {
+                                                                    $('#socialLegalAttr').show();
+                                                                }
+
+                                                                $("#socialLegal").on("click", function () {
+                                                                    $('#socialLegalAttr').toggle();
+                                                                });
+                                                            });
+                                                        </script>
                                                         <label class="col-sm-12"><input class="px col-sm-12" type="checkbox" name="reintegration_economic[]" id="TypesofEconomic" <?php echo $pre_data['other_reintegration_economic'] != NULL ? 'checked' : '' ?>><span class="lbl">Others</span></label>
                                                     </div>
                                                 </div>
@@ -1994,7 +2426,7 @@ doAction('render_start');
                                             <div class="form-group">  
                                                 <label>Date Services Received (Social)</label>
                                                 <div class="input-group">
-                                                    <input id="ServicesReceivedSocial" type="text" class="form-control" name="soical_date" value="<?php echo $pre_data['soical_date'] && $pre_data['soical_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['soical_date'])) : date('d-m-Y'); ?>">
+                                                    <input id="ServicesReceivedSocial" type="text" class="form-control" name="soical_date" value="<?php echo $pre_data['soical_date'] && $pre_data['soical_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['soical_date'])) : ''; ?>">
                                                 </div><br />
                                                 <script type="text/javascript">
                                                     init.push(function () {
@@ -2005,7 +2437,7 @@ doAction('render_start');
                                             <div class="form-group">
                                                 <label>Date Services Received (Medical)</label>
                                                 <div class="input-group">
-                                                    <input id="ServicesReceivedMedical" type="text" class="form-control" name="medical_date" value="<?php echo $pre_data['medical_date'] && $pre_data['medical_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['medical_date'])) : date('d-m-Y'); ?>">
+                                                    <input id="ServicesReceivedMedical" type="text" class="form-control" name="medical_date" value="<?php echo $pre_data['medical_date'] && $pre_data['medical_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['medical_date'])) : ''; ?>">
                                                 </div><br />
                                                 <script type="text/javascript">
                                                     init.push(function () {
@@ -2016,7 +2448,7 @@ doAction('render_start');
                                             <div class="form-group">
                                                 <label>Date Services Received (Education))</label>
                                                 <div class="input-group">
-                                                    <input id="ServicesReceivedEducation" type="text" class="form-control" name="date_education" value="<?php echo $pre_data['date_education'] && $pre_data['date_education'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['date_education'])) : date('d-m-Y'); ?>">
+                                                    <input id="ServicesReceivedEducation" type="text" class="form-control" name="date_education" value="<?php echo $pre_data['date_education'] && $pre_data['date_education'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['date_education'])) : ''; ?>">
                                                 </div><br />
                                                 <script type="text/javascript">
                                                     init.push(function () {
@@ -2027,7 +2459,7 @@ doAction('render_start');
                                             <div class="form-group">
                                                 <label>Date Services Received (Housing))</label>
                                                 <div class="input-group">
-                                                    <input id="ServicesReceivedHousing" type="text" class="form-control" name="date_housing" value="<?php echo $pre_data['date_housing'] && $pre_data['date_housing'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['date_housing'])) : date('d-m-Y'); ?>">
+                                                    <input id="ServicesReceivedHousing" type="text" class="form-control" name="date_housing" value="<?php echo $pre_data['date_housing'] && $pre_data['date_housing'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['date_housing'])) : ''; ?>">
                                                 </div><br />
                                                 <script type="text/javascript">
                                                     init.push(function () {
@@ -2038,7 +2470,7 @@ doAction('render_start');
                                             <div class="form-group">
                                                 <label>Date Services Received (Legal & Others))</label>
                                                 <div class="input-group">
-                                                    <input id="ServicesReceivedOthers" type="text" class="form-control" name="date_legal" value="<?php echo $pre_data['date_legal'] && $pre_data['date_legal'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['date_legal'])) : date('d-m-Y'); ?>">
+                                                    <input id="ServicesReceivedOthers" type="text" class="form-control" name="date_legal" value="<?php echo $pre_data['date_legal'] && $pre_data['date_legal'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['date_legal'])) : ''; ?>">
                                                 </div><br />
                                                 <script type="text/javascript">
                                                     init.push(function () {
@@ -2048,74 +2480,22 @@ doAction('render_start');
                                             </div>
                                         </div>
                                     </fieldset>	
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label>Attended IPT shows?</label>
-                                        <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
-                                            <div class="options_holder radio">
-                                                <label><input class="px" type="radio" id="yesLiteracyTraining" name="attended_ipt" value="yes" <?php echo $pre_data && $pre_data['attended_ipt'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
-                                                <label><input class="px" type="radio" id="noLiteracyTraining" name="attended_ipt" value="no" <?php echo $pre_data && $pre_data['attended_ipt'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group" id="LearnShowType" style="display: none; margin-bottom: 1em;">
-                                        <textarea class="form-control" name="learn_show" rows="3" placeholder="Lessons learnt from IPT show"><?php echo $pre_data['learn_show'] ? $pre_data['learn_show'] : ''; ?></textarea>
-                                    </div>
-                                    <script>
-                                        init.push(function () {
-                                            var isChecked = $('#yesLiteracyTraining').is(':checked');
-
-                                            if (isChecked == true) {
-                                                $('#LearnShowType').show();
-                                            }
-
-                                            $("#yesLiteracyTraining").on("click", function () {
-                                                $('#LearnShowType').toggle();
-                                            });
-                                        });
-                                    </script>
-                                    <div class="form-group">
-                                        <label>Attended community video shows?</label>
-                                        <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
-                                            <div class="options_holder radio">
-                                                <label><input class="px" type="radio" id="yesCommunityVideo" name="is_per_community_video" value="yes" <?php echo $pre_data && $pre_data['is_per_community_video'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
-                                                <label><input class="px" type="radio" id="noCommunityVideo" name="is_per_community_video" value="no" <?php echo $pre_data && $pre_data['is_per_community_video'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group"id="LearnVideo" style="display: none; margin-bottom: 1em;">
-                                        <textarea class="form-control" name="learn_video" rows="3" placeholder="Lessons learnt from video show"><?php echo $pre_data['learn_video'] ? $pre_data['learn_video'] : ''; ?></textarea>
-                                    </div>
-                                    <script>
-                                        init.push(function () {
-                                            var isChecked = $('#yesCommunityVideo').is(':checked');
-
-                                            if (isChecked == true) {
-                                                $('#LearnVideo').show();
-                                            }
-
-                                            $("#yesCommunityVideo").on("click", function () {
-                                                $('#LearnVideo').toggle();
-                                            });
-                                        });
-                                    </script>
-                                </div>
+                                </div>                                
                                 <?php
                                 $support_referred = $support_referred ? $support_referred : array($support_referred);
                                 ?> 
-                                <div class="col-sm-8">
+                                <div class="col-sm-12">
                                     <fieldset class="scheduler-border">
                                         <legend class="scheduler-border">Types of Support Referred for</legend>
                                         <div class="form-group ">
                                             <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                                 <div class="options_holder radio">
-                                                    <label class="col-sm-4"><input class="px" type="checkbox" name="support_referred[]" value="Social Protection Schemes(Place to access to public services & Social Protection)" <?php
+                                                    <label class="col-sm-12"><input class="px" id="reintegrationEconomicReferred" type="checkbox" name="support_referred[]" value="Social Protection Schemes(Place to access to public services & Social Protection)" <?php
                                                         if (in_array('Social Protection Schemes(Place to access to public services & Social Protection)', $support_referred)) {
                                                             echo 'checked';
                                                         }
                                                         ?>><span class="lbl">Social Protection Schemes(Place to access to public services & Social Protection)</span></label>
-                                                    <div class="form-group col-sm-8">
+                                                    <div id="reintegrationEconomicReferredAttr" class="form-group col-sm-12">
                                                         <div class="options_holder radio">
                                                             <label><input class="px" type="checkbox" name="support_referred[]" value="Union Parished" <?php
                                                                 if (in_array('Union Parished', $support_referred)) {
@@ -2149,12 +2529,27 @@ doAction('render_start');
                                                                 ?>><span class="lbl">Private/ NGO</span></label>
                                                         </div>
                                                     </div>
-                                                    <label class="col-sm-4"><input class="px" type="checkbox" name="support_referred[]" value="Medical Support" <?php
+                                                    <script>
+                                                        init.push(function () {
+                                                            $('#reintegrationEconomicReferredAttr').hide();
+
+                                                            var isChecked = $('#reintegrationEconomicReferred').is(':checked');
+
+                                                            if (isChecked == true) {
+                                                                $('#reintegrationEconomicReferredAttr').show();
+                                                            }
+
+                                                            $("#reintegrationEconomicReferred").on("click", function () {
+                                                                $('#reintegrationEconomicReferredAttr').toggle();
+                                                            });
+                                                        });
+                                                    </script>
+                                                    <label class="col-sm-12"><input class="px" id="socialMedicalSupportReferred" type="checkbox" name="support_referred[]" value="Medical Support" <?php
                                                         if (in_array('Medical Support', $support_referred)) {
                                                             echo 'checked';
                                                         }
                                                         ?>><span class="lbl">Medical Support</span></label>
-                                                    <div class="form-group col-sm-8">
+                                                    <div id="socialMedicalSupportReferredAttr" class="form-group col-sm-12">
                                                         <div class="options_holder radio">
                                                             <label><input class="px" type="checkbox" name="support_referred[]" value="Project" <?php
                                                                 if (in_array('Project', $support_referred)) {
@@ -2173,12 +2568,27 @@ doAction('render_start');
                                                                 ?>><span class="lbl">Private/ NGO operated health service centre</span></label>
                                                         </div>
                                                     </div>
-                                                    <label class="col-sm-4"><input class="px" type="checkbox" name="support_referred[]" value="Education" <?php
+                                                    <script>
+                                                        init.push(function () {
+                                                            $('#socialMedicalSupportReferredAttr').hide();
+
+                                                            var isChecked = $('#socialMedicalSupportReferred').is(':checked');
+
+                                                            if (isChecked == true) {
+                                                                $('#socialMedicalSupportReferredAttr').show();
+                                                            }
+
+                                                            $("#socialMedicalSupportReferred").on("click", function () {
+                                                                $('#socialMedicalSupportReferredAttr').toggle();
+                                                            });
+                                                        });
+                                                    </script>
+                                                    <label class="col-sm-12"><input class="px" id="socialEducationReferred" type="checkbox" name="support_referred[]" value="Education" <?php
                                                         if (in_array('Education', $support_referred)) {
                                                             echo 'checked';
                                                         }
                                                         ?>><span class="lbl">Education</span></label>
-                                                    <div class="form-group col-sm-8">
+                                                    <div id="socialEducationReferredAttr" class="form-group col-sm-12">
                                                         <div class="options_holder radio">
                                                             <label><input class="px" type="checkbox" name="support_referred[]" value="Admission" <?php
                                                                 if (in_array('Admission', $support_referred)) {
@@ -2192,12 +2602,27 @@ doAction('render_start');
                                                                 ?>><span class="lbl">Stipend/ Scholarship</span></label>
                                                         </div>
                                                     </div>
-                                                    <label class="col-sm-4"><input class="px" type="checkbox" name="support_referred[]" value="Housing" <?php
+                                                    <script>
+                                                        init.push(function () {
+                                                            $('#socialEducationReferredAttr').hide();
+
+                                                            var isChecked = $('#socialEducationReferred').is(':checked');
+
+                                                            if (isChecked == true) {
+                                                                $('#socialEducationReferredAttr').show();
+                                                            }
+
+                                                            $("#socialEducationReferred").on("click", function () {
+                                                                $('#socialEducationReferredAttr').toggle();
+                                                            });
+                                                        });
+                                                    </script>
+                                                    <label class="col-sm-12"><input class="px" id="socialHousingReferred" type="checkbox" name="support_referred[]" value="Housing" <?php
                                                         if (in_array('Housing', $support_referred)) {
                                                             echo 'checked';
                                                         }
                                                         ?>><span class="lbl">Housing</span></label>
-                                                    <div class="form-group col-sm-8">
+                                                    <div id="socialHousingReferredAttr" class="form-group col-sm-12">
                                                         <div class="options_holder radio">
                                                             <label><input class="px" type="checkbox" name="support_referred[]" value="Allocation of ‘Khas land’" <?php
                                                                 if (in_array('Allocation of ‘Khas land’', $support_referred)) {
@@ -2211,30 +2636,60 @@ doAction('render_start');
                                                                 ?>><span class="lbl">Support for housing loan</span></label>
                                                         </div>
                                                     </div>
-                                                    <label class="col-sm-4"><input class="px" type="checkbox" name="support_referred[]" value="Legal Services" <?php
-                                                            if (in_array('Legal Services', $support_referred)) {
-                                                                echo 'checked';
+                                                    <script>
+                                                        init.push(function () {
+                                                            $('#socialHousingReferredAttr').hide();
+
+                                                            var isChecked = $('#socialHousingReferred').is(':checked');
+
+                                                            if (isChecked == true) {
+                                                                $('#socialEducationReferredAttr').show();
                                                             }
-                                                            ?>><span class="lbl">Legal Services</span></label>
-                                                        <div class="form-group col-sm-8">
-                                                            <div class="options_holder radio">
-                                                                <label><input class="px" type="checkbox" name="support_referred[]" value="Legal Aid" <?php
-                                                                    if (in_array('Legal Aid"', $support_referred)) {
-                                                                        echo 'checked';
-                                                                    }
-                                                                    ?>><span class="lbl">Legal Aid</span></label>
-                                                                <label><input class="px" type="checkbox" name="support_referred[]" value="Claiming Compensation" <?php
-                                                                    if (in_array('Claiming Compensation', $support_referred)) {
-                                                                        echo 'checked';
-                                                                    }
-                                                                    ?>><span class="lbl">Claiming Compensation</span></label>
-                                                                <label><input class="px" type="checkbox" name="support_referred[]" value="Assistance in resolving family dispute" <?php
-                                                                    if (in_array('Assistance in resolving family dispute', $support_referred)) {
-                                                                        echo 'checked';
-                                                                    }
-                                                                    ?>><span class="lbl">Assistance in resolving family dispute</span></label>
-                                                            </div>
+
+                                                            $("#socialHousingReferred").on("click", function () {
+                                                                $('#socialHousingReferredAttr').toggle();
+                                                            });
+                                                        });
+                                                    </script>
+                                                    <label class="col-sm-12"><input class="px" id="socialLegalReferred" type="checkbox" name="support_referred[]" value="Legal Services" <?php
+                                                        if (in_array('Legal Services', $support_referred)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Legal Services</span></label>
+                                                    <div id="socialLegalReferredAttr" class="form-group col-sm-12">
+                                                        <div class="options_holder radio">
+                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Legal Aid" <?php
+                                                                if (in_array('Legal Aid"', $support_referred)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Legal Aid</span></label>
+                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Claiming Compensation" <?php
+                                                                if (in_array('Claiming Compensation', $support_referred)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Claiming Compensation</span></label>
+                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Assistance in resolving family dispute" <?php
+                                                                if (in_array('Assistance in resolving family dispute', $support_referred)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Assistance in resolving family dispute</span></label>
                                                         </div>
+                                                    </div>
+                                                    <script>
+                                                        init.push(function () {
+                                                            $('#socialLegalReferredAttr').hide();
+
+                                                            var isChecked = $('#socialLegalReferred').is(':checked');
+
+                                                            if (isChecked == true) {
+                                                                $('#socialLegalReferredAttr').show();
+                                                            }
+
+                                                            $("#socialLegalReferred").on("click", function () {
+                                                                $('#socialLegalReferredAttr').toggle();
+                                                            });
+                                                        });
+                                                    </script>
                                                     <label class="col-sm-12"><input class="px col-sm-12" type="checkbox" id="supportreferred" <?php echo $pre_data['other_support_referred'] != NULL ? 'checked' : '' ?>><span class="lbl">Others</span></label>
                                                 </div>
                                             </div>
@@ -2266,364 +2721,29 @@ doAction('render_start');
                     <div class="tab-pane fade " id="ReviewFollowUp">
                         <fieldset>
                             <legend>Section 6: Review and Follow-Up</legend>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>Case dropped out from the project? (*)</label>
-                                        <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
-                                            <div class="options_holder radio">
-                                                <label><input class="px" type="radio" id="yesCasedropped" name="casedropped" value="yes" <?php echo $pre_data && $pre_data['casedropped'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
-                                                <label><input class="px" type="radio" id="noCasedropped" name="casedropped" value="no" <?php echo $pre_data && $pre_data['casedropped'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <script>
-                                        init.push(function () {
-                                            $('.Casedropped').hide();
-                                            var isChecked = $('#yesCasedropped').is(':checked');
-
-                                            if (isChecked == true) {
-                                                $('.Casedropped').show();
-                                            }
-
-                                            $("#yesCasedropped").on("click", function () {
-                                                $('.Casedropped').show();
-                                            });
-
-                                            $("#noCasedropped").on("click", function () {
-                                                $('.Casedropped').hide();
-                                            });
-                                        });
-                                    </script>
-                                    <fieldset class="scheduler-border Casedropped">
-                                        <legend class="scheduler-border">Reason for Dropping Out</legend>
-                                        <div class="form-group ">
-                                            <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
-                                                <div class="options_holder radio">
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="reason_dropping[]" value="Lack of interest" <?php
-                                                        if (in_array('Lack of interest', $reason_dropping)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Lack of interest</span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="reason_dropping[]" value="Critical illness" <?php
-                                                        if (in_array('Critical illness', $reason_dropping)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Critical illness</span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="reason_dropping[]" value="Family issues" <?php
-                                                        if (in_array('Family issues', $reason_dropping)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Family issues</span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="reason_dropping[]" value="Have other issues to attend to" <?php
-                                                        if (in_array('Have other issues to attend to', $reason_dropping)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Have other issues to attend to</span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="reason_dropping[]" value="Re-migrated" <?php
-                                                        if (in_array('Re-migrated', $reason_dropping)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Re-migrated</span></label>
-                                                    <label class="col-sm-12"><input  class="px col-sm-12" type="checkbox" id="ReasonDropping" <?php echo $pre_data['other_reason_dropping'] != NULL ? 'checked' : '' ?>><span class="lbl">Others</span></label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div id="ReasonDroppingType" style="display: none; margin-bottom: 1em;">
-                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_reason_dropping" value="<?php echo $pre_data['other_reason_dropping'] ? $pre_data['other_reason_dropping'] : ''; ?>">
-                                        </div>
-                                        <script>
-                                            init.push(function () {
-                                                var isChecked = $('#ReasonDropping').is(':checked');
-
-                                                if (isChecked == true) {
-                                                    $('#ReasonDroppingType').show();
-                                                }
-
-                                                $("#ReasonDropping").on("click", function () {
-                                                    $('#ReasonDroppingType').toggle();
-                                                });
-                                            });
-                                        </script>
-                                    </fieldset>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
                                     <?php
-                                    $confirm_services = $confirm_services ? $confirm_services : array($confirm_services);
-                                    ?> 
-                                    <fieldset class="scheduler-border">
-                                        <legend class="scheduler-border">Confirmed Services Received after 3 Months</legend>
-                                        <div class="form-group">
-                                            <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
-                                                <div class="options_holder radio">
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="confirm_services[]" value="Child Care" <?php
-                                                        if (in_array('Child Care', $confirm_services)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Child Care</span></label>
-                                                    <label class="col-sm-4"><input class="px" type="checkbox" name="confirm_services[]" value="Education" <?php
-                                                        if (in_array('Education', $confirm_services)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Education</span></label>
-                                                    <div class="form-group col-sm-8">
-                                                        <div class="options_holder radio">
-                                                            <label><input class="px" type="checkbox" name="confirm_services[]" value="Admission" <?php
-                                                                if (in_array('Admission', $confirm_services)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Admission</span></label>
-                                                            <label><input class="px" type="checkbox" name="confirm_services[]" value="Scholarship/Stipend" <?php
-                                                                if (in_array('Scholarship/Stipend', $confirm_services)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Scholarship/Stipend</span></label>
-                                                        </div>
-                                                    </div>
-                                                    <label class="col-sm-4"><input class="px" type="checkbox" name="confirm_services[]" value="Financial Services" <?php
-                                                        if (in_array('Financial Services', $confirm_services)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Financial Services</span></label>
-                                                    <div class="form-group col-sm-8">
-                                                        <div class="options_holder radio">
-                                                            <label><input class="px" type="checkbox" name="confirm_services[]" value="Loan" <?php
-                                                                if (in_array('Loan', $confirm_services)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Loan</span></label>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label>Other Financial Service</label>
-                                                            <input class="form-control" placeholder="Other financial service" type="text" name="followup_financial_service" value="<?php echo $pre_data['followup_financial_service'] ? $pre_data['followup_financial_service'] : ''; ?>">
-                                                        </div>
-                                                    </div>
-                                                    <label class="col-sm-4"><input class="px" type="checkbox" name="confirm_services[]" value="Housing" <?php
-                                                        if (in_array('Housing', $confirm_services)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Housing</span></label>
-                                                    <div class="form-group col-sm-8">
-                                                        <div class="options_holder radio">
-                                                            <label><input class="px" type="checkbox" name="confirm_services[]" value="Allocation for khas land" <?php
-                                                                if (in_array('Housing', $confirm_services)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Allocation for khas land</span></label>
-                                                            <label><input class="px" type="checkbox" name="confirm_services[]" value="Support for land allocation" <?php
-                                                                if (in_array('Support for land allocation', $confirm_services)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Support for land allocation</span></label>
-                                                        </div>
-                                                    </div>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="confirm_services[]" value="Job Placement" <?php
-                                                        if (in_array('Job Placement', $confirm_services)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Job Placement</span></label>
-                                                    <label class="col-sm-4"><input class="px" type="checkbox" name="reintegration_economic[]" value="Legal Services" <?php
-                                                        if (in_array('Legal Services', $confirm_services)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Legal Services</span></label>
-                                                    <div class="form-group col-sm-8">
-                                                        <div class="options_holder radio">
-                                                            <label><input class="px" type="checkbox" name="reintegration_economic[]" value="Legal Aid" <?php
-                                                                if (in_array('Legal Aid"', $confirm_services)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Legal Aid</span></label>
-                                                            <label><input class="px" type="checkbox" name="reintegration_economic[]" value="Claiming Compensation" <?php
-                                                                if (in_array('Claiming Compensation', $confirm_services)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Claiming Compensation</span></label>
-                                                            <label><input class="px" type="checkbox" name="reintegration_economic[]" value="Assistance in resolving family dispute" <?php
-                                                                if (in_array('Assistance in resolving family dispute', $confirm_services)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Assistance in resolving family dispute</span></label>
-                                                        </div>
-                                                    </div>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="confirm_services[]" value="Job Placement" <?php
-                                                        if (in_array('Job Placement', $confirm_services)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Job Placement</span></label>
-                                                    <label class="col-sm-4"><input class="px" type="checkbox" name="confirm_services[]" value="Training" <?php
-                                                        if (in_array('Training', $confirm_services)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Training</span></label>
-                                                    <div class="form-group col-sm-8">
-                                                        <div class="options_holder radio">
-                                                            <label><input class="px" type="checkbox" name="confirm_services[]" value="Financial Literacy Training" <?php
-                                                                if (in_array('Financial Literacy Training', $confirm_services)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Financial Literacy Training</span></label>
-                                                            <label><input class="px" type="checkbox" name="confirm_services[]" value="Advance training from project" <?php
-                                                                if (in_array('Advance training from project"', $confirm_services)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Advance training from project</span></label>
-                                                            <label><input class="px" type="checkbox" name="confirm_services[]" value="Advance training through referrals" <?php
-                                                                if (in_array('Advance training through referrals', $confirm_services)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Advance training through referrals</span></label>
-                                                        </div>
-                                                    </div>
-                                                    <label class="col-sm-4"><input class="px" type="checkbox" name="confirm_services[]" value="Material Assistance" <?php
-                                                        if (in_array('Material Assistance', $confirm_services)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Material Assistance</span></label>
-                                                    <div class="form-group col-sm-8">
-                                                        <div class="options_holder radio">
-                                                            <label><input class="px" type="checkbox" name="confirm_services[]" value="Business equipment/tools" <?php
-                                                                if (in_array('Business equipment/tools', $confirm_services)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Business equipment/tools</span></label>
-                                                            <label><input class="px" type="checkbox" name="confirm_services[]" value="Allocation of land or pond for business" <?php
-                                                                if (in_array('Allocation of land or pond for business', $confirm_services)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Allocation of land or pond for business</span></label>
-                                                        </div>
-                                                    </div>
-                                                    <label class="col-sm-4"><input class="px" type="checkbox" name="confirm_services[]" value="Remigration" <?php
-                                                        if (in_array('Remigration', $confirm_services)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Remigration</span></label>
-                                                    <div class="form-group col-sm-8">
-                                                        <div class="options_holder radio">
-                                                            <label><input class="px" type="checkbox" name="confirm_services[]" value="Direct Assistance from project" <?php
-                                                                if (in_array('Direct Assistance from project', $confirm_services)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Direct Assistance from project</span></label>
-                                                            <label><input class="px" type="checkbox" name="confirm_services[]" value="Referrals support from project" <?php
-                                                                if (in_array('Referrals support from project', $confirm_services)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Referrals support from project</span></label>
-                                                        </div>
-                                                    </div>
-                                                    <label class="col-sm-4"><input class="px" type="checkbox" name="confirm_services[]" value="Medical Support" <?php
-                                                        if (in_array('Medical Support', $confirm_services)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Medical Support</span></label>
-                                                    <div class="form-group col-sm-8">
-                                                        <div class="options_holder radio">
-                                                            <label><input class="px" type="checkbox" name="confirm_services[]" value="Medical treatment" <?php
-                                                                if (in_array('Medical treatment', $confirm_services)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Medical treatment</span></label>
-                                                            <label><input class="px" type="checkbox" name="confirm_services[]" value="Psychiatric treatment" <?php
-                                                                if (in_array('Psychiatric treatment', $confirm_services)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Psychiatric treatment</span></label>
-                                                        </div>
-                                                    </div>
-                                                    <label class="col-sm-4"><input class="px" type="checkbox" name="confirm_services[]" value="Microbusiness" <?php
-                                                        if (in_array('Microbusiness', $confirm_services)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Microbusiness</span></label>
-                                                    <div class="form-group col-sm-8">
-                                                        <div class="options_holder radio">
-                                                            <label><input class="px" type="checkbox" name="confirm_services[]" value="Business grant" <?php
-                                                                if (in_array('Business grant"', $confirm_services)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Business grant</span></label>
-                                                        </div>
-                                                    </div>
-                                                    <label class="col-sm-4"><input class="px" type="checkbox" name="confirm_services[]" value="Psychosocial Support" <?php
-                                                        if (in_array('Psychosocial Support', $confirm_services)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Psychosocial Support</span></label>
-                                                    <div class="form-group col-sm-8">
-                                                        <div class="options_holder radio">
-                                                            <label><input class="px" type="checkbox" name="confirm_services[]" value="Individual Counselling" <?php
-                                                                if (in_array('Individual Counselling', $confirm_services)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Individual Counselling</span></label>
-                                                            <label><input class="px" type="checkbox" name="confirm_services[]" value="Family Counselling" <?php
-                                                                if (in_array('Family Counselling', $confirm_services)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Family Counselling</span></label>
-                                                            <label><input class="px" type="checkbox" name="confirm_services[]" value="Trauma Counseling" <?php
-                                                                if (in_array('Trauma Counseling', $confirm_services)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Trauma Counseling</span></label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group col-sm-12">
-                                                        <label><input class="px" type="checkbox" id="YesSpecifySevervice" value="Social Protection Schemes"><span class="lbl">Social Protection Schemes</span></label>
-                                                    </div>
-                                                    <div class="form-group col-sm-12">
-                                                        <input class="form-control" type="text" placeholder="Social Protection Schemes" name="social_protection" value="<?php echo $pre_data['social_protection'] ? $pre_data['social_protection'] : ''; ?>">
-                                                    </div>
-                                                    <div class="form-group col-sm-12">
-                                                        <label><input class="px" type="checkbox" id="YesSecurityMeasures" value="Special Security Measures, Please Specify"><span class="lbl">Special Security Measures</span></label>
-                                                    </div>
-                                                    <div class="form-group col-sm-12">
-                                                        <input class="form-control" type="text" name="special_security" placeholder="Special Security Measures" value="<?php echo $pre_data['special_security'] ? $pre_data['special_security'] : ''; ?>">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </fieldset>
-                                </div>					
-                                <div class="col-sm-6">
-                                    <fieldset class="scheduler-border">
-                                        <legend class="scheduler-border">Comment on Situation of Case</legend>
-                                        <div class="form-group">
-                                            <textarea class="form-control" name="comment_psychosocial" rows="3" placeholder="Comment on psychosocial reintegration"><?php echo $pre_data['comment_psychosocial'] ? $pre_data['comment_psychosocial'] : ''; ?></textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <textarea class="form-control" name="comment_economic" rows="3" placeholder="Comment on economic reintegration"><?php echo $pre_data['comment_economic'] ? $pre_data['comment_economic'] : ''; ?></textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <textarea class="form-control" name="comment_social" rows="3" placeholder="Comment on social reintegration"><?php echo $pre_data['comment_social'] ? $pre_data['comment_social'] : ''; ?></textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <textarea class="form-control" name="complete_income" rows="3" placeholder="Complete income tracking information"><?php echo $pre_data['complete_income'] ? $pre_data['complete_income'] : ''; ?></textarea>
-                                        </div>
-                                    </fieldset>
-                                    <fieldset class="scheduler-border">
-                                        <legend class="scheduler-border">Status of Case after Receiving the Services</legend>
-                                        <div class="form-group">
-                                            <input class="form-control" name="monthly_income" value="<?php echo $pre_data['monthly_income'] ? $pre_data['monthly_income'] : ''; ?>" placeholder="Monthly income (BDT)" type="number" name="" value="">
-                                        </div>
-                                        <div class="form-group">
-                                            <input class="form-control" name="challenges" value="<?php echo $pre_data['challenges'] ? $pre_data['challenges'] : ''; ?>" placeholder="Challenges" type="text" name="" value="">
-                                        </div>
-                                        <div class="form-group">
-                                            <input class="form-control" name="actions_taken" value="<?php echo $pre_data['actions_taken'] ? $pre_data['actions_taken'] : ''; ?>" placeholder="Actions taken" type="text" name="" value="">
-                                        </div>
-                                        <div class="form-group">
-                                            <input class="form-control" name="remark_participant" value="<?php echo $pre_data['remark_participant'] ? $pre_data['remark_participant'] : ''; ?>" placeholder="Remark of the participant (if any)" type="text" name="" value="">
-                                        </div>
-                                        <div class="form-group">
-                                            <input class="form-control" name="comment_brac" value="<?php echo $pre_data['comment_brac'] ? $pre_data['comment_brac'] : ''; ?>" placeholder="Comment of BRAC Officer responsible for participant" type="text" name="" value="">
-                                        </div>
-                                        <div class="form-group">
-                                            <input class="form-control" name="remark_district" value="<?php echo $pre_data['remark_district'] ? $pre_data['remark_district'] : ''; ?>" placeholder="Remark of District Manager" type="text" name="" value="">
-                                        </div>
-                                    </fieldset>
-                                </div>
-                            </div>
+                                    foreach ($reviews['data'] as $value):
+                                        ?>
+                                        <tr>
+                                            <td><?php echo date('d-m-Y', strtotime($value['update_date'] ? $value['update_date'] : $value['entry_date'])) ?></td>
+                                            <td>
+                                                <a href="<?php echo url('dev_customer_management/manage_cases?action=add_edit_review&edit=' . $value['pk_followup_id']) ?>" target="_blank" class="btn btn-primary btn-sm" style="margin-bottom: 1%">Edit</a>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                    endforeach
+                                    ?>
+                                </tbody>
+                            </table>
+                            <a href="<?php echo url('dev_customer_management/manage_cases?action=add_edit_review&customer_id=' . $edit) ?>" target="_blank" class="btn btn-success btn-sm" style="margin-bottom: 1%">Add New Review and Follow-Up</a>
                         </fieldset>
                     </div>
                 </div>

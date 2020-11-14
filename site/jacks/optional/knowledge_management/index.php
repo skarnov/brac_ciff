@@ -53,7 +53,7 @@ class dev_knowledge_management {
             'jack' => $this->thsClass,
         );
         $params = array(
-            'label' => 'Success Story Management',
+            'label' => 'Success Story',
             'description' => 'Manage All Success Stories',
             'menu_group' => 'Knowledge Base',
             'position' => 'default',
@@ -65,8 +65,8 @@ class dev_knowledge_management {
             admenu_register($params);
 
         $params = array(
-            'label' => 'Study Report Management',
-            'description' => 'Manage All Success Study Reports',
+            'label' => 'Case Study',
+            'description' => 'Manage All Case Studies',
             'menu_group' => 'Knowledge Base',
             'position' => 'default',
             'action' => 'manage_study_reports',
@@ -77,7 +77,7 @@ class dev_knowledge_management {
             admenu_register($params);
 
         $params = array(
-            'label' => 'Research Report Management',
+            'label' => 'Research Report',
             'description' => 'Manage All Research Reports',
             'menu_group' => 'Knowledge Base',
             'position' => 'default',
@@ -89,8 +89,8 @@ class dev_knowledge_management {
             admenu_register($params);
 
         $params = array(
-            'label' => 'Periodic Assessment Report',
-            'description' => 'Manage All Periodic Assessment Reports',
+            'label' => 'Project Report',
+            'description' => 'Manage All Project Reports',
             'menu_group' => 'Knowledge Base',
             'position' => 'default',
             'action' => 'manage_assessment_reports',

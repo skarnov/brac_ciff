@@ -87,10 +87,14 @@ class dev_customer_management {
 
         if ($_GET['action'] == 'add_edit_customer')
             include('pages/add_edit_customer.php');
+        elseif ($_GET['action'] == 'add_edit_customer_form')
+            include('pages/add_edit_customer_form.php');
         elseif ($_GET['action'] == 'add_edit_evaluate')
             include('pages/add_edit_evaluate.php');
         elseif ($_GET['action'] == 'add_edit_satisfaction_scale')
             include('pages/add_edit_satisfaction_scale.php');
+        elseif ($_GET['action'] == 'list_satisfaction_scale')
+            include('pages/list_satisfaction_scale.php');
         elseif ($_GET['action'] == 'deleteProfile')
             include('pages/deleteProfile.php');
         elseif ($_GET['action'] == 'deleteMigration')
@@ -115,6 +119,8 @@ class dev_customer_management {
             include('pages/add_edit_session_completion.php');
         elseif ($_GET['action'] == 'add_edit_psychosocial_followup')
             include('pages/add_edit_psychosocial_followup.php');
+        elseif ($_GET['action'] == 'add_edit_review')
+            include('pages/add_edit_review.php');
         elseif ($_GET['action'] == 'deleteCase')
             include('pages/deleteCase.php');
         else
@@ -227,7 +233,7 @@ class dev_customer_management {
         if ($is_update) {
             $oldData = $this->get_customers(array('customer_id' => $is_update, 'single' => true));
             if (!$oldData) {
-                return array('error' => ['Invalid returnee id, no data found']);
+                return array('error' => ['Invalid participant id, no data found']);
             }
         }
 
@@ -277,12 +283,12 @@ class dev_customer_management {
             if ($is_update) {
                 $customer_data['update_date'] = date('Y-m-d');
                 $customer_data['update_time'] = date('H:i:s');
-                $customer_data['update_by'] = $_config['user']['pk_user_id'];
+                $customer_data['updated_by'] = $_config['user']['pk_user_id'];
                 $ret['customer_update'] = $devdb->insert_update('dev_customers', $customer_data, " pk_customer_id = '" . $is_update . "'");
             } else {
                 $customer_data['create_date'] = date('Y-m-d');
                 $customer_data['create_time'] = date('H:i:s');
-                $customer_data['create_by'] = $_config['user']['pk_user_id'];
+                $customer_data['created_by'] = $_config['user']['pk_user_id'];
                 $ret['customer_insert'] = $devdb->insert_update('dev_customers', $customer_data);
                 /* Customer ID Creation */
 //                $sql = "SELECT COUNT(pk_customer_id) as TOTAL FROM dev_customers WHERE (create_date >= '" . date('Y-m-01') . "' AND create_date <= '" . date('Y-m-t') . "')";
@@ -315,6 +321,9 @@ class dev_customer_management {
 
                 $case_data = array();
                 $case_data['fk_customer_id'] = $ret['customer_insert']['success'];
+                $case_data['create_date'] = date('Y-m-d');
+                $case_data['create_time'] = date('H:i:s');
+                $case_data['created_by'] = $_config['user']['pk_user_id'];
                 $ret['case_insert'] = $devdb->insert_update('dev_immediate_supports', $case_data);
 
                 $evaluate_data = array();
@@ -357,6 +366,14 @@ class dev_customer_management {
 
             $migration_data['migration_duration'] = "Year: $years, Month: $months, Days: $days";
 
+            $calc_age = $diff = abs(strtotime($migration_data['return_date']) - strtotime(date('Y-m-d', strtotime($params['form_data']['customer_birthdate']))));
+
+            $calc_years = floor($calc_age / (365 * 60 * 60 * 24));
+            $calc_months = floor(($calc_age - $calc_years * 365 * 60 * 60 * 24) / (30 * 60 * 60 * 24));
+            $calc_days = floor(($calc_age - $calc_years * 365 * 60 * 60 * 24 - $calc_months * 30 * 60 * 60 * 24) / (60 * 60 * 24));
+
+            $migration_data['returned_age'] = "Age: $calc_years, Month: $calc_months, Days: $calc_days";
+
             $migration_data['migration_occupation'] = $params['form_data']['migration_occupation'];
             $migration_data['earned_money'] = $params['form_data']['earned_money'];
 
@@ -395,6 +412,9 @@ class dev_customer_management {
             $migration_data['is_kept_document'] = $params['form_data']['is_kept_document'];
 
             if ($is_update) {
+                $migration_data['update_date'] = date('Y-m-d');
+                $migration_data['update_time'] = date('H:i:s');
+                $migration_data['updated_by'] = $_config['user']['pk_user_id'];
                 $ret['migration_update'] = $devdb->insert_update('dev_migrations', $migration_data, " fk_customer_id = '" . $is_update . "'");
 
                 $devdb->query("DELETE FROM dev_migration_documents WHERE fk_customer_id = '$is_update'");
@@ -436,16 +456,19 @@ class dev_customer_management {
                         $migration_documents['fk_customer_id'] = $is_update;
                         $migration_documents['document_name'] = $value;
                         $migration_documents['document_file'] = $params['form_data']['document_file'];
-                        $migration_documents['modify_time'] = date('H:i:s');
-                        $migration_documents['modify_date'] = date('Y-m-d');
-                        $migration_documents['modified_by'] = $_config['user']['pk_user_id'];
+                        $migration_documents['update_time'] = date('H:i:s');
+                        $migration_documents['update_date'] = date('Y-m-d');
+                        $migration_documents['updated_by'] = $_config['user']['pk_user_id'];
                         $ret['migration_document'] = $devdb->insert_update('dev_migration_documents', $migration_documents);
 
                         $key++;
                     }
                 }
             } else {
-                $ret['migration_new_insert'] = $devdb->insert_update('dev_migrations', $migration_data, " fk_customer_id = '" . $ret['customer_insert']['success'] . "'");
+                $migration_data['update_date'] = date('Y-m-d');
+                $migration_data['update_time'] = date('H:i:s');
+                $migration_data['updated_by'] = $_config['user']['pk_user_id'];
+                $ret['migration_insert'] = $devdb->insert_update('dev_migrations', $migration_data, " fk_customer_id = '" . $ret['customer_insert']['success'] . "'");
 
                 $document_name = $params['form_data']['document_name'];
 
@@ -495,6 +518,11 @@ class dev_customer_management {
             }
 
             $economic_profile_data = array();
+            $economic_profile_data['property_name'] = $params['form_data']['property_name'];
+            $economic_profile_data['property_value'] = $params['form_data']['property_value'];
+            $economic_profile_data['returnee_income_source'] = $params['form_data']['returnee_income_source'];
+            $economic_profile_data['income_source'] = $params['form_data']['income_source'];
+            $economic_profile_data['family_income'] = $params['form_data']['family_income'];
             $economic_profile_data['pre_occupation'] = $params['form_data']['pre_occupation'];
             $economic_profile_data['present_occupation'] = $params['form_data']['present_occupation'];
             $economic_profile_data['present_income'] = $params['form_data']['present_income'];
@@ -512,7 +540,10 @@ class dev_customer_management {
             }
             $economic_profile_data['male_household_member'] = $params['form_data']['male_household_member'];
             $economic_profile_data['female_household_member'] = $params['form_data']['female_household_member'];
-            $economic_profile_data['total_member'] = $params['form_data']['male_household_member'] + $params['form_data']['female_household_member'];
+            $economic_profile_data['boy_household_member'] = $params['form_data']['boy_household_member'];
+            $economic_profile_data['girl_household_member'] = $params['form_data']['girl_household_member'];
+
+            $economic_profile_data['total_member'] = $params['form_data']['male_household_member'] + $params['form_data']['female_household_member'] + $params['form_data']['boy_household_member'] + $params['form_data']['girl_household_member'];
 
             if ($params['form_data']['new_ownership']) {
                 $economic_profile_data['current_residence_ownership'] = $params['form_data']['new_ownership'];
@@ -525,9 +556,15 @@ class dev_customer_management {
                 $economic_profile_data['current_residence_type'] = $params['form_data']['current_residence_type'];
             }
             if ($is_update) {
+                $economic_profile_data['update_date'] = date('Y-m-d');
+                $economic_profile_data['update_time'] = date('H:i:s');
+                $economic_profile_data['updated_by'] = $_config['user']['pk_user_id'];
                 $ret['economic_update'] = $devdb->insert_update('dev_economic_profile', $economic_profile_data, " fk_customer_id = '" . $is_update . "'");
             } else {
-                $ret['economic_new_insert'] = $devdb->insert_update('dev_economic_profile', $economic_profile_data, " fk_customer_id = '" . $ret['customer_insert']['success'] . "'");
+                $economic_profile_data['create_date'] = date('Y-m-d');
+                $economic_profile_data['create_time'] = date('H:i:s');
+                $economic_profile_data['created_by'] = $_config['user']['pk_user_id'];
+                $ret['economic_insert'] = $devdb->insert_update('dev_economic_profile', $economic_profile_data, " fk_customer_id = '" . $ret['customer_insert']['success'] . "'");
             }
 
             $skill_data = array();
@@ -555,9 +592,15 @@ class dev_customer_management {
             }
 
             if ($is_update) {
+                $skill_data['update_date'] = date('Y-m-d');
+                $skill_data['update_time'] = date('H:i:s');
+                $skill_data['updated_by'] = $_config['user']['pk_user_id'];
                 $ret['skill_update'] = $devdb->insert_update('dev_customer_skills', $skill_data, " fk_customer_id = '" . $is_update . "'");
             } else {
-                $ret['skill_new_insert'] = $devdb->insert_update('dev_customer_skills', $skill_data, " fk_customer_id = '" . $ret['customer_insert']['success'] . "'");
+                $skill_data['create_date'] = date('Y-m-d');
+                $skill_data['create_time'] = date('H:i:s');
+                $skill_data['created_by'] = $_config['user']['pk_user_id'];
+                $ret['skill_insert'] = $devdb->insert_update('dev_customer_skills', $skill_data, " fk_customer_id = '" . $ret['customer_insert']['success'] . "'");
             }
 
             $customer_health_data = array();
@@ -579,9 +622,15 @@ class dev_customer_management {
             }
 
             if ($is_update) {
+                $customer_health_data['update_date'] = date('Y-m-d');
+                $customer_health_data['update_time'] = date('H:i:s');
+                $customer_health_data['updated_by'] = $_config['user']['pk_user_id'];
                 $ret['health_update'] = $devdb->insert_update('dev_customer_health', $customer_health_data, " fk_customer_id = '" . $is_update . "'");
             } else {
-                $ret['health_new_insert'] = $devdb->insert_update('dev_customer_health', $customer_health_data, " fk_customer_id = '" . $ret['customer_insert']['success'] . "'");
+                $customer_health_data['create_date'] = date('Y-m-d');
+                $customer_health_data['create_time'] = date('H:i:s');
+                $customer_health_data['created_by'] = $_config['user']['pk_user_id'];
+                $ret['health_insert'] = $devdb->insert_update('dev_customer_health', $customer_health_data, " fk_customer_id = '" . $ret['customer_insert']['success'] . "'");
             }
         }
         return $ret;
@@ -639,38 +688,17 @@ class dev_customer_management {
         if (!$ret['error']) {
             $data = array();
             $data['is_participant'] = $params['form_data']['is_participant'];
-
-            if ($params['form_data']['new_evaluate_services'] == NULL) {
-                $data_type = $params['form_data']['evaluate_services'];
-                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $evaluate_services = $data_types;
-            } elseif ($params['form_data']['evaluate_services'] == NULL) {
-                $evaluate_services = $params['form_data']['new_evaluate_services'];
-            } elseif ($params['form_data']['evaluate_services'] != NULL && $params['form_data']['new_evaluate_services'] != NULL) {
-                $data_type = $params['form_data']['evaluate_services'];
-                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $evaluate_services = $params['form_data']['new_evaluate_services'] . ',' . $data_types;
-            }
-
-            $plan = array();
-            if ($evaluate_services) {
-                $plan['evaluate_services'] = $evaluate_services;
-                if ($params['form_data']['new_social_protection']) {
-                    $plan['social_protection'] = $params['form_data']['new_social_protection'];
-                }
-                if ($params['form_data']['new_security_measures']) {
-                    $plan['security_measures'] = $params['form_data']['new_security_measures'];
-                }
-            }
-
-            $data['evaluate_services'] = implode(',', $plan);
+            $data['justification_project'] = $params['form_data']['justification_project'];
 
             if ($is_update) {
                 $data['update_date'] = date('Y-m-d');
                 $data['update_time'] = date('H:i:s');
-                $data['modified_by'] = $_config['user']['pk_user_id'];
+                $data['updated_by'] = $_config['user']['pk_user_id'];
                 $ret['evaluation_update'] = $devdb->insert_update('dev_initial_evaluation', $data, " fk_customer_id = '" . $is_update . "'");
             } else {
+                $data['create_date'] = date('Y-m-d');
+                $data['create_time'] = date('H:i:s');
+                $data['created_by'] = $_config['user']['pk_user_id'];
                 $ret['evaluation_insert'] = $devdb->insert_update('dev_initial_evaluation', $data);
             }
         }
@@ -728,21 +756,34 @@ class dev_customer_management {
 
         if (!$ret['error']) {
             $satisfaction_scale_data = array();
+            $satisfaction_scale_data['entry_date'] = date('Y-m-d', strtotime($params['form_data']['entry_date']));
+
             $satisfaction_scale_data['satisfied_assistance'] = $params['form_data']['satisfied_assistance'];
+            $satisfaction_scale_data['satisfied_assistance_date'] = date('Y-m-d', strtotime($params['form_data']['satisfied_assistance_date']));
             $satisfaction_scale_data['satisfied_counseling'] = $params['form_data']['satisfied_counseling'];
+            $satisfaction_scale_data['satisfied_counseling_date'] = date('Y-m-d', strtotime($params['form_data']['satisfied_counseling_date']));
             $satisfaction_scale_data['satisfied_economic'] = $params['form_data']['satisfied_economic'];
+            $satisfaction_scale_data['satisfied_economic_date'] = date('Y-m-d', strtotime($params['form_data']['satisfied_economic_date']));
             $satisfaction_scale_data['satisfied_social'] = $params['form_data']['satisfied_social'];
+            $satisfaction_scale_data['satisfied_social_date'] = date('Y-m-d', strtotime($params['form_data']['satisfied_social_date']));
             $satisfaction_scale_data['satisfied_community'] = $params['form_data']['satisfied_community'];
+            $satisfaction_scale_data['satisfied_community_date'] = date('Y-m-d', strtotime($params['form_data']['satisfied_community_date']));
             $satisfaction_scale_data['satisfied_reintegration'] = $params['form_data']['satisfied_reintegration'];
+            $satisfaction_scale_data['satisfied_reintegration_date'] = date('Y-m-d', strtotime($params['form_data']['satisfied_reintegration_date']));
+
             $satisfaction_scale_data['total_score'] = ($satisfaction_scale_data['satisfied_assistance'] + $satisfaction_scale_data['satisfied_counseling'] + $satisfaction_scale_data['satisfied_economic'] + $satisfaction_scale_data['satisfied_social'] + $satisfaction_scale_data['satisfied_community'] + $satisfaction_scale_data['satisfied_reintegration']);
 
             if ($is_update) {
                 $satisfaction_scale_data['update_date'] = date('Y-m-d');
                 $satisfaction_scale_data['update_time'] = date('H:i:s');
-                $satisfaction_scale_data['modified_by'] = $_config['user']['pk_user_id'];
+                $satisfaction_scale_data['updated_by'] = $_config['user']['pk_user_id'];
                 $ret['satisfaction_update'] = $devdb->insert_update('dev_reintegration_satisfaction_scale', $satisfaction_scale_data, " fk_customer_id = '" . $is_update . "'");
             } else {
-                $ret['satisfaction_new_insert'] = $devdb->insert_update('dev_reintegration_satisfaction_scale', $satisfaction_scale_data);
+                $satisfaction_scale_data['fk_customer_id'] = $params['customer_id'];
+                $satisfaction_scale_data['create_date'] = date('Y-m-d');
+                $satisfaction_scale_data['create_time'] = date('H:i:s');
+                $satisfaction_scale_data['created_by'] = $_config['user']['pk_user_id'];
+                $ret['satisfaction_insert'] = $devdb->insert_update('dev_reintegration_satisfaction_scale', $satisfaction_scale_data);
             }
         }
         return $ret;
@@ -826,6 +867,8 @@ class dev_customer_management {
             $immediate_support = array();
             $immediate_support['fk_branch_id'] = $_config['user']['user_branch'];
             $immediate_support['fk_staff_id'] = $params['form_data']['fk_staff_id'];
+            $immediate_support['entry_date'] = date('Y-m-d', strtotime($params['form_data']['support_date']));
+            $immediate_support['arrival_place'] = $params['form_data']['arrival_place'];
 
             $data_type = $params['form_data']['immediate_support'];
             $data_types = is_array($data_type) ? implode(',', $data_type) : '';
@@ -834,7 +877,7 @@ class dev_customer_management {
             if ($is_update) {
                 $immediate_support['update_date'] = date('Y-m-d');
                 $immediate_support['update_time'] = date('H:i:s');
-                $immediate_support['update_by'] = $_config['user']['pk_user_id'];
+                $immediate_support['updated_by'] = $_config['user']['pk_user_id'];
                 $ret['support_update'] = $devdb->insert_update('dev_immediate_supports', $immediate_support, " fk_customer_id = '" . $is_update . "'");
             }
 
@@ -845,6 +888,7 @@ class dev_customer_management {
              */
 
             $reintegration_plan = array();
+            $reintegration_plan['plan_date'] = date('Y-m-d', strtotime($params['form_data']['plan_date']));
 
             if ($params['form_data']['new_service_requested'] == NULL) {
                 $data_type = $params['form_data']['service_requested'];
@@ -874,9 +918,15 @@ class dev_customer_management {
                 $pre_customer_id = $devdb->get_row($sql);
 
                 if ($pre_customer_id) {
+                    $reintegration_plan['update_date'] = date('Y-m-d');
+                    $reintegration_plan['update_time'] = date('H:i:s');
+                    $reintegration_plan['updated_by'] = $_config['user']['pk_user_id'];
                     $ret['reintegration_update'] = $devdb->insert_update('dev_reintegration_plan', $reintegration_plan, " fk_customer_id = '" . $is_update . "'");
                 } else {
                     $reintegration_plan['fk_customer_id'] = $is_update;
+                    $reintegration_plan['create_date'] = date('Y-m-d');
+                    $reintegration_plan['create_time'] = date('H:i:s');
+                    $reintegration_plan['created_by'] = $_config['user']['pk_user_id'];
                     $ret['reintegration_insert'] = $devdb->insert_update('dev_reintegration_plan', $reintegration_plan);
                 }
             }
@@ -889,20 +939,6 @@ class dev_customer_management {
 
             $psycho_supports = array();
             $psycho_supports['first_meeting'] = date('Y-m-d', strtotime($params['form_data']['first_meeting']));
-            $psycho_supports['is_home_visit'] = $params['form_data']['is_home_visit'];
-
-            if ($params['form_data']['new_issue_discussed'] == NULL) {
-                $data_type = $params['form_data']['issue_discussed'];
-                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $psycho_supports['issue_discussed'] = $data_types;
-            } elseif ($params['form_data']['issue_discussed'] == NULL) {
-                $psycho_supports['other_issue_discussed'] = $params['form_data']['new_issue_discussed'];
-            } elseif ($params['form_data']['issue_discussed'] != NULL && $params['form_data']['new_issue_discussed'] != NULL) {
-                $data_type = $params['form_data']['issue_discussed'];
-                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $psycho_supports['issue_discussed'] = $data_types;
-                $psycho_supports['other_issue_discussed'] = $params['form_data']['new_issue_discussed'];
-            }
 
             if ($params['form_data']['new_problem_identified'] == NULL) {
                 $data_type = $params['form_data']['problem_identified'];
@@ -918,7 +954,6 @@ class dev_customer_management {
 
             $psycho_supports['problem_description'] = $params['form_data']['problem_description'];
             $psycho_supports['initial_plan'] = $params['form_data']['initial_plan'];
-            $psycho_supports['is_family_counceling'] = $params['form_data']['is_family_counceling'];
             $psycho_supports['family_counseling'] = $params['form_data']['family_counseling'];
 
             if ($params['form_data']['new_session_place']) {
@@ -952,9 +987,16 @@ class dev_customer_management {
                 $pre_customer_id = $devdb->get_row($sql);
 
                 if ($pre_customer_id) {
+                    $psycho_supports['update_date'] = date('Y-m-d');
+                    $psycho_supports['update_time'] = date('H:i:s');
+                    $psycho_supports['updated_by'] = $_config['user']['pk_user_id'];
                     $ret['psycho_support_update'] = $devdb->insert_update('dev_psycho_supports', $psycho_supports, " fk_customer_id = '" . $is_update . "'");
                 } else {
                     $psycho_supports['fk_customer_id'] = $is_update;
+                    $psycho_supports['create_date'] = date('Y-m-d');
+                    $psycho_supports['create_time'] = date('H:i:s');
+                    $psycho_supports['created_by'] = $_config['user']['pk_user_id'];
+
                     $ret['psycho_support_insert'] = $devdb->insert_update('dev_psycho_supports', $psycho_supports);
                 }
             }
@@ -966,6 +1008,7 @@ class dev_customer_management {
              */
 
             $economic_supports_data = array();
+            $economic_supports_data['entry_date'] = date('Y-m-d', strtotime($params['form_data']['economic_reintegration_date']));
 
             if ($params['form_data']['new_inkind_project'] == NULL) {
                 $data_type = $params['form_data']['inkind_project'];
@@ -980,8 +1023,6 @@ class dev_customer_management {
                 $economic_supports_data['other_inkind_project'] = $params['form_data']['new_inkind_project'];
             }
 
-            $economic_supports_data['inkind_received'] = $params['form_data']['inkind_received'];
-            $economic_supports_data['training_duration'] = $params['form_data']['training_duration'];
             $economic_supports_data['is_certification_received'] = $params['form_data']['is_certification_received'];
             $economic_supports_data['training_used'] = $params['form_data']['training_used'];
             $economic_supports_data['other_comments'] = $params['form_data']['economic_other_comments'];
@@ -991,33 +1032,31 @@ class dev_customer_management {
             $economic_supports_data['family_training'] = $params['form_data']['family_training'];
 
             $economic_supports_data['traning_entry_date'] = date('Y-m-d', strtotime($params['form_data']['traning_entry_date']));
+            $economic_supports_data['place_traning'] = $params['form_data']['place_traning'];
             $economic_supports_data['duration_traning'] = $params['form_data']['duration_traning'];
             $economic_supports_data['training_status'] = $params['form_data']['training_status'];
 
-            if ($params['form_data']['new_received_vocational_training'] == NULL) {
-                $data_type = $params['form_data']['received_vocational_training'];
-                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $economic_supports_data['received_vocational_training'] = $data_types;
-            } elseif ($params['form_data']['received_vocational_training'] == NULL) {
-                $economic_supports_data['other_received_vocational_training'] = $params['form_data']['new_received_vocational_training'];
-            } elseif ($params['form_data']['received_vocational_training'] != NULL && $params['form_data']['new_received_vocational_training'] != NULL) {
-                $data_type = $params['form_data']['received_vocational_training'];
-                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $economic_supports_data['received_vocational_training'] = $data_types;
-                $economic_supports_data['other_received_vocational_training'] = $params['form_data']['new_received_vocational_training'];
-            }
-
-            $economic_supports_data['training_start_date'] = date('Y-m-d', strtotime($params['form_data']['training_start_date']));
-            $economic_supports_data['training_end_date'] = date('Y-m-d', strtotime($params['form_data']['training_end_date']));
+            $economic_supports_data['financial_literacy_date'] = date('Y-m-d', strtotime($params['form_data']['financial_literacy_date']));
+            $economic_supports_data['business_development_date'] = date('Y-m-d', strtotime($params['form_data']['business_development_date']));
+            $economic_supports_data['product_development_date'] = date('Y-m-d', strtotime($params['form_data']['product_development_date']));
+            $economic_supports_data['entrepreneur_training_date'] = date('Y-m-d', strtotime($params['form_data']['entrepreneur_training_date']));
+            $economic_supports_data['other_financial_training_name'] = $params['form_data']['other_financial_training_name'];
+            $economic_supports_data['other_financial_training_date'] = date('Y-m-d', strtotime($params['form_data']['other_financial_training_date']));
 
             if ($is_update) {
                 $sql = "SELECT fk_customer_id FROM dev_economic_supports WHERE fk_customer_id = '$is_update'";
                 $pre_customer_id = $devdb->get_row($sql);
 
                 if ($pre_customer_id) {
+                    $economic_supports_data['update_date'] = date('Y-m-d');
+                    $economic_supports_data['update_time'] = date('H:i:s');
+                    $economic_supports_data['updated_by'] = $_config['user']['pk_user_id'];
                     $ret['economic_support_update'] = $devdb->insert_update('dev_economic_supports', $economic_supports_data, " fk_customer_id = '" . $is_update . "'");
                 } else {
                     $economic_supports_data['fk_customer_id'] = $is_update;
+                    $economic_supports_data['create_date'] = date('Y-m-d');
+                    $economic_supports_data['create_time'] = date('H:i:s');
+                    $economic_supports_data['created_by'] = $_config['user']['pk_user_id'];
                     $ret['economic_support_insert'] = $devdb->insert_update('dev_economic_supports', $economic_supports_data);
                 }
             }
@@ -1029,7 +1068,25 @@ class dev_customer_management {
              */
 
             $economic_reintegration_data = array();
+            $economic_reintegration_data['entry_date'] = date('Y-m-d', strtotime($params['form_data']['economic_reintegration_referral_date']));
             $economic_reintegration_data['is_vocational_training'] = $params['form_data']['is_vocational_training'];
+
+            if ($params['form_data']['new_received_vocational_training'] == NULL) {
+                $data_type = $params['form_data']['received_vocational_training'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $economic_reintegration_data['received_vocational_training'] = $data_types;
+            } elseif ($params['form_data']['received_vocational_training'] == NULL) {
+                $economic_reintegration_data['other_received_vocational_training'] = $params['form_data']['new_received_vocational_training'];
+            } elseif ($params['form_data']['received_vocational_training'] != NULL && $params['form_data']['new_received_vocational_training'] != NULL) {
+                $data_type = $params['form_data']['received_vocational_training'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $economic_reintegration_data['received_vocational_training'] = $data_types;
+                $economic_reintegration_data['other_received_vocational_training'] = $params['form_data']['new_received_vocational_training'];
+            }
+
+            $economic_reintegration_data['training_start_date'] = date('Y-m-d', strtotime($params['form_data']['training_start_date']));
+            $economic_reintegration_data['training_end_date'] = date('Y-m-d', strtotime($params['form_data']['training_end_date']));
+
             if ($params['form_data']['new_received_vocational'] == NULL) {
                 $data_type = $params['form_data']['received_vocational'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
@@ -1042,8 +1099,6 @@ class dev_customer_management {
                 $economic_reintegration_data['received_vocational'] = $data_types;
                 $economic_reintegration_data['other_received_vocational'] = $params['form_data']['new_received_vocational'];
             }
-            $economic_reintegration_data['is_certificate_received'] = $params['form_data']['is_certificate_received'];
-            $economic_reintegration_data['used_far'] = $params['form_data']['used_far'];
             $economic_reintegration_data['other_comments'] = $params['form_data']['economic_referrals_other_comments'];
             $economic_reintegration_data['is_economic_services'] = $params['form_data']['is_economic_services'];
 
@@ -1071,14 +1126,23 @@ class dev_customer_management {
             $economic_reintegration_data['status_traning'] = $params['form_data']['status_traning'];
             $economic_reintegration_data['assistance_utilized'] = $params['form_data']['assistance_utilized'];
 
+            $economic_reintegration_data['job_placement_date'] = date('Y-m-d', strtotime($params['form_data']['job_placement_date']));
+            $economic_reintegration_data['financial_services_date'] = date('Y-m-d', strtotime($params['form_data']['financial_services_date']));
+
             if ($is_update) {
                 $sql = "SELECT fk_customer_id FROM dev_economic_reintegration_referrals WHERE fk_customer_id = '$is_update'";
                 $pre_customer_id = $devdb->get_row($sql);
 
                 if ($pre_customer_id) {
+                    $economic_reintegration_data['update_date'] = date('Y-m-d');
+                    $economic_reintegration_data['update_time'] = date('H:i:s');
+                    $economic_reintegration_data['updated_by'] = $_config['user']['pk_user_id'];
                     $ret['economic_support_update'] = $devdb->insert_update('dev_economic_reintegration_referrals', $economic_reintegration_data, " fk_customer_id = '" . $is_update . "'");
                 } else {
                     $economic_reintegration_data['fk_customer_id'] = $is_update;
+                    $economic_reintegration_data['create_date'] = date('Y-m-d');
+                    $economic_reintegration_data['create_time'] = date('H:i:s');
+                    $economic_reintegration_data['created_by'] = $_config['user']['pk_user_id'];
                     $ret['economic_support_insert'] = $devdb->insert_update('dev_economic_reintegration_referrals', $economic_reintegration_data);
                 }
             }
@@ -1109,10 +1173,6 @@ class dev_customer_management {
             $dev_social_supports_data['date_education'] = date('Y-m-d', strtotime($params['form_data']['date_education']));
             $dev_social_supports_data['date_housing'] = date('Y-m-d', strtotime($params['form_data']['date_housing']));
             $dev_social_supports_data['date_legal'] = date('Y-m-d', strtotime($params['form_data']['date_legal']));
-            $dev_social_supports_data['attended_ipt'] = $params['form_data']['attended_ipt'];
-            $dev_social_supports_data['learn_show'] = $params['form_data']['learn_show'];
-            $dev_social_supports_data['is_per_community_video'] = $params['form_data']['is_per_community_video'];
-            $dev_social_supports_data['learn_video'] = $params['form_data']['learn_video'];
 
             if ($params['form_data']['new_supportreferred'] == NULL) {
                 $data_type = $params['form_data']['support_referred'];
@@ -1132,77 +1192,16 @@ class dev_customer_management {
                 $pre_customer_id = $devdb->get_row($sql);
 
                 if ($pre_customer_id) {
+                    $dev_social_supports_data['update_date'] = date('Y-m-d');
+                    $dev_social_supports_data['update_time'] = date('H:i:s');
+                    $dev_social_supports_data['updated_by'] = $_config['user']['pk_user_id'];
                     $ret['social_support_update'] = $devdb->insert_update('dev_social_supports', $dev_social_supports_data, " fk_customer_id = '" . $is_update . "'");
                 } else {
                     $dev_social_supports_data['fk_customer_id'] = $is_update;
+                    $dev_social_supports_data['create_date'] = date('Y-m-d');
+                    $dev_social_supports_data['create_time'] = date('H:i:s');
+                    $dev_social_supports_data['created_by'] = $_config['user']['pk_user_id'];
                     $ret['social_support_insert'] = $devdb->insert_update('dev_social_supports', $dev_social_supports_data);
-                }
-            }
-
-            /*
-              -------------------------------------------------------------------
-              | Table Name : dev_followups
-              |------------------------------------------------------------------
-             */
-
-            $dev_followups_data = array();
-
-            $dev_followups_data['casedropped'] = $params['form_data']['casedropped'];
-            if ($params['form_data']['new_reason_dropping'] == NULL) {
-                $data_type = $params['form_data']['reason_dropping'];
-                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $dev_followups_data['reason_dropping'] = $data_types;
-            } elseif ($params['form_data']['reason_dropping'] == NULL) {
-                $dev_followups_data['other_reason_dropping'] = $params['form_data']['new_reason_dropping'];
-            } elseif ($params['form_data']['reason_dropping'] != NULL && $params['form_data']['new_reason_dropping'] != NULL) {
-                $data_type = $params['form_data']['reason_dropping'];
-                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $dev_followups_data['reason_dropping'] = $data_types;
-                $dev_followups_data['other_reason_dropping'] = $params['form_data']['new_reason_dropping'];
-            }
-
-            if ($params['form_data']['new_confirm_services'] == NULL) {
-                $data_type = $params['form_data']['confirm_services'];
-                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $dev_followups_data['confirm_services'] = $data_types;
-            } elseif ($params['form_data']['confirm_services'] == NULL) {
-                $dev_followups_data['confirm_services'] = $params['form_data']['new_confirm_services'];
-            } elseif ($params['form_data']['confirm_services'] != NULL && $params['form_data']['new_confirm_services'] != NULL) {
-                $data_type = $params['form_data']['confirm_services'];
-                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
-                $dev_followups_data['confirm_services'] = $params['form_data']['new_confirm_services'] . ',' . $data_types;
-            }
-
-            $dev_followups_data['financial_service'] = $params['form_data']['followup_financial_service'];
-
-            if ($params['form_data']['social_protection']) {
-                $dev_followups_data['social_protection'] = $params['form_data']['social_protection'];
-            }
-            if ($params['form_data']['special_security']) {
-                $dev_followups_data['special_security'] = $params['form_data']['special_security'];
-            }
-
-            $dev_followups_data['comment_psychosocial'] = $params['form_data']['comment_psychosocial'];
-            $dev_followups_data['comment_economic'] = $params['form_data']['comment_economic'];
-            $dev_followups_data['comment_social'] = $params['form_data']['comment_social'];
-
-            $dev_followups_data['complete_income'] = $params['form_data']['complete_income'];
-            $dev_followups_data['monthly_income'] = $params['form_data']['monthly_income'];
-            $dev_followups_data['challenges'] = $params['form_data']['challenges'];
-            $dev_followups_data['actions_taken'] = $params['form_data']['actions_taken'];
-            $dev_followups_data['remark_participant'] = $params['form_data']['remark_participant'];
-            $dev_followups_data['comment_brac'] = $params['form_data']['comment_brac'];
-            $dev_followups_data['remark_district'] = $params['form_data']['remark_district'];
-
-            if ($is_update) {
-                $sql = "SELECT fk_customer_id FROM dev_followups WHERE fk_customer_id = '$is_update'";
-                $pre_customer_id = $devdb->get_row($sql);
-
-                if ($pre_customer_id) {
-                    $ret['followup_update'] = $devdb->insert_update('dev_followups', $dev_followups_data, " fk_customer_id = '" . $is_update . "'");
-                } else {
-                    $dev_followups_data['fk_customer_id'] = $is_update;
-                    $ret['followup_insert'] = $devdb->insert_update('dev_followups', $dev_followups_data);
                 }
             }
         }
@@ -1263,8 +1262,11 @@ class dev_customer_management {
             $psycho_family_counselling_data['entry_date'] = date('Y-m-d', strtotime($params['form_data']['family_entry_date']));
             $psycho_family_counselling_data['entry_time'] = $params['form_data']['family_entry_time'];
             $psycho_family_counselling_data['session_place'] = $params['form_data']['session_place'];
-            $psycho_family_counselling_data['members_counseled'] = $params['form_data']['members_counseled'];
             $psycho_family_counselling_data['session_comments'] = $params['form_data']['session_comments'];
+
+            $psycho_family_counselling_data['male_counseled'] = $params['form_data']['male_counseled'];
+            $psycho_family_counselling_data['female_counseled'] = $params['form_data']['female_counseled'];
+            $psycho_family_counselling_data['members_counseled'] = $psycho_family_counselling_data['male_counseled'] + $psycho_family_counselling_data['female_counseled'];
 
             if ($is_update)
                 $ret = $devdb->insert_update('dev_psycho_family_counselling', $psycho_family_counselling_data, " pk_psycho_family_counselling_id = '" . $is_update . "'");
@@ -1333,10 +1335,16 @@ class dev_customer_management {
             $psycho_sessions_data['session_comments'] = $params['form_data']['session_comments'];
             $psycho_sessions_data['next_date'] = date('Y-m-d', strtotime($params['form_data']['next_date']));
 
-            if ($is_update)
+            if ($is_update) {
+                $psycho_sessions_data['update_date'] = date('Y-m-d');
+                $psycho_sessions_data['update_time'] = date('H:i:s');
+                $psycho_sessions_data['updated_by'] = $_config['user']['pk_user_id'];
                 $ret = $devdb->insert_update('dev_psycho_sessions', $psycho_sessions_data, " pk_psycho_session_id = '" . $is_update . "'");
-            else {
+            } else {
                 $psycho_sessions_data['fk_customer_id'] = $params['customer_id'];
+                $psycho_sessions_data['create_date'] = date('Y-m-d');
+                $psycho_sessions_data['create_time'] = date('H:i:s');
+                $psycho_sessions_data['created_by'] = $_config['user']['pk_user_id'];
                 $ret = $devdb->insert_update('dev_psycho_sessions', $psycho_sessions_data);
             }
         }
@@ -1394,7 +1402,7 @@ class dev_customer_management {
 
         if (!$ret['error']) {
             $psycho_completions_data = array();
-            $psycho_completions_data['entry_date'] = date('Y-m-d');
+            $psycho_completions_data['entry_date'] = date('Y-m-d', strtotime($params['form_data']['entry_date']));
             $psycho_completions_data['is_completed'] = $params['form_data']['is_completed'];
             $psycho_completions_data['dropout_reason'] = $params['form_data']['dropout_reason'];
             $psycho_completions_data['review_session'] = $params['form_data']['review_session'];
@@ -1403,10 +1411,16 @@ class dev_customer_management {
             $psycho_completions_data['final_evaluation'] = $params['form_data']['final_evaluation'];
             $psycho_completions_data['required_session'] = $params['form_data']['required_session'];
 
-            if ($is_update)
+            if ($is_update) {
+                $psycho_completions_data['update_date'] = date('Y-m-d');
+                $psycho_completions_data['update_time'] = date('H:i:s');
+                $psycho_completions_data['updated_by'] = $_config['user']['pk_user_id'];
                 $ret = $devdb->insert_update('dev_psycho_completions', $psycho_completions_data, " pk_psycho_completion_id = '" . $is_update . "'");
-            else {
+            } else {
                 $psycho_completions_data['fk_customer_id'] = $params['customer_id'];
+                $psycho_completions_data['create_date'] = date('Y-m-d');
+                $psycho_completions_data['create_time'] = date('H:i:s');
+                $psycho_completions_data['created_by'] = $_config['user']['pk_user_id'];
                 $ret = $devdb->insert_update('dev_psycho_completions', $psycho_completions_data);
             }
         }
@@ -1468,11 +1482,135 @@ class dev_customer_management {
             $psycho_followups_data['entry_date'] = date('Y-m-d', strtotime($params['form_data']['followup_entry_date']));
             $psycho_followups_data['followup_comments'] = $params['form_data']['followup_comments'];
 
-            if ($is_update)
+            if ($is_update) {
+                $psycho_followups_data['update_date'] = date('Y-m-d');
+                $psycho_followups_data['update_time'] = date('H:i:s');
+                $psycho_followups_data['updated_by'] = $_config['user']['pk_user_id'];
                 $ret = $devdb->insert_update('dev_psycho_followups', $psycho_followups_data, " pk_psycho_followup_id = '" . $is_update . "'");
-            else {
+            } else {
                 $psycho_followups_data['fk_customer_id'] = $params['customer_id'];
+                $psycho_followups_data['create_date'] = date('Y-m-d');
+                $psycho_followups_data['create_time'] = date('H:i:s');
+                $psycho_followups_data['created_by'] = $_config['user']['pk_user_id'];
                 $ret = $devdb->insert_update('dev_psycho_followups', $psycho_followups_data);
+            }
+        }
+        return $ret;
+    }
+
+    function get_case_review($param = null) {
+        $param['single'] = $param['single'] ? $param['single'] : false;
+
+        $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
+        $from = "FROM dev_followups ";
+        $where = "WHERE 1 ";
+        $conditions = " ";
+        $sql = $select . $from . $where;
+        $count_sql = "SELECT COUNT(pk_followup_id) AS TOTAL " . $from . $where;
+
+        $loopCondition = array(
+            'id' => 'pk_followup_id',
+            'customer_id' => 'fk_customer_id',
+        );
+
+        $conditions .= sql_condition_maker($loopCondition, $param);
+
+        $orderBy = sql_order_by($param);
+        $limitBy = sql_limit_by($param);
+
+        $sql .= $conditions . $orderBy . $limitBy;
+        $count_sql .= $conditions;
+
+        $result = sql_data_collector($sql, $count_sql, $param);
+        return $result;
+    }
+
+    function add_edit_review($params = array()) {
+        global $devdb, $_config;
+
+        $ret = array('success' => array(), 'error' => array());
+        $is_update = $params['edit'] ? $params['edit'] : array();
+
+        $oldData = array();
+        if ($is_update) {
+            $oldData = $this->get_case_review(array('id' => $is_update, 'single' => true));
+            if (!$oldData) {
+                return array('error' => ['Invalid review followup id, no data found']);
+            }
+        }
+
+        foreach ($params['required'] as $i => $v) {
+            if (isset($params['form_data'][$i]))
+                $temp = form_validator::required($params['form_data'][$i]);
+            if ($temp !== true) {
+                $ret['error'][] = $v . ' ' . $temp;
+            }
+        }
+
+        if (!$ret['error']) {
+            $dev_followups_data = array();
+            $dev_followups_data['entry_date'] = date('Y-m-d', strtotime($params['form_data']['entry_date']));
+            $dev_followups_data['casedropped'] = $params['form_data']['casedropped'];
+
+            if ($params['form_data']['new_reason_dropping'] == NULL) {
+                $data_type = $params['form_data']['reason_dropping'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $dev_followups_data['reason_dropping'] = $data_types;
+            } elseif ($params['form_data']['reason_dropping'] == NULL) {
+                $dev_followups_data['other_reason_dropping'] = $params['form_data']['new_reason_dropping'];
+            } elseif ($params['form_data']['reason_dropping'] != NULL && $params['form_data']['new_reason_dropping'] != NULL) {
+                $data_type = $params['form_data']['reason_dropping'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $dev_followups_data['reason_dropping'] = $data_types;
+                $dev_followups_data['other_reason_dropping'] = $params['form_data']['new_reason_dropping'];
+            }
+
+            if ($params['form_data']['new_confirm_services'] == NULL) {
+                $data_type = $params['form_data']['confirm_services'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $dev_followups_data['confirm_services'] = $data_types;
+            } elseif ($params['form_data']['confirm_services'] == NULL) {
+                $dev_followups_data['confirm_services'] = $params['form_data']['new_confirm_services'];
+            } elseif ($params['form_data']['confirm_services'] != NULL && $params['form_data']['new_confirm_services'] != NULL) {
+                $data_type = $params['form_data']['confirm_services'];
+                $data_types = is_array($data_type) ? implode(',', $data_type) : '';
+                $dev_followups_data['confirm_services'] = $params['form_data']['new_confirm_services'] . ',' . $data_types;
+            }
+
+            if ($params['form_data']['social_protection']) {
+                $dev_followups_data['social_protection'] = $params['form_data']['social_protection'];
+            }
+
+            if ($params['form_data']['special_security']) {
+                $dev_followups_data['special_security'] = $params['form_data']['special_security'];
+            }
+
+            $dev_followups_data['comment_psychosocial'] = $params['form_data']['comment_psychosocial'];
+            $dev_followups_data['comment_psychosocial_date'] = date('Y-m-d', strtotime($params['form_data']['comment_psychosocial_date']));
+            $dev_followups_data['comment_economic'] = $params['form_data']['comment_economic'];
+            $dev_followups_data['comment_economic_date'] = date('Y-m-d', strtotime($params['form_data']['comment_economic_date']));
+            $dev_followups_data['comment_social'] = $params['form_data']['comment_social'];
+            $dev_followups_data['comment_social_date'] = date('Y-m-d', strtotime($params['form_data']['comment_social_date']));
+            $dev_followups_data['comment_income'] = $params['form_data']['comment_income'];
+            $dev_followups_data['comment_income_date'] = date('Y-m-d', strtotime($params['form_data']['comment_income_date']));
+            $dev_followups_data['monthly_income'] = $params['form_data']['monthly_income'];
+            $dev_followups_data['challenges'] = $params['form_data']['challenges'];
+            $dev_followups_data['actions_taken'] = $params['form_data']['actions_taken'];
+            $dev_followups_data['remark_participant'] = $params['form_data']['remark_participant'];
+            $dev_followups_data['comment_brac'] = $params['form_data']['comment_brac'];
+            $dev_followups_data['remark_district'] = $params['form_data']['remark_district'];
+
+            if ($is_update) {
+                $dev_followups_data['update_date'] = date('Y-m-d');
+                $dev_followups_data['update_time'] = date('H:i:s');
+                $dev_followups_data['updated_by'] = $_config['user']['pk_user_id'];
+                $ret = $devdb->insert_update('dev_followups', $dev_followups_data, " pk_followup_id = '" . $is_update . "'");
+            } else {
+                $dev_followups_data['fk_customer_id'] = $params['customer_id'];
+                $dev_followups_data['create_date'] = date('Y-m-d');
+                $dev_followups_data['create_time'] = date('H:i:s');
+                $dev_followups_data['created_by'] = $_config['user']['pk_user_id'];
+                $ret = $devdb->insert_update('dev_followups', $dev_followups_data);
             }
         }
         return $ret;
@@ -1573,7 +1711,7 @@ class dev_customer_management {
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
                 $returnee_data['legal_document'] = $params['form_data']['new_legal_document'] . ',' . $data_types;
             }
-            
+
             if ($params['form_data']['new_legal_document'] == NULL) {
                 $data_type = $params['form_data']['legal_document'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
@@ -1586,7 +1724,7 @@ class dev_customer_management {
                 $returnee_data['legal_document'] = $data_types;
                 $returnee_data['other_legal_document'] = $params['form_data']['new_legal_document'];
             }
-            
+
             $returnee_data['remigrate_intention'] = $params['form_data']['remigrate_intention'];
 
             if ($params['form_data']['new_qualification']) {

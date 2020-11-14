@@ -73,6 +73,17 @@ doAction('render_start');
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
+                        <label>Date</label>
+                        <div class="input-group">
+                            <input id="FamilyCounselingDate" type="text" class="form-control" name="entry_date" value="<?php echo $pre_data['entry_date'] && $pre_data['entry_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['entry_date'])) : date('d-m-Y'); ?>">
+                        </div>
+                        <script type="text/javascript">
+                            init.push(function () {
+                                _datepicker('FamilyCounselingDate');
+                            });
+                        </script>
+                    </div>
+                    <div class="form-group">
                         <label>Completed Counselling Session</label>
                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                             <div class="options_holder radio">
@@ -115,6 +126,8 @@ doAction('render_start');
                         <label>Review of Counselling Session</label>
                         <input class="form-control" type="text" id="review_session" name="review_session" value="<?php echo $pre_data['review_session'] ? $pre_data['review_session'] : ''; ?>">
                     </div>
+                </div>
+                <div class="col-sm-6">
                     <div class="form-group">
                         <label>Comments of the Client</label>
                         <textarea class="form-control" name="client_comments" rows="2" placeholder="Comments of the Client"><?php echo $pre_data['client_comments'] ? $pre_data['client_comments'] : ''; ?></textarea>

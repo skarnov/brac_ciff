@@ -299,7 +299,7 @@ filterForm($filterForm);
                                 <a href="<?php echo url('admin/dev_customer_management/manage_customers?action=add_edit_customer&edit=' . $customer['pk_customer_id']) ?>" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i> Edit</a>
                                 <a href="<?php echo url('admin/dev_customer_management/manage_customers?action=add_edit_evaluate&edit=' . $customer['pk_customer_id']) ?>" class="btn btn-warning">Evaluate</a>
                                 <a href="<?php echo url('admin/dev_customer_management/manage_cases?action=add_edit_case&edit=' . $customer['pk_customer_id']) ?>" class="btn btn-info">Case Management</a>
-                                <a href="<?php echo url('admin/dev_customer_management/manage_customers?action=add_edit_satisfaction_scale&edit=' . $customer['pk_customer_id']) ?>" class="btn btn-dark-gray">Reintegration Assistance Satisfaction Scale</a>
+                                <a href="<?php echo url('admin/dev_customer_management/manage_customers?action=list_satisfaction_scale&id=' . $customer['pk_customer_id']) ?>" class="btn btn-dark-gray">Reintegration Assistance Satisfaction Scale</a>
                             </div>                                
                         <?php endif ?>
                         <?php if (has_permission('delete_customer')): ?>
