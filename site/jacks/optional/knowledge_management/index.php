@@ -208,7 +208,10 @@ class dev_knowledge_management {
 
         $loopCondition = array(
             'id' => 'dev_knowledge.pk_knowledge_id',
+            'name' => 'dev_knowledge.name',
+            'tags' => 'dev_knowledge.tags',
             'type' => 'dev_knowledge.type',
+            'create_date' => 'dev_knowledge.create_date',
         );
 
         $conditions .= sql_condition_maker($loopCondition, $param);
@@ -294,7 +297,7 @@ class dev_knowledge_management {
             if ($is_update) {
                 $knowledge_data['update_date'] = date('Y-m-d');
                 $knowledge_data['update_time'] = date('H:i:s');
-                $knowledge_data['modified_by'] = $_config['user']['pk_user_id'];
+                $knowledge_data['updated_by'] = $_config['user']['pk_user_id'];
                 $ret['knowledge_update'] = $devdb->insert_update('dev_knowledge', $knowledge_data, " pk_knowledge_id = '" . $is_update . "'");
             } else {
                 $knowledge_data['create_date'] = date('Y-m-d');
@@ -386,7 +389,7 @@ class dev_knowledge_management {
             if ($is_update) {
                 $knowledge_data['update_date'] = date('Y-m-d');
                 $knowledge_data['update_time'] = date('H:i:s');
-                $knowledge_data['modified_by'] = $_config['user']['pk_user_id'];
+                $knowledge_data['updated_by'] = $_config['user']['pk_user_id'];
                 $ret['knowledge_update'] = $devdb->insert_update('dev_knowledge', $knowledge_data, " pk_knowledge_id = '" . $is_update . "'");
             } else {
                 $knowledge_data['create_date'] = date('Y-m-d');
@@ -478,7 +481,7 @@ class dev_knowledge_management {
             if ($is_update) {
                 $knowledge_data['update_date'] = date('Y-m-d');
                 $knowledge_data['update_time'] = date('H:i:s');
-                $knowledge_data['modified_by'] = $_config['user']['pk_user_id'];
+                $knowledge_data['updated_by'] = $_config['user']['pk_user_id'];
                 $ret['knowledge_update'] = $devdb->insert_update('dev_knowledge', $knowledge_data, " pk_knowledge_id = '" . $is_update . "'");
             } else {
                 $knowledge_data['create_date'] = date('Y-m-d');
@@ -570,7 +573,7 @@ class dev_knowledge_management {
             if ($is_update) {
                 $knowledge_data['update_date'] = date('Y-m-d');
                 $knowledge_data['update_time'] = date('H:i:s');
-                $knowledge_data['modified_by'] = $_config['user']['pk_user_id'];
+                $knowledge_data['updated_by'] = $_config['user']['pk_user_id'];
                 $ret['knowledge_update'] = $devdb->insert_update('dev_knowledge', $knowledge_data, " pk_knowledge_id = '" . $is_update . "'");
             } else {
                 $knowledge_data['create_date'] = date('Y-m-d');
@@ -662,7 +665,7 @@ class dev_knowledge_management {
             if ($is_update) {
                 $knowledge_data['update_date'] = date('Y-m-d');
                 $knowledge_data['update_time'] = date('H:i:s');
-                $knowledge_data['modified_by'] = $_config['user']['pk_user_id'];
+                $knowledge_data['updated_by'] = $_config['user']['pk_user_id'];
                 $ret['knowledge_update'] = $devdb->insert_update('dev_knowledge', $knowledge_data, " pk_knowledge_id = '" . $is_update . "'");
             } else {
                 $knowledge_data['create_date'] = date('Y-m-d');

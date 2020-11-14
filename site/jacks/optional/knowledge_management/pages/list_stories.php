@@ -9,7 +9,7 @@ $filter_end_date = $_GET['end_date'] ? $_GET['end_date'] : null;
 
 $args = array(
     'name' => $filter_name,
-    'tag' => $filter_tag,
+    'tags' => $filter_tag,
     'type' => 'story',
     'limit' => array(
         'start' => $start * $per_page_items,
@@ -43,37 +43,68 @@ if ($filter_start_date)
 if ($filter_end_date)
     $filterString[] = 'End Date: ' . $filter_end_date;
 
+$all_story_tags = $this->get_lookups('success_story');
+
 doAction('render_start');
 ?>
 <div class="page-header">
-    <h1>All Stories</h1>
-    <div class="oh">
-        <div class="btn-group btn-group-sm">
-            <?php
-            echo linkButtonGenerator(array(
-                'href' => $myUrl . '?action=add_edit_story',
-                'action' => 'add',
-                'icon' => 'icon_add',
-                'text' => 'New Story',
-                'title' => 'New Story',
-            ));
-            ?>
+    <div class="row">
+        <div class="col-md-8">
+            <h1>All Success Stories</h1>
+            <div class="oh">
+                <div class="btn-group btn-group-sm">
+                    <?php
+                    echo linkButtonGenerator(array(
+                        'href' => $myUrl . '?action=add_edit_story',
+                        'action' => 'add',
+                        'icon' => 'icon_add',
+                        'text' => 'New Success Story',
+                        'title' => 'New Success Story',
+                    ));
+                    ?>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-row">
+                <div class="stat-cell bg-warning">
+                    <span class="text-bg"><?php echo $stories['total'] ?></span><br>
+                    <span class="text-sm">Stored in Database</span>
+                </div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-cell bg-warning padding-sm no-padding-t text-center">
+                    <div id="stats-sparklines-2" class="stats-sparklines" style="width: 100%"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 <?php
 ob_start();
 echo formProcessor::form_elements('name', 'name', array(
-    'width' => 2, 'type' => 'text', 'label' => 'Name',
-        ), $filter_name);
-echo formProcessor::form_elements('nid', 'nid', array(
-    'width' => 2, 'type' => 'text', 'label' => 'NID',
-        ), $filter_nid);
+    'width' => 3, 'type' => 'text', 'label' => 'Name',
+        ), $filter_name)
 ?>
-<div class="form-group col-sm-2">
+<div class="form-group col-sm-3">
+    <label>Tag</label>
+    <select name="tag" class="form-control">
+        <option value="">Select Tag</option>
+        <?php
+        foreach ($all_story_tags['data'] as $tag) {
+            ?>
+            <option value="<?php echo $tag['lookup_value'] ?>" <?php
+            if ($tag['lookup_value'] == $filter_tag) {
+                echo 'selected';
+            }
+            ?>><?php echo $tag['lookup_value'] ?></option>
+                <?php } ?>
+    </select>
+</div>
+<div class="form-group col-sm-3">
     <label>Entry Start Date</label>
     <div class="input-group">
-        <input id="startDate" type="text" class="form-control" name="entry_start_date" value="<?php echo $filter_entry_start_date ?>">
+        <input id="startDate" type="text" class="form-control" name="start_date" value="<?php echo $filter_start_date ?>">
     </div>
     <script type="text/javascript">
         init.push(function () {
@@ -81,10 +112,10 @@ echo formProcessor::form_elements('nid', 'nid', array(
         });
     </script>
 </div>
-<div class="form-group col-sm-2">
+<div class="form-group col-sm-3">
     <label>Entry End Date</label>
     <div class="input-group">
-        <input id="endDate" type="text" class="form-control" name="entry_end_date" value="<?php echo $filter_entry_end_date ?>">
+        <input id="endDate" type="text" class="form-control" name="end_date" value="<?php echo $filter_end_date ?>">
     </div>
     <script type="text/javascript">
         init.push(function () {

@@ -59,15 +59,15 @@ ob_start();
     }
 </style>
 <div class="page-header">
-    <h1><?php echo $edit ? 'Update ' : 'New ' ?> Study Report </h1>
+    <h1><?php echo $edit ? 'Update ' : 'New ' ?> Case Study </h1>
     <div class="oh">
         <div class="btn-group btn-group-sm">
             <?php
             echo linkButtonGenerator(array(
                 'href' => $myUrl,
                 'action' => 'list',
-                'text' => 'All Study Reports',
-                'title' => 'Manage Study Reports',
+                'text' => 'All Case Studies',
+                'title' => 'Manage All Case Study Reports',
                 'icon' => 'icon_list',
                 'size' => 'sm'
             ));

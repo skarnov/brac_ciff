@@ -2,7 +2,14 @@
 $start = $_GET['start'] ? $_GET['start'] : 0;
 $per_page_items = 10;
 
+$filter_name = $_GET['name'] ? $_GET['name'] : null;
+$filter_tag = $_GET['tag'] ? $_GET['tag'] : null;
+$filter_start_date = $_GET['start_date'] ? $_GET['start_date'] : null;
+$filter_end_date = $_GET['end_date'] ? $_GET['end_date'] : null;
+
 $args = array(
+    'name' => $filter_name,
+    'tags' => $filter_tag,
     'type' => 'assessment',
     'limit' => array(
         'start' => $start * $per_page_items,
@@ -14,31 +21,120 @@ $args = array(
     ),
 );
 
+if ($filter_start_date && $filter_end_date) {
+    $args['BETWEEN_INCLUSIVE'] = array(
+        'create_date' => array(
+            'left' => date_to_db($filter_start_date),
+            'right' => date_to_db($filter_end_date),
+        ),
+    );
+}
+
 $assessment_reports = $this->get_knowledge($args);
 $pagination = pagination($assessment_reports['total'], $per_page_items, $start);
 
+$filterString = array();
+if ($filter_name)
+    $filterString[] = 'Name: ' . $filter_name;
+if ($filter_tag)
+    $filterString[] = 'Tag: ' . $filter_tag;
+if ($filter_start_date)
+    $filterString[] = 'Start Date: ' . $filter_start_date;
+if ($filter_end_date)
+    $filterString[] = 'End Date: ' . $filter_end_date;
+
+$all_assessment_report_tags = $this->get_lookups('success_assessment_report');
+
 doAction('render_start');
-ob_start();
 ?>
 <div class="page-header">
-    <h1>All Assessment Report</h1>
-    <div class="oh">
-        <div class="btn-group btn-group-sm">
-            <?php
-            echo linkButtonGenerator(array(
-                'href' => $myUrl . '?action=add_edit_assessment_report',
-                'action' => 'add',
-                'icon' => 'icon_add',
-                'text' => 'New Assessment Report',
-                'title' => 'New Assessment Report',
-            ));
-            ?>
+    <div class="row">
+        <div class="col-md-8">
+            <h1>All Project Report</h1>
+            <div class="oh">
+                <div class="btn-group btn-group-sm">
+                    <?php
+                    echo linkButtonGenerator(array(
+                        'href' => $myUrl . '?action=add_edit_assessment_report',
+                        'action' => 'add',
+                        'icon' => 'icon_add',
+                        'text' => 'New Project Report',
+                        'title' => 'New Project Report',
+                    ));
+                    ?>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-row">
+                <div class="stat-cell bg-warning">
+                    <span class="text-bg"><?php echo $stories['total'] ?></span><br>
+                    <span class="text-sm">Stored in Database</span>
+                </div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-cell bg-warning padding-sm no-padding-t text-center">
+                    <div id="stats-sparklines-2" class="stats-sparklines" style="width: 100%"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+<?php
+ob_start();
+echo formProcessor::form_elements('name', 'name', array(
+    'width' => 3, 'type' => 'text', 'label' => 'Name',
+        ), $filter_name)
+?>
+<div class="form-group col-sm-3">
+    <label>Tag</label>
+    <select name="tag" class="form-control">
+        <option value="">Select Tag</option>
+        <?php
+        foreach ($all_assessment_report_tags['data'] as $tag) {
+            ?>
+            <option value="<?php echo $tag['lookup_value'] ?>" <?php
+            if ($tag['lookup_value'] == $filter_tag) {
+                echo 'selected';
+            }
+            ?>><?php echo $tag['lookup_value'] ?></option>
+                <?php } ?>
+    </select>
+</div>
+<div class="form-group col-sm-3">
+    <label>Entry Start Date</label>
+    <div class="input-group">
+        <input id="startDate" type="text" class="form-control" name="start_date" value="<?php echo $filter_start_date ?>">
+    </div>
+    <script type="text/javascript">
+        init.push(function () {
+            _datepicker('startDate');
+        });
+    </script>
+</div>
+<div class="form-group col-sm-3">
+    <label>Entry End Date</label>
+    <div class="input-group">
+        <input id="endDate" type="text" class="form-control" name="end_date" value="<?php echo $filter_end_date ?>">
+    </div>
+    <script type="text/javascript">
+        init.push(function () {
+            _datepicker('endDate');
+        });
+    </script>
+</div>
+<?php
+$filterForm = ob_get_clean();
+filterForm($filterForm);
+?>
 <div class="table-primary table-responsive">
+    <?php if ($filterString): ?>
+        <div class="table-header">
+            Filtered With: <?php echo implode(', ', $filterString) ?>
+        </div>
+    <?php endif; ?>
     <div class="table-header">
-        <?php echo searchResultText($assessment_reports['total'], $start, $per_page_items, count($assessment_reports['data']), 'study reports') ?>
+        <?php echo searchResultText($assessment_reports['total'], $start, $per_page_items, count($assessment_reports['data']), 'project reports') ?>
     </div>
     <table class="table table-bordered table-condensed">
         <thead>

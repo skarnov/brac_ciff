@@ -59,15 +59,15 @@ ob_start();
     }
 </style>
 <div class="page-header">
-    <h1><?php echo $edit ? 'Update ' : 'New ' ?> Assessment Report </h1>
+    <h1><?php echo $edit ? 'Update ' : 'New ' ?> Project Report </h1>
     <div class="oh">
         <div class="btn-group btn-group-sm">
             <?php
             echo linkButtonGenerator(array(
                 'href' => $myUrl,
                 'action' => 'list',
-                'text' => 'All Assessment Reports',
-                'title' => 'Manage Assessment Reports',
+                'text' => 'All Project Reports',
+                'title' => 'Manage Project Reports',
                 'icon' => 'icon_list',
                 'size' => 'sm'
             ));
