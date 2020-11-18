@@ -78,7 +78,11 @@ ob_start();
         <div class="panel-body">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="case_id">Case ID</label>
+                    <label>Full Name</label>
+                    <input type="text" class="form-control" name="full_name" value="<?php echo $pre_data['full_name']; ?>">
+                </div>
+                <div class="form-group">
+                    <label for="case_id">Case Number</label>
                     <input type="text" class="form-control" id="case_id" name="case_id" value="<?php echo $pre_data['case_id']; ?>">
                 </div>
                 <div class="form-group">
@@ -134,22 +138,22 @@ ob_start();
                         <option value="Abhaynagar" <?php echo $pre_data && $pre_data['upazila'] == 'Abhaynagar' ? 'selected' : '' ?>>Abhaynagar</option>
                     </select>
                 </div>
+            </div>
+            <div class="col-md-6">
                 <div class="form-group">
                     <label for="police_station">Name of police station</label>
                     <input type="text" class="form-control" id="police_station" name="police_station" value="<?php echo $pre_data['police_station']; ?>">
                 </div>
-            </div>
-            <div class="col-md-6">
                 <div class="form-group">
                     <label for="inputAge">Age</label>
                     <input type="text" class="form-control" id="Age" name="age" value="<?php echo $pre_data['age']; ?>">
                 </div>
                 <div class="form-group">
-                    <label>Sex</label>
+                    <label>Gender</label>
                     <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                         <div class="options_holder radio">
-                            <label><input class="px oldGender" type="radio" name="gender" value="male" <?php echo $pre_data && $pre_data['gender'] == 'male' ? 'checked' : '' ?>><span class="lbl">Male</span></label>
-                            <label><input class="px oldGender" type="radio" name="gender" value="female" <?php echo $pre_data && $pre_data['gender'] == 'female' ? 'checked' : '' ?>><span class="lbl">Female</span></label>
+                            <label><input class="px oldGender" type="radio" name="gender" value="male" <?php echo $pre_data && $pre_data['gender'] == 'male' ? 'checked' : '' ?>><span class="lbl">Men (>=18)</span></label>
+                            <label><input class="px oldGender" type="radio" name="gender" value="female" <?php echo $pre_data && $pre_data['gender'] == 'female' ? 'checked' : '' ?>><span class="lbl">Women (>=18)</span></label>
                             <label><input class="px" type="radio" name="gender" id="newGender"><span class="lbl">Other</span></label>
                         </div>
                     </div>

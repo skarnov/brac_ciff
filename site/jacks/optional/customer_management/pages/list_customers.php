@@ -236,6 +236,12 @@ $result = array_combine($all_countries, $all_countries);
     </div>
 </div>
 <div class="form-group col-sm-2">
+    <label>Union</label>
+    <div class="select2-info">
+        <select class="form-control" id="filter_union"></select>
+    </div>
+</div>
+<div class="form-group col-sm-2">
     <label>Entry Start Date</label>
     <div class="input-group">
         <input id="startDate" type="text" class="form-control" name="entry_start_date" value="<?php echo $filter_entry_start_date ?>">
@@ -337,6 +343,7 @@ filterForm($filterForm);
             'sub_district': $('#filter_sub_district'),
             'police_station': $('#filter_police_station'),
             'post_office': $('#filter_post_office'),
+            'union': $('#filter_union'),
         });
     });
 </script>

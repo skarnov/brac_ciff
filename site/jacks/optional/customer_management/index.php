@@ -1738,9 +1738,9 @@ class dev_customer_management {
             $returnee_data['remarks'] = $params['form_data']['remarks'];
 
             if ($is_update) {
-                $returnee_data['modify_date'] = date('Y-m-d');
-                $returnee_data['modify_time'] = date('H:i:s');
-                $returnee_data['modified_by'] = $_config['user']['pk_user_id'];
+                $returnee_data['update_date'] = date('Y-m-d');
+                $returnee_data['update_time'] = date('H:i:s');
+                $returnee_data['updated_by'] = $_config['user']['pk_user_id'];
                 $ret['returnee_update'] = $devdb->insert_update('dev_returnees', $returnee_data, " pk_returnee_id = '" . $is_update . "'");
             } else {
                 $returnee_data['create_date'] = date('Y-m-d');

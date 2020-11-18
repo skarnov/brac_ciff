@@ -37,7 +37,7 @@ $pagination = pagination($complain_fileds['total'], $per_page_items, $start);
 doAction('render_start');
 ?>
 <div class="page-header">
-    <h1>All Complain Fileds</h1>
+    <h1>All Complain Files</h1>
     <div class="oh">
         <div class="btn-group btn-group-sm">
             <?php
@@ -45,8 +45,8 @@ doAction('render_start');
                 'href' => $myUrl . '?action=add_edit_complain_filed',
                 'action' => 'add',
                 'icon' => 'icon_add',
-                'text' => 'New Complain Filed',
-                'title' => 'New Complain Filed',
+                'text' => 'New Complain File',
+                'title' => 'New Complain File',
             ));
             ?>
         </div>
@@ -60,8 +60,8 @@ ob_start();
     <div class="select2-primary">
         <select class="form-control" name="gender">
             <option value="">Select One</option>
-            <option value="male" <?php echo ('male' == $filter_gender) ? 'selected' : '' ?>>Male</option>
-            <option value="female" <?php echo ('female' == $filter_gender) ? 'selected' : '' ?>>Female</option>
+            <option value="male" <?php echo ('male' == $filter_gender) ? 'selected' : '' ?>>Men (>=18)</option>
+            <option value="female" <?php echo ('female' == $filter_gender) ? 'selected' : '' ?>>Women (>=18)</option>
         </select>
     </div>
 </div>
@@ -135,6 +135,7 @@ filterForm($filterForm);
                 <th>Month</th>
                 <th>Police Station</th>
                 <th>Case Type</th>
+                <th>Gender</th>
                 <th class="tar action_column">Actions</th>
             </tr>
         </thead>
@@ -148,6 +149,19 @@ filterForm($filterForm);
                     <td><?php echo $complain_filed['month']; ?></td>
                     <td><?php echo $complain_filed['police_station']; ?></td>
                     <td><?php echo $complain_filed['type_case']; ?></td>
+                    <td>
+                        <?php
+                        if ($complain_filed['gender'] == 'male' && $complain_filed['age'] <= 17) {
+                            echo 'Boy (<18)';
+                        } else if ($complain_filed['gender'] == 'male' && $complain_filed['age'] > 17) {
+                            echo 'Men (>=18)';
+                        } else if ($complain_filed['gender'] == 'female' && $complain_filed['age'] <= 17) {
+                            echo 'Girl (<18)';
+                        } else if ($complain_filed['gender'] == 'female' && $complain_filed['age'] > 17) {
+                            echo 'Women (>=18)';
+                        }
+                        ?>
+                    </td>
                     <td class="tar action_column">
                         <?php if (has_permission('edit_complain_filed')): ?>
                             <div class="btn-group btn-group-sm">

@@ -17,10 +17,10 @@ if ($_POST['ajax_type'] == 'add_menu_item') {
         'item_short_title' => $_POST['item_short_title'],
         'create_date' => $thisDate,
         'create_time' => $thisTime,
-        'create_by' => $thisUser,
+        'created_by' => $thisUser,
         'update_date' => $thisDate,
         'update_time' => $thisTime,
-        'update_by' => $thisUser,
+        'updated_by' => $thisUser,
     );
 
     $insert = $devdb->insert_update('dev_branch_types', $data);
@@ -54,7 +54,7 @@ if ($_POST['ajax_type'] == 'edit_menu_item') {
         'item_short_title' => $_POST['item_short_title'],
         'update_date' => $thisDate,
         'update_time' => $thisTime,
-        'update_by' => $thisUser,
+        'updated_by' => $thisUser,
     );
 
     $insert = $devdb->insert_update('dev_branch_types', $data, " pk_item_id = '" . $_POST['menu_item_id'] . "'");

@@ -215,7 +215,7 @@ class immediate_support {
             if ($is_update) {
                 $data['modify_date'] = date('Y-m-d');
                 $data['modify_time'] = date('H:i:s');
-                $data['modified_by'] = $_config['user']['pk_user_id'];
+                $data['updated_by'] = $_config['user']['pk_user_id'];
                 $ret = $devdb->insert_update('dev_airport_land_supports', $data, " pk_support_id = '" . $is_update . "'");
             } else {
                 $data['create_date'] = date('Y-m-d');
@@ -305,7 +305,7 @@ class immediate_support {
             if ($is_update) {
                 $data['modify_date'] = date('Y-m-d');
                 $data['modify_time'] = date('H:i:s');
-                $data['modified_by'] = $_config['user']['pk_user_id'];
+                $data['updated_by'] = $_config['user']['pk_user_id'];
                 $ret = $devdb->insert_update('dev_access_to_pp', $data, " pk_access_id = '" . $is_update . "'");
             } else {
                 $data['create_date'] = date('Y-m-d');

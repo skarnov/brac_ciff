@@ -61,8 +61,8 @@ ob_start();
     <div class="select2-primary">
         <select class="form-control" name="gender">
             <option value="">Select One</option>
-            <option value="male" <?php echo ('male' == $filter_gender) ? 'selected' : '' ?>>Male</option>
-            <option value="female" <?php echo ('female' == $filter_gender) ? 'selected' : '' ?>>Female</option>
+            <option value="male" <?php echo ('male' == $filter_gender) ? 'selected' : '' ?>>Men (>=18)</option>
+            <option value="female" <?php echo ('female' == $filter_gender) ? 'selected' : '' ?>>Women (>=18)</option>
         </select>
     </div>
 </div>
@@ -136,6 +136,7 @@ filterForm($filterForm);
                 <th>Month</th>
                 <th>Police Station</th>
                 <th>Case Type</th>
+                <th>Gender</th>
                 <th class="tar action_column">Actions</th>
             </tr>
         </thead>
@@ -149,43 +150,56 @@ filterForm($filterForm);
                     <td><?php echo $complain_investigation['month']; ?></td>
                     <td><?php echo $complain_investigation['police_station']; ?></td>
                     <td><?php echo $complain_investigation['type_case']; ?></td>
+                    <td>
+                        <?php
+                        if ($complain_investigation['gender'] == 'male' && $complain_investigation['age'] <= 17) {
+                            echo 'Boy (<18)';
+                        } else if ($complain_investigation['gender'] == 'male' && $complain_investigation['age'] > 17) {
+                            echo 'Men (>=18)';
+                        } else if ($complain_investigation['gender'] == 'female' && $complain_investigation['age'] <= 17) {
+                            echo 'Girl (<18)';
+                        } else if ($complain_investigation['gender'] == 'female' && $complain_investigation['age'] > 17) {
+                            echo 'Women (>=18)';
+                        }
+                        ?>
+                    </td>
                     <td class="tar action_column">
                         <?php if (has_permission('edit_complain_investigation')): ?>
                             <div class="btn-group btn-group-sm">
-                                <?php
-                                echo linkButtonGenerator(array(
-                                    'href' => build_url(array('action' => 'add_edit_complain_investigation', 'edit' => $complain_investigation['pk_complain_investigation_id'])),
-                                    'action' => 'edit',
-                                    'icon' => 'icon_edit',
-                                    'text' => 'Edit',
-                                    'title' => 'Edit Complain Investigation',
-                                ));
-                                ?>
+                            <?php
+                            echo linkButtonGenerator(array(
+                                'href' => build_url(array('action' => 'add_edit_complain_investigation', 'edit' => $complain_investigation['pk_complain_investigation_id'])),
+                                'action' => 'edit',
+                                'icon' => 'icon_edit',
+                                'text' => 'Edit',
+                                'title' => 'Edit Complain Investigation',
+                            ));
+                            ?>
                             </div>
-                        <?php endif; ?>
-                        <?php if (has_permission('delete_complain_investigation')): ?>
+                            <?php endif; ?>
+                            <?php if (has_permission('delete_complain_investigation')): ?>
                             <div class="btn-group btn-group-sm">
-                                <?php
-                                echo buttonButtonGenerator(array(
-                                    'action' => 'delete',
-                                    'icon' => 'icon_delete',
-                                    'text' => 'Delete',
-                                    'title' => 'Delete Record',
-                                    'attributes' => array('data-id' => $complain_investigation['pk_complain_investigation_id']),
-                                    'classes' => 'delete_single_record'));
-                                ?>
+                            <?php
+                            echo buttonButtonGenerator(array(
+                                'action' => 'delete',
+                                'icon' => 'icon_delete',
+                                'text' => 'Delete',
+                                'title' => 'Delete Record',
+                                'attributes' => array('data-id' => $complain_investigation['pk_complain_investigation_id']),
+                                'classes' => 'delete_single_record'));
+                            ?>
                             </div>
-                        <?php endif; ?>
+                            <?php endif; ?>
                     </td>
                 </tr>
-                <?php
-            }
-            ?>
+                        <?php
+                    }
+                    ?>
         </tbody>
     </table>
     <div class="table-footer oh">
         <div class="pull-left">
-            <?php echo $pagination ?>
+<?php echo $pagination ?>
         </div>
     </div>
 </div>

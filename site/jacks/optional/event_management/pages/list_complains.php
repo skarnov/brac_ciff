@@ -62,8 +62,8 @@ ob_start();
     <div class="select2-primary">
         <select class="form-control" name="gender">
             <option value="">Select One</option>
-            <option value="male" <?php echo ('male' == $filter_gender) ? 'selected' : '' ?>>Male</option>
-            <option value="female" <?php echo ('female' == $filter_gender) ? 'selected' : '' ?>>Female</option>
+            <option value="male" <?php echo ('male' == $filter_gender) ? 'selected' : '' ?>>Men (>=18)</option>
+            <option value="female" <?php echo ('female' == $filter_gender) ? 'selected' : '' ?>>Women (>=18)</option>
         </select>
     </div>
 </div>
@@ -162,7 +162,19 @@ filterForm($filterForm);
                     <td><?php echo date('d-m-Y', strtotime($complain['complain_register_date'])) ?></td>
                     <td style="text-transform: capitalize"><?php echo $complain['type_recipient']; ?></td>
                     <td style="text-transform: capitalize"><?php echo $complain['age']; ?></td>
-                    <td style="text-transform: capitalize"><?php echo $complain['gender']; ?></td>
+                    <td>
+                        <?php
+                        if ($complain['gender'] == 'male' && $complain['age'] <= 17) {
+                            echo 'Boy (<18)';
+                        } else if ($complain['gender'] == 'male' && $complain['age'] > 17) {
+                            echo 'Men (>=18)';
+                        } else if ($complain['gender'] == 'female' && $complain['age'] <= 17) {
+                            echo 'Girl (<18)';
+                        } else if ($complain['gender'] == 'female' && $complain['age'] > 17) {
+                            echo 'Women (>=18)';
+                        }
+                        ?>
+                    </td>
                     <td class="tar action_column">
                         <?php if (has_permission('edit_complain')): ?>
                             <div class="btn-group btn-group-sm">

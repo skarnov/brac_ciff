@@ -104,14 +104,12 @@ ob_start();
                     <label for="inputId">Profession</label>
                     <input type="text" class="form-control" id="Profesion" name="profession" value="<?php echo $pre_data['profession']; ?>">
                 </div>
-            </div>
-            <div class="col-md-6">
                 <div class="form-group">
-                    <label>Sex</label>
+                    <label>Gender</label>
                     <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                         <div class="options_holder radio">
-                            <label><input class="px oldGender" type="radio" name="gender" value="male" <?php echo $pre_data && $pre_data['gender'] == 'male' ? 'checked' : '' ?>><span class="lbl">Male</span></label>
-                            <label><input class="px oldGender" type="radio" name="gender" value="female" <?php echo $pre_data && $pre_data['gender'] == 'female' ? 'checked' : '' ?>><span class="lbl">Female</span></label>
+                            <label><input class="px oldGender" type="radio" name="gender" value="male" <?php echo $pre_data && $pre_data['gender'] == 'male' ? 'checked' : '' ?>><span class="lbl">Men (>=18)</span></label>
+                            <label><input class="px oldGender" type="radio" name="gender" value="female" <?php echo $pre_data && $pre_data['gender'] == 'female' ? 'checked' : '' ?>><span class="lbl">Women (>=18)</span></label>
                             <label><input class="px" type="radio" name="gender" id="newGender"><span class="lbl">Other</span></label>
                         </div>
                     </div>
@@ -130,10 +128,24 @@ ob_start();
                             $('#newGenderText').val('');
                         });
                     });
-                </script>        
+                </script>   
+            </div>
+            <div class="col-md-6">   
                 <div class="form-group">
-                    <label for="inputId">Training Name</label>
+                    <label for="inputId">Name of the training</label>
                     <input type="text" class="form-control" id="Profesion" name="training_name" value="<?php echo $pre_data['training_name']; ?>">
+                </div>
+                <div class="form-group">
+                    <label for="inputId">Name of the workshop</label>
+                    <input type="text" class="form-control" name="workshop_name" value="<?php echo $pre_data['workshop_name']; ?>">
+                </div>
+                <div class="form-group">
+                    <label for="inputId">Duration of Workshop</label>
+                    <input type="text" class="form-control" name="workshop_duration" value="<?php echo $pre_data['workshop_duration']; ?>">
+                </div>
+                <div class="form-group">
+                    <label for="inputId">Duration of training</label>
+                    <input type="text" class="form-control" name="training_duration" value="<?php echo $pre_data['training_duration']; ?>">
                 </div>
                 <div class="form-group">
                     <label for="inputId">Mobile</label>

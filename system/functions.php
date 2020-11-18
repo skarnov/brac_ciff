@@ -2098,3 +2098,27 @@ function d($data){
     print_r($data);
     exit();
 }
+
+function get_division(){
+    global $devdb;
+    $result = $devdb->get_results("SELECT name FROM bd_divisions");
+    return $result;
+}
+
+function get_district($division_id){
+    global $devdb;
+    $result = $devdb->get_results("SELECT name FROM bd_districts WHERE division_id = '$division_id'");
+    return $result;
+}
+
+function get_upazila($district_id){
+    global $devdb;
+    $result = $devdb->get_results("SELECT name FROM bd_upazilas WHERE district_id = '$district_id'");
+    return $result;
+}
+
+function get_union($upazilla_id){
+    global $devdb;
+    $result = $devdb->get_results("SELECT name FROM bd_unions WHERE upazilla_id = '$upazilla_id'");
+    return $result;
+}

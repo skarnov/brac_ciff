@@ -2,7 +2,12 @@
 $start = $_GET['start'] ? $_GET['start'] : 0;
 $per_page_items = 10;
 
+$filter_division = $_GET['division'] ? $_GET['division'] : null;
+$filter_district = $_GET['district'] ? $_GET['district'] : null;
+
 $args = array(
+    'division' => $filter_division,
+    'district' => $filter_district,
     'limit' => array(
         'start' => $start * $per_page_items,
         'count' => $per_page_items
@@ -13,11 +18,32 @@ $args = array(
     ),
 );
 
+if ($filter_entry_start_date && $filter_entry_start_date) {
+    $args['BETWEEN_INCLUSIVE'] = array(
+        'entry_date' => array(
+            'left' => date_to_db($filter_entry_start_date),
+            'right' => date_to_db($filter_entry_end_date),
+        ),
+    );
+}
+
 $events = $this->get_events($args);
 $pagination = pagination($events['total'], $per_page_items, $start);
 
+$filterString = array();
+if ($filter_division)
+    $filterString[] = 'Division: ' . $filter_division;
+if ($filter_district)
+    $filterString[] = 'District: ' . $filter_district;
+if ($filter_name)
+    $filterString[] = 'Name: ' . $filter_name;
+if ($filter_entry_start_date)
+    $filterString[] = 'Start Date: ' . $filter_entry_start_date;
+if ($filter_entry_end_date)
+    $filterString[] = 'End Date: ' . $filter_entry_end_date;
+
+
 doAction('render_start');
-ob_start();
 ?>
 <div class="page-header">
     <h1>All Events</h1>
@@ -28,16 +54,83 @@ ob_start();
                 'href' => $myUrl . '?action=add_edit_event',
                 'action' => 'add',
                 'icon' => 'icon_add',
-                'text' => 'New Event',
-                'title' => 'New Event',
+                'text' => 'Add Event',
+                'title' => 'Add Event',
             ));
             ?>
         </div>
     </div>
 </div>
+<?php
+ob_start();
+echo formProcessor::form_elements('name', 'name', array(
+    'width' => 3, 'type' => 'text', 'label' => 'Name',
+        ), $filter_name);
+?>
+<div class="form-group col-sm-3">
+    <label>Branch</label>
+    <div class="select2-primary">
+        <select class="form-control" name="branch_id"></select>
+    </div>
+</div>
+<div class="form-group col-sm-3">
+    <label>Division</label>
+    <div class="select2-primary">
+        <select class="form-control" id="filter_division" name="division" data-selected="<?php echo $filter_division ?>"></select>
+    </div>
+</div>
+<div class="form-group col-sm-3">
+    <label>District</label>
+    <div class="select2-success">
+        <select class="form-control" id="filter_district" name="district" data-selected="<?php echo $filter_district; ?>"></select>
+    </div>
+</div>
+<div class="form-group col-sm-3">
+    <label>Upazila</label>
+    <div class="select2-success">
+        <select class="form-control" id="filter_district" name="district" data-selected="<?php echo $filter_district; ?>"></select>
+    </div>
+</div>
+<div class="form-group col-sm-3">
+    <label>Union</label>
+    <div class="select2-success">
+        <select class="form-control" id="filter_union" name="union" data-selected="<?php echo $filter_union; ?>"></select>
+    </div>
+</div>
+<div class="form-group col-sm-3">
+    <label>Entry Start Date</label>
+    <div class="input-group">
+        <input id="startDate" type="text" class="form-control" name="entry_start_date" value="<?php echo $filter_entry_start_date ?>">
+    </div>
+    <script type="text/javascript">
+        init.push(function () {
+            _datepicker('startDate');
+        });
+    </script>
+</div>
+<div class="form-group col-sm-3">
+    <label>Entry End Date</label>
+    <div class="input-group">
+        <input id="endDate" type="text" class="form-control" name="entry_end_date" value="<?php echo $filter_entry_end_date ?>">
+    </div>
+    <script type="text/javascript">
+        init.push(function () {
+            _datepicker('endDate');
+        });
+    </script>
+</div>
+<?php
+$filterForm = ob_get_clean();
+filterForm($filterForm);
+?>
 <div class="table-primary table-responsive">
+    <?php if ($filterString): ?>
+        <div class="table-header">
+            Filtered With: <?php echo implode(', ', $filterString) ?>
+        </div>
+    <?php endif; ?>
     <div class="table-header">
-        <?php echo searchResultText($events['total'], $start, $per_page_items, count($events['data']), 'events') ?>
+        <?php echo searchResultText($events['total'], $start, $per_page_items, count($events['data']), 'activities') ?>
     </div>
     <table class="table table-bordered table-condensed">
         <thead>
@@ -48,6 +141,7 @@ ob_start();
                 <th>District</th>
                 <th>Upazila</th>
                 <th>Submitted By</th>
+                <th>Participant Number</th>
                 <th>Event Validation Count</th>
                 <th>Observation Score</th>
                 <th class="tar action_column">Actions</th>
@@ -64,6 +158,7 @@ ob_start();
                     <td style="text-transform: capitalize"><?php echo $event['event_district']; ?></td>
                     <td style="text-transform: capitalize"><?php echo $event['event_upazila']; ?></td>
                     <td><?php echo $event['user_fullname']; ?></td>
+                    <td><?php echo 'Boy: '.$event['participant_boy'].'<br><hr/>Girl: '.$event['participant_girl'].'<br><hr/>Men: '.$event['participant_male'].'<br><hr/>Women: '.$event['participant_female'] ?></td>
                     <td><?php echo $event['validation_count']; ?></td>
                     <td><?php echo $event['observation_score']; ?></td>
                     <td class="tar action_column">
@@ -117,6 +212,18 @@ ob_start();
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    var BD_LOCATIONS = <?php echo getBDLocationJson(); ?>;
+    init.push(function () {
+        new bd_new_location_selector({
+            'division': $('#filter_division'),
+            'district': $('#filter_district'),
+            'sub_district': $('#filter_sub_district'),
+            'police_station': $('#filter_police_station'),
+            'post_office': $('#filter_post_office'),
+        });
+    });
+</script>
 <script type="text/javascript">
     init.push(function () {
         $(document).on('click', '.delete_single_record', function () {

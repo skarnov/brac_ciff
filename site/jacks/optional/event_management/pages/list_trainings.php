@@ -4,12 +4,14 @@ $per_page_items = 10;
 
 $filter_profession = $_GET['profession'] ? $_GET['profession'] : null;
 $filter_training_name = $_GET['training_name'] ? $_GET['training_name'] : null;
+$filter_workshop_name = $_GET['workshop_name'] ? $_GET['workshop_name'] : null;
 $filter_entry_start_date = $_GET['entry_start_date'] ? $_GET['entry_start_date'] : null;
 $filter_entry_end_date = $_GET['entry_end_date'] ? $_GET['entry_end_date'] : null;
 
 $args = array(
     'profession' => $filter_profession,
     'training_name' => $filter_training_name,
+    'workshop_name' => $filter_workshop_name,
     'limit' => array(
         'start' => $start * $per_page_items,
         'count' => $per_page_items
@@ -34,10 +36,12 @@ $pagination = pagination($trainings['total'], $per_page_items, $start);
 
 
 $filterString = array();
-if ($filter_id)
+if ($filter_profession)
     $filterString[] = 'Profession: ' . $filter_profession;
-if ($filter_name)
+if ($filter_training_name)
     $filterString[] = 'Training Name: ' . $filter_training_name;
+if ($filter_workshop_name)
+    $filterString[] = 'Workshop Name: ' . $filter_workshop_name;
 if ($filter_entry_start_date)
     $filterString[] = 'Start Date: ' . $filter_entry_start_date;
 if ($filter_entry_end_date)
@@ -93,6 +97,9 @@ echo formProcessor::form_elements('name', 'profession', array(
 echo formProcessor::form_elements('name', 'training_name', array(
     'width' => 3, 'type' => 'text', 'label' => 'Training Name',
         ), $filter_training_name);
+echo formProcessor::form_elements('workshop_name', 'workshop_name', array(
+    'width' => 3, 'type' => 'text', 'label' => 'Workshop Name',
+        ), $filter_workshop_name);
 $filterForm = ob_get_clean();
 filterForm($filterForm);
 ?>
@@ -127,7 +134,15 @@ filterForm($filterForm);
                     <td><?php echo $training['training_name']; ?></td>
                     <td><?php echo $training['name']; ?></td>
                     <td><?php echo $training['mobile']; ?></td>
-                    <td style="text-transform: capitalize"><?php echo $training['gender']; ?></td>
+                    <td>
+                        <?php
+                        if ($training['gender'] == 'male') {
+                            echo 'Men (>=18)';
+                        } else {
+                            echo 'Women (>=18)';
+                        }
+                        ?>
+                    </td>
                     <td class="tar action_column">
                         <?php if (has_permission('edit_training')): ?>
                             <div class="btn-group btn-group-sm">

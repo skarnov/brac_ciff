@@ -129,12 +129,12 @@ class dev_project_management {
         if ($is_update) {
             $insert_data['update_time'] = date('H:i:s');
             $insert_data['update_date'] = date('Y-m-d');
-            $insert_data['update_by'] = $_config['user']['pk_user_id'];
+            $insert_data['updated_by'] = $_config['user']['pk_user_id'];
             $ret = $devdb->insert_update('dev_projects', $insert_data, " pk_project_id = '" . $is_update . "'");
         } else {
             $insert_data['create_date'] = date('Y-m-d');
             $insert_data['create_time'] = date('H:i:s');
-            $insert_data['create_by'] = $_config['user']['pk_user_id'];
+            $insert_data['created_by'] = $_config['user']['pk_user_id'];
             $ret = $devdb->insert_update('dev_projects', $insert_data);
         }
 

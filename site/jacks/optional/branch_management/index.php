@@ -175,14 +175,14 @@ class dev_branch_management {
                 'branch_sub_district' => $params['branch_sub_district'],
                 'update_time' => date('H:i:s'),
                 'update_date' => date('Y-m-d'),
-                'update_by' => $_config['user']['pk_user_id'],
+                'updated_by' => $_config['user']['pk_user_id'],
             );
             if ($is_update) {
                 $ret = $devdb->insert_update('dev_branches', $insert_data, " pk_branch_id = '" . $is_update . "'");
             } else {
                 $insert_data['create_date'] = date('Y-m-d');
                 $insert_data['create_time'] = date('H:i:s');
-                $insert_data['create_by'] = $_config['user']['pk_user_id'];
+                $insert_data['created_by'] = $_config['user']['pk_user_id'];
                 $ret = $devdb->insert_update('dev_branches', $insert_data);
             }
 

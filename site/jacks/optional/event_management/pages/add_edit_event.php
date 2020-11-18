@@ -101,7 +101,7 @@ ob_start();
     }
 </style>
 <div class="page-header">
-    <h1><?php echo $edit ? 'Update ' : 'New ' ?> Event </h1>
+    <h1><?php echo $edit ? 'Update ' : 'Add ' ?> Event </h1>
     <div class="oh">
         <div class="btn-group btn-group-sm">
             <?php
@@ -238,22 +238,24 @@ ob_start();
                 <fieldset class="scheduler-border">
                     <legend class="scheduler-border">Section 1: Basic Geographical Information</legend>
                     <div class="col-md-6">
-                        <input class="form-control" type="hidden" name="event_division" value="khulna">
-                        <input class="form-control" type="hidden" name="event_district" value="jashore">
-                        <label class="control-label input-label">Upazila</label>
                         <div class="form-group">
-                            <select class="form-control" name="event_upazila">
-                                <option value="">Select One</option>
-                                <option value="Jashore Sadar" <?php echo $pre_data && $pre_data['event_upazila'] == 'Jashore Sadar' ? 'selected' : '' ?>>Jashore Sadar</option>
-                                <option value="Jhikargacha" <?php echo $pre_data && $pre_data['event_upazila'] == 'Jhikargacha' ? 'selected' : '' ?>>Jhikargacha</option>
-                                <option value="Sharsha" <?php echo $pre_data && $pre_data['event_upazila'] == 'Sharsha' ? 'selected' : '' ?>>Sharsha</option>
-                                <option value="Chougachha" <?php echo $pre_data && $pre_data['event_upazila'] == 'Chougachha' ? 'selected' : '' ?>>Chougachha</option>
-                                <option value="Manirampur" <?php echo $pre_data && $pre_data['event_upazila'] == 'Manirampur' ? 'selected' : '' ?>>Manirampur</option>
-                                <option value="Bagherpara" <?php echo $pre_data && $pre_data['event_upazila'] == 'Bagherpara' ? 'selected' : '' ?>>Bagherpara</option>
-                                <option value="Keshabpur" <?php echo $pre_data && $pre_data['event_upazila'] == 'Keshabpur' ? 'selected' : '' ?>>Keshabpur</option>
-                                <option value="Abhaynagar" <?php echo $pre_data && $pre_data['event_upazila'] == 'Abhaynagar' ? 'selected' : '' ?>>Abhaynagar</option>
-                            </select>
+                            <label>Division</label>
+                            <div class="select2-primary">
+                                <select class="form-control" id="filter_division" name="event_division" data-selected="<?php echo $pre_data['event_division'] ? $pre_data['event_division'] : '' ?>"></select>
+                            </div>
                         </div>
+                        <div class="form-group">
+                            <label>District</label>
+                            <div class="select2-success">
+                                <select class="form-control" id="filter_district" name="event_district" data-selected="<?php echo $pre_data['event_district'] ? $pre_data['event_district'] : ''; ?>"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Sub-District</label>
+                            <div class="select2-success">
+                                <select class="form-control" id="filter_sub_district" name="event_upazila" data-selected="<?php echo $pre_data['event_upazila'] ? $pre_data['event_upazila'] : ''; ?>"></select>
+                            </div>
+                        </div>                        
                         <label class="control-label input-label">Union</label>
                         <div class="form-group">
                             <input class="form-control" type="text" name="event_union" value="<?php echo $pre_data['event_union'] ? $pre_data['event_union'] : ''; ?>">
@@ -281,15 +283,15 @@ ob_start();
                     <div class="col-md-6">
                         <label class="control-label input-label">Below 18</label>
                         <div class="form-group">
-                            <input class="form-control" type="number" name="participant_boy" value="<?php echo $pre_data['participant_boy'] ? $pre_data['participant_boy'] : ''; ?>" placeholder="Boy"><br />
-                            <input class="form-control" type="number" name="participant_girl" value="<?php echo $pre_data['participant_girl'] ? $pre_data['participant_girl'] : ''; ?>" placeholder="Girl">
+                            <input class="form-control" type="number" name="participant_boy" value="<?php echo $pre_data['participant_boy'] ? $pre_data['participant_boy'] : ''; ?>" placeholder="Boy (<18)"><br />
+                            <input class="form-control" type="number" name="participant_girl" value="<?php echo $pre_data['participant_girl'] ? $pre_data['participant_girl'] : ''; ?>" placeholder="Girl (<18)">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <label class="control-label input-label">Above 18</label>
                         <div class="form-group">
-                            <input class="form-control" type="number" name="participant_male" value="<?php echo $pre_data['participant_male'] ? $pre_data['participant_male'] : ''; ?>" placeholder="Male"><br />
-                            <input class="form-control" type="number" name="participant_female" value="<?php echo $pre_data['participant_female'] ? $pre_data['participant_female'] : ''; ?>" placeholder="Female">
+                            <input class="form-control" type="number" name="participant_male" value="<?php echo $pre_data['participant_male'] ? $pre_data['participant_male'] : ''; ?>" placeholder="Men (>=18)"><br />
+                            <input class="form-control" type="number" name="participant_female" value="<?php echo $pre_data['participant_female'] ? $pre_data['participant_female'] : ''; ?>" placeholder="Women (>=18)">
                         </div>
                     </div>
                 </fieldset>
@@ -315,7 +317,7 @@ ob_start();
                             <label>Time management of the event was</label>
                             <div class="select2-success">
                                 <select class="form-control" required name="time_management" >
-                                    <option>Select One</option>
+                                    <option value="">Select One</option>
                                     <option value="5" <?php echo $pre_data && $pre_data['time_management'] == '5' ? 'selected' : '' ?>>Excellent</option>
                                     <option value="4" <?php echo $pre_data && $pre_data['time_management'] == '4' ? 'selected' : '' ?>>Good</option>
                                     <option value="3" <?php echo $pre_data && $pre_data['time_management'] == '3' ? 'selected' : '' ?>>Neutral</option>
@@ -328,7 +330,7 @@ ob_start();
                             <label>Participants attention during the event was</label>
                             <div class="select2-success">
                                 <select class="form-control" required name="participants_attention" >
-                                    <option>Select One</option>
+                                    <option value="">Select One</option>
                                     <option value="5" <?php echo $pre_data && $pre_data['participants_attention'] == '5' ? 'selected' : '' ?>>Excellent</option>
                                     <option value="4" <?php echo $pre_data && $pre_data['participants_attention'] == '4' ? 'selected' : '' ?>>Good</option>
                                     <option value="3" <?php echo $pre_data && $pre_data['participants_attention'] == '3' ? 'selected' : '' ?>>Neutral</option>
@@ -343,7 +345,7 @@ ob_start();
                             <label>Logistical arrangements (e.g. stationery, sitting arrangements, sound quality others) were</label>
                             <div class="select2-success">
                                 <select class="form-control" required name="logistical_arrangements" >
-                                    <option>Select One</option>
+                                    <option value="">Select One</option>
                                     <option value="5" <?php echo $pre_data && $pre_data['logistical_arrangements'] == '5' ? 'selected' : '' ?>>Excellent</option>
                                     <option value="4" <?php echo $pre_data && $pre_data['logistical_arrangements'] == '4' ? 'selected' : '' ?>>Good</option>
                                     <option value="3" <?php echo $pre_data && $pre_data['logistical_arrangements'] == '3' ? 'selected' : '' ?>>Neutral</option>
@@ -356,7 +358,7 @@ ob_start();
                             <label>Relevancy of delivery of messages from the event was</label>
                             <div class="select2-success">
                                 <select class="form-control" required name="relevancy_delivery" >
-                                    <option>Select One</option>
+                                    <option value="">Select One</option>
                                     <option value="5" <?php echo $pre_data && $pre_data['participants_attention'] == '5' ? 'selected' : '' ?>>Excellent</option>
                                     <option value="4" <?php echo $pre_data && $pre_data['participants_attention'] == '4' ? 'selected' : '' ?>>Good</option>
                                     <option value="3" <?php echo $pre_data && $pre_data['participants_attention'] == '3' ? 'selected' : '' ?>>Neutral</option>
@@ -369,7 +371,7 @@ ob_start();
                             <label>Participants feedback on the overall event was</label>
                             <div class="select2-success">
                                 <select class="form-control" required name="participants_feedback" >
-                                    <option>Select One</option>
+                                    <option value="">Select One</option>
                                     <option value="5" <?php echo $pre_data && $pre_data['participants_feedback'] == '5' ? 'selected' : '' ?>>Excellent</option>
                                     <option value="4" <?php echo $pre_data && $pre_data['participants_feedback'] == '4' ? 'selected' : '' ?>>Good</option>
                                     <option value="3" <?php echo $pre_data && $pre_data['participants_feedback'] == '3' ? 'selected' : '' ?>>Neutral</option>
@@ -403,6 +405,16 @@ ob_start();
         </div>
     </div>
 </form>
+<script type="text/javascript">
+    var BD_LOCATIONS = <?php echo getBDLocationJson(); ?>;
+    init.push(function () {
+        new bd_new_location_selector({
+            'division': $('#filter_division'),
+            'district': $('#filter_district'),
+            'sub_district': $('#filter_sub_district')
+        });
+    });
+</script>
 <script type="text/javascript">
     init.push(function () {
         theForm.find('input:submit, button:submit').prop('disabled', true);

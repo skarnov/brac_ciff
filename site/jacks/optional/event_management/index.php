@@ -53,15 +53,15 @@ class dev_event_management {
 
     function adm_menus() {
         $params = array(
-            'label' => 'Events',
+            'label' => 'Activities',
             'iconClass' => 'fa-building',
             'jack' => $this->thsClass,
         );
 
         $params = array(
-            'label' => 'Event',
+            'label' => 'Events',
             'description' => 'Manage All Event',
-            'menu_group' => 'Events',
+            'menu_group' => 'Activities',
             'position' => 'default',
             'action' => 'manage_events',
             'iconClass' => 'fa-binoculars',
@@ -73,7 +73,7 @@ class dev_event_management {
         $params = array(
             'label' => 'Sharing Session',
             'description' => 'Manage All Sharing Session',
-            'menu_group' => 'Events',
+            'menu_group' => 'Activities',
             'position' => 'default',
             'action' => 'manage_sharing_session',
             'iconClass' => 'fa-binoculars',
@@ -85,7 +85,7 @@ class dev_event_management {
         $params = array(
             'label' => 'Community Service',
             'description' => 'Manage All Community Services',
-            'menu_group' => 'Events',
+            'menu_group' => 'Activities',
             'position' => 'default',
             'action' => 'manage_complains',
             'iconClass' => 'fa-binoculars',
@@ -95,9 +95,9 @@ class dev_event_management {
             admenu_register($params);
 
         $params = array(
-            'label' => 'Complain Fileds',
+            'label' => 'Complain Files',
             'description' => 'Manage All Complain Fileds',
-            'menu_group' => 'Events',
+            'menu_group' => 'Activities',
             'position' => 'default',
             'action' => 'manage_complain_fileds',
             'iconClass' => 'fa-binoculars',
@@ -109,7 +109,7 @@ class dev_event_management {
         $params = array(
             'label' => 'Complain Investigations',
             'description' => 'Manage All Complain Investigations',
-            'menu_group' => 'Events',
+            'menu_group' => 'Activities',
             'position' => 'default',
             'action' => 'manage_complain_investigations',
             'iconClass' => 'fa-binoculars',
@@ -121,7 +121,7 @@ class dev_event_management {
         $params = array(
             'label' => 'Trainings',
             'description' => 'Manage All Trainings',
-            'menu_group' => 'Events',
+            'menu_group' => 'Activities',
             'position' => 'default',
             'action' => 'manage_trainings',
             'iconClass' => 'fa-binoculars',
@@ -248,6 +248,8 @@ class dev_event_management {
 
         $loopCondition = array(
             'id' => 'dev_events.pk_event_id',
+            'division' => 'dev_events.event_division',
+            'district' => 'dev_events.event_district',
         );
 
         $conditions .= sql_condition_maker($loopCondition, $param);
@@ -316,7 +318,7 @@ class dev_event_management {
             if ($is_update) {
                 $events_data['update_date'] = date('Y-m-d');
                 $events_data['update_time'] = date('H:i:s');
-                $events_data['modified_by'] = $_config['user']['pk_user_id'];
+                $events_data['updated_by'] = $_config['user']['pk_user_id'];
                 $ret['events_update'] = $devdb->insert_update('dev_events', $events_data, " pk_event_id  = '" . $is_update . "'");
 
                 $achievement_male = $params['form_data']['participant_male'];
@@ -326,9 +328,9 @@ class dev_event_management {
                 $achievement_total = $achievement_male + $achievement_female + $achievement_boy + $achievement_girl;
                 $update_date = date('Y-m-d');
                 $update_time = date('H:i:s');
-                $modified_by = $_config['user']['pk_user_id'];
+                $updated_by = $_config['user']['pk_user_id'];
 
-                $sql = "UPDATE dev_targets SET achievement_male = '$achievement_male', achievement_female = '$achievement_female', achievement_boy = '$achievement_boy', achievement_girl = '$achievement_girl', achievement_total = '$achievement_total', update_date = '$update_date', update_time = '$update_time', modified_by = '$modified_by' WHERE fk_activity_id = '" . $events_data['fk_activity_id'] . "' AND fk_branch_id = '" . $events_data['fk_branch_id'] . "' AND fk_project_id = '" . $events_data['fk_project_id'] . "' AND month = '" . $events_data['month'] . "'";
+                $sql = "UPDATE dev_targets SET achievement_male = '$achievement_male', achievement_female = '$achievement_female', achievement_boy = '$achievement_boy', achievement_girl = '$achievement_girl', achievement_total = '$achievement_total', update_date = '$update_date', update_time = '$update_time', updated_by = '$updated_by' WHERE fk_activity_id = '" . $events_data['fk_activity_id'] . "' AND fk_branch_id = '" . $events_data['fk_branch_id'] . "' AND fk_project_id = '" . $events_data['fk_project_id'] . "' AND month = '" . $events_data['month'] . "'";
                 $ret['misactivity_update'] = $devdb->query($sql);
             } else {
                 $events_data['create_date'] = date('Y-m-d');
@@ -343,9 +345,9 @@ class dev_event_management {
                 $achievement_total = $achievement_male + $achievement_female + $achievement_boy + $achievement_girl;
                 $update_date = date('Y-m-d');
                 $update_time = date('H:i:s');
-                $modified_by = $_config['user']['pk_user_id'];
+                $updated_by = $_config['user']['pk_user_id'];
 
-                $sql = "UPDATE dev_targets SET achievement_male = '$achievement_male', achievement_female = '$achievement_female', achievement_boy = '$achievement_boy', achievement_girl = '$achievement_girl', achievement_total = '$achievement_total', activity_achievement = activity_achievement + 1, update_date = '$update_date', update_time = '$update_time', modified_by = '$modified_by' WHERE fk_activity_id = '" . $events_data['fk_activity_id'] . "' AND fk_branch_id = '" . $events_data['fk_branch_id'] . "' AND fk_project_id = '" . $events_data['fk_project_id'] . "' AND month = '" . $events_data['month'] . "'";
+                $sql = "UPDATE dev_targets SET achievement_male = '$achievement_male', achievement_female = '$achievement_female', achievement_boy = '$achievement_boy', achievement_girl = '$achievement_girl', achievement_total = '$achievement_total', activity_achievement = activity_achievement + 1, update_date = '$update_date', update_time = '$update_time', updated_by = '$updated_by' WHERE fk_activity_id = '" . $events_data['fk_activity_id'] . "' AND fk_branch_id = '" . $events_data['fk_branch_id'] . "' AND fk_project_id = '" . $events_data['fk_project_id'] . "' AND month = '" . $events_data['month'] . "'";
                 $ret['misactivity_update'] = $devdb->query($sql);
             }
         }
@@ -451,7 +453,7 @@ class dev_event_management {
             if ($is_update) {
                 $data['update_date'] = date('Y-m-d');
                 $data['update_time'] = date('H:i:s');
-                $data['modified_by'] = $_config['user']['pk_user_id'];
+                $data['updated_by'] = $_config['user']['pk_user_id'];
                 $ret['event_validations_update'] = $devdb->insert_update('dev_event_validations', $data, " pk_validation_id  = '" . $is_update . "'");
             } else {
                 $data['create_date'] = date('Y-m-d');
@@ -546,7 +548,7 @@ class dev_event_management {
             if ($is_update) {
                 $sharing_session_data['update_date'] = date('Y-m-d');
                 $sharing_session_data['update_time'] = date('H:i:s');
-                $sharing_session_data['modified_by'] = $_config['user']['pk_user_id'];
+                $sharing_session_data['updated_by'] = $_config['user']['pk_user_id'];
                 $ret['update'] = $devdb->insert_update('dev_sharing_sessions', $sharing_session_data, " pk_sharing_session_id  = '" . $is_update . "'");
             } else {
                 $sharing_session_data['create_date'] = date('Y-m-d');
@@ -668,7 +670,7 @@ class dev_event_management {
             if ($is_update) {
                 $complains_data['update_date'] = date('Y-m-d');
                 $complains_data['update_time'] = date('H:i:s');
-                $complains_data['modified_by'] = $_config['user']['pk_user_id'];
+                $complains_data['updated_by'] = $_config['user']['pk_user_id'];
                 $ret = $devdb->insert_update('dev_complains', $complains_data, " pk_complain_id  = '" . $is_update . "'");
             } else {
                 $complains_data['create_date'] = date('Y-m-d');
@@ -722,7 +724,7 @@ class dev_event_management {
         if ($is_update) {
             $oldData = $this->get_complain_fileds(array('id' => $is_update, 'single' => true));
             if (!$oldData) {
-                return array('error' => ['Invalid complain fileds id, no data found']);
+                return array('error' => ['Invalid complain file id, no data found']);
             }
         }
 
@@ -737,6 +739,7 @@ class dev_event_management {
         if (!$ret['error']) {
             $complain_filed_data = array();
             $complain_filed_data['complain_register_date'] = date('Y-m-d', strtotime($params['form_data']['complain_register_date']));
+            $complain_filed_data['full_name'] = $params['form_data']['full_name'];
             $complain_filed_data['month'] = $params['form_data']['month'];
             $complain_filed_data['division'] = $params['form_data']['division'];
             $complain_filed_data['district'] = $params['form_data']['district'];
@@ -760,7 +763,7 @@ class dev_event_management {
             if ($is_update) {
                 $complain_filed_data['update_date'] = date('Y-m-d');
                 $complain_filed_data['update_time'] = date('H:i:s');
-                $complain_filed_data['modified_by'] = $_config['user']['pk_user_id'];
+                $complain_filed_data['updated_by'] = $_config['user']['pk_user_id'];
                 $ret = $devdb->insert_update('dev_complain_fileds', $complain_filed_data, " pk_complain_filed_id  = '" . $is_update . "'");
             } else {
                 $complain_filed_data['create_date'] = date('Y-m-d');
@@ -831,6 +834,7 @@ class dev_event_management {
         if (!$ret['error']) {
             $complain_investigation_data = array();
             $complain_investigation_data['complain_register_date'] = date('Y-m-d', strtotime($params['form_data']['complain_register_date']));
+            $complain_investigation_data['full_name'] = $params['form_data']['full_name'];
             $complain_investigation_data['month'] = $params['form_data']['month'];
             $complain_investigation_data['division'] = $params['form_data']['division'];
             $complain_investigation_data['district'] = $params['form_data']['district'];
@@ -854,7 +858,7 @@ class dev_event_management {
             if ($is_update) {
                 $complain_investigation_data['update_date'] = date('Y-m-d');
                 $complain_investigation_data['update_time'] = date('H:i:s');
-                $complain_investigation_data['modified_by'] = $_config['user']['pk_user_id'];
+                $complain_investigation_data['updated_by'] = $_config['user']['pk_user_id'];
                 $ret = $devdb->insert_update('dev_complain_investigations', $complain_investigation_data, " pk_complain_investigation_id  = '" . $is_update . "'");
             } else {
                 $complain_investigation_data['create_date'] = date('Y-m-d');
@@ -932,6 +936,9 @@ class dev_event_management {
             }
             $training_data['profession'] = $params['form_data']['profession'];
             $training_data['training_name'] = $params['form_data']['training_name'];
+            $training_data['workshop_name'] = $params['form_data']['workshop_name'];
+            $training_data['workshop_duration'] = $params['form_data']['workshop_duration'];
+            $training_data['training_duration'] = $params['form_data']['training_duration'];
             $training_data['address'] = $params['form_data']['address'];
             $training_data['mobile'] = $params['form_data']['mobile'];
             $training_data['age'] = $params['form_data']['age'];
@@ -939,7 +946,7 @@ class dev_event_management {
             if ($is_update) {
                 $training_data['update_date'] = date('Y-m-d');
                 $training_data['update_time'] = date('H:i:s');
-                $training_data['modified_by'] = $_config['user']['pk_user_id'];
+                $training_data['updated_by'] = $_config['user']['pk_user_id'];
                 $ret = $devdb->insert_update('dev_trainings', $training_data, " pk_training_id   = '" . $is_update . "'");
             } else {
                 $training_data['create_date'] = date('Y-m-d');

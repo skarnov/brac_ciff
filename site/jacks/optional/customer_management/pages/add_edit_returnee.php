@@ -101,7 +101,7 @@ if ($_POST) {
             'collection_date' => 'Date of data Collection',
             'person_type' => 'Type of person',
             'full_name' => 'Name of person',
-            'returnee_gender' => 'Sex',
+            'returnee_gender' => 'Gender',
             'permanent_district' => 'District',
             'return_date' => 'Return Date',
             'destination_country' => 'Country of Destination',
@@ -288,11 +288,11 @@ ob_start();
                                 <input class="form-control" type="text" required name="full_name" value="<?php echo $pre_data['full_name'] ? $pre_data['full_name'] : ''; ?>">
                             </div>
                             <div class="form-group">
-                                <label>Sex (*)</label>
+                                <label>Gender (*)</label>
                                 <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                     <div class="options_holder radio">
-                                        <label><input class="px oldGender" type="radio" name="returnee_gender" value="male" <?php echo $pre_data && $pre_data['returnee_gender'] == 'male' ? 'checked' : '' ?>><span class="lbl">Male</span></label>
-                                        <label><input class="px oldGender" type="radio" name="returnee_gender" value="female" <?php echo $pre_data && $pre_data['returnee_gender'] == 'female' ? 'checked' : '' ?>><span class="lbl">Female</span></label>
+                                        <label><input class="px oldGender" type="radio" name="returnee_gender" value="male" <?php echo $pre_data && $pre_data['returnee_gender'] == 'male' ? 'checked' : '' ?>><span class="lbl">Men (>=18)</span></label>
+                                        <label><input class="px oldGender" type="radio" name="returnee_gender" value="female" <?php echo $pre_data && $pre_data['returnee_gender'] == 'female' ? 'checked' : '' ?>><span class="lbl">Women (>=18)</span></label>
                                     </div>
                                 </div>
                             </div>

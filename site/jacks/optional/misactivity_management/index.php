@@ -204,7 +204,7 @@ class dev_misactivity_management {
             if ($is_update) {
                 $misactivity_data['update_date'] = date('Y-m-d');
                 $misactivity_data['update_time'] = date('H:i:s');
-                $misactivity_data['modified_by'] = $_config['user']['pk_user_id'];
+                $misactivity_data['updated_by'] = $_config['user']['pk_user_id'];
                 $ret['misactivity_update'] = $devdb->insert_update('dev_activities', $misactivity_data, " pk_activity_id = '" . $is_update . "'");
             } else {
                 $misactivity_data['create_date'] = date('Y-m-d');
@@ -293,7 +293,7 @@ class dev_misactivity_management {
 
             $data['update_date'] = $dateNow;
             $data['update_time'] = $timeNow;
-            $data['modified_by'] = $_config['user']['pk_user_id'];
+            $data['updated_by'] = $_config['user']['pk_user_id'];
             $ret = $devdb->insert_update('dev_targets', $data, " pk_target_id  = '" . $is_update . "'");
             return $ret;
             exit();
@@ -325,7 +325,7 @@ class dev_misactivity_management {
                     if ($is_update) {
                         $data['update_date'] = $dateNow;
                         $data['update_time'] = $timeNow;
-                        $data['modified_by'] = $_config['user']['pk_user_id'];
+                        $data['updated_by'] = $_config['user']['pk_user_id'];
                         $ret = $devdb->insert_update('dev_targets', $data, " pk_target_id  = '" . $is_update . "'");
                     } else {
                         $data['create_date'] = $dateNow;

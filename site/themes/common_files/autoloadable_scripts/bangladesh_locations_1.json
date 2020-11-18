@@ -2405,15 +2405,48 @@
       ]
     },
     "Jashore": {
-      "Abhaynagar": [
-        "Unon 1",
-        "union 2",
+      "sub-district": [
+        "Abhaynagar",
+        "Bagherpara",
         "Chaugachha",
         "Jhikargacha",
         "Keshabpur",
         "Jashore Sadar",
         "Manirampur",
         "Sharsha"
+      ],
+      "post-office": {
+        "Bagharpara": "7470",
+        "Gouranagar": "7471",
+        "Chougachha": "7410",
+        "Basundia": "7406",
+        "Chanchra": "7402",
+        "Churamankathi": "7407",
+        "Jashore Airbach": "7404",
+        "Jashore canttonment": "7403",
+        "Jashore Sadar": "7400",
+        "Jashore Upa-Shahar": "7401",
+        "Rupdia": "7405",
+        "Jhikargacha": "7420",
+        "Keshobpur": "7450",
+        "Monirampur": "7440",
+        "Bhugilhat": "7462",
+        "Noapara": "7460",
+        "Rajghat": "7461",
+        "Bag Achra": "7433",
+        "Benapole": "7431",
+        "Jadabpur": "7432",
+        "Sarsa": "7430"
+      },
+      "police-stations": [
+        "Abhaynagar ",
+        "Keshabpur ",
+        "Bagherpara ",
+        "Jashore Sadar ",
+        "Chaugachha ",
+        "Manirampur ",
+        "Jhikargacha ",
+        "Sharsha "
       ]
     },
     "Jhenaida": {

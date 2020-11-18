@@ -8,6 +8,8 @@ if (!checkPermission($edit, 'add_customer', 'edit_customer')) {
     exit();
 }
 
+$all_division = get_division();
+
 $pre_data = array();
 
 if ($edit) {
@@ -338,8 +340,8 @@ ob_start();
                                 <label>Gender (*)</label>
                                 <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                     <div class="options_holder radio">
-                                        <label><input class="px oldGender" type="radio" name="customer_gender" value="male" <?php echo $pre_data && $pre_data['customer_gender'] == 'male' ? 'checked' : '' ?>><span class="lbl">Male</span></label>
-                                        <label><input class="px oldGender" type="radio" name="customer_gender" value="female" <?php echo $pre_data && $pre_data['customer_gender'] == 'female' ? 'checked' : '' ?>><span class="lbl">Female</span></label>
+                                        <label><input class="px oldGender" type="radio" name="customer_gender" value="male" <?php echo $pre_data && $pre_data['customer_gender'] == 'male' ? 'checked' : '' ?>><span class="lbl">Men (>=18)</span></label>
+                                        <label><input class="px oldGender" type="radio" name="customer_gender" value="female" <?php echo $pre_data && $pre_data['customer_gender'] == 'female' ? 'checked' : '' ?>><span class="lbl">Women (>=18)</span></label>
                                         <label><input class="px" type="radio" name="customer_gender" id="newGender"><span class="lbl">Other</span></label>
                                     </div>
                                 </div>
@@ -402,6 +404,30 @@ ob_start();
                                     <div class="form-group">
                                         <input class="form-control" type="number" name="permanent_ward" value="<?php echo $pre_data['permanent_ward'] ? $pre_data['permanent_ward'] : ''; ?>">
                                     </div>
+
+
+<!--                                    <div class="form-group">
+                                        <label class="control-label input-label">Division (*)</label>
+                                        <select class="form-control" onchange="findDistrict(this.value)" name="permanent_division">
+                                            <option value="">Select One</option>
+                                            <?php foreach ($all_division as $division) { ?>
+                                                <option value="<?php echo $division['name'] ?>" <?php echo $pre_data && $pre_data['permanent_sub_district'] == $division['name'] ? 'selected' : '' ?>><?php echo $division['name'] ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+
+                                    <script>
+                                    
+                                    function findDistrict(divisionId){
+                                        alert(divisionId);
+                                    }
+                                    
+                                    </script>-->
+                                    
+                                    
+
+
+
                                     <!--                                            <div class="form-group">
                                                                                     <label>Division (*)</label>
                                                                                     <div class="select2-primary">
@@ -455,49 +481,44 @@ ob_start();
                             <div class="col-sm-4">   
                                 <label class="control-label input-label">Men (>=18) (*)</label>
                                 <div class="form-group">
-                                    <input type="number" class="filter form-control" id="maleMember" name="male_household_member" value="<?php echo $pre_data['male_household_member'] ? $pre_data['male_household_member'] : ''; ?>" />
+                                    <input type="number" class="form-control" onkeyup="calc()" id="maleMember" name="male_household_member" value="<?php echo $pre_data['male_household_member'] ? $pre_data['male_household_member'] : ''; ?>" />
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <label class="control-label input-label">Women (>=18) (*)</label>
                                 <div class="form-group">
-                                    <input class="filter form-control" id="femaleMember" type="number" name="female_household_member" value="<?php echo $pre_data['female_household_member'] ? $pre_data['female_household_member'] : ''; ?>">
+                                    <input class="filter form-control" onkeyup="calc()" id="femaleMember" type="number" name="female_household_member" value="<?php echo $pre_data['female_household_member'] ? $pre_data['female_household_member'] : ''; ?>">
                                 </div>
                             </div>
                             <div class="col-sm-4">   
                                 <label class="control-label input-label">Boy (<18) (*)</label>
                                 <div class="form-group">
-                                    <input class="filter form-control" id="boyMember" type="number" name="boy_household_member" value="<?php echo $pre_data['boy_household_member'] ? $pre_data['boy_household_member'] : ''; ?>">
+                                    <input class="filter form-control" onkeyup="calc()" id="boyMember" type="number" name="boy_household_member" value="<?php echo $pre_data['boy_household_member'] ? $pre_data['boy_household_member'] : ''; ?>">
                                 </div>
                             </div>
                             <div class="col-sm-4">   
                                 <label class="control-label input-label">Girl (<18) (*)</label>
                                 <div class="form-group">
-                                    <input class="filter form-control" id="girlMember" type="number" name="girl_household_member" value="<?php echo $pre_data['girl_household_member'] ? $pre_data['girl_household_member'] : ''; ?>">
+                                    <input class="filter form-control" onkeyup="calc()" id="girlMember" type="number" name="girl_household_member" value="<?php echo $pre_data['girl_household_member'] ? $pre_data['girl_household_member'] : ''; ?>">
                                 </div>
                             </div>
                             <div class="col-sm-4">   
                                 <label class="control-label input-label">Total</label>
                                 <div class="form-group">
-                                    <input class="form-control" id="totalMember" type="number" value="<?php echo $pre_data['male_household_member'] + $pre_data['female_household_member'] ?>">
+                                    <input class="form-control" onkeyup="calc()" id="totalMember" type="number" value="<?php echo $pre_data['male_household_member'] + $pre_data['female_household_member'] ?>">
                                 </div>
                             </div>
                         </fieldset>
                         <script>
-                            init.push(function () {
-                                var $form = $('#theForm'),
-                                        hideShow = function () {
-                                            var maleMember = $('#maleMember').val();
-                                            var femaleMember = $('#femaleMember').val();
-                                            var boyMember = $('#boyMember').val();
-                                            var girlMember = $('#girlMember').val();
+                            function calc() {
+                                var maleMember = $('#maleMember').val();
+                                var femaleMember = $('#femaleMember').val();
+                                var boyMember = $('#boyMember').val();
+                                var girlMember = $('#girlMember').val();
 
-                                            var total = Number(maleMember) + Number(femaleMember) + Number(boyMember) + Number(girlMember);
-                                            $('#totalMember').val(total);
-                                        };
-
-                                $form.find('.filter').on('keyup', hideShow);
-                            });
+                                var total = Number(maleMember) + Number(femaleMember) + Number(boyMember) + Number(girlMember);
+                                $('#totalMember').val(total);
+                            }
                         </script>
                     </div>
                 </fieldset>
@@ -970,7 +991,7 @@ ob_start();
                             </div>
                             <div class="form-group">
                                 <label>Savings (BDT) (*)</label>
-                                <input type="number" class="form-control" name="personal_savings" value="<?php echo $pre_data['personal_savings'] ? $pre_data['personal_savings'] : ''; ?>" />
+                                <input type="number" class="form-control" name="personal_savings" value="<?php echo $pre_data['personal_savings'] ? $pre_data['personal_savings'] : '00'; ?>" />
                             </div>
                             <div class="form-group">
                                 <label>Loan Amount (BDT) (*)</label>
