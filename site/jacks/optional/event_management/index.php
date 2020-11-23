@@ -17,6 +17,11 @@ class dev_event_management {
                     'edit_event' => 'Edit Event',
                     'delete_event' => 'Delete Event',
                 ),
+                'manage_sharing_session' => array(
+                    'add_sharing_session' => 'Add Sharing Session',
+                    'edit_sharing_session' => 'Edit Sharing Session',
+                    'delete_sharing_session' => 'Delete Sharing Session',
+                ),
                 'manage_event_validations' => array(
                     'add_event_validation' => 'Add Event Validation',
                     'edit_event_validation' => 'Edit Event Validation',

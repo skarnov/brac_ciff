@@ -82,6 +82,20 @@ ob_start();
     </select>
 </div>
 <div class="form-group col-sm-4">
+    <label>Union</label>
+    <select class="form-control" name="upazila">
+        <option value="">Select One</option>
+        <option value="Jashore Sadar" <?php echo $filter_upazila && $filter_upazila == 'Jashore Sadar' ? 'selected' : '' ?>>Jashore Sadar</option>
+        <option value="Jhikargacha" <?php echo $filter_upazila && $filter_upazila == 'Jhikargacha' ? 'selected' : '' ?>>Jhikargacha</option>
+        <option value="Sharsha" <?php echo $filter_upazila && $filter_upazila == 'Sharsha' ? 'selected' : '' ?>>Sharsha</option>
+        <option value="Chougachha" <?php echo $filter_upazila && $filter_upazila == 'Chougachha' ? 'selected' : '' ?>>Chougachha</option>
+        <option value="Manirampur" <?php echo $filter_upazila && $filter_upazila == 'Manirampur' ? 'selected' : '' ?>>Manirampur</option>
+        <option value="Bagherpara" <?php echo $filter_upazila && $filter_upazila == 'Bagherpara' ? 'selected' : '' ?>>Bagherpara</option>
+        <option value="Keshabpur" <?php echo $filter_upazila && $filter_upazila == 'Keshabpur' ? 'selected' : '' ?>>Keshabpur</option>
+        <option value="Abhaynagar" <?php echo $filter_upazila && $filter_upazila == 'Abhaynagar' ? 'selected' : '' ?>>Abhaynagar</option>
+    </select>
+</div>
+<div class="form-group col-sm-4">
     <label>Service Recipient</label>
     <div class="select2-primary">
         <select class="form-control" name="service_recipient">
