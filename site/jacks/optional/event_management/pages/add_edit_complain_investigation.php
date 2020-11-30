@@ -78,6 +78,15 @@ ob_start();
         <div class="panel-body">
             <div class="col-md-6">
                 <div class="form-group">
+                    <label>Is It Continuing Investigation?</label>
+                    <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
+                        <div class="options_holder radio">
+                            <label><input class="px" type="radio" name="running_investigation" value="yes" <?php echo $pre_data && $pre_data['running_investigation'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
+                            <label><input class="px" type="radio" name="running_investigation" value="no" <?php echo $pre_data && $pre_data['running_investigation'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label>Full Name</label>
                     <input type="text" class="form-control" name="full_name" value="<?php echo $pre_data['full_name']; ?>">
                 </div>
@@ -113,38 +122,6 @@ ob_start();
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Division (*)</label>
-                    <div class="select2-primary">
-                        <select class="form-control" id="permanent_division" name="division" data-selected="<?php echo $pre_data['division'] ? $pre_data['division'] : '' ?>"></select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>District (*)</label>
-                    <div class="select2-success">
-                        <select class="form-control" id="permanent_district" name="district" data-selected="<?php echo $pre_data['district'] ? $pre_data['district'] : ''; ?>"></select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label input-label">Select Municipality/Upazila</label>
-                    <select class="form-control" name="upazila">
-                        <option value="">Select One</option>
-                        <option value="Jashore Sadar" <?php echo $pre_data && $pre_data['upazila'] == 'Jashore Sadar' ? 'selected' : '' ?>>Jashore Sadar</option>
-                        <option value="Jhikargacha" <?php echo $pre_data && $pre_data['upazila'] == 'Jhikargacha' ? 'selected' : '' ?>>Jhikargacha</option>
-                        <option value="Sharsha" <?php echo $pre_data && $pre_data['upazila'] == 'Sharsha' ? 'selected' : '' ?>>Sharsha</option>
-                        <option value="Chougachha" <?php echo $pre_data && $pre_data['upazila'] == 'Chougachha' ? 'selected' : '' ?>>Chougachha</option>
-                        <option value="Manirampur" <?php echo $pre_data && $pre_data['upazila'] == 'Manirampur' ? 'selected' : '' ?>>Manirampur</option>
-                        <option value="Bagherpara" <?php echo $pre_data && $pre_data['upazila'] == 'Bagherpara' ? 'selected' : '' ?>>Bagherpara</option>
-                        <option value="Keshabpur" <?php echo $pre_data && $pre_data['upazila'] == 'Keshabpur' ? 'selected' : '' ?>>Keshabpur</option>
-                        <option value="Abhaynagar" <?php echo $pre_data && $pre_data['upazila'] == 'Abhaynagar' ? 'selected' : '' ?>>Abhaynagar</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="police_station">Name of police station</label>
-                    <input type="text" class="form-control" id="police_station" name="police_station" value="<?php echo $pre_data['police_station']; ?>">
-                </div>
-                <div class="form-group">
                     <label for="inputAge">Age</label>
                     <input type="text" class="form-control" id="Age" name="age" value="<?php echo $pre_data['age']; ?>">
                 </div>
@@ -173,6 +150,8 @@ ob_start();
                         });
                     });
                 </script>
+            </div>
+            <div class="col-md-6">
                 <div class="form-group">
                     <label for="comments">Type of Case</label>
                     <div class="options_holder radio">
@@ -184,6 +163,36 @@ ob_start();
                 </div>  
                 <div id="newCaseType" style="display: none; margin-bottom: 1em;">
                     <input class="form-control" placeholder="Please Specity" type="text" name="new_type_case" value="<?php echo $pre_data['type_case'] ? $pre_data['type_case'] : ''; ?>">
+                </div>
+                <div class="form-group">
+                    <label>Division (*)</label>
+                    <div class="select2-primary">
+                        <select class="form-control" id="permanent_division" name="division" data-selected="<?php echo $pre_data['division'] ? $pre_data['division'] : '' ?>"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>District (*)</label>
+                    <div class="select2-success">
+                        <select class="form-control" id="permanent_district" name="district" data-selected="<?php echo $pre_data['district'] ? $pre_data['district'] : ''; ?>"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label input-label">Select Municipality/Upazila</label>
+                    <select class="form-control" name="upazila">
+                        <option value="">Select One</option>
+                        <option value="Jashore Sadar" <?php echo $pre_data && $pre_data['upazila'] == 'Jashore Sadar' ? 'selected' : '' ?>>Jashore Sadar</option>
+                        <option value="Jhikargacha" <?php echo $pre_data && $pre_data['upazila'] == 'Jhikargacha' ? 'selected' : '' ?>>Jhikargacha</option>
+                        <option value="Sharsha" <?php echo $pre_data && $pre_data['upazila'] == 'Sharsha' ? 'selected' : '' ?>>Sharsha</option>
+                        <option value="Chougachha" <?php echo $pre_data && $pre_data['upazila'] == 'Chougachha' ? 'selected' : '' ?>>Chougachha</option>
+                        <option value="Manirampur" <?php echo $pre_data && $pre_data['upazila'] == 'Manirampur' ? 'selected' : '' ?>>Manirampur</option>
+                        <option value="Bagherpara" <?php echo $pre_data && $pre_data['upazila'] == 'Bagherpara' ? 'selected' : '' ?>>Bagherpara</option>
+                        <option value="Keshabpur" <?php echo $pre_data && $pre_data['upazila'] == 'Keshabpur' ? 'selected' : '' ?>>Keshabpur</option>
+                        <option value="Abhaynagar" <?php echo $pre_data && $pre_data['upazila'] == 'Abhaynagar' ? 'selected' : '' ?>>Abhaynagar</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="police_station">Name of police station</label>
+                    <input type="text" class="form-control" id="police_station" name="police_station" value="<?php echo $pre_data['police_station']; ?>">
                 </div>
                 <div class="form-group">
                     <label for="comments">Comments</label>

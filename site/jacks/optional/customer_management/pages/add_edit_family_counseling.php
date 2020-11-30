@@ -111,13 +111,13 @@ doAction('render_start');
                     <fieldset class="scheduler-border">
                         <legend class="scheduler-border">No of Family Members Counseled</legend>
                         <div class="col-sm-4">   
-                            <label class="control-label input-label">Male</label>
+                            <label class="control-label input-label">Men</label>
                             <div class="form-group">
                                 <input type="number" class="filter form-control" id="maleMember" name="male_household_member" value="<?php echo $pre_data['male_household_member'] ? $pre_data['male_household_member'] : ''; ?>" />
                             </div>
                         </div>
                         <div class="col-sm-4">
-                            <label class="control-label input-label">Female</label>
+                            <label class="control-label input-label">Women</label>
                             <div class="form-group">
                                 <input class="filter form-control" id="femaleMember" type="number" name="female_household_member" value="<?php echo $pre_data['female_household_member'] ? $pre_data['female_household_member'] : ''; ?>">
                             </div>

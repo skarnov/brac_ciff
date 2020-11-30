@@ -18,9 +18,9 @@ class dev_event_management {
                     'delete_event' => 'Delete Event',
                 ),
                 'manage_sharing_session' => array(
-                    'add_sharing_session' => 'Add Sharing Session',
-                    'edit_sharing_session' => 'Edit Sharing Session',
-                    'delete_sharing_session' => 'Delete Sharing Session',
+                    'add_sharing_session' => 'Add Training/Workshop Validation',
+                    'edit_sharing_session' => 'Edit Training/Workshop Validation',
+                    'delete_sharing_session' => 'Delete Training/Workshop Validation',
                 ),
                 'manage_event_validations' => array(
                     'add_event_validation' => 'Add Event Validation',
@@ -76,18 +76,6 @@ class dev_event_management {
             admenu_register($params);
 
         $params = array(
-            'label' => 'Sharing Session',
-            'description' => 'Manage All Sharing Session',
-            'menu_group' => 'Activities',
-            'position' => 'default',
-            'action' => 'manage_sharing_session',
-            'iconClass' => 'fa-binoculars',
-            'jack' => $this->thsClass,
-        );
-        if (has_permission('manage_sharing_session'))
-            admenu_register($params);
-
-        $params = array(
             'label' => 'Community Service',
             'description' => 'Manage All Community Services',
             'menu_group' => 'Activities',
@@ -124,8 +112,8 @@ class dev_event_management {
             admenu_register($params);
 
         $params = array(
-            'label' => 'Trainings',
-            'description' => 'Manage All Trainings',
+            'label' => 'Training/Workshop',
+            'description' => 'Manage All Training/Workshop',
             'menu_group' => 'Activities',
             'position' => 'default',
             'action' => 'manage_trainings',
@@ -172,12 +160,12 @@ class dev_event_management {
         global $devdb, $_config;
         $myUrl = jack_url($this->thsClass, 'manage_sharing_session');
 
-        if ($_GET['action'] == 'add_edit_sharing_session')
-            include('pages/add_edit_sharing_session.php');
-        elseif ($_GET['action'] == 'deleteSession')
-            include('pages/deleteSession.php');
+        if ($_GET['action'] == 'add_edit_training_validation')
+            include('pages/add_edit_training_validation.php');
+        elseif ($_GET['action'] == 'deleteTrainingValidation')
+            include('pages/deleteTrainingValidation.php');
         else
-            include('pages/list_sharing_sessions.php');
+            include('pages/list_training_validations.php');
     }
 
     function manage_complains() {
@@ -245,7 +233,7 @@ class dev_event_management {
                 LEFT JOIN dev_activities ON (dev_activities.pk_activity_id = dev_events.fk_activity_id)
                 LEFT JOIN dev_users ON (dev_users.pk_user_id = dev_events.created_by)
             ";
-        
+
         $where = " WHERE 1";
         $conditions = " ";
         $sql = $select . $from . $where;
@@ -478,15 +466,7 @@ class dev_event_management {
 
         $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
 
-        if ($param['listing']) {
-            $from = "FROM dev_sharing_sessions 
-
-            ";
-        } else {
-            $from = "FROM dev_sharing_sessions 
-
-            ";
-        }
+        $from = "FROM dev_sharing_sessions ";
 
         $where = " WHERE 1";
         $conditions = " ";
@@ -495,6 +475,7 @@ class dev_event_management {
 
         $loopCondition = array(
             'id' => 'dev_sharing_sessions.pk_sharing_session_id',
+            'training_id' => 'dev_sharing_sessions.fk_training_id',
         );
 
         $conditions .= sql_condition_maker($loopCondition, $param);
@@ -534,7 +515,7 @@ class dev_event_management {
         if (!$ret['error']) {
             $sharing_session_data = array();
             $sharing_session_data['traning_date'] = date('Y-m-d', strtotime($params['form_data']['traning_date']));
-            $sharing_session_data['traning_name'] = $params['form_data']['traning_name'];
+            $sharing_session_data['fk_training_id'] = $params['training_id'];
 
             if ($params['form_data']['new_evaluator_profession']) {
                 $sharing_session_data['evaluator_profession'] = $params['form_data']['new_evaluator_profession'];
@@ -839,6 +820,7 @@ class dev_event_management {
         if (!$ret['error']) {
             $complain_investigation_data = array();
             $complain_investigation_data['complain_register_date'] = date('Y-m-d', strtotime($params['form_data']['complain_register_date']));
+            $complain_investigation_data['running_investigation'] = $params['form_data']['running_investigation'];
             $complain_investigation_data['full_name'] = $params['form_data']['full_name'];
             $complain_investigation_data['month'] = $params['form_data']['month'];
             $complain_investigation_data['division'] = $params['form_data']['division'];

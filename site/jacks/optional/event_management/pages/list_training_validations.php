@@ -1,8 +1,11 @@
 <?php
+$training_id = $_GET['training_id'] ? $_GET['training_id'] : null;
+
 $start = $_GET['start'] ? $_GET['start'] : 0;
 $per_page_items = 10;
 
 $args = array(
+    'training_id' => $training_id,
     'listing' => TRUE,
     'limit' => array(
         'start' => $start * $per_page_items,
@@ -14,23 +17,23 @@ $args = array(
     ),
 );
 
-$sharing_sessions = $this->get_sharing_sessions($args);
-$pagination = pagination($sharing_sessions['total'], $per_page_items, $start);
+$trainings = $this->get_sharing_sessions($args);
+$pagination = pagination($trainings['total'], $per_page_items, $start);
 
 doAction('render_start');
 ob_start();
 ?>
 <div class="page-header">
-    <h1>All Sharing Sessions</h1>
+    <h1>All Training/Workshop Validations</h1>
     <div class="oh">
         <div class="btn-group btn-group-sm">
             <?php
             echo linkButtonGenerator(array(
-                'href' => $myUrl . '?action=add_edit_sharing_session',
+                'href' => $myUrl . '?action=add_edit_training_validation&training_id=' . $training_id,
                 'action' => 'add',
                 'icon' => 'icon_add',
-                'text' => 'New Sharing Session',
-                'title' => 'New Sharing Session',
+                'text' => 'New Training/Workshop Validation',
+                'title' => 'New Training/Workshop Validation',
             ));
             ?>
         </div>
@@ -38,40 +41,38 @@ ob_start();
 </div>
 <div class="table-primary table-responsive">
     <div class="table-header">
-        <?php echo searchResultText($sharing_sessions['total'], $start, $per_page_items, count($sharing_sessions['data']), 'Sharing sessions') ?>
+        <?php echo searchResultText($trainings['total'], $start, $per_page_items, count($trainings['data']), 'training validation') ?>
     </div>
     <table class="table table-bordered table-condensed">
         <thead>
             <tr>
                 <th>Date</th>
-                <th>Training Name</th>
                 <th>Evaluator Profession</th>
                 <th class="tar action_column">Actions</th>
             </tr>
         </thead>
         <tbody>
             <?php
-            foreach ($sharing_sessions['data'] as $i => $sharing_session) {
+            foreach ($trainings['data'] as $i => $training) {
                 ?>
                 <tr>
-                    <td><?php echo date('d-m-Y', strtotime($sharing_session['traning_date'])) ?></td>
-                    <td><?php echo $sharing_session['traning_name']; ?></td>
-                    <td><?php echo $sharing_session['evaluator_profession']; ?></td>
+                    <td><?php echo date('d-m-Y', strtotime($training['traning_date'])) ?></td>
+                    <td><?php echo $training['evaluator_profession'] ?></td>
                     <td class="tar action_column">
-                        <?php if (has_permission('edit_sharing_session')): ?>
+                        <?php if (has_permission('edit_training_validation')): ?>
                             <div class="btn-group btn-group-sm">
                                 <?php
                                 echo linkButtonGenerator(array(
-                                    'href' => build_url(array('action' => 'add_edit_sharing_session', 'edit' => $sharing_session['pk_sharing_session_id'])),
+                                    'href' => build_url(array('action' => 'add_edit_training_validation', 'edit' => $training['pk_sharing_session_id'], 'training_id' => $training_id)),
                                     'action' => 'edit',
-                                    'icon' => 'icon_edit',
+                                    'icon' => 'icon_add',
                                     'text' => 'Edit',
-                                    'title' => 'Edit Sharing Session',
+                                    'title' => 'Edit Training',
                                 ));
                                 ?>
                             </div>
                         <?php endif; ?>
-                        <?php if (has_permission('delete_sharing_session')): ?>
+                        <?php if (has_permission('delete_training')): ?>
                             <div class="btn-group btn-group-sm">
                                 <?php
                                 echo buttonButtonGenerator(array(
@@ -79,7 +80,7 @@ ob_start();
                                     'icon' => 'icon_delete',
                                     'text' => 'Delete',
                                     'title' => 'Delete Record',
-                                    'attributes' => array('data-id' => $sharing_session['pk_sharing_session_id']),
+                                    'attributes' => array('data-id' => $training['pk_sharing_session_id'], 'data-training' => $training_id),
                                     'classes' => 'delete_single_record'));
                                 ?>
                             </div>
@@ -102,7 +103,8 @@ ob_start();
         $(document).on('click', '.delete_single_record', function () {
             var ths = $(this);
             var thisCell = ths.closest('td');
-            var logId = ths.attr('data-id');        
+            var logId = ths.attr('data-id');
+            var training = ths.attr('data-training');
             if (!logId)
                 return false;
 
@@ -116,7 +118,7 @@ ob_start();
                     }],
                 callback: function (result) {
                     if (result == 'delete') {
-                        window.location.href = '?action=deleteSession&id=' + logId;
+                        window.location.href = '?action=deleteTrainingValidation&id=' + logId + '&training_id=' + training;
                     }
                     hide_button_overlay_working(thisCell);
                 }

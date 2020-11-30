@@ -38,18 +38,35 @@ $pagination = pagination($complain_investigations['total'], $per_page_items, $st
 doAction('render_start');
 ?>
 <div class="page-header">
-    <h1>All Complain Investigations</h1>
-    <div class="oh">
-        <div class="btn-group btn-group-sm">
-            <?php
-            echo linkButtonGenerator(array(
-                'href' => $myUrl . '?action=add_edit_complain_investigation',
-                'action' => 'add',
-                'icon' => 'icon_add',
-                'text' => 'New Complain Investigation',
-                'title' => 'New Complain Investigation',
-            ));
-            ?>
+    <div class="row">
+        <div class="col-md-8">
+            <h1>All Complain Investigations</h1>
+            <div class="oh">
+                <div class="btn-group btn-group-sm">
+                    <?php
+                    echo linkButtonGenerator(array(
+                        'href' => $myUrl . '?action=add_edit_complain_investigation',
+                        'action' => 'add',
+                        'icon' => 'icon_add',
+                        'text' => 'New Complain Investigation',
+                        'title' => 'New Complain Investigation',
+                    ));
+                    ?>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-row">
+                <div class="stat-cell bg-warning">
+                    <span class="text-bg"><?php echo $complain_investigations['total'] ?></span><br>
+                    <span class="text-sm">Stored in Database</span>
+                </div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-cell bg-warning padding-sm no-padding-t text-center">
+                    <div id="stats-sparklines-2" class="stats-sparklines" style="width: 100%"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -77,24 +94,26 @@ ob_start();
         </select>
     </div>
 </div>
-<div class="form-group col-sm-4">
+<div class="form-group col-sm-2">
+    <label>Division</label>
+    <div class="select2-primary">
+        <select class="form-control" id="filter_division" name="division" data-selected="<?php echo $filter_division ?>"></select>
+    </div>
+</div>
+<div class="form-group col-sm-2">
+    <label>District</label>
+    <div class="select2-success">
+        <select class="form-control" id="filter_district" name="district" data-selected="<?php echo $filter_district; ?>"></select>
+    </div>
+</div>
+<div class="form-group col-sm-2">
     <label>Upazila</label>
-    <div class="form-group">
-        <select class="form-control" name="upazila">
-            <option value="">Select One</option>
-            <option value="Jashore Sadar" <?php echo $filter_upazila && $filter_upazila == 'Jashore Sadar' ? 'selected' : '' ?>>Jashore Sadar</option>
-            <option value="Jhikargacha" <?php echo $filter_upazila && $filter_upazila == 'Jhikargacha' ? 'selected' : '' ?>>Jhikargacha</option>
-            <option value="Sharsha" <?php echo $filter_upazila && $filter_upazila == 'Sharsha' ? 'selected' : '' ?>>Sharsha</option>
-            <option value="Chougachha" <?php echo $filter_upazila && $filter_upazila == 'Chougachha' ? 'selected' : '' ?>>Chougachha</option>
-            <option value="Manirampur" <?php echo $filter_upazila && $filter_upazila == 'Manirampur' ? 'selected' : '' ?>>Manirampur</option>
-            <option value="Bagherpara" <?php echo $filter_upazila && $filter_upazila == 'Bagherpara' ? 'selected' : '' ?>>Bagherpara</option>
-            <option value="Keshabpur" <?php echo $filter_upazila && $filter_upazila == 'Keshabpur' ? 'selected' : '' ?>>Keshabpur</option>
-            <option value="Abhaynagar" <?php echo $filter_upazila && $filter_upazila == 'Abhaynagar' ? 'selected' : '' ?>>Abhaynagar</option>
-        </select>
+    <div class="select2-success">
+        <select class="form-control" id="filter_sub_district" name="sub_district" data-selected="<?php echo $filter_sub_district; ?>"></select>
     </div>
 </div>
 <div class="form-group col-sm-4">
-    <label>Entry Start Date</label>
+    <label>Start Date</label>
     <div class="input-group">
         <input id="startDate" type="text" class="form-control" name="entry_start_date" value="<?php echo $filter_entry_start_date ?>">
     </div>
@@ -105,7 +124,7 @@ ob_start();
     </script>
 </div>
 <div class="form-group col-sm-4">
-    <label>Entry End Date</label>
+    <label>End Date</label>
     <div class="input-group">
         <input id="endDate" type="text" class="form-control" name="entry_end_date" value="<?php echo $filter_entry_end_date ?>">
     </div>
@@ -166,40 +185,40 @@ filterForm($filterForm);
                     <td class="tar action_column">
                         <?php if (has_permission('edit_complain_investigation')): ?>
                             <div class="btn-group btn-group-sm">
-                            <?php
-                            echo linkButtonGenerator(array(
-                                'href' => build_url(array('action' => 'add_edit_complain_investigation', 'edit' => $complain_investigation['pk_complain_investigation_id'])),
-                                'action' => 'edit',
-                                'icon' => 'icon_edit',
-                                'text' => 'Edit',
-                                'title' => 'Edit Complain Investigation',
-                            ));
-                            ?>
+                                <?php
+                                echo linkButtonGenerator(array(
+                                    'href' => build_url(array('action' => 'add_edit_complain_investigation', 'edit' => $complain_investigation['pk_complain_investigation_id'])),
+                                    'action' => 'edit',
+                                    'icon' => 'icon_edit',
+                                    'text' => 'Edit',
+                                    'title' => 'Edit Complain Investigation',
+                                ));
+                                ?>
                             </div>
-                            <?php endif; ?>
-                            <?php if (has_permission('delete_complain_investigation')): ?>
+                        <?php endif; ?>
+                        <?php if (has_permission('delete_complain_investigation')): ?>
                             <div class="btn-group btn-group-sm">
-                            <?php
-                            echo buttonButtonGenerator(array(
-                                'action' => 'delete',
-                                'icon' => 'icon_delete',
-                                'text' => 'Delete',
-                                'title' => 'Delete Record',
-                                'attributes' => array('data-id' => $complain_investigation['pk_complain_investigation_id']),
-                                'classes' => 'delete_single_record'));
-                            ?>
+                                <?php
+                                echo buttonButtonGenerator(array(
+                                    'action' => 'delete',
+                                    'icon' => 'icon_delete',
+                                    'text' => 'Delete',
+                                    'title' => 'Delete Record',
+                                    'attributes' => array('data-id' => $complain_investigation['pk_complain_investigation_id']),
+                                    'classes' => 'delete_single_record'));
+                                ?>
                             </div>
-                            <?php endif; ?>
+                        <?php endif; ?>
                     </td>
                 </tr>
-                        <?php
-                    }
-                    ?>
+                <?php
+            }
+            ?>
         </tbody>
     </table>
     <div class="table-footer oh">
         <div class="pull-left">
-<?php echo $pagination ?>
+            <?php echo $pagination ?>
         </div>
     </div>
 </div>

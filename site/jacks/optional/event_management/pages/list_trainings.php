@@ -50,7 +50,7 @@ if ($filter_entry_end_date)
 doAction('render_start');
 ?>
 <div class="page-header">
-    <h1>All Trainings</h1>
+    <h1>All Training/Workshop</h1>
     <div class="oh">
         <div class="btn-group btn-group-sm">
             <?php
@@ -58,8 +58,8 @@ doAction('render_start');
                 'href' => $myUrl . '?action=add_edit_training',
                 'action' => 'add',
                 'icon' => 'icon_add',
-                'text' => 'New Training',
-                'title' => 'New Training',
+                'text' => 'New Training/Workshop',
+                'title' => 'New Training/Workshop',
             ));
             ?>
         </div>
@@ -69,7 +69,7 @@ doAction('render_start');
 ob_start();
 ?>
 <div class="form-group col-sm-3">
-    <label>Entry Start Date</label>
+    <label>Start Date</label>
     <div class="input-group">
         <input id="startDate" type="text" class="form-control" name="entry_start_date" value="<?php echo $filter_entry_start_date ?>">
     </div>
@@ -80,7 +80,7 @@ ob_start();
     </script>
 </div>
 <div class="form-group col-sm-3">
-    <label>Entry End Date</label>
+    <label>End Date</label>
     <div class="input-group">
         <input id="endDate" type="text" class="form-control" name="entry_end_date" value="<?php echo $filter_entry_end_date ?>">
     </div>
@@ -145,6 +145,17 @@ filterForm($filterForm);
                     </td>
                     <td class="tar action_column">
                         <?php if (has_permission('edit_training')): ?>
+                            <div class="btn-group btn-group-sm">
+                                <?php
+                                echo linkButtonGenerator(array(
+                                    'href' => url('admin/dev_event_management/manage_sharing_session?training_id=' . $training['pk_training_id']),
+                                    'action' => 'edit',
+                                    'icon' => 'icon_add',
+                                    'text' => 'Training/Workshop Validation',
+                                    'title' => 'Training/Workshop Validation',
+                                ));
+                                ?>
+                            </div>
                             <div class="btn-group btn-group-sm">
                                 <?php
                                 echo linkButtonGenerator(array(

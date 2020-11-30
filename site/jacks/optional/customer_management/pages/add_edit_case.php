@@ -1538,6 +1538,200 @@ doAction('render_start');
                                             });
                                         </script>
                                     </div>
+                                    <div class="form-group">
+                                        <label>Referrals done for Vocational Training</label>
+                                        <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
+                                            <div class="options_holder radio">
+                                                <label><input class="px" type="radio" id="yesReferralstraining" name="is_vocational_training" value="yes" <?php echo $pre_data && $pre_data['is_vocational_training'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
+                                                <label><input class="px" type="radio" id="noReferralstraining" name="is_vocational_training" value="no" <?php echo $pre_data && $pre_data['is_vocational_training'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <script>
+                                        init.push(function () {
+                                            $('.Referralstraining').hide();
+                                            var isChecked = $('#yesReferralstraining').is(':checked');
+
+                                            if (isChecked == true) {
+                                                $('.Referralstraining').show();
+                                            }
+
+                                            $("#yesReferralstraining").on("click", function () {
+                                                $('.Referralstraining').show();
+                                            });
+
+                                            $("#noReferralstraining").on("click", function () {
+                                                $('.Referralstraining').hide();
+                                            });
+                                        });
+                                    </script>
+                                    <?php
+                                    $received_vocational = $received_vocational ? $received_vocational : array($received_vocational);
+                                    ?> 
+                                    <fieldset class="scheduler-border Referralstraining">
+                                        <legend class="scheduler-border">Name of the Vocational Training Received (Referrals)</legend>
+                                        <div class="form-group ">
+                                            <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
+                                                <div class="options_holder radio">
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Agriculture forestry, fishing and farming" <?php
+                                                        if (in_array('Agriculture forestry, fishing and farming', $received_vocational)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Agriculture forestry, fishing and farming</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Mining and quarrying" <?php
+                                                        if (in_array('Mining and quarrying', $received_vocational)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Mining and quarrying</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Manufacturing" <?php
+                                                        if (in_array('Manufacturing', $received_vocational)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Manufacturing</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Energies supply" <?php
+                                                        if (in_array('Energies supply', $received_vocational)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Energies supply</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Water supply and waste management" <?php
+                                                        if (in_array('Water supply and waste management', $received_vocational)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Water supply and waste management</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Construction" <?php
+                                                        if (in_array('Construction', $received_vocational)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Construction</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Electrical and housing wiring" <?php
+                                                        if (in_array('Electrical and housing wiring', $received_vocational)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Electrical and housing wiring</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Masonry" <?php
+                                                        if (in_array('Masonry', $received_vocational)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Masonry</span></label>
+                                                    <label class="col-sm-4"><input class="px" type="checkbox" id="tradeRepair" name="received_vocational[]" value="Trade and repair" <?php
+                                                        if (in_array('Trade and repair', $received_vocational)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Trade and repair</span></label>
+                                                    <div id="tradeRepairList" class="form-group col-sm-8">
+                                                        <div class="options_holder radio">
+                                                            <label><input class="px" type="checkbox" name="received_vocational[]" value="Carpentry" <?php
+                                                                if (in_array('Carpentry', $received_vocational)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Carpentry </span></label>
+                                                            <label><input class="px" type="checkbox" name="received_vocational[]" value="Electronics and Maintenance" <?php
+                                                                if (in_array('Electronics and Maintenance', $received_vocational)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Electronics and Maintenance</span></label>
+                                                        </div>
+                                                    </div>
+                                                    <script>
+                                                        init.push(function () {
+                                                            $('#tradeRepairList').hide();
+                                                            var isChecked = $('#tradeRepair').is(':checked');
+
+                                                            if (isChecked == true) {
+                                                                $('#tradeRepairList').show();
+                                                            }
+
+                                                            $("#tradeRepair").on("click", function () {
+                                                                $('#tradeRepairList').toggle();
+                                                            });
+                                                        });
+                                                    </script>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Transportation and storage" <?php
+                                                        if (in_array('Transportation and storage', $received_vocational)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Transportation and storage</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Hospitality" <?php
+                                                        if (in_array('Hospitality', $received_vocational)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Hospitality</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="IT and communication" <?php
+                                                        if (in_array('IT and communication', $received_vocational)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">IT and communication</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Computer classes" <?php
+                                                        if (in_array('Computer classes', $received_vocational)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Computer classes</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Financial and insurance activities" <?php
+                                                        if (in_array('Financial and insurance activities', $received_vocational)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Financial and insurance activities</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Real estate" <?php
+                                                        if (in_array('Real estate', $received_vocational)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Real estate</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Professional scientific and technical activities" <?php
+                                                        if (in_array('Professional scientific and technical activities', $received_vocational)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Professional scientific and technical activities</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Administrative and support services (incl. cleaning and maintenance)" <?php
+                                                        if (in_array('Administrative and support services (incl. cleaning and maintenance)', $received_vocational)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Administrative and support services (incl. cleaning and maintenance)</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Public administration and defense" <?php
+                                                        if (in_array('Public administration and defense', $received_vocational)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Public administration and defense</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Education (Teaching)" <?php
+                                                        if (in_array('Education (Teaching)', $received_vocational)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Education (Teaching)</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Arts and entertainment" <?php
+                                                        if (in_array('Arts and entertainment', $received_vocational)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Arts and entertainment</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Domestic work" <?php
+                                                        if (in_array('Domestic work', $received_vocational)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Domestic work</span></label>
+                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Health and social work" <?php
+                                                        if (in_array('Health and social work', $received_vocational)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Health and social work</span></label>
+                                                    <label class="col-sm-12"><input class="px col-sm-12" type="checkbox" name="received_vocational[]" id="newReferralstraining" <?php echo $pre_data && $pre_data['other_received_vocational'] != NULL ? 'checked' : '' ?>><span class="lbl">Others</span></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="newReferralstrainingType" style="display: none; margin-bottom: 1em;">
+                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_received_vocational" value="<?php echo $pre_data['other_received_vocational'] ? $pre_data['other_received_vocational'] : ''; ?>">
+                                        </div>
+                                        <script>
+                                            init.push(function () {
+                                                var isChecked = $('#newReferralstraining').is(':checked');
+
+                                                if (isChecked == true) {
+                                                    $('#newReferralstrainingType').show();
+                                                }
+
+                                                $("#newReferralstraining").on("click", function () {
+                                                    $('#newReferralstrainingType').toggle();
+                                                });
+                                            });
+                                        </script>
+                                    </fieldset>
                                     <?php
                                     $received_vocational_training = $received_vocational_training ? $received_vocational_training : array($received_vocational_training);
                                     ?> 
@@ -1586,12 +1780,12 @@ doAction('render_start');
                                                             echo 'checked';
                                                         }
                                                         ?>><span class="lbl">Masonry</span></label>
-                                                    <label class="col-sm-4"><input class="px" type="checkbox" name="received_vocational_training[]" value="Trade and repair" <?php
+                                                    <label class="col-sm-4"><input class="px" id="receivedTrade" type="checkbox" name="received_vocational_training[]" value="Trade and repair" <?php
                                                         if (in_array('Trade and repair', $received_vocational_training)) {
                                                             echo 'checked';
                                                         }
                                                         ?>><span class="lbl">Trade and repair</span></label>
-                                                    <div class="form-group col-sm-8">
+                                                    <div id="receivedTradeList" class="form-group col-sm-8">
                                                         <div class="options_holder radio">
                                                             <label><input class="px" type="checkbox" name="received_vocational_training[]" value="Carpentry" <?php
                                                                 if (in_array('Carpentry', $received_vocational_training)) {
@@ -1605,6 +1799,20 @@ doAction('render_start');
                                                                 ?>><span class="lbl">Electronics and Maintenance</span></label>
                                                         </div>
                                                     </div>
+                                                    <script>
+                                                        init.push(function () {
+                                                            $('#receivedTradeList').hide();
+                                                            var isChecked = $('#receivedTrade').is(':checked');
+
+                                                            if (isChecked == true) {
+                                                                $('#receivedTradeList').show();
+                                                            }
+
+                                                            $("#receivedTrade").on("click", function () {
+                                                                $('#receivedTradeList').toggle();
+                                                            });
+                                                        });
+                                                    </script>
                                                     <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational_training[]" value="Transportation and storage" <?php
                                                         if (in_array('Transportation and storage', $received_vocational_training)) {
                                                             echo 'checked';
@@ -1710,186 +1918,6 @@ doAction('render_start');
                                         <script type="text/javascript">
                                             init.push(function () {
                                                 _datepicker('EndDateTraining');
-                                            });
-                                        </script>
-                                    </fieldset>
-                                    <div class="form-group">
-                                        <label>Referrals done for Vocational Training</label>
-                                        <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
-                                            <div class="options_holder radio">
-                                                <label><input class="px" type="radio" id="yesReferralstraining" name="is_vocational_training" value="yes" <?php echo $pre_data && $pre_data['is_vocational_training'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>
-                                                <label><input class="px" type="radio" id="noReferralstraining" name="is_vocational_training" value="no" <?php echo $pre_data && $pre_data['is_vocational_training'] == 'no' ? 'checked' : '' ?>><span class="lbl">No</span></label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <script>
-                                        init.push(function () {
-                                            $('.Referralstraining').hide();
-                                            var isChecked = $('#yesReferralstraining').is(':checked');
-
-                                            if (isChecked == true) {
-                                                $('.Referralstraining').show();
-                                            }
-
-                                            $("#yesReferralstraining").on("click", function () {
-                                                $('.Referralstraining').show();
-                                            });
-
-                                            $("#noReferralstraining").on("click", function () {
-                                                $('.Referralstraining').hide();
-                                            });
-                                        });
-                                    </script>
-                                    <?php
-                                    $received_vocational = $received_vocational ? $received_vocational : array($received_vocational);
-                                    ?> 
-                                    <fieldset class="scheduler-border Referralstraining">
-                                        <legend class="scheduler-border">Name of the Vocational Training Received</legend>
-                                        <div class="form-group ">
-                                            <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
-                                                <div class="options_holder radio">
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Agriculture forestry, fishing and farming" <?php
-                                                        if (in_array('Agriculture forestry, fishing and farming', $received_vocational)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Agriculture forestry, fishing and farming</span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Mining and quarrying" <?php
-                                                        if (in_array('Mining and quarrying', $received_vocational)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Mining and quarrying</span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Manufacturing" <?php
-                                                        if (in_array('Manufacturing', $received_vocational)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Manufacturing</span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Energies supply" <?php
-                                                        if (in_array('Energies supply', $received_vocational)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Energies supply</span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Water supply and waste management" <?php
-                                                        if (in_array('Water supply and waste management', $received_vocational)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Water supply and waste management</span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Construction" <?php
-                                                        if (in_array('Construction', $received_vocational)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Construction</span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Electrical and housing wiring" <?php
-                                                        if (in_array('Electrical and housing wiring', $received_vocational)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Electrical and housing wiring</span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Masonry" <?php
-                                                        if (in_array('Masonry', $received_vocational)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Masonry</span></label>
-                                                    <label class="col-sm-4"><input class="px" type="checkbox" name="received_vocational[]" value="Trade and repair" <?php
-                                                        if (in_array('Trade and repair', $received_vocational)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Trade and repair</span></label>
-                                                    <div class="form-group col-sm-8">
-                                                        <div class="options_holder radio">
-                                                            <label><input class="px" type="checkbox" name="received_vocational[]" value="Carpentry" <?php
-                                                                if (in_array('Carpentry', $received_vocational)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Carpentry </span></label>
-                                                            <label><input class="px" type="checkbox" name="received_vocational[]" value="Electronics and Maintenance" <?php
-                                                                if (in_array('Electronics and Maintenance', $received_vocational)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Electronics and Maintenance</span></label>
-                                                        </div>
-                                                    </div>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Transportation and storage" <?php
-                                                        if (in_array('Transportation and storage', $received_vocational)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Transportation and storage</span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Hospitality" <?php
-                                                        if (in_array('Hospitality', $received_vocational)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Hospitality</span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="IT and communication" <?php
-                                                        if (in_array('IT and communication', $received_vocational)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">IT and communication</span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Computer classes" <?php
-                                                        if (in_array('Computer classes', $received_vocational)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Computer classes</span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Financial and insurance activities" <?php
-                                                        if (in_array('Financial and insurance activities', $received_vocational)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Financial and insurance activities</span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Real estate" <?php
-                                                        if (in_array('Real estate', $received_vocational)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Real estate</span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Professional scientific and technical activities" <?php
-                                                        if (in_array('Professional scientific and technical activities', $received_vocational)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Professional scientific and technical activities</span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Administrative and support services (incl. cleaning and maintenance)" <?php
-                                                        if (in_array('Administrative and support services (incl. cleaning and maintenance)', $received_vocational)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Administrative and support services (incl. cleaning and maintenance)</span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Public administration and defense" <?php
-                                                        if (in_array('Public administration and defense', $received_vocational)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Public administration and defense</span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Education (Teaching)" <?php
-                                                        if (in_array('Education (Teaching)', $received_vocational)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Education (Teaching)</span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Arts and entertainment" <?php
-                                                        if (in_array('Arts and entertainment', $received_vocational)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Arts and entertainment</span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Domestic work" <?php
-                                                        if (in_array('Domestic work', $received_vocational)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Domestic work</span></label>
-                                                    <label class="col-sm-12"><input class="px" type="checkbox" name="received_vocational[]" value="Health and social work" <?php
-                                                        if (in_array('Health and social work', $received_vocational)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Health and social work</span></label>
-                                                    <label class="col-sm-12"><input class="px col-sm-12" type="checkbox" name="received_vocational[]" id="newReferralstraining" <?php echo $pre_data && $pre_data['other_received_vocational'] != NULL ? 'checked' : '' ?>><span class="lbl">Others</span></label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div id="newReferralstrainingType" style="display: none; margin-bottom: 1em;">
-                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_received_vocational" value="<?php echo $pre_data['other_received_vocational'] ? $pre_data['other_received_vocational'] : ''; ?>">
-                                        </div>
-                                        <script>
-                                            init.push(function () {
-                                                var isChecked = $('#newReferralstraining').is(':checked');
-
-                                                if (isChecked == true) {
-                                                    $('#newReferralstrainingType').show();
-                                                }
-
-                                                $("#newReferralstraining").on("click", function () {
-                                                    $('#newReferralstrainingType').toggle();
-                                                });
                                             });
                                         </script>
                                     </fieldset>
@@ -2187,19 +2215,250 @@ doAction('render_start');
                             </div>
                         </fieldset>
                     </div>
-                    <?php
-                    $reintegration_economic = $reintegration_economic ? $reintegration_economic : array($reintegration_economic);
-                    ?> 
                     <div class="tab-pane fade " id="SocialReintegrationSupport">
                         <fieldset>
                             <legend>Section 5: Social Reintegration Support</legend>
                             <div class="row">
+                                <?php
+                                $support_referred = $support_referred ? $support_referred : array($support_referred);
+                                ?> 
+                                <div class="col-sm-12">
+                                    <fieldset class="scheduler-border">
+                                        <legend class="scheduler-border">Types of Support Referred for</legend>
+                                        <div class="form-group ">
+                                            <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
+                                                <div class="options_holder radio">
+                                                    <label class="col-sm-12"><input class="px" id="reintegrationEconomicReferred" type="checkbox" name="support_referred[]" value="Social Protection Schemes(Place to access to public services & Social Protection)" <?php
+                                                        if (in_array('Social Protection Schemes(Place to access to public services & Social Protection)', $support_referred)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Social Protection Schemes(Place to access to public services & Social Protection)</span></label>
+                                                    <div id="reintegrationEconomicReferredAttr" class="form-group col-sm-12">
+                                                        <div class="options_holder radio">
+                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Union Parished" <?php
+                                                                if (in_array('Union Parished', $support_referred)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Union Parished</span></label>
+                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Upazila Parished" <?php
+                                                                if (in_array('Upazila Parished', $support_referred)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Upazila Parished</span></label>
+                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="District/Upazila Social Welfare office" <?php
+                                                                if (in_array('District/Upazila Social Welfare office', $support_referred)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">District/Upazila Social Welfare office</span></label>
+                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="District/Upazila Youth Development office" <?php
+                                                                if (in_array('District/Upazila Youth Development office', $support_referred)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">District/Upazila Youth Development office</span></label>
+                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="District/ Upazila Women Affairs Department" <?php
+                                                                if (in_array('District/ Upazila Women Affairs Department', $support_referred)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">District/ Upazila Women Affairs Department</span></label>
+                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Private/ NGO" <?php
+                                                                if (in_array('Private/ NGO', $support_referred)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Private/ NGO</span></label>
+                                                        </div>
+                                                    </div>
+                                                    <script>
+                                                        init.push(function () {
+                                                            $('#reintegrationEconomicReferredAttr').hide();
+
+                                                            var isChecked = $('#reintegrationEconomicReferred').is(':checked');
+
+                                                            if (isChecked == true) {
+                                                                $('#reintegrationEconomicReferredAttr').show();
+                                                            }
+
+                                                            $("#reintegrationEconomicReferred").on("click", function () {
+                                                                $('#reintegrationEconomicReferredAttr').toggle();
+                                                            });
+                                                        });
+                                                    </script>
+                                                    <label class="col-sm-12"><input class="px" id="socialMedicalSupportReferred" type="checkbox" name="support_referred[]" value="Medical Support" <?php
+                                                        if (in_array('Medical Support', $support_referred)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Medical Support</span></label>
+                                                    <div id="socialMedicalSupportReferredAttr" class="form-group col-sm-12">
+                                                        <div class="options_holder radio">
+                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Project" <?php
+                                                                if (in_array('Project', $support_referred)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Project</span></label>
+                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Government health facility" <?php
+                                                                if (in_array('Government health facility', $support_referred)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Government health facility</span></label>
+                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Private/ NGO operated health service centre" <?php
+                                                                if (in_array('Private/ NGO operated health service centre', $support_referred)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Private/ NGO operated health service centre</span></label>
+                                                        </div>
+                                                    </div>
+                                                    <script>
+                                                        init.push(function () {
+                                                            $('#socialMedicalSupportReferredAttr').hide();
+
+                                                            var isChecked = $('#socialMedicalSupportReferred').is(':checked');
+
+                                                            if (isChecked == true) {
+                                                                $('#socialMedicalSupportReferredAttr').show();
+                                                            }
+
+                                                            $("#socialMedicalSupportReferred").on("click", function () {
+                                                                $('#socialMedicalSupportReferredAttr').toggle();
+                                                            });
+                                                        });
+                                                    </script>
+                                                    <label class="col-sm-12"><input class="px" id="socialEducationReferred" type="checkbox" name="support_referred[]" value="Education" <?php
+                                                        if (in_array('Education', $support_referred)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Education</span></label>
+                                                    <div id="socialEducationReferredAttr" class="form-group col-sm-12">
+                                                        <div class="options_holder radio">
+                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Admission" <?php
+                                                                if (in_array('Admission', $support_referred)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Admission</span></label>
+                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Stipend/ Scholarship" <?php
+                                                                if (in_array('Stipend/ Scholarship', $support_referred)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Stipend/ Scholarship</span></label>
+                                                        </div>
+                                                    </div>
+                                                    <script>
+                                                        init.push(function () {
+                                                            $('#socialEducationReferredAttr').hide();
+
+                                                            var isChecked = $('#socialEducationReferred').is(':checked');
+
+                                                            if (isChecked == true) {
+                                                                $('#socialEducationReferredAttr').show();
+                                                            }
+
+                                                            $("#socialEducationReferred").on("click", function () {
+                                                                $('#socialEducationReferredAttr').toggle();
+                                                            });
+                                                        });
+                                                    </script>
+                                                    <label class="col-sm-12"><input class="px" id="socialHousingReferred" type="checkbox" name="support_referred[]" value="Housing" <?php
+                                                        if (in_array('Housing', $support_referred)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Housing</span></label>
+                                                    <div id="socialHousingReferredAttr" class="form-group col-sm-12">
+                                                        <div class="options_holder radio">
+                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Allocation of ‘Khas land’" <?php
+                                                                if (in_array('Allocation of ‘Khas land’', $support_referred)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Allocation of ‘Khas land’</span></label>
+                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Support for housing loan" <?php
+                                                                if (in_array('Support for housing loan', $support_referred)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Support for housing loan</span></label>
+                                                        </div>
+                                                    </div>
+                                                    <script>
+                                                        init.push(function () {
+                                                            $('#socialHousingReferredAttr').hide();
+
+                                                            var isChecked = $('#socialHousingReferred').is(':checked');
+
+                                                            if (isChecked == true) {
+                                                                $('#socialEducationReferredAttr').show();
+                                                            }
+
+                                                            $("#socialHousingReferred").on("click", function () {
+                                                                $('#socialHousingReferredAttr').toggle();
+                                                            });
+                                                        });
+                                                    </script>
+                                                    <label class="col-sm-12"><input class="px" id="socialLegalReferred" type="checkbox" name="support_referred[]" value="Legal Services" <?php
+                                                        if (in_array('Legal Services', $support_referred)) {
+                                                            echo 'checked';
+                                                        }
+                                                        ?>><span class="lbl">Legal Services</span></label>
+                                                    <div id="socialLegalReferredAttr" class="form-group col-sm-12">
+                                                        <div class="options_holder radio">
+                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Legal Aid" <?php
+                                                                if (in_array('Legal Aid"', $support_referred)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Legal Aid</span></label>
+                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Claiming Compensation" <?php
+                                                                if (in_array('Claiming Compensation', $support_referred)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Claiming Compensation</span></label>
+                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Assistance in resolving family dispute" <?php
+                                                                if (in_array('Assistance in resolving family dispute', $support_referred)) {
+                                                                    echo 'checked';
+                                                                }
+                                                                ?>><span class="lbl">Assistance in resolving family dispute</span></label>
+                                                        </div>
+                                                    </div>
+                                                    <script>
+                                                        init.push(function () {
+                                                            $('#socialLegalReferredAttr').hide();
+
+                                                            var isChecked = $('#socialLegalReferred').is(':checked');
+
+                                                            if (isChecked == true) {
+                                                                $('#socialLegalReferredAttr').show();
+                                                            }
+
+                                                            $("#socialLegalReferred").on("click", function () {
+                                                                $('#socialLegalReferredAttr').toggle();
+                                                            });
+                                                        });
+                                                    </script>
+                                                    <label class="col-sm-12"><input class="px col-sm-12" type="checkbox" id="supportreferred" <?php echo $pre_data['other_support_referred'] != NULL ? 'checked' : '' ?>><span class="lbl">Others</span></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12" id="TypesupportreferredType" style="display: none; margin-bottom: 1em;">
+                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_supportreferred" value="<?php echo $pre_data['other_support_referred'] ? $pre_data['other_support_referred'] : ''; ?>">
+                                        </div>
+                                        <script>
+                                            init.push(function () {
+                                                var isChecked = $('#supportreferred').is(':checked');
+
+                                                if (isChecked == true) {
+                                                    $('#TypesupportreferredType').show();
+                                                }
+
+                                                $("#supportreferred").on("click", function () {
+                                                    $('#TypesupportreferredType').toggle();
+                                                });
+                                            });
+                                        </script>
+                                    </fieldset>	
+                                </div>
                                 <div class="col-sm-12">
                                     <fieldset class="scheduler-border">
                                         <legend class="scheduler-border">Types of Social Reintegration Support</legend>
                                         <div class="col-sm-8">
                                             <div class="form-group">
                                                 <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
+                                                    <?php
+                                                    $reintegration_economic = $reintegration_economic ? $reintegration_economic : array($reintegration_economic);
+                                                    ?> 
                                                     <div class="options_holder radio">
                                                         <label class="col-sm-12"><input class="px" id="reintegrationEconomic" type="checkbox" name="reintegration_economic[]" value="Social Protection Schemes(Place to access to public services & Social Protection)" <?php
                                                             if (in_array('Social Protection Schemes(Place to access to public services & Social Protection)', $reintegration_economic)) {
@@ -2479,237 +2738,6 @@ doAction('render_start');
                                                 </script>
                                             </div>
                                         </div>
-                                    </fieldset>	
-                                </div>                                
-                                <?php
-                                $support_referred = $support_referred ? $support_referred : array($support_referred);
-                                ?> 
-                                <div class="col-sm-12">
-                                    <fieldset class="scheduler-border">
-                                        <legend class="scheduler-border">Types of Support Referred for</legend>
-                                        <div class="form-group ">
-                                            <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
-                                                <div class="options_holder radio">
-                                                    <label class="col-sm-12"><input class="px" id="reintegrationEconomicReferred" type="checkbox" name="support_referred[]" value="Social Protection Schemes(Place to access to public services & Social Protection)" <?php
-                                                        if (in_array('Social Protection Schemes(Place to access to public services & Social Protection)', $support_referred)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Social Protection Schemes(Place to access to public services & Social Protection)</span></label>
-                                                    <div id="reintegrationEconomicReferredAttr" class="form-group col-sm-12">
-                                                        <div class="options_holder radio">
-                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Union Parished" <?php
-                                                                if (in_array('Union Parished', $support_referred)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Union Parished</span></label>
-                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Upazila Parished" <?php
-                                                                if (in_array('Upazila Parished', $support_referred)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Upazila Parished</span></label>
-                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="District/Upazila Social Welfare office" <?php
-                                                                if (in_array('District/Upazila Social Welfare office', $support_referred)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">District/Upazila Social Welfare office</span></label>
-                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="District/Upazila Youth Development office" <?php
-                                                                if (in_array('District/Upazila Youth Development office', $support_referred)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">District/Upazila Youth Development office</span></label>
-                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="District/ Upazila Women Affairs Department" <?php
-                                                                if (in_array('District/ Upazila Women Affairs Department', $support_referred)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">District/ Upazila Women Affairs Department</span></label>
-                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Private/ NGO" <?php
-                                                                if (in_array('Private/ NGO', $support_referred)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Private/ NGO</span></label>
-                                                        </div>
-                                                    </div>
-                                                    <script>
-                                                        init.push(function () {
-                                                            $('#reintegrationEconomicReferredAttr').hide();
-
-                                                            var isChecked = $('#reintegrationEconomicReferred').is(':checked');
-
-                                                            if (isChecked == true) {
-                                                                $('#reintegrationEconomicReferredAttr').show();
-                                                            }
-
-                                                            $("#reintegrationEconomicReferred").on("click", function () {
-                                                                $('#reintegrationEconomicReferredAttr').toggle();
-                                                            });
-                                                        });
-                                                    </script>
-                                                    <label class="col-sm-12"><input class="px" id="socialMedicalSupportReferred" type="checkbox" name="support_referred[]" value="Medical Support" <?php
-                                                        if (in_array('Medical Support', $support_referred)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Medical Support</span></label>
-                                                    <div id="socialMedicalSupportReferredAttr" class="form-group col-sm-12">
-                                                        <div class="options_holder radio">
-                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Project" <?php
-                                                                if (in_array('Project', $support_referred)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Project</span></label>
-                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Government health facility" <?php
-                                                                if (in_array('Government health facility', $support_referred)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Government health facility</span></label>
-                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Private/ NGO operated health service centre" <?php
-                                                                if (in_array('Private/ NGO operated health service centre', $support_referred)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Private/ NGO operated health service centre</span></label>
-                                                        </div>
-                                                    </div>
-                                                    <script>
-                                                        init.push(function () {
-                                                            $('#socialMedicalSupportReferredAttr').hide();
-
-                                                            var isChecked = $('#socialMedicalSupportReferred').is(':checked');
-
-                                                            if (isChecked == true) {
-                                                                $('#socialMedicalSupportReferredAttr').show();
-                                                            }
-
-                                                            $("#socialMedicalSupportReferred").on("click", function () {
-                                                                $('#socialMedicalSupportReferredAttr').toggle();
-                                                            });
-                                                        });
-                                                    </script>
-                                                    <label class="col-sm-12"><input class="px" id="socialEducationReferred" type="checkbox" name="support_referred[]" value="Education" <?php
-                                                        if (in_array('Education', $support_referred)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Education</span></label>
-                                                    <div id="socialEducationReferredAttr" class="form-group col-sm-12">
-                                                        <div class="options_holder radio">
-                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Admission" <?php
-                                                                if (in_array('Admission', $support_referred)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Admission</span></label>
-                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Stipend/ Scholarship" <?php
-                                                                if (in_array('Stipend/ Scholarship', $support_referred)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Stipend/ Scholarship</span></label>
-                                                        </div>
-                                                    </div>
-                                                    <script>
-                                                        init.push(function () {
-                                                            $('#socialEducationReferredAttr').hide();
-
-                                                            var isChecked = $('#socialEducationReferred').is(':checked');
-
-                                                            if (isChecked == true) {
-                                                                $('#socialEducationReferredAttr').show();
-                                                            }
-
-                                                            $("#socialEducationReferred").on("click", function () {
-                                                                $('#socialEducationReferredAttr').toggle();
-                                                            });
-                                                        });
-                                                    </script>
-                                                    <label class="col-sm-12"><input class="px" id="socialHousingReferred" type="checkbox" name="support_referred[]" value="Housing" <?php
-                                                        if (in_array('Housing', $support_referred)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Housing</span></label>
-                                                    <div id="socialHousingReferredAttr" class="form-group col-sm-12">
-                                                        <div class="options_holder radio">
-                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Allocation of ‘Khas land’" <?php
-                                                                if (in_array('Allocation of ‘Khas land’', $support_referred)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Allocation of ‘Khas land’</span></label>
-                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Support for housing loan" <?php
-                                                                if (in_array('Support for housing loan', $support_referred)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Support for housing loan</span></label>
-                                                        </div>
-                                                    </div>
-                                                    <script>
-                                                        init.push(function () {
-                                                            $('#socialHousingReferredAttr').hide();
-
-                                                            var isChecked = $('#socialHousingReferred').is(':checked');
-
-                                                            if (isChecked == true) {
-                                                                $('#socialEducationReferredAttr').show();
-                                                            }
-
-                                                            $("#socialHousingReferred").on("click", function () {
-                                                                $('#socialHousingReferredAttr').toggle();
-                                                            });
-                                                        });
-                                                    </script>
-                                                    <label class="col-sm-12"><input class="px" id="socialLegalReferred" type="checkbox" name="support_referred[]" value="Legal Services" <?php
-                                                        if (in_array('Legal Services', $support_referred)) {
-                                                            echo 'checked';
-                                                        }
-                                                        ?>><span class="lbl">Legal Services</span></label>
-                                                    <div id="socialLegalReferredAttr" class="form-group col-sm-12">
-                                                        <div class="options_holder radio">
-                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Legal Aid" <?php
-                                                                if (in_array('Legal Aid"', $support_referred)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Legal Aid</span></label>
-                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Claiming Compensation" <?php
-                                                                if (in_array('Claiming Compensation', $support_referred)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Claiming Compensation</span></label>
-                                                            <label><input class="px" type="checkbox" name="support_referred[]" value="Assistance in resolving family dispute" <?php
-                                                                if (in_array('Assistance in resolving family dispute', $support_referred)) {
-                                                                    echo 'checked';
-                                                                }
-                                                                ?>><span class="lbl">Assistance in resolving family dispute</span></label>
-                                                        </div>
-                                                    </div>
-                                                    <script>
-                                                        init.push(function () {
-                                                            $('#socialLegalReferredAttr').hide();
-
-                                                            var isChecked = $('#socialLegalReferred').is(':checked');
-
-                                                            if (isChecked == true) {
-                                                                $('#socialLegalReferredAttr').show();
-                                                            }
-
-                                                            $("#socialLegalReferred").on("click", function () {
-                                                                $('#socialLegalReferredAttr').toggle();
-                                                            });
-                                                        });
-                                                    </script>
-                                                    <label class="col-sm-12"><input class="px col-sm-12" type="checkbox" id="supportreferred" <?php echo $pre_data['other_support_referred'] != NULL ? 'checked' : '' ?>><span class="lbl">Others</span></label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12" id="TypesupportreferredType" style="display: none; margin-bottom: 1em;">
-                                            <input class="form-control col-sm-12" placeholder="Please Specity" type="text" name="new_supportreferred" value="<?php echo $pre_data['other_support_referred'] ? $pre_data['other_support_referred'] : ''; ?>">
-                                        </div>
-                                        <script>
-                                            init.push(function () {
-                                                var isChecked = $('#supportreferred').is(':checked');
-
-                                                if (isChecked == true) {
-                                                    $('#TypesupportreferredType').show();
-                                                }
-
-                                                $("#supportreferred").on("click", function () {
-                                                    $('#TypesupportreferredType').toggle();
-                                                });
-                                            });
-                                        </script>
                                     </fieldset>	
                                 </div>
                             </div>

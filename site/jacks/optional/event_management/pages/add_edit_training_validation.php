@@ -1,5 +1,7 @@
 <?php
 global $devdb;
+
+$training_id = $_GET['training_id'] ? $_GET['training_id'] : null;
 $edit = $_GET['edit'] ? $_GET['edit'] : null;
 
 if (!checkPermission($edit, 'add_sharing_session', 'edit_sharing_session')) {
@@ -12,7 +14,7 @@ $pre_data = array();
 
 if ($edit) {
     $pre_data = $this->get_sharing_sessions(array('id' => $edit, 'single' => true));
-    
+
     if (!$pre_data) {
         add_notification('Invalid sharing session, no data found.', 'error');
         header('Location:' . build_url(NULL, array('action', 'edit')));
@@ -25,13 +27,14 @@ if ($_POST) {
         'required' => array(
         ),
     );
+    $data['training_id'] = $training_id;
     $data['form_data'] = $_POST;
     $data['edit'] = $edit;
 
     $ret = $this->add_edit_sharing_session($data);
 
     if ($ret) {
-        $msg = "Sharing Session has been " . ($edit ? 'updated.' : 'saved.');
+        $msg = "Training/Workshop Validation has been " . ($edit ? 'updated.' : 'saved.');
         add_notification($msg);
         $activityType = $edit ? 'update' : 'create';
         user_activity::add_activity($msg, 'success', $activityType);
@@ -57,15 +60,15 @@ ob_start();
     }
 </style>
 <div class="page-header">
-    <h1><?php echo $edit ? 'Update ' : 'New ' ?> Sharing Session </h1>
+    <h1><?php echo $edit ? 'Update ' : 'New ' ?> Training/Workshop Validation </h1>
     <div class="oh">
         <div class="btn-group btn-group-sm">
             <?php
             echo linkButtonGenerator(array(
-                'href' => $myUrl,
+                'href' => build_url(array('action' => 'manage_sharing_session', 'training_id' => $training_id)),
                 'action' => 'list',
-                'text' => 'All Sharing Sessions',
-                'title' => 'Manage Sharing Sessions',
+                'text' => 'All Training/Workshop Validations',
+                'title' => 'Manage Training/Workshop Validations',
                 'icon' => 'icon_list',
                 'size' => 'sm'
             ));
@@ -87,10 +90,6 @@ ob_start();
                             _datepicker('TrainingwDate');
                         });
                     </script>
-                </div>
-                <label class="control-label input-label">Training Name</label>
-                <div class="form-group">
-                    <input class="form-control" type="text" name="traning_name" value="<?php echo $pre_data['traning_name'] ?>">
                 </div>
                 <div class="form-group">
                     <label>Evaluator Profession</label>

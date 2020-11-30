@@ -46,25 +46,42 @@ if ($filter_entry_end_date)
 doAction('render_start');
 ?>
 <div class="page-header">
-    <h1>All Events</h1>
-    <div class="oh">
-        <div class="btn-group btn-group-sm">
-            <?php
-            echo linkButtonGenerator(array(
-                'href' => $myUrl . '?action=add_edit_event',
-                'action' => 'add',
-                'icon' => 'icon_add',
-                'text' => 'Add Event',
-                'title' => 'Add Event',
-            ));
-            ?>
+    <div class="row">
+        <div class="col-md-8">
+            <h1>All Events</h1>
+            <div class="oh">
+                <div class="btn-group btn-group-sm">
+                    <?php
+                    echo linkButtonGenerator(array(
+                        'href' => $myUrl . '?action=add_edit_event',
+                        'action' => 'add',
+                        'icon' => 'icon_add',
+                        'text' => 'Add Event',
+                        'title' => 'Add Event',
+                    ));
+                    ?>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-row">
+                <div class="stat-cell bg-warning">
+                    <span class="text-bg"><?php echo $events['total'] ?></span><br>
+                    <span class="text-sm">Stored in Database</span>
+                </div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-cell bg-warning padding-sm no-padding-t text-center">
+                    <div id="stats-sparklines-2" class="stats-sparklines" style="width: 100%"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 <?php
 ob_start();
 echo formProcessor::form_elements('name', 'name', array(
-    'width' => 3, 'type' => 'text', 'label' => 'Name',
+    'width' => 3, 'type' => 'text', 'label' => 'Event Name',
         ), $filter_name);
 ?>
 <div class="form-group col-sm-3">
@@ -98,7 +115,7 @@ echo formProcessor::form_elements('name', 'name', array(
     </div>
 </div>
 <div class="form-group col-sm-3">
-    <label>Entry Start Date</label>
+    <label>Start Date</label>
     <div class="input-group">
         <input id="startDate" type="text" class="form-control" name="entry_start_date" value="<?php echo $filter_entry_start_date ?>">
     </div>
@@ -109,7 +126,7 @@ echo formProcessor::form_elements('name', 'name', array(
     </script>
 </div>
 <div class="form-group col-sm-3">
-    <label>Entry End Date</label>
+    <label>End Date</label>
     <div class="input-group">
         <input id="endDate" type="text" class="form-control" name="entry_end_date" value="<?php echo $filter_entry_end_date ?>">
     </div>
@@ -158,7 +175,7 @@ filterForm($filterForm);
                     <td style="text-transform: capitalize"><?php echo $event['event_district']; ?></td>
                     <td style="text-transform: capitalize"><?php echo $event['event_upazila']; ?></td>
                     <td><?php echo $event['user_fullname']; ?></td>
-                    <td><?php echo 'Boy: '.$event['participant_boy'].'<br><hr/>Girl: '.$event['participant_girl'].'<br><hr/>Men: '.$event['participant_male'].'<br><hr/>Women: '.$event['participant_female'] ?></td>
+                    <td><?php echo 'Boy: ' . $event['participant_boy'] . '<br><hr/>Girl: ' . $event['participant_girl'] . '<br><hr/>Men: ' . $event['participant_male'] . '<br><hr/>Women: ' . $event['participant_female'] ?></td>
                     <td><?php echo $event['validation_count']; ?></td>
                     <td><?php echo $event['observation_score']; ?></td>
                     <td class="tar action_column">

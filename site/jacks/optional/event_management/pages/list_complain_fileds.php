@@ -37,18 +37,35 @@ $pagination = pagination($complain_fileds['total'], $per_page_items, $start);
 doAction('render_start');
 ?>
 <div class="page-header">
-    <h1>All Complain Files</h1>
-    <div class="oh">
-        <div class="btn-group btn-group-sm">
-            <?php
-            echo linkButtonGenerator(array(
-                'href' => $myUrl . '?action=add_edit_complain_filed',
-                'action' => 'add',
-                'icon' => 'icon_add',
-                'text' => 'New Complain File',
-                'title' => 'New Complain File',
-            ));
-            ?>
+    <div class="row">
+        <div class="col-md-8">
+            <h1>All Complain Files</h1>
+            <div class="oh">
+                <div class="btn-group btn-group-sm">
+                    <?php
+                    echo linkButtonGenerator(array(
+                        'href' => $myUrl . '?action=add_edit_complain_filed',
+                        'action' => 'add',
+                        'icon' => 'icon_add',
+                        'text' => 'New Complain File',
+                        'title' => 'New Complain File',
+                    ));
+                    ?>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-row">
+                <div class="stat-cell bg-warning">
+                    <span class="text-bg"><?php echo $complain_fileds['total'] ?></span><br>
+                    <span class="text-sm">Stored in Database</span>
+                </div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-cell bg-warning padding-sm no-padding-t text-center">
+                    <div id="stats-sparklines-2" class="stats-sparklines" style="width: 100%"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -76,24 +93,26 @@ ob_start();
         </select>
     </div>
 </div>
-<div class="form-group col-sm-4">
+<div class="form-group col-sm-2">
+    <label>Division</label>
+    <div class="select2-primary">
+        <select class="form-control" id="filter_division" name="division" data-selected="<?php echo $filter_division ?>"></select>
+    </div>
+</div>
+<div class="form-group col-sm-2">
+    <label>District</label>
+    <div class="select2-success">
+        <select class="form-control" id="filter_district" name="district" data-selected="<?php echo $filter_district; ?>"></select>
+    </div>
+</div>
+<div class="form-group col-sm-2">
     <label>Upazila</label>
-    <div class="form-group">
-        <select class="form-control" name="upazila">
-            <option value="">Select One</option>
-            <option value="Jashore Sadar" <?php echo $filter_upazila && $filter_upazila == 'Jashore Sadar' ? 'selected' : '' ?>>Jashore Sadar</option>
-            <option value="Jhikargacha" <?php echo $filter_upazila && $filter_upazila == 'Jhikargacha' ? 'selected' : '' ?>>Jhikargacha</option>
-            <option value="Sharsha" <?php echo $filter_upazila && $filter_upazila == 'Sharsha' ? 'selected' : '' ?>>Sharsha</option>
-            <option value="Chougachha" <?php echo $filter_upazila && $filter_upazila == 'Chougachha' ? 'selected' : '' ?>>Chougachha</option>
-            <option value="Manirampur" <?php echo $filter_upazila && $filter_upazila == 'Manirampur' ? 'selected' : '' ?>>Manirampur</option>
-            <option value="Bagherpara" <?php echo $filter_upazila && $filter_upazila == 'Bagherpara' ? 'selected' : '' ?>>Bagherpara</option>
-            <option value="Keshabpur" <?php echo $filter_upazila && $filter_upazila == 'Keshabpur' ? 'selected' : '' ?>>Keshabpur</option>
-            <option value="Abhaynagar" <?php echo $filter_upazila && $filter_upazila == 'Abhaynagar' ? 'selected' : '' ?>>Abhaynagar</option>
-        </select>
+    <div class="select2-success">
+        <select class="form-control" id="filter_sub_district" name="sub_district" data-selected="<?php echo $filter_sub_district; ?>"></select>
     </div>
 </div>
 <div class="form-group col-sm-4">
-    <label>Entry Start Date</label>
+    <label>Start Date</label>
     <div class="input-group">
         <input id="startDate" type="text" class="form-control" name="entry_start_date" value="<?php echo $filter_entry_start_date ?>">
     </div>
@@ -104,7 +123,7 @@ ob_start();
     </script>
 </div>
 <div class="form-group col-sm-4">
-    <label>Entry End Date</label>
+    <label>End Date</label>
     <div class="input-group">
         <input id="endDate" type="text" class="form-control" name="entry_end_date" value="<?php echo $filter_entry_end_date ?>">
     </div>

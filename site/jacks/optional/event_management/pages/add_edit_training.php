@@ -57,15 +57,15 @@ ob_start();
     }
 </style>
 <div class="page-header">
-    <h1><?php echo $edit ? 'Update ' : 'New ' ?> Training </h1>
+    <h1><?php echo $edit ? 'Update ' : 'New ' ?> Training/Workshop</h1>
     <div class="oh">
         <div class="btn-group btn-group-sm">
             <?php
             echo linkButtonGenerator(array(
                 'href' => $myUrl,
                 'action' => 'list',
-                'text' => 'All Trainings',
-                'title' => 'Manage Trainings',
+                'text' => 'All Training/Workshop',
+                'title' => 'Manage Training/Workshop',
                 'icon' => 'icon_list',
                 'size' => 'sm'
             ));

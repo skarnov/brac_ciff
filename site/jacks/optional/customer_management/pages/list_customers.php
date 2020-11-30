@@ -197,10 +197,10 @@ ob_start();
 ?>
 <?php
 echo formProcessor::form_elements('id', 'id', array(
-    'width' => 2, 'type' => 'text', 'label' => 'ID',
+    'width' => 2, 'type' => 'text', 'label' => 'Participant ID',
         ), $filter_id);
 echo formProcessor::form_elements('name', 'name', array(
-    'width' => 2, 'type' => 'text', 'label' => 'Name',
+    'width' => 2, 'type' => 'text', 'label' => 'Participant Name',
         ), $filter_name);
 echo formProcessor::form_elements('nid', 'nid', array(
     'width' => 2, 'type' => 'text', 'label' => 'NID',
@@ -224,15 +224,9 @@ $result = array_combine($all_countries, $all_countries);
     </div>
 </div>
 <div class="form-group col-sm-2">
-    <label>Sub-District</label>
+    <label>Upazila</label>
     <div class="select2-success">
         <select class="form-control" id="filter_sub_district" name="sub_district" data-selected="<?php echo $filter_sub_district; ?>"></select>
-    </div>
-</div>
-<div class="form-group col-sm-2">
-    <label>Police Station</label>
-    <div class="select2-info">
-        <select class="form-control" id="filter_police_station" name="ps" data-selected="<?php echo $filter_ps; ?>"></select>
     </div>
 </div>
 <div class="form-group col-sm-2">
@@ -242,7 +236,7 @@ $result = array_combine($all_countries, $all_countries);
     </div>
 </div>
 <div class="form-group col-sm-2">
-    <label>Entry Start Date</label>
+    <label>Start Date</label>
     <div class="input-group">
         <input id="startDate" type="text" class="form-control" name="entry_start_date" value="<?php echo $filter_entry_start_date ?>">
     </div>
@@ -253,7 +247,7 @@ $result = array_combine($all_countries, $all_countries);
     </script>
 </div>
 <div class="form-group col-sm-2">
-    <label>Entry End Date</label>
+    <label>End Date</label>
     <div class="input-group">
         <input id="endDate" type="text" class="form-control" name="entry_end_date" value="<?php echo $filter_entry_end_date ?>">
     </div>

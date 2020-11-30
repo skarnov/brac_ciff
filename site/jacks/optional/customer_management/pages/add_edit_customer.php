@@ -469,7 +469,7 @@ ob_start();
                                                                                 </div>-->
                                 </div>
                                 <div class="col-sm-12">  
-                                    <label class="control-label input-label">Address (*)</label>
+                                    <label class="control-label input-label">Present Address (*)</label>
                                     <div class="form-group">
                                         <textarea type="text" class="form-control" name="permanent_house" /><?php echo $pre_data['permanent_house'] ? $pre_data['permanent_house'] : ''; ?></textarea>
                                     </div>
@@ -972,11 +972,11 @@ ob_start();
                                 <input type="text" class="form-control" name="present_occupation" value="<?php echo $pre_data['present_occupation'] ? $pre_data['present_occupation'] : ''; ?>" />
                             </div>
                             <div class="form-group">
-                                <label>Monthly income of returnee after return(in BDT) (*)</label>
+                                <label>Monthly income of Survivor after return(in BDT) (*)</label>
                                 <input type="number" class="form-control" name="present_income" value="<?php echo $pre_data['present_income'] ? $pre_data['present_income'] : ''; ?>" />
                             </div>
                             <div class="form-group">
-                                <label>Source of income (after monthly income of returnee after return(in BDT)</label>
+                                <label>Source of income (Last month in BDT)</label>
                                 <input type="text" class="form-control" name="returnee_income_source" value="<?php echo $pre_data['returnee_income_source'] ? $pre_data['returnee_income_source'] : ''; ?>" />
                             </div>
                             <div class="form-group">
