@@ -12,8 +12,6 @@ $args = array(
         'permanent_division' => 'dev_customers.permanent_division',
         'permanent_district' => 'dev_customers.permanent_district',
         'permanent_sub_district' => 'dev_customers.permanent_sub_district',
-        'permanent_police_station' => 'dev_customers.permanent_police_station',
-        'permanent_post_office' => 'dev_customers.permanent_post_office',
         'customer_status' => 'dev_customers.customer_status',
     ),
     'listing' => TRUE,
