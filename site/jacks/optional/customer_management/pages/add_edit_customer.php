@@ -1136,7 +1136,7 @@ ob_start();
                                 <div class="form-group ">
                                     <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                         <div class="options_holder radio">
-                                            <label class="col-sm-12"><input class="px" id="vocationalSkill" type="checkbox" name="technical_have_skills[]" <?php echo $pre_data && $pre_data['vocational_skill'] != NULL ? 'checked' : '' ?>><span class="lbl">Vocational</span></label>
+                                            <label class="col-sm-12"><input class="px" id="vocationalSkill" type="checkbox" name="technical_have_skills[]" <?php echo $pre_data && $pre_data['vocational_skill'] != NULL ? 'checked' : '' ?> value="Vocational"><span class="lbl">Vocational</span></label>
                                             <div id="vocationalSkillAttr" class="form-group col-sm-9">
                                                 <input type="text" class="form-control" placeholder="Specify....." name="new_vocational" value="<?php echo $pre_data['vocational_skill'] ? $pre_data['vocational_skill'] : ''; ?>" />
                                             </div>
@@ -1154,7 +1154,7 @@ ob_start();
                                                     });
                                                 });
                                             </script>
-                                            <label class="col-sm-12"><input class="px" id="handicraftSkill" type="checkbox" name="technical_have_skills[]" <?php echo $pre_data && $pre_data['handicraft_skill'] != NULL ? 'checked' : '' ?>><span class="lbl">Handicrafts</span></label>
+                                            <label class="col-sm-12"><input class="px" id="handicraftSkill" type="checkbox" name="technical_have_skills[]" <?php echo $pre_data && $pre_data['handicraft_skill'] != NULL ? 'checked' : '' ?> value="Handicrafts"><span class="lbl">Handicrafts</span></label>
                                             <div id="handicraftSkillAttr" class="form-group col-sm-9">
                                                 <input type="text" class="form-control" placeholder="Specify....." name="new_handicrafts" value="<?php echo $pre_data['handicraft_skill'] ? $pre_data['handicraft_skill'] : ''; ?>" />
                                             </div>
@@ -1172,38 +1172,38 @@ ob_start();
                                                     });
                                                 });
                                             </script>
-                                            <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" value="beauty_parlour" <?php
-                                                if (in_array('beauty_parlour', $have_skills)) {
+                                            <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" value="Beauty Parlour" <?php
+                                                if (in_array('Beauty Parlour', $have_skills)) {
                                                     echo 'checked';
                                                 }
                                                 ?>><span class="lbl">Beauty Parlour</span></label>
-                                            <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" value="tailor_work" <?php
-                                                if (in_array('tailor_work', $have_skills)) {
+                                            <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" value="Tailor Work" <?php
+                                                if (in_array('Tailor Work', $have_skills)) {
                                                     echo 'checked';
                                                 }
                                                 ?>><span class="lbl">Tailor Work</span></label>
-                                            <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" value="block_batiks" <?php
-                                                if (in_array('block_batiks', $have_skills)) {
+                                            <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" value="Block batik's" <?php
+                                                if (in_array("Block batik's", $have_skills)) {
                                                     echo 'checked';
                                                 }
                                                 ?>><span class="lbl">Block batik's</span></label>
-                                            <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" value="cultivation" <?php
-                                                if (in_array('cultivation', $have_skills)) {
+                                            <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" value="Cultivating bees/crab fattening" <?php
+                                                if (in_array('Cultivating bees/crab fattening', $have_skills)) {
                                                     echo 'checked';
                                                 }
                                                 ?>><span class="lbl">Cultivating bees/crab fattening</span></label>
-                                            <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" value="livestock" <?php
-                                                if (in_array('livestock', $have_skills)) {
+                                            <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" value="Livestock Rearing" <?php
+                                                if (in_array('Livestock Rearing', $have_skills)) {
                                                     echo 'checked';
                                                 }
                                                 ?>><span class="lbl">Livestock Rearing</span></label>
-                                            <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" value="poultry" <?php
-                                                if (in_array('poultry', $have_skills)) {
+                                            <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" value="Poultry Rearing" <?php
+                                                if (in_array('Poultry Rearing', $have_skills)) {
                                                     echo 'checked';
                                                 }
                                                 ?>><span class="lbl">Poultry Rearing</span></label>
-                                            <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" value="cooking" <?php
-                                                if (in_array('cooking', $have_skills)) {
+                                            <label class="col-sm-12"><input class="px" type="checkbox" name="technical_have_skills[]" value="Cooking" <?php
+                                                if (in_array('Cooking', $have_skills)) {
                                                     echo 'checked';
                                                 }
                                                 ?>><span class="lbl">Cooking</span></label>
@@ -1297,42 +1297,42 @@ ob_start();
                             $disease_types = $disease_types ? $disease_types : array($disease_types);
                             ?>
                             <fieldset class="scheduler-border ChronicDisease" style="display: none; margin-bottom: 1em;">
-                                <legend class="scheduler-border">Type of  Disease</legend>
+                                <legend class="scheduler-border">Type of Disease</legend>
                                 <div class="form-group ">
                                     <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                         <div class="options_holder radio">
-                                            <label><input class="px" type="checkbox" name="disease_type[]" value="cancer" <?php
-                                                if (in_array('cancer', $disease_types)) {
+                                            <label><input class="px" type="checkbox" name="disease_type[]" value="Cancer" <?php
+                                                if (in_array('Cancer', $disease_types)) {
                                                     echo 'checked';
                                                 }
                                                 ?>><span class="lbl">Cancer</span></label>
-                                            <label><input class="px" type="checkbox" name="disease_type[]" value="diabetes" <?php
-                                                if (in_array('diabetes', $disease_types)) {
+                                            <label><input class="px" type="checkbox" name="disease_type[]" value="Diabetes" <?php
+                                                if (in_array('Diabetes', $disease_types)) {
                                                     echo 'checked';
                                                 }
                                                 ?>><span class="lbl">Diabetes</span></label>
-                                            <label><input class="px" type="checkbox" name="disease_type[]" value="arthritis" <?php
-                                                if (in_array('arthritis', $disease_types)) {
+                                            <label><input class="px" type="checkbox" name="disease_type[]" value="Arthritis" <?php
+                                                if (in_array('Arthritis', $disease_types)) {
                                                     echo 'checked';
                                                 }
                                                 ?>><span class="lbl">Arthritis</span></label>
-                                            <label><input class="px" type="checkbox" name="disease_type[]" value="asthmatic" <?php
-                                                if (in_array('asthmatic', $disease_types)) {
+                                            <label><input class="px" type="checkbox" name="disease_type[]" value="Asthmatic" <?php
+                                                if (in_array('Asthmatic', $disease_types)) {
                                                     echo 'checked';
                                                 }
                                                 ?>><span class="lbl">Asthmatic</span></label>
-                                            <label><input class="px" type="checkbox" name="disease_type[]" value="kidney_disease" <?php
-                                                if (in_array('kidney_disease', $disease_types)) {
+                                            <label><input class="px" type="checkbox" name="disease_type[]" value="Kidney Disease" <?php
+                                                if (in_array('Kidney Disease', $disease_types)) {
                                                     echo 'checked';
                                                 }
                                                 ?>><span class="lbl">Kidney Disease</span></label>
-                                            <label><input class="px" type="checkbox" name="disease_type[]" value="heart_diseases" <?php
-                                                if (in_array('heart_diseases', $disease_types)) {
+                                            <label><input class="px" type="checkbox" name="disease_type[]" value="Heart Diseases" <?php
+                                                if (in_array('Heart Diseases', $disease_types)) {
                                                     echo 'checked';
                                                 }
                                                 ?>><span class="lbl">Heart Diseases</span></label>
-                                            <label><input class="px" type="checkbox" name="disease_type[]" value="bronchitis" <?php
-                                                if (in_array('bronchitis', $disease_types)) {
+                                            <label><input class="px" type="checkbox" name="disease_type[]" value="Bronchitis" <?php
+                                                if (in_array('Bronchitis', $disease_types)) {
                                                     echo 'checked';
                                                 }
                                                 ?>><span class="lbl">Bronchitis</span></label>
