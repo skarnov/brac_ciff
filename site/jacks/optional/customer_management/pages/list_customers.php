@@ -9,7 +9,7 @@ $filter_passport = $_GET['passport'] ? $_GET['passport'] : null;
 $filter_division = $_GET['division'] ? $_GET['division'] : null;
 $filter_district = $_GET['district'] ? $_GET['district'] : null;
 $filter_sub_district = $_GET['sub_district'] ? $_GET['sub_district'] : null;
-$filter_ps = $_GET['ps'] ? $_GET['ps'] : null;
+$filter_union = $_GET['union'] ? $_GET['union'] : null;
 $filter_entry_start_date = $_GET['entry_start_date'] ? $_GET['entry_start_date'] : null;
 $filter_entry_end_date = $_GET['entry_end_date'] ? $_GET['entry_end_date'] : null;
 $branch_id = $_config['user']['user_branch'] ? $_config['user']['user_branch'] : null;
@@ -22,11 +22,10 @@ $args = array(
         'full_name' => 'dev_customers.full_name',
         'customer_mobile' => 'dev_customers.customer_mobile',
         'passport_number' => 'dev_customers.passport_number',
-        'present_division' => 'dev_customers.permanent_division',
-        'present_district' => 'dev_customers.permanent_district',
-        'present_sub_district' => 'dev_customers.permanent_sub_district',
-        'present_police_station' => 'dev_customers.permanent_police_station',
-        'present_post_office' => 'dev_customers.permanent_post_office',
+        'permanent_division' => 'dev_customers.permanent_division',
+        'permanent_district' => 'dev_customers.permanent_district',
+        'permanent_sub_district' => 'dev_customers.permanent_sub_district',
+        'permanent_union' => 'dev_customers.permanent_union',
         'customer_status' => 'dev_customers.customer_status'
     ),
     'id' => $filter_id,
@@ -36,7 +35,7 @@ $args = array(
     'division' => $filter_division,
     'district' => $filter_district,
     'sub_district' => $filter_sub_district,
-    'ps' => $filter_ps,
+    'union' => $filter_union,
     'limit' => array(
         'start' => $start * $per_page_items,
         'count' => $per_page_items
@@ -59,6 +58,31 @@ if ($filter_entry_start_date && $filter_entry_start_date) {
 $customers = $this->get_customers($args);
 $pagination = pagination($customers['total'], $per_page_items, $start);
 
+$divisions = get_division();
+
+if (isset($_POST['division_id'])) {
+    $districts = get_district($_POST['division_id']);
+    echo "<option value=''>Select One</option>";
+    foreach ($districts as $district) :
+        echo "<option id='" . $district['id'] . "' value='" . strtolower($district['name']) . "' >" . $district['name'] . "</option>";
+    endforeach;
+    exit;
+} else if (isset($_POST['district_id'])) {
+    $subdistricts = get_subdistrict($_POST['district_id']);
+    echo "<option value=''>Select One</option>";
+    foreach ($subdistricts as $subdistrict) :
+        echo "<option id='" . $subdistrict['id'] . "' value='" . strtolower($subdistrict['name']) . "'>" . $subdistrict['name'] . "</option>";
+    endforeach;
+    exit;
+} else if (isset($_POST['subdistrict_id'])) {
+    $unions = get_union($_POST['subdistrict_id']);
+    echo "<option value=''>Select One</option>";
+    foreach ($unions as $union) :
+        echo "<option id='" . $union['id'] . "' value='" . strtolower($union['name']) . "'>" . $union['name'] . "</option>";
+    endforeach;
+    exit;
+}
+
 $filterString = array();
 if ($filter_id)
     $filterString[] = 'ID: ' . $filter_id;
@@ -73,9 +97,9 @@ if ($filter_division)
 if ($filter_district)
     $filterString[] = 'District: ' . $filter_district;
 if ($filter_sub_district)
-    $filterString[] = 'Sub-District: ' . $filter_sub_district;
-if ($filter_ps)
-    $filterString[] = 'Police Station: ' . $filter_ps;
+    $filterString[] = 'Upazila: ' . $filter_sub_district;
+if ($filter_union)
+    $filterString[] = 'Union: ' . $filter_union;
 if ($filter_entry_start_date)
     $filterString[] = 'Start Date: ' . $filter_entry_start_date;
 if ($filter_entry_end_date)
@@ -208,34 +232,53 @@ echo formProcessor::form_elements('nid', 'nid', array(
 echo formProcessor::form_elements('passport', 'passport', array(
     'width' => 2, 'type' => 'text', 'label' => 'Passport',
         ), $filter_passport);
-$all_countries = getWorldCountry();
-$result = array_combine($all_countries, $all_countries);
 ?>
 <div class="form-group col-sm-2">
     <label>Division</label>
     <div class="select2-primary">
-        <select class="form-control" id="filter_division" name="division" data-selected="<?php echo $filter_division ?>"></select>
+        <select class="form-control division" name="division">
+            <?php if ($filter_division) : ?>
+                <option value="<?php echo $filter_division ?>"><?php echo $filter_division ?></option>
+            <?php else: ?>
+                <option>Select One</option>
+            <?php endif ?>
+            <?php foreach ($divisions as $division) : ?>
+                <option id="<?php echo $division['id'] ?>" value="<?php echo strtolower($division['name']) ?>"><?php echo $division['name'] ?></option>
+            <?php endforeach ?>
+        </select>
     </div>
 </div>
 <div class="form-group col-sm-2">
     <label>District</label>
-    <div class="select2-success">
-        <select class="form-control" id="filter_district" name="district" data-selected="<?php echo $filter_district; ?>"></select>
+    <div class="select2-primary">
+        <select class="form-control district" name="district" id="districtList">
+            <?php if ($filter_district) : ?>
+                <option value="<?php echo $filter_district ?>"><?php echo $filter_district ?></option>
+            <?php endif ?>
+        </select>
     </div>
 </div>
 <div class="form-group col-sm-2">
     <label>Upazila</label>
-    <div class="select2-success">
-        <select class="form-control" id="filter_sub_district" name="sub_district" data-selected="<?php echo $filter_sub_district; ?>"></select>
+    <div class="select2-primary">
+        <select class="form-control subdistrict" name="sub_district" id="subdistrictList">
+            <?php if ($filter_sub_district) : ?>
+                <option value="<?php echo $filter_sub_district ?>"><?php echo $filter_sub_district ?></option>
+            <?php endif ?>
+        </select>
     </div>
 </div>
 <div class="form-group col-sm-2">
     <label>Union</label>
-    <div class="select2-info">
-        <select class="form-control" id="filter_union"></select>
+    <div class="select2-primary">
+        <select class="form-control union" name="union" id="unionList">
+            <?php if ($filter_union) : ?>
+                <option value="<?php echo $filter_union ?>"><?php echo $filter_union ?></option>
+            <?php endif ?>
+        </select>
     </div>
 </div>
-<div class="form-group col-sm-2">
+<div class="form-group col-sm-3">
     <label>Start Date</label>
     <div class="input-group">
         <input id="startDate" type="text" class="form-control" name="entry_start_date" value="<?php echo $filter_entry_start_date ?>">
@@ -246,7 +289,7 @@ $result = array_combine($all_countries, $all_countries);
         });
     </script>
 </div>
-<div class="form-group col-sm-2">
+<div class="form-group col-sm-3">
     <label>End Date</label>
     <div class="input-group">
         <input id="endDate" type="text" class="form-control" name="entry_end_date" value="<?php echo $filter_entry_end_date ?>">
@@ -291,16 +334,20 @@ filterForm($filterForm);
                     <td><?php echo $customer['full_name']; ?></td>
                     <td><?php echo $customer['customer_mobile']; ?></td>
                     <td><?php echo $customer['passport_number']; ?></td>
-                    <td><?php echo '<b>Division - </b>' . $customer['permanent_division'] . ',<br><b>District - </b>' . $customer['permanent_district'] . ',<br><b>Sub-District - </b>' . $customer['permanent_sub_district'] . ',<br><b>Police Station - </b>' . $customer['permanent_police_station'] . ',<br><b>Post Office - </b>' . $customer['permanent_post_office'] ?></td>
+                    <td style="text-transform: capitalize"><?php echo '<b>Division - </b>' . $customer['permanent_division'] . ',<br><b>District - </b>' . $customer['permanent_district'] . ',<br><b>Upazila - </b>' . $customer['permanent_sub_district'] . ',<br><b>Union - </b>' . $customer['permanent_union'] ?></td>
                     <td style="text-transform: capitalize"><?php echo $customer['customer_status']; ?></td>
                     <td>
                         <?php if (has_permission('edit_customer')): ?>
-                            <div class="btn-group">
-                                <a href="<?php echo url('admin/dev_customer_management/manage_customers?action=add_edit_customer&edit=' . $customer['pk_customer_id']) ?>" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i> Edit</a>
-                                <a href="<?php echo url('admin/dev_customer_management/manage_customers?action=add_edit_evaluate&edit=' . $customer['pk_customer_id']) ?>" class="btn btn-warning">Evaluate</a>
-                                <a href="<?php echo url('admin/dev_customer_management/manage_cases?action=add_edit_case&edit=' . $customer['pk_customer_id']) ?>" class="btn btn-info">Case Management</a>
-                                <a href="<?php echo url('admin/dev_customer_management/manage_customers?action=list_satisfaction_scale&id=' . $customer['pk_customer_id']) ?>" class="btn btn-dark-gray">Reintegration Assistance Satisfaction Scale</a>
-                            </div>                                
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-dark-gray dropdown-toggle" data-toggle="dropdown"><i class="btn-label fa fa-cogs"></i> Options&nbsp;<i class="fa fa-caret-down"></i></button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="<?php echo url('admin/dev_customer_management/manage_customers?action=add_edit_customer&edit=' . $customer['pk_customer_id']) ?>">Edit</a></li>
+                                    <li><a href="<?php echo url('admin/dev_customer_management/manage_customers?action=add_edit_evaluate&edit=' . $customer['pk_customer_id']) ?>">Evaluate</a></li>
+                                    <li><a href="<?php echo url('admin/dev_customer_management/manage_cases?action=add_edit_case&edit=' . $customer['pk_customer_id']) ?>">Case Management</a></li>
+                                    <li><a href="<?php echo url('admin/dev_customer_management/manage_customers?action=list_satisfaction_scale&id=' . $customer['pk_customer_id']) ?>">Reintegration Assistance<br/> Satisfaction Scale</a></li>
+                                    <li><a href="<?php echo url('admin/dev_customer_management/manage_customers?action=download_pdf&id=' . $customer['pk_customer_id']) ?>">Download PDF</a></li>
+                                </ul>
+                            </div>                         
                         <?php endif ?>
                         <?php if (has_permission('delete_customer')): ?>
                             <div class="btn-group btn-group-sm">
@@ -329,15 +376,36 @@ filterForm($filterForm);
     </div>
 </div>
 <script type="text/javascript">
-    var BD_LOCATIONS = <?php echo getBDLocationJson(); ?>;
     init.push(function () {
-        new bd_new_location_selector({
-            'division': $('#filter_division'),
-            'district': $('#filter_district'),
-            'sub_district': $('#filter_sub_district'),
-            'police_station': $('#filter_police_station'),
-            'post_office': $('#filter_post_office'),
-            'union': $('#filter_union'),
+        $('.division').change(function () {
+            var divisionId = $(this).find('option:selected').attr('id');
+            $.ajax({
+                type: 'POST',
+                data: {division_id: divisionId},
+                success: function (result) {
+                    $('#districtList').html(result);
+                }}
+            );
+        });
+        $('.district').change(function () {
+            var districtId = $(this).find('option:selected').attr('id');
+            $.ajax({
+                type: 'POST',
+                data: {district_id: districtId},
+                success: function (result) {
+                    $('#subdistrictList').html(result);
+                }}
+            );
+        });
+        $('.subdistrict').change(function () {
+            var subdistrictId = $(this).find('option:selected').attr('id');
+            $.ajax({
+                type: 'POST',
+                data: {subdistrict_id: subdistrictId},
+                success: function (result) {
+                    $('#unionList').html(result);
+                }}
+            );
         });
     });
 </script>

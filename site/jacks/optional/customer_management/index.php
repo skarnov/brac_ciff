@@ -95,6 +95,8 @@ class dev_customer_management {
             include('pages/add_edit_satisfaction_scale.php');
         elseif ($_GET['action'] == 'list_satisfaction_scale')
             include('pages/list_satisfaction_scale.php');
+        elseif ($_GET['action'] == 'download_pdf')
+            include('pages/download_pdf.php');
         elseif ($_GET['action'] == 'deleteProfile')
             include('pages/deleteProfile.php');
         elseif ($_GET['action'] == 'deleteMigration')
@@ -174,9 +176,8 @@ class dev_customer_management {
             'division' => 'dev_customers.permanent_division',
             'district' => 'dev_customers.permanent_district',
             'sub_district' => 'dev_customers.permanent_sub_district',
-            'ps' => 'dev_customers.permanent_police_station',
+            'union' => 'dev_customers.permanent_union',
             'entry_date' => 'dev_customers.create_date',
-            'customer_type' => 'dev_customers.customer_type',
             'customer_status' => 'dev_customers.customer_status',
             'branch_id' => 'dev_customers.fk_branch_id',
         );

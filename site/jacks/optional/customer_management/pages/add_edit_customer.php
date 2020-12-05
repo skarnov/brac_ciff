@@ -8,7 +8,30 @@ if (!checkPermission($edit, 'add_customer', 'edit_customer')) {
     exit();
 }
 
-$all_division = get_division();
+$divisions = get_division();
+
+if (isset($_POST['division_id'])) {
+    $districts = get_district($_POST['division_id']);
+    echo "<option value=''>Select One</option>";
+    foreach ($districts as $district) :
+        echo "<option id='" . $district['id'] . "' value='" . strtolower($district['name']) . "' >" . $district['name'] . "</option>";
+    endforeach;
+    exit;
+} else if (isset($_POST['district_id'])) {
+    $subdistricts = get_subdistrict($_POST['district_id']);
+    echo "<option value=''>Select One</option>";
+    foreach ($subdistricts as $subdistrict) :
+        echo "<option id='" . $subdistrict['id'] . "' value='" . strtolower($subdistrict['name']) . "'>" . $subdistrict['name'] . "</option>";
+    endforeach;
+    exit;
+} else if (isset($_POST['subdistrict_id'])) {
+    $unions = get_union($_POST['subdistrict_id']);
+    echo "<option value=''>Select One</option>";
+    foreach ($unions as $union) :
+        echo "<option id='" . $union['id'] . "' value='" . strtolower($union['name']) . "'>" . $union['name'] . "</option>";
+    endforeach;
+    exit;
+}
 
 $pre_data = array();
 
@@ -395,7 +418,54 @@ ob_start();
                             </script>
                             <fieldset class="scheduler-border">
                                 <legend class="scheduler-border">Address Information</legend>
-                                <div class="col-sm-6">   
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="control-label input-label">Division</label>
+                                        <div class="select2-primary">
+                                            <select class="form-control division" name="permanent_division" style="text-transform: capitalize">
+                                                <?php if ($pre_data['permanent_division']) : ?>
+                                                    <option value="<?php echo strtolower($pre_data['permanent_division']) ?>"><?php echo $pre_data['permanent_division'] ?></option>
+                                                <?php else: ?>
+                                                    <option>Select One</option>
+                                                <?php endif ?>
+                                                <?php foreach ($divisions as $division) : ?>
+                                                    <option id="<?php echo $division['id'] ?>" value="<?php echo strtolower($division['name']) ?>" <?php echo $pre_data && $pre_data['permanent_division'] == $division['name'] ? 'selected' : '' ?>><?php echo $division['name'] ?></option>
+                                                <?php endforeach ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label input-label">District</label>
+                                        <div class="select2-primary">
+                                            <select class="form-control district" name="permanent_district" style="text-transform: capitalize" id="districtList">
+                                                <?php if ($pre_data['permanent_district']) : ?>
+                                                    <option value="<?php echo $pre_data['permanent_district'] ?>"><?php echo $pre_data['permanent_district'] ?></option>
+                                                <?php endif ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label input-label">Upazila</label>
+                                        <div class="select2-primary">
+                                            <select class="form-control subdistrict" name="permanent_sub_district" style="text-transform: capitalize" id="subdistrictList">
+                                                <?php if ($pre_data['permanent_sub_district']) : ?>
+                                                    <option value="<?php echo $pre_data['permanent_sub_district'] ?>"><?php echo $pre_data['permanent_sub_district'] ?></option>
+                                                <?php endif ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label input-label">Union</label>
+                                        <div class="select2-primary">
+                                            <select class="form-control union" name="permanent_union" style="text-transform: capitalize" id="unionList">
+                                                <?php if ($pre_data['permanent_union']) : ?>
+                                                    <option value="<?php echo $pre_data['permanent_union'] ?>"><?php echo $pre_data['permanent_union'] ?></option>
+                                                <?php endif ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
                                     <label class="control-label input-label">Village</label>
                                     <div class="form-group">
                                         <input class="form-control" type="text" name="permanent_village" value="<?php echo $pre_data['permanent_village'] ? $pre_data['permanent_village'] : ''; ?>">
@@ -404,69 +474,6 @@ ob_start();
                                     <div class="form-group">
                                         <input class="form-control" type="number" name="permanent_ward" value="<?php echo $pre_data['permanent_ward'] ? $pre_data['permanent_ward'] : ''; ?>">
                                     </div>
-
-
-<!--                                    <div class="form-group">
-                                        <label class="control-label input-label">Division (*)</label>
-                                        <select class="form-control" onchange="findDistrict(this.value)" name="permanent_division">
-                                            <option value="">Select One</option>
-                                            <?php foreach ($all_division as $division) { ?>
-                                                <option value="<?php echo $division['name'] ?>" <?php echo $pre_data && $pre_data['permanent_sub_district'] == $division['name'] ? 'selected' : '' ?>><?php echo $division['name'] ?></option>
-                                            <?php } ?>
-                                        </select>
-                                    </div>
-
-                                    <script>
-                                    
-                                    function findDistrict(divisionId){
-                                        alert(divisionId);
-                                    }
-                                    
-                                    </script>-->
-                                    
-                                    
-
-
-
-                                    <!--                                            <div class="form-group">
-                                                                                    <label>Division (*)</label>
-                                                                                    <div class="select2-primary">
-                                                                                        <select class="form-control" id="permanent_division" name="permanent_division" data-selected="<?php echo $pre_data['permanent_division'] ? $pre_data['permanent_division'] : '' ?>"></select>
-                                                                                    </div>
-                                                                                </div>-->
-                                </div>
-                                <div class="col-sm-6">
-                                    <label class="control-label input-label">Union/Pourashava</label>
-                                    <div class="form-group">
-                                        <input class="form-control" type="text" name="permanent_union" value="<?php echo $pre_data['permanent_union'] ? $pre_data['permanent_union'] : ''; ?>">
-                                    </div>
-                                    <label class="control-label input-label">Upazila (*)</label>
-
-                                    <div class="form-group">
-                                        <select class="form-control" name="permanent_sub_district">
-                                            <option value="">Select One</option>
-                                            <option value="Jashore Sadar" <?php echo $pre_data && $pre_data['permanent_sub_district'] == 'Jashore Sadar' ? 'selected' : '' ?>>Jashore Sadar</option>
-                                            <option value="Jhikargacha" <?php echo $pre_data && $pre_data['permanent_sub_district'] == 'Jhikargacha' ? 'selected' : '' ?>>Jhikargacha</option>
-                                            <option value="Sharsha" <?php echo $pre_data && $pre_data['permanent_sub_district'] == 'Sharsha' ? 'selected' : '' ?>>Sharsha</option>
-                                            <option value="Chougachha" <?php echo $pre_data && $pre_data['permanent_sub_district'] == 'Chougachha' ? 'selected' : '' ?>>Chougachha</option>
-                                            <option value="Manirampur" <?php echo $pre_data && $pre_data['permanent_sub_district'] == 'Manirampur' ? 'selected' : '' ?>>Manirampur</option>
-                                            <option value="Bagherpara" <?php echo $pre_data && $pre_data['permanent_sub_district'] == 'Bagherpara' ? 'selected' : '' ?>>Bagherpara</option>
-                                            <option value="Keshabpur" <?php echo $pre_data && $pre_data['permanent_sub_district'] == 'Keshabpur' ? 'selected' : '' ?>>Keshabpur</option>
-                                            <option value="Abhaynagar" <?php echo $pre_data && $pre_data['permanent_sub_district'] == 'Abhaynagar' ? 'selected' : '' ?>>Abhaynagar</option>
-                                        </select>
-                                    </div>
-                                    <!--                                            <div class="form-group">
-                                                                                    <input class="form-control" type="text" name="permanent_sub_district" value="<?php echo $pre_data['permanent_sub_district'] ? $pre_data['permanent_sub_district'] : ''; ?>">
-                                                                                </div>-->
-                                    <input class="form-control" type="hidden" name="permanent_district" value="jashore">
-                                    <input class="form-control" type="hidden" name="permanent_division" value="khulna">
-
-                                    <!--                                            <div class="form-group">
-                                                                                    <label>District (*)</label>
-                                                                                    <div class="select2-success">
-                                                                                        <select class="form-control" id="permanent_district" name="permanent_district" data-selected="<?php echo $pre_data['permanent_district'] ? $pre_data['permanent_district'] : ''; ?>"></select>
-                                                                                    </div>
-                                                                                </div>-->
                                 </div>
                                 <div class="col-sm-12">  
                                     <label class="control-label input-label">Present Address (*)</label>
@@ -475,6 +482,40 @@ ob_start();
                                     </div>
                                 </div>
                             </fieldset>
+                            <script type="text/javascript">
+                                init.push(function () {
+                                    $('.division').change(function () {
+                                        var divisionId = $(this).find('option:selected').attr('id');
+                                        $.ajax({
+                                            type: 'POST',
+                                            data: {division_id: divisionId},
+                                            success: function (result) {
+                                                $('#districtList').html(result);
+                                            }}
+                                        );
+                                    });
+                                    $('.district').change(function () {
+                                        var districtId = $(this).find('option:selected').attr('id');
+                                        $.ajax({
+                                            type: 'POST',
+                                            data: {district_id: districtId},
+                                            success: function (result) {
+                                                $('#subdistrictList').html(result);
+                                            }}
+                                        );
+                                    });
+                                    $('.subdistrict').change(function () {
+                                        var subdistrictId = $(this).find('option:selected').attr('id');
+                                        $.ajax({
+                                            type: 'POST',
+                                            data: {subdistrict_id: subdistrictId},
+                                            success: function (result) {
+                                                $('#unionList').html(result);
+                                            }}
+                                        );
+                                    });
+                                });
+                            </script>
                         </div>
                         <fieldset class="scheduler-border">
                             <legend class="scheduler-border">Number of Accompany/ Number of Family Member</legend>
@@ -505,7 +546,7 @@ ob_start();
                             <div class="col-sm-4">   
                                 <label class="control-label input-label">Total</label>
                                 <div class="form-group">
-                                    <input class="form-control" onkeyup="calc()" id="totalMember" type="number" value="<?php echo $pre_data['male_household_member'] + $pre_data['female_household_member'] ?>">
+                                    <input class="form-control" onkeyup="calc()" id="totalMember" type="number" value="<?php echo $pre_data['male_household_member'] + $pre_data['female_household_member'] + $pre_data['boy_household_member'] + $pre_data['girl_household_member'] ?>">
                                 </div>
                             </div>
                         </fieldset>
@@ -728,7 +769,7 @@ ob_start();
                         </div>
                         <?php if ($edit): ?>
                             <div class="form-group">
-                                <label>Age (When return in Bangladesh)</label>
+                                <label>Age (When come to Bangladesh)</label>
                                 <input class="form-control" type="text" value="<?php echo $pre_data['returned_age'] ? $pre_data['returned_age'] : ''; ?>">
                             </div>
                             <div class="form-group">
