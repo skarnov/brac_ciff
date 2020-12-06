@@ -123,6 +123,8 @@ class dev_customer_management {
             include('pages/add_edit_psychosocial_followup.php');
         elseif ($_GET['action'] == 'add_edit_review')
             include('pages/add_edit_review.php');
+        elseif ($_GET['action'] == 'download_pdf')
+            include('pages/case_download_pdf.php');
         elseif ($_GET['action'] == 'deleteCase')
             include('pages/deleteCase.php');
         else
@@ -823,6 +825,15 @@ class dev_customer_management {
 
         $loopCondition = array(
             'id' => 'dev_immediate_supports.fk_customer_id',
+            'customer_id' => 'dev_customers.customer_id',
+            'name' => 'dev_customers.full_name',
+            'nid' => 'dev_customers.nid_number',
+            'birth' => 'dev_customers.birth_reg_number',
+            'division' => 'dev_customers.permanent_division',
+            'district' => 'dev_customers.permanent_district',
+            'sub_district' => 'dev_customers.permanent_sub_district',
+            'entry_date' => 'dev_customers.create_date',
+            'branch_id' => 'dev_customers.fk_branch_id',
         );
 
         $conditions .= sql_condition_maker($loopCondition, $param);
@@ -832,7 +843,7 @@ class dev_customer_management {
 
         $sql .= $conditions . $orderBy . $limitBy;
         $count_sql .= $conditions;
-
+        
         $cases = sql_data_collector($sql, $count_sql, $param);
         return $cases;
     }

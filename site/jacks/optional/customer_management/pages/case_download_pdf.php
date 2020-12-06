@@ -1,9 +1,10 @@
 <?php
 
-$customer_id = $_GET['id'];
-$profile = $this->get_customers(array('customer_id' => $customer_id, 'single' => true));
-$birth_reg_number = $profile['birth_reg_number'] ? $profile['birth_reg_number'] : 'N/A';
-$customer_spouse = $profile['customer_spouse'] ? $profile['customer_spouse'] : 'N/A';
+$case_id = $_GET['id'];
+$case_info = $this->get_cases(array('id' => $case_id, 'single' => true));
+
+$birth_reg_number = $case_info['birth_reg_number'] ? $case_info['birth_reg_number'] : 'N/A';
+$customer_spouse = $case_info['customer_spouse'] ? $profile['customer_spouse'] : 'N/A';
 
 if ($profile['educational_qualification'] == 'illiterate'):
     $educational_qualification = 'Illiterate';

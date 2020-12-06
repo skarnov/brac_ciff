@@ -201,14 +201,14 @@ doAction('render_start');
                 'title' => 'New Participant Profile',
             ));
             ?>
-        </div>
+        </div>  
         <div class="btn-group btn-group-sm">
             <?php
             echo linkButtonGenerator(array(
-                'href' => '?download_csv=1&id=' . $filter_id . '&name=' . $filter_name . '&nid=' . $filter_nid . '&passport=' . $filter_passport . '&division=' . $filter_division . '&district=' . $filter_district . '&sub_district=' . $filter_sub_district . '&ps=' . $filter_ps . '&entry_start_date=' . $filter_entry_start_date . '&entry_end_date=' . $filter_entry_end_date,
+                'href' => '?download_csv=1&id=' . $filter_id . '&name=' . $filter_name . '&nid=' . $filter_nid . '&passport=' . $filter_passport . '&division=' . $filter_division . '&district=' . $filter_district . '&sub_district=' . $filter_sub_district . '&union=' . $filter_union . '&entry_start_date=' . $filter_entry_start_date . '&entry_end_date=' . $filter_entry_end_date,
                 'attributes' => array('target' => '_blank'),
                 'action' => 'download',
-                'icon' => 'icon_edit',
+                'icon' => 'icon_download',
                 'text' => 'Download Participants',
                 'title' => 'Download Participants',
             ));
@@ -236,11 +236,11 @@ echo formProcessor::form_elements('passport', 'passport', array(
 <div class="form-group col-sm-2">
     <label>Division</label>
     <div class="select2-primary">
-        <select class="form-control division" name="division">
+        <select class="form-control division" name="division" style="text-transform: capitalize">
             <?php if ($filter_division) : ?>
                 <option value="<?php echo $filter_division ?>"><?php echo $filter_division ?></option>
             <?php else: ?>
-                <option>Select One</option>
+                <option value="">Select One</option>
             <?php endif ?>
             <?php foreach ($divisions as $division) : ?>
                 <option id="<?php echo $division['id'] ?>" value="<?php echo strtolower($division['name']) ?>"><?php echo $division['name'] ?></option>
@@ -251,7 +251,7 @@ echo formProcessor::form_elements('passport', 'passport', array(
 <div class="form-group col-sm-2">
     <label>District</label>
     <div class="select2-primary">
-        <select class="form-control district" name="district" id="districtList">
+        <select class="form-control district" name="district" id="districtList" style="text-transform: capitalize">
             <?php if ($filter_district) : ?>
                 <option value="<?php echo $filter_district ?>"><?php echo $filter_district ?></option>
             <?php endif ?>
@@ -261,7 +261,7 @@ echo formProcessor::form_elements('passport', 'passport', array(
 <div class="form-group col-sm-2">
     <label>Upazila</label>
     <div class="select2-primary">
-        <select class="form-control subdistrict" name="sub_district" id="subdistrictList">
+        <select class="form-control subdistrict" name="sub_district" id="subdistrictList" style="text-transform: capitalize">
             <?php if ($filter_sub_district) : ?>
                 <option value="<?php echo $filter_sub_district ?>"><?php echo $filter_sub_district ?></option>
             <?php endif ?>
@@ -271,7 +271,7 @@ echo formProcessor::form_elements('passport', 'passport', array(
 <div class="form-group col-sm-2">
     <label>Union</label>
     <div class="select2-primary">
-        <select class="form-control union" name="union" id="unionList">
+        <select class="form-control union" name="union" id="unionList" style="text-transform: capitalize">
             <?php if ($filter_union) : ?>
                 <option value="<?php echo $filter_union ?>"><?php echo $filter_union ?></option>
             <?php endif ?>
