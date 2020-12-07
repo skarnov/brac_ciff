@@ -2,6 +2,8 @@
 
 $customer_id = $_GET['id'];
 $profile = $this->get_customers(array('customer_id' => $customer_id, 'single' => true));
+
+$nid_number = $profile['nid_number'] ? $profile['nid_number'] : 'N/A';
 $birth_reg_number = $profile['birth_reg_number'] ? $profile['birth_reg_number'] : 'N/A';
 $customer_spouse = $profile['customer_spouse'] ? $profile['customer_spouse'] : 'N/A';
 
@@ -77,7 +79,7 @@ $devPdf->Cell(0, 7, 'Section 1: Personal information', 0, 1, 'C');
 $devPdf->SetFont('Times', '', 12);
 $devPdf->Cell(0, 10, 'Beneficiary ID/Reference number: ' . $profile['customer_id'], 0, 1, 'L');
 $devPdf->Cell(0, 0, 'Full Name: ' . $profile['full_name'], 0, 1, 'L');
-$devPdf->Cell(0, 10, 'NID Number: ' . $profile['nid_number'], 0, 1, 'L');
+$devPdf->Cell(0, 10, 'NID Number: ' . $nid_number, 0, 1, 'L');
 $devPdf->Cell(0, 0, 'Birth Registration Number: ' . $birth_reg_number, 0, 1, 'L');
 $devPdf->Cell(0, 10, "Father's Name: " . $profile['father_name'], 0, 1, 'L');
 $devPdf->Cell(0, 0, "Mother's Name: " . $profile['mother_name'], 0, 1, 'L');

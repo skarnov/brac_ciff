@@ -16,6 +16,7 @@ $branch_id = $_config['user']['user_branch'] ? $_config['user']['user_branch'] :
 $args = array(
     'listing' => TRUE,
     'select_fields' => array(
+        'id' => 'dev_immediate_supports.fk_customer_id',
         'customer_id' => 'dev_customers.customer_id',
         'full_name' => 'dev_customers.full_name',
         'customer_mobile' => 'dev_customers.customer_mobile',
