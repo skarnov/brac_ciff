@@ -86,6 +86,7 @@ if ($edit) {
             'immediate_support' => 'dev_immediate_supports.immediate_support',
             'entry_date' => 'dev_immediate_supports.entry_date AS entry_date',
             'arrival_place' => 'dev_immediate_supports.arrival_place',
+            'plan_date' => 'dev_reintegration_plan.plan_date',
             'reintegration_financial_service' => 'dev_reintegration_plan.reintegration_financial_service',
             'service_requested' => 'dev_reintegration_plan.service_requested',
             'other_service_requested' => 'dev_reintegration_plan.other_service_requested',
@@ -844,27 +845,6 @@ doAction('render_start');
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
-                                    <div class="form-group Familymembers" style="display:none">
-                                        <label>If yes, how many?</label>
-                                        <input class="form-control" type="number" name="family_counseling" value="<?php echo $pre_data['family_counseling'] ? $pre_data['family_counseling'] : ''; ?>">
-                                    </div>
-                                    <script>
-                                        init.push(function () {
-                                            var isChecked = $('#yesFamilymembers').is(':checked');
-
-                                            if (isChecked == true) {
-                                                $('.Familymembers').show();
-                                            }
-
-                                            $("#yesFamilymembers").on("click", function () {
-                                                $('.Familymembers').show();
-                                            });
-
-                                            $("#noFamilymembers").on("click", function () {
-                                                $('.Familymembers').hide();
-                                            });
-                                        });
-                                    </script>
                                     <div class="form-group">
                                         <label>Place of Session</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
@@ -994,7 +974,7 @@ doAction('render_start');
                     </div>
                     <div class="tab-pane fade " id="ReintegrationSession">
                         <fieldset>
-                            <legend>Section 3.3: Psychosocial Reintegration Session Activities</legend>
+                            <legend>Section 3.2: Psychosocial Reintegration Session Activities</legend>
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -1022,7 +1002,7 @@ doAction('render_start');
                     </div>
                     <div class="tab-pane fade " id="SessionCompletion">
                         <fieldset>
-                            <legend>Section 3.4: Session Completion Status</legend>
+                            <legend>Section 3.3: Session Completion Status</legend>
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -1050,7 +1030,7 @@ doAction('render_start');
                     </div>
                     <div class="tab-pane fade " id="ReintegrationFollowup">
                         <fieldset>
-                            <legend>Section 3.5: Psychosocial Reintegration (Followup)</legend>
+                            <legend>Section 3.4: Psychosocial Reintegration (Followup)</legend>
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -1242,7 +1222,7 @@ doAction('render_start');
                                         });
                                     </script>
                                     <div class="form-group">
-                                        <label>Microbusiness Established</label>
+                                        <label>Micro-business Established</label>
                                         <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
                                             <div class="options_holder radio">
                                                 <label><input class="px" type="radio" id="yesMicrobusiness" name="microbusiness_established" value="yes" <?php echo $pre_data && $pre_data['microbusiness_established'] == 'yes' ? 'checked' : '' ?>><span class="lbl">Yes</span></label>

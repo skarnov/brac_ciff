@@ -74,6 +74,17 @@ doAction('render_start');
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
+                        <label>Date (*)</label>
+                        <div class="input-group">
+                            <input id="FollowupTimeDate" name="followup_entry_date" type="text" class="form-control" value="<?php echo $pre_data['entry_date'] && $pre_data['entry_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['entry_date'])) : date('d-m-Y'); ?>">
+                        </div>
+                    </div>
+                    <script type="text/javascript">
+                        init.push(function () {
+                            _datepicker('FollowupTimeDate');
+                        });
+                    </script>
+                    <div class="form-group">
                         <label>Time (*)</label>
                         <div class="input-group date">
                             <input type="text" name="followup_entry_time" value="<?php echo $pre_data['entry_time'] && $pre_data['entry_time'] != '00-00-00' ? date('H:i:s', strtotime($pre_data['entry_time'])) : date('H:i:s'); ?>" class="form-control" id="FollowupTime"><span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
@@ -89,17 +100,6 @@ doAction('render_start');
                                 orientation: $('body').hasClass('right-to-left') ? {x: 'right', y: 'auto'} : {x: 'auto', y: 'auto'}
                             }
                             $('#FollowupTime').timepicker(options2);
-                        });
-                    </script>
-                    <div class="form-group">
-                        <label>Date (*)</label>
-                        <div class="input-group">
-                            <input id="FollowupTimeDate" name="followup_entry_date" type="text" class="form-control" value="<?php echo $pre_data['entry_date'] && $pre_data['entry_date'] != '0000-00-00' ? date('d-m-Y', strtotime($pre_data['entry_date'])) : date('d-m-Y'); ?>">
-                        </div>
-                    </div>
-                    <script type="text/javascript">
-                        init.push(function () {
-                            _datepicker('FollowupTimeDate');
                         });
                     </script>
                     <div class="form-group">

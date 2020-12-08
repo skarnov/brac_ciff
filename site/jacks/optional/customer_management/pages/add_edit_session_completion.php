@@ -123,7 +123,7 @@ doAction('render_start');
                         });
                     </script>
                     <div class="form-group">
-                        <label>Review of Counselling Session</label>
+                        <label>Review of Counseling Session</label>
                         <input class="form-control" type="text" id="review_session" name="review_session" value="<?php echo $pre_data['review_session'] ? $pre_data['review_session'] : ''; ?>">
                     </div>
                 </div>
@@ -133,8 +133,8 @@ doAction('render_start');
                         <textarea class="form-control" name="client_comments" rows="2" placeholder="Comments of the Client"><?php echo $pre_data['client_comments'] ? $pre_data['client_comments'] : ''; ?></textarea>
                     </div>
                     <div class="form-group">
-                        <label>Counsellor’s Comment</label>
-                        <textarea class="form-control" rows="2" name="counsellor_comments" placeholder="Counsellor’s Comment"><?php echo $pre_data['counsellor_comments'] ? $pre_data['counsellor_comments'] : ''; ?></textarea>
+                        <label>Counselor’s Comment</label>
+                        <textarea class="form-control" rows="2" name="counsellor_comments" placeholder="Counselor’s Comment"><?php echo $pre_data['counsellor_comments'] ? $pre_data['counsellor_comments'] : ''; ?></textarea>
                     </div>
                     <div class="form-group">
                         <label>Final Evaluation</label>
