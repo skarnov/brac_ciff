@@ -70,7 +70,7 @@ class dev_mysqli{
         }
 
     function escape($str){
-        if(get_magic_quotes_gpc()){
+        if(@get_magic_quotes_gpc()){
             $str = stripslashes($str);
             }
         return $this->dbh->escape_string($str);

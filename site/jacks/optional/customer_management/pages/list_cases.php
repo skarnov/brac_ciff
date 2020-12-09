@@ -1,4 +1,10 @@
 <?php
+use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
+use Box\Spout\Common\Entity\Row;
+use Box\Spout\Writer\Common\Creator\Style\StyleBuilder;
+use Box\Spout\Common\Entity\Style\Color;
+use Box\Spout\Common\Entity\Style\CellAlignment;
+
 $start = $_GET['start'] ? $_GET['start'] : 0;
 $per_page_items = 10;
 
@@ -84,6 +90,130 @@ if ($filter_entry_start_date)
 if ($filter_entry_end_date)
     $filterString[] = 'End Date: ' . $filter_entry_end_date;
 
+if ($_GET['download_excel']) {
+    unset($args['select_fields']);
+    unset($args['limit']);
+    
+    $args['data_only'] = true;
+    $data = $this->get_cases($args);
+    $data = $data['data'];
+
+    // This will be here in our project
+
+    $writer =WriterEntityFactory::createXLSXWriter();
+    $style = (new StyleBuilder())
+           ->setFontBold()
+           ->setFontSize(12)
+           //->setShouldWrapText()
+           ->build();
+
+    $fileName = 'case-management-' . time() . '.xlsx';
+    $writer->openToBrowser($fileName); // stream data directly to the browser
+
+    // Header text
+    $style2 = (new StyleBuilder())
+           ->setFontBold()
+           ->setFontSize(15)
+           //->setFontColor(Color::BLUE)
+           ->setShouldWrapText()
+           ->setCellAlignment(CellAlignment::LEFT)
+           ->build();
+
+    /** add a row at a time */
+    $report_head = ['Case Management Report '];
+    $singleRow = WriterEntityFactory::createRowFromArray($report_head,$style2);
+    $writer->addRow($singleRow);
+
+    $report_date = ['Date: '.Date('d-m-Y H:i')];
+    $reportDateRow = WriterEntityFactory::createRowFromArray($report_date);
+    $writer->addRow($reportDateRow);
+
+    $filtered_with = ['Participant ID = '.$filter_id.', Name = '.$filter_name.', NID = '.$filter_nid.', Passport = '.$filter_passport.', Division = ' . $filter_division . ', District = ' . $filter_district . ', Sub-District = ' . $filter_sub_district . ', Police Station = ' . $filter_ps. ', Start Date = ' . $filter_entry_start_date. ', End Date = ' . $filter_entry_end_date];
+    $rowFromVal = WriterEntityFactory::createRowFromArray($filtered_with);
+    $writer->addRow($rowFromVal);
+
+    $empty_row = [''];
+    $rowFromVal = WriterEntityFactory::createRowFromArray($empty_row);
+    $writer->addRow($rowFromVal);
+
+    $header = [
+                "SL",
+                'Participant ID', 
+                'Full Name', 
+                "NID Number", 
+                "Birth Registration Number",
+                'Date of Birth', 
+                'Gender', 
+                'Mobile No', 
+                'Emergency Mobile No',
+                'Name of that Person', 
+                "Relation with Participant", 
+                "Father's Name",
+                "Mother's Name",
+                "Village",
+                'Ward No', 
+                'Union',
+                'Upazilla',
+                "District", 
+                'Present Address of Beneficiary', 
+
+                'Support Date',
+                'Arrival Place',
+                "Immediate support services received", 
+
+    ];
+
+    $rowFromVal = WriterEntityFactory::createRowFromArray($header,$style);
+    $writer->addRow($rowFromVal);
+    $multipleRows = array();
+
+    if ($data) {
+        $count = 0;
+        foreach ($data as $case_info) {
+            $nid_number = $case_info['nid_number'] ? $case_info['nid_number'] : 'N/A';
+            $birth_reg_number = $case_info['birth_reg_number'] ? $case_info['birth_reg_number'] : 'N/A';
+            $support_date = $case_info['entry_date'] ? date('d-m-Y', strtotime($case_info['entry_date'])) : 'N/A';
+
+            $cells = [
+                WriterEntityFactory::createCell(++$count),
+                WriterEntityFactory::createCell($case_info['customer_id']),
+                WriterEntityFactory::createCell($case_info['full_name']),
+                WriterEntityFactory::createCell($nid_number),
+                WriterEntityFactory::createCell($birth_reg_number),
+                WriterEntityFactory::createCell(date('d-m-Y', strtotime($case_info['customer_birthdate']))),
+                WriterEntityFactory::createCell(ucfirst($case_info['customer_gender'])),
+                WriterEntityFactory::createCell($case_info['customer_mobile']),
+                WriterEntityFactory::createCell($case_info['emergency_mobile']),
+                WriterEntityFactory::createCell($case_info['emergency_name']),
+                WriterEntityFactory::createCell($case_info['emergency_relation']),
+                WriterEntityFactory::createCell($case_info['father_name']),
+                WriterEntityFactory::createCell($case_info['mother_name']),
+                WriterEntityFactory::createCell($case_info['permanent_village']),
+                WriterEntityFactory::createCell($case_info['permanent_ward']),
+                WriterEntityFactory::createCell($case_info['permanent_union']),
+                WriterEntityFactory::createCell($case_info['permanent_sub_district']),
+                WriterEntityFactory::createCell($case_info['permanent_district']),
+                WriterEntityFactory::createCell($case_info['permanent_house']),
+                WriterEntityFactory::createCell($support_date),
+                WriterEntityFactory::createCell($case_info['arrival_place']),
+                WriterEntityFactory::createCell($case_info['immediate_support']),
+            ];
+
+            $multipleRows[] = WriterEntityFactory::createRow($cells);
+
+        }
+    }
+    $writer->addRows($multipleRows); 
+
+    $currentSheet = $writer->getCurrentSheet();
+    $mergeRanges = ['A1:V1','A2:V2','A3:V3']; // you can list the cells you want to merge like this ['A1:A4','A1:E1']
+    $currentSheet->setMergeRanges($mergeRanges);
+
+    $writer->close();
+    exit;
+    // End this is to our project
+}
+
 doAction('render_start');
 ?>
 <div class="page-header">
@@ -92,7 +222,7 @@ doAction('render_start');
         <div class="btn-group btn-group-sm">
             <?php
             echo linkButtonGenerator(array(
-                'href' => '?download_csv=1&customer_id=' . $filter_customer_id . '&name=' . $filter_name . '&nid=' . $filter_nid . '&birth=' . $filter_birth . '&division=' . $filter_division . '&district=' . $filter_district . '&sub_district=' . $filter_sub_district . '&entry_start_date=' . $filter_entry_start_date . '&entry_end_date=' . $filter_entry_end_date,
+                'href' => '?download_excel=1&customer_id=' . $filter_customer_id . '&name=' . $filter_name . '&nid=' . $filter_nid . '&birth=' . $filter_birth . '&division=' . $filter_division . '&district=' . $filter_district . '&sub_district=' . $filter_sub_district . '&entry_start_date=' . $filter_entry_start_date . '&entry_end_date=' . $filter_entry_end_date,
                 'attributes' => array('target' => '_blank'),
                 'action' => 'download',
                 'icon' => 'icon_download',
