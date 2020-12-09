@@ -241,8 +241,13 @@ class dev_event_management {
 
         $loopCondition = array(
             'id' => 'dev_events.pk_event_id',
+            'name' => 'dev_activities.activity_name',
+            'branch_id' => 'dev_events.fk_branch_id',
             'division' => 'dev_events.event_division',
             'district' => 'dev_events.event_district',
+            'sub_district' => 'dev_events.event_upazila',
+            'union' => 'dev_events.event_union',
+            'create_date' => 'dev_events.create_date',
         );
 
         $conditions .= sql_condition_maker($loopCondition, $param);
@@ -551,9 +556,7 @@ class dev_event_management {
 
         $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
 
-        $from = "FROM dev_complains 
-
-            ";
+        $from = "FROM dev_complains ";
 
         $where = " WHERE 1";
         $conditions = " ";
@@ -563,9 +566,13 @@ class dev_event_management {
         $loopCondition = array(
             'id' => 'dev_complains.pk_complain_id',
             'gender' => 'dev_complains.gender',
-            'upazila' => 'dev_complains.upazila',
+            'division' => 'dev_complains.division',
+            'district' => 'dev_complains.branch_district',
+            'sub_district' => 'dev_complains.upazila',
+            'union' => 'dev_complains.branch_union',
             'type_recipient' => 'dev_complains.type_recipient',
-            'entry_date' => 'dev_complains.complain_register_date'
+            'type_service' => 'dev_complains.type_service',
+            'complain_register_date' => 'dev_complains.complain_register_date'
         );
 
         if ($param['type_service']) {
@@ -684,8 +691,10 @@ class dev_event_management {
             'id' => 'dev_complain_fileds.pk_complain_filed_id',
             'gender' => 'dev_complain_fileds.gender',
             'type_case' => 'dev_complain_fileds.type_case',
-            'upazila' => 'dev_complain_fileds.upazila',
-            'entry_date' => 'dev_complain_fileds.complain_register_date'
+            'division' => 'dev_complain_fileds.division',
+            'district' => 'dev_complain_fileds.district',
+            'sub_district' => 'dev_complain_fileds.upazila',
+            'complain_register_date' => 'dev_complain_fileds.complain_register_date'
         );
 
         $conditions .= sql_condition_maker($loopCondition, $param);
@@ -874,7 +883,7 @@ class dev_event_management {
             'id' => 'dev_trainings.pk_training_id',
             'profession' => 'dev_trainings.profession',
             'training_name' => 'dev_trainings.training_name',
-            'entry_date' => 'dev_trainings.date',
+            'date' => 'dev_trainings.date',
         );
 
         $conditions .= sql_condition_maker($loopCondition, $param);

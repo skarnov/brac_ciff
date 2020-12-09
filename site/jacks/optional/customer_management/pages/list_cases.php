@@ -175,12 +175,13 @@ if ($_GET['download_excel']) {
         ),
     );
 
+    unset($args['listing']);
     unset($args['limit']);
-
+    
     $args['data_only'] = true;
     $data = $this->get_cases($args);
     $data = $data['data'];
-
+   
     // This will be here in our project
 
     $writer = WriterEntityFactory::createXLSXWriter();

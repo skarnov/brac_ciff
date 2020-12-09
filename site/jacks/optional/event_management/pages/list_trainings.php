@@ -24,7 +24,7 @@ $args = array(
 
 if ($filter_entry_start_date && $filter_entry_start_date) {
     $args['BETWEEN_INCLUSIVE'] = array(
-        'entry_date' => array(
+        'date' => array(
             'left' => date_to_db($filter_entry_start_date),
             'right' => date_to_db($filter_entry_end_date),
         ),
@@ -68,6 +68,17 @@ doAction('render_start');
 <?php
 ob_start();
 ?>
+<?php
+echo formProcessor::form_elements('name', 'profession', array(
+    'width' => 4, 'type' => 'text', 'label' => 'Profession',
+        ), $filter_profession);
+echo formProcessor::form_elements('name', 'training_name', array(
+    'width' => 4, 'type' => 'text', 'label' => 'Training Name',
+        ), $filter_training_name);
+echo formProcessor::form_elements('workshop_name', 'workshop_name', array(
+    'width' => 4, 'type' => 'text', 'label' => 'Workshop Name',
+        ), $filter_workshop_name);
+?>
 <div class="form-group col-sm-3">
     <label>Start Date</label>
     <div class="input-group">
@@ -91,15 +102,6 @@ ob_start();
     </script>
 </div>
 <?php
-echo formProcessor::form_elements('name', 'profession', array(
-    'width' => 3, 'type' => 'text', 'label' => 'Profession',
-        ), $filter_profession);
-echo formProcessor::form_elements('name', 'training_name', array(
-    'width' => 3, 'type' => 'text', 'label' => 'Training Name',
-        ), $filter_training_name);
-echo formProcessor::form_elements('workshop_name', 'workshop_name', array(
-    'width' => 3, 'type' => 'text', 'label' => 'Workshop Name',
-        ), $filter_workshop_name);
 $filterForm = ob_get_clean();
 filterForm($filterForm);
 ?>
