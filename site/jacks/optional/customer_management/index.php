@@ -843,7 +843,7 @@ class dev_customer_management {
 
         $sql .= $conditions . $orderBy . $limitBy;
         $count_sql .= $conditions;
-        
+
         $cases = sql_data_collector($sql, $count_sql, $param);
         return $cases;
     }
@@ -1649,6 +1649,8 @@ class dev_customer_management {
             'division' => 'permanent_division',
             'district' => 'permanent_district',
             'sub_district' => 'permanent_sub_district',
+            'union' => 'permanent_union',
+            'create_date' => 'create_date',
         );
 
         $conditions .= sql_condition_maker($loopCondition, $param);
