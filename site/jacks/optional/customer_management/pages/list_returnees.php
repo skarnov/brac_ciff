@@ -1,4 +1,10 @@
 <?php
+use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
+use Box\Spout\Common\Entity\Row;
+use Box\Spout\Writer\Common\Creator\Style\StyleBuilder;
+use Box\Spout\Common\Entity\Style\Color;
+use Box\Spout\Common\Entity\Style\CellAlignment;
+
 $start = $_GET['start'] ? $_GET['start'] : 0;
 $per_page_items = 10;
 
@@ -104,6 +110,172 @@ if ($filter_entry_start_date)
 if ($filter_entry_end_date)
     $filterString[] = 'End Date: ' . $filter_entry_end_date;
 
+if ($_GET['download_excel']) {
+    unset($args['select_fields']);
+    unset($args['limit']);
+    
+    $args['data_only'] = true;
+    $data = $this->get_returnees($args);
+    $data = $data['data'];
+    // This will be here in our project
+
+    $writer =WriterEntityFactory::createXLSXWriter();
+    $style = (new StyleBuilder())
+           ->setFontBold()
+           ->setFontSize(12)
+           //->setShouldWrapText()
+           ->build();
+
+    $fileName = 'returnee-' . time() . '.xlsx';
+    //$writer->openToFile('lemon1.xlsx'); // write data to a file or to a PHP stream
+    $writer->openToBrowser($fileName); // stream data directly to the browser
+
+    // Header text
+    $style2 = (new StyleBuilder())
+           ->setFontBold()
+           ->setFontSize(15)
+           //->setFontColor(Color::BLUE)
+           ->setShouldWrapText()
+           ->setCellAlignment(CellAlignment::LEFT)
+           ->build();
+
+    /** add a row at a time */
+    $report_head = ['Returnee Report'];
+    $singleRow = WriterEntityFactory::createRowFromArray($report_head,$style2);
+    $writer->addRow($singleRow);
+
+    $report_date = ['Date: '.Date('d-m-Y H:i')];
+    $reportDateRow = WriterEntityFactory::createRowFromArray($report_date);
+    $writer->addRow($reportDateRow);
+
+    $filtered_with = ['Returnee ID = '.$filter_returnee_id.', Name = '.$filter_name.', NID = '.$filter_nid.', Passport = '.$filter_passport.', Division = ' . $filter_division . ', District = ' . $filter_district . ', Sub-District = ' . $filter_sub_district . ', Union = '.$filter_union. ', Police Station = ' . $filter_ps. ', Start Date = ' . $filter_entry_start_date. ', End Date = ' . $filter_entry_end_date];
+    $rowFromVal = WriterEntityFactory::createRowFromArray($filtered_with);
+    $writer->addRow($rowFromVal);
+
+    $empty_row = [''];
+    $rowFromVal = WriterEntityFactory::createRowFromArray($empty_row);
+    $writer->addRow($rowFromVal);
+
+    $header = [
+                "SL",
+                'Returnee ID', 
+                'District Centre / Branch Name', 
+                'Project', 
+                'Name', 
+                "Father's Name", 
+                "Mother's Name",
+                'Marital Status',
+                'Gender',
+                'Educational Qualification',
+                'Mobile Number',
+                'Emergency Mobile Number',
+                'NID Number',
+                'Date of Birth', 
+                'Passport',
+                'Division',
+                'District',
+                'Upazila',
+                'Union',
+                'BRAC Info ID',
+                'Collection Date',
+                'Type of person',
+                'Return Date',
+                'Country of Destination',
+                'Legal Document',
+                'Intention to Remigrate',
+                'Occupation in overseas country',
+                'Selected for profiling',
+                'Remarks',
+    ];
+
+    $rowFromVal = WriterEntityFactory::createRowFromArray($header,$style);
+    $writer->addRow($rowFromVal);
+    $multipleRows = array();
+
+    if ($data) {
+        $count = 0;
+        foreach ($data as $returnee) {
+
+            $nid_number = $returnee['nid_number'] ? $returnee['nid_number'] : 'N/A';
+            $birth_reg_number = $returnee['birth_reg_number'] ? $returnee['birth_reg_number'] : 'N/A';
+            $customer_spouse = $returnee['customer_spouse'] ? $returnee['customer_spouse'] : 'N/A';
+
+            if ($returnee['educational_qualification'] == 'illiterate'):
+                $educational_qualification = 'Illiterate';
+            elseif ($returnee['educational_qualification'] == 'sign'):
+                $educational_qualification = 'Can Sign only';
+            elseif ($returnee['educational_qualification'] == 'psc'):
+                $educational_qualification = 'Primary education (Passed Grade 5)';
+            elseif ($returnee['educational_qualification'] == 'not_psc'):
+                $educational_qualification = 'Did not complete primary education';
+            elseif ($returnee['educational_qualification'] == 'jsc'):
+                $educational_qualification = 'Completed JSC (Passed Grade 8) or equivalent';
+            elseif ($returnee['educational_qualification'] == 'ssc'):
+                $educational_qualification = 'Completed School Secondary Certificate or equivalent';
+            elseif ($returnee['educational_qualification'] == 'hsc'):
+                $educational_qualification = 'Higher Secondary Certificate/Diploma/ equivalent';
+            elseif ($returnee['educational_qualification'] == 'bachelor'):
+                $educational_qualification = 'Bachelor’s degree or equivalent';
+            elseif ($returnee['educational_qualification'] == 'master'):
+                $educational_qualification = 'Masters or Equivalent';
+            elseif ($returnee['educational_qualification'] == 'professional_education'):
+                $educational_qualification = 'Completed Professional education';
+            elseif ($returnee['educational_qualification'] == 'general_education'):
+                $educational_qualification = 'Completed general Education';
+            else:
+                $educational_qualification = 'N/A';
+            endif;
+
+            $cells = [
+                WriterEntityFactory::createCell(++$count),
+                WriterEntityFactory::createCell($returnee['fk_branch_id']),
+                WriterEntityFactory::createCell($returnee['fk_project_id']),
+                WriterEntityFactory::createCell($returnee['returnee_id']),
+                WriterEntityFactory::createCell($returnee['full_name']),
+                WriterEntityFactory::createCell($returnee['father_name']),
+                WriterEntityFactory::createCell($returnee['mother_name']),
+                WriterEntityFactory::createCell(ucfirst($returnee['marital_status'])),
+                WriterEntityFactory::createCell(ucfirst($returnee['returnee_gender'])),
+                WriterEntityFactory::createCell($educational_qualification),
+                WriterEntityFactory::createCell($mobile_number),
+                WriterEntityFactory::createCell($emergency_mobile),
+                WriterEntityFactory::createCell($nid_number),
+                WriterEntityFactory::createCell($birth_reg_number),
+                WriterEntityFactory::createCell($returnee['passport_number']),
+                WriterEntityFactory::createCell($returnee['permanent_division']),
+                WriterEntityFactory::createCell($returnee['permanent_district']),
+                WriterEntityFactory::createCell($returnee['permanent_sub_district']),
+                WriterEntityFactory::createCell($returnee['permanent_union']),
+                WriterEntityFactory::createCell($returnee['brac_info_id']),
+                WriterEntityFactory::createCell(date('d-m-Y', strtotime($returnee['collection_date']))),
+                WriterEntityFactory::createCell($returnee['person_type']),
+                WriterEntityFactory::createCell(date('d-m-Y', strtotime($returnee['return_date']))),
+                WriterEntityFactory::createCell($returnee['destination_country']),
+                WriterEntityFactory::createCell($returnee['legal_document']),
+                WriterEntityFactory::createCell(ucfirst($returnee['remigrate_intention'])),
+                WriterEntityFactory::createCell($returnee['destination_country_profession']),
+                WriterEntityFactory::createCell(ucfirst($returnee['profile_selection'])),
+                WriterEntityFactory::createCell($returnee['remarks']),
+
+            ];
+
+            $multipleRows[] = WriterEntityFactory::createRow($cells);
+
+        }
+    }
+
+    
+    $writer->addRows($multipleRows); 
+
+    $currentSheet = $writer->getCurrentSheet();
+    $mergeRanges = ['A1:BQ1','A2:BQ2','A3:BQ3']; // you can list the cells you want to merge like this ['A1:A4','A1:E1']
+    $currentSheet->setMergeRanges($mergeRanges);
+
+    $writer->close();
+    exit;
+    // End this is to our project
+}
+
 doAction('render_start');
 ?>
 <div class="page-header">
@@ -117,6 +289,18 @@ doAction('render_start');
                 'icon' => 'icon_add',
                 'text' => 'New Returnee',
                 'title' => 'New Returnee',
+            ));
+            ?>
+        </div>
+        <div class="btn-group btn-group-sm">
+            <?php
+            echo linkButtonGenerator(array(
+                'href' => '?download_excel=1&returnee_id=' . $filter_returnee_id . '&name=' . $filter_name . '&nid=' . $filter_nid . '&passport=' . $filter_passport . '&division=' . $filter_division . '&district=' . $filter_district . '&sub_district=' . $filter_sub_district . '&union=' . $filter_union . '&entry_start_date=' . $filter_entry_start_date . '&entry_end_date=' . $filter_entry_end_date,
+                'attributes' => array('target' => '_blank'),
+                'action' => 'download',
+                'icon' => 'icon_download',
+                'text' => 'Download Participants',
+                'title' => 'Download Participants',
             ));
             ?>
         </div>
