@@ -201,7 +201,6 @@ filterForm($filterForm);
                 <th>Birth ID</th>
                 <th>Present Address</th>
                 <th>Status</th>
-                <th class="tar action_column">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -215,32 +214,6 @@ filterForm($filterForm);
                     <td><?php echo $case['birth_reg_number']; ?></td>
                     <td style="text-transform: capitalize"><?php echo '<b>Division - </b>' . $case['permanent_division'] . ',<br><b>District - </b>' . $case['permanent_district'] . ',<br><b>Upazila - </b>' . $case['permanent_sub_district'] ?></td>
                     <td style="text-transform: capitalize"><?php echo $case['customer_status']; ?></td>
-                    <td class="tar action_column">
-                        <?php if (has_permission('edit_case')): ?>
-                            <div class="btn-group btn-group-sm">
-                                <?php
-                                echo linkButtonGenerator(array(
-                                    'href' => build_url(array('action' => 'add_edit_case', 'edit' => $case['fk_customer_id'])),
-                                    'action' => 'edit',
-                                    'icon' => 'icon_edit',
-                                    'text' => 'Edit',
-                                    'title' => 'Edit Case',
-                                ));
-                                ?>
-                            </div>
-                            <div class="btn-group btn-group-sm">
-                                <?php
-                                echo linkButtonGenerator(array(
-                                    'href' => build_url(array('action' => 'download_pdf', 'id' => $case['fk_customer_id'])),
-                                    'action' => 'download',
-                                    'icon' => 'icon_download',
-                                    'text' => 'Download',
-                                    'title' => 'Download Case',
-                                ));
-                                ?>
-                            </div>
-                        <?php endif; ?>
-                    </td>
                 </tr>
                 <?php
             }
