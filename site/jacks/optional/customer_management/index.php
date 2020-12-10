@@ -1589,6 +1589,10 @@ class dev_customer_management {
                 $dev_followups_data['confirm_services'] = $params['form_data']['new_confirm_services'] . ',' . $data_types;
             }
 
+            if ($params['form_data']['followup_financial_service']) {
+                $dev_followups_data['followup_financial_service'] = $params['form_data']['followup_financial_service'];
+            }
+            
             if ($params['form_data']['social_protection']) {
                 $dev_followups_data['social_protection'] = $params['form_data']['social_protection'];
             }

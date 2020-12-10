@@ -284,24 +284,24 @@ doAction('render_start');
                                                 });
                                             });
                                         </script>
-                                        <label class="col-sm-12"><input class="px" id="legalServicesConfirm" type="checkbox" name="reintegration_economic[]" value="Legal Services" <?php
+                                        <label class="col-sm-12"><input class="px" id="legalServicesConfirm" type="checkbox" name="confirm_services[]" value="Legal Services" <?php
                                             if (in_array('Legal Services', $confirm_services)) {
                                                 echo 'checked';
                                             }
                                             ?>><span class="lbl">Legal Services</span></label>
                                         <div id="legalServicesConfirmAttr" class="form-group col-sm-12">
                                             <div class="options_holder radio">
-                                                <label><input class="px" type="checkbox" name="reintegration_economic[]" value="Legal Aid" <?php
+                                                <label><input class="px" type="checkbox" name="confirm_services[]" value="Legal Aid" <?php
                                                     if (in_array('Legal Aid"', $confirm_services)) {
                                                         echo 'checked';
                                                     }
                                                     ?>><span class="lbl">Legal Aid</span></label>
-                                                <label><input class="px" type="checkbox" name="reintegration_economic[]" value="Claiming Compensation" <?php
+                                                <label><input class="px" type="checkbox" name="confirm_services[]" value="Claiming Compensation" <?php
                                                     if (in_array('Claiming Compensation', $confirm_services)) {
                                                         echo 'checked';
                                                     }
                                                     ?>><span class="lbl">Claiming Compensation</span></label>
-                                                <label><input class="px" type="checkbox" name="reintegration_economic[]" value="Assistance in resolving family dispute" <?php
+                                                <label><input class="px" type="checkbox" name="confirm_services[]" value="Assistance in resolving family dispute" <?php
                                                     if (in_array('Assistance in resolving family dispute', $confirm_services)) {
                                                         echo 'checked';
                                                     }
@@ -591,7 +591,7 @@ doAction('render_start');
                                 <input class="form-control" name="actions_taken" value="<?php echo $pre_data['actions_taken'] ? $pre_data['actions_taken'] : ''; ?>" placeholder="Actions taken" type="text" name="" value="">
                             </div>
                             <div class="form-group">
-                                <input class="form-control" name="remark_participant" value="<?php echo $pre_data['remark_participant'] ? $pre_data['remark_participant'] : ''; ?>" placeholder="Remark of the participant (if any)" type="text" name="" value="">
+                                <input class="form-control" name="remark_participant" value="<?php echo $pre_data['remark_participant'] ? $pre_data['remark_participant'] : ''; ?>" placeholder="Remark of the participant (If Any)" type="text" name="" value="">
                             </div>
                             <div class="form-group">
                                 <input class="form-control" name="comment_brac" value="<?php echo $pre_data['comment_brac'] ? $pre_data['comment_brac'] : ''; ?>" placeholder="Comment of BRAC Officer responsible for participant" type="text" name="" value="">

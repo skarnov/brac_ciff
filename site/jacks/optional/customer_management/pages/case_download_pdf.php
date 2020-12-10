@@ -110,13 +110,26 @@ $case_info = $this->get_cases($args);
 $nid_number = $case_info['nid_number'] ? $case_info['nid_number'] : 'N/A';
 $birth_reg_number = $case_info['birth_reg_number'] ? $case_info['birth_reg_number'] : 'N/A';
 $support_date = $case_info['entry_date'] ? date('d-m-Y', strtotime($case_info['entry_date'])) : 'N/A';
+$soical_date = $case_info['soical_date'] ? date('d-m-Y', strtotime($case_info['soical_date'])) : 'N/A';
+$medical_date = $case_info['medical_date'] ? date('d-m-Y', strtotime($case_info['medical_date'])) : 'N/A';
+$date_education = $case_info['date_education'] ? date('d-m-Y', strtotime($case_info['date_education'])) : 'N/A';
+$date_housing = $case_info['date_housing'] ? date('d-m-Y', strtotime($case_info['date_housing'])) : 'N/A';
+$date_legal = $case_info['date_legal'] ? date('d-m-Y', strtotime($case_info['date_legal'])) : 'N/A';
+$plan_date = $case_info['plan_date'] ? date('d-m-Y', strtotime($case_info['plan_date'])) : 'N/A';
+$first_meeting = $case_info['first_meeting'] ? date('d-m-Y', strtotime($case_info['first_meeting'])) : 'N/A';
+$traning_entry_date = $case_info['traning_entry_date'] ? date('d-m-Y', strtotime($case_info['traning_entry_date'])) : 'N/A';
+$training_start_date = $case_info['training_start_date'] ? date('d-m-Y', strtotime($case_info['training_start_date'])) : 'N/A';
+$training_end_date = $case_info['training_end_date'] ? date('d-m-Y', strtotime($case_info['training_end_date'])) : 'N/A';
+$job_placement_date = $case_info['job_placement_date'] ? date('d-m-Y', strtotime($case_info['job_placement_date'])) : 'N/A';
+$economic_reintegration_date = $case_info['economic_reintegration_date'] ? date('d-m-Y', strtotime($case_info['economic_reintegration_date'])) : 'N/A';
+$economic_reintegration_referral_date = $case_info['economic_reintegration_referral_date'] ? date('d-m-Y', strtotime($case_info['economic_reintegration_referral_date'])) : 'N/A';
+$financial_services_date = $case_info['financial_services_date'] ? date('d-m-Y', strtotime($case_info['financial_services_date'])) : 'N/A';
 $financial_literacy_date = $case_info['financial_literacy_date'] ? date('d-m-Y', strtotime($case_info['financial_literacy_date'])) : 'N/A';
 $business_development_date = $case_info['business_development_date'] ? date('d-m-Y', strtotime($case_info['business_development_date'])) : 'N/A';
 $product_development_date = $case_info['product_development_date'] ? date('d-m-Y', strtotime($case_info['product_development_date'])) : 'N/A';
 $entrepreneur_training_date = $case_info['entrepreneur_training_date'] ? date('d-m-Y', strtotime($case_info['entrepreneur_training_date'])) : 'N/A';
 $other_financial_training_name = $case_info['other_financial_training_name'] ? $case_info['other_financial_training_name'] : 'N/A';
 $other_financial_training_date = $case_info['other_financial_training_date'] ? date('d-m-Y', strtotime($case_info['other_financial_training_date'])) : 'N/A';
-
 
 $family_counsellings = $this->get_family_counselling(array('customer_id' => $customer_id));
 $psychosocial_sessions = $this->get_psychosocial_session(array('customer_id' => $customer_id));
@@ -166,7 +179,7 @@ $devPdf->SetFont('Times', 'B', 14);
 $devPdf->Cell(0, 13, 'Section 2: Preferred Services and Reintegration Plan', 0, 1, 'C');
 
 $devPdf->SetFont('Times', '', 12);
-$devPdf->Cell(0, 10, 'Plan Date: ' . date('d-m-Y', strtotime($case_info['plan_date'])), 0, 1, 'L');
+$devPdf->Cell(0, 10, 'Plan Date: ' . $plan_date, 0, 1, 'L');
 $devPdf->Cell(0, 0, 'Type of Services Requested: ' . $case_info['service_requested'] . ' ' . $case_info['other_service_requested'], 0, 1, 'L');
 $devPdf->Cell(0, 10, 'Social Protection Schemes: ' . $case_info['social_protection'], 0, 1, 'L');
 $devPdf->Cell(0, 0, 'Special Security Measures: ' . $case_info['security_measure'], 0, 1, 'L');
@@ -177,7 +190,7 @@ $devPdf->SetFont('Times', 'B', 14);
 $devPdf->Cell(0, 13, 'Section 3: Psychosocial Reintegration Support Services', 0, 1, 'C');
 
 $devPdf->SetFont('Times', '', 12);
-$devPdf->Cell(0, 10, 'Date of first meeting: ' . date('d-m-Y', strtotime($case_info['first_meeting'])), 0, 1, 'L');
+$devPdf->Cell(0, 10, 'Date of first meeting: ' . $first_meeting, 0, 1, 'L');
 $devPdf->Cell(0, 0, 'Problems Identified: ' . $case_info['problem_identified'], 0, 1, 'L');
 $devPdf->Cell(0, 10, 'Problem Description: ' . $case_info['problem_description'], 0, 1, 'L');
 $devPdf->Cell(0, 0, 'Initial Plan: ' . $case_info['initial_plan'], 0, 1, 'L');
@@ -209,7 +222,7 @@ if ($family_counsellings['data'] != NULL) {
 
     foreach ($family_counsellings['data'] as $i => $item) {
         $family_counselling_reportData[] = array(
-            date('d-m-Y', strtotime($item['entry_date'])),
+            $item['entry_date'] ? date('d-m-Y', strtotime($item['entry_date'])) : 'N/A',
             $item['entry_time'],
             $item['session_place'],
             $item['male_household_member'],
@@ -240,9 +253,9 @@ if ($psychosocial_sessions['data'] != NULL) {
 
     foreach ($family_counsellings['data'] as $i => $item) {
         $psychosocial_session_reportData[] = array(
-            date('d-m-Y', strtotime($item['entry_date'])),
+            $item['entry_date'] ? date('d-m-Y', strtotime($item['entry_date'])) : 'N/A',
             $item['entry_time'],
-            date('d-m-Y', strtotime($item['next_date'])),
+            $item['next_date'] ? date('d-m-Y', strtotime($item['next_date'])) : 'N/A',
             $item['activities_description'],
             $item['session_comments'],
         );
@@ -254,7 +267,6 @@ if ($psychosocial_sessions['data'] != NULL) {
     $devPdf->addTable();
 }
 
-
 $devPdf->SetFont('Times', 'B', 14);
 $devPdf->Cell(0, 13, 'Section 3.3: Session Completion Status', 0, 1, 'C');
 
@@ -262,7 +274,7 @@ $devPdf->SetFont('Times', '', 12);
 
 if ($psychosocial_completions['data'] != NULL) {
     foreach ($psychosocial_completions['data'] as $i => $item) {
-        $devPdf->Cell(0, 10, 'Date: ' . date('d-m-Y', strtotime($item['entry_date'])), 0, 1, 'L');
+        $devPdf->Cell(0, 10, 'Date: ' . $item['entry_date'] ? date('d-m-Y', strtotime($item['entry_date'])) : 'N/A', 0, 1, 'L');
         $devPdf->Cell(0, 0, 'Session Completion: ' . ucfirst($item['is_completed']), 0, 1, 'L');
         $devPdf->Cell(0, 10, 'Drop-out Reason (If Any): ' . $item['dropout_reason'], 0, 1, 'L');
         $devPdf->Cell(0, 0, 'Review of Counseling Session: ' . $item['review_session'], 0, 1, 'L');
@@ -288,7 +300,7 @@ if ($psychosocial_followups['data'] != NULL) {
 
     foreach ($psychosocial_followups['data'] as $i => $item) {
         $psychosocial_followup_reportData[] = array(
-            date('d-m-Y', strtotime($item['entry_date'])),
+            $item['entry_date'] ? date('d-m-Y', strtotime($item['entry_date'])) : 'N/A',
             $item['entry_time'],
             $item['followup_comments'],
         );
@@ -303,17 +315,17 @@ $devPdf->SetFont('Times', 'B', 14);
 $devPdf->Cell(0, 13, 'Section 4: Economic Reintegration Support', 0, 1, 'C');
 
 $devPdf->SetFont('Times', '', 12);
-$devPdf->Cell(0, 10, 'Date: ' . date('d-m-Y', strtotime($case_info['economic_reintegration_date'])), 0, 1, 'L');
+$devPdf->Cell(0, 10, 'Date: ' . $economic_reintegration_date, 0, 1, 'L');
 $devPdf->Cell(0, 0, 'In-kind Support from Project: ' . $case_info['inkind_project'] . ' ' . $case_info['other_inkind_project'], 0, 1, 'L');
 $devPdf->Cell(0, 10, 'Training Certificate Received: ' . ucfirst($case_info['is_certification_received']), 0, 1, 'L');
 $devPdf->Cell(0, 0, 'How has the training been used so far?', 0, 1, 'L');
-$devPdf->Cell(0, 10, '   - ' . $profile['training_used'], 0, 1, 'L');
+$devPdf->Cell(0, 10, '- ' . $case_info['training_used'], 0, 1, 'L');
 $devPdf->Cell(0, 0, 'Any other Comments: ' . $case_info['economic_other_comments'], 0, 1, 'L');
 $devPdf->Cell(0, 10, 'Micro-business Established: ' . ucfirst($case_info['microbusiness_established']), 0, 1, 'L');
 $devPdf->Cell(0, 0, 'Month Of Business Inauguration: ' . $case_info['month_inauguration'], 0, 1, 'L');
 $devPdf->Cell(0, 10, 'Year of Business Inauguration: ' . $case_info['year_inauguration'], 0, 1, 'L');
 $devPdf->Cell(0, 0, 'Family members received Financial Literacy Training: ' . ucfirst($case_info['family_training']), 0, 1, 'L');
-$devPdf->Cell(0, 10, 'Date of Training: ' . date('d-m-Y', strtotime($case_info['traning_entry_date'])), 0, 1, 'L');
+$devPdf->Cell(0, 10, 'Date of Training: ' . $traning_entry_date, 0, 1, 'L');
 $devPdf->Cell(0, 0, 'Place of Training: ' . $case_info['place_traning'], 0, 1, 'L');
 $devPdf->Cell(0, 10, 'Duration of Training: ' . $case_info['duration_traning'], 0, 1, 'L');
 $devPdf->Cell(0, 0, 'Status Of Training: ' . ucfirst($case_info['training_status']), 0, 1, 'L');
@@ -325,22 +337,78 @@ $devPdf->Cell(0, 10, 'Other Training Name (If Any): ' . $other_financial_trainin
 $devPdf->Cell(0, 0, 'Other Training Start Date: ' . $other_financial_training_date, 0, 1, 'L');
 $devPdf->Cell(0, 10, '', 0, 1, 'L');
 
-
-
-
-
-
 $devPdf->SetFont('Times', 'B', 14);
 $devPdf->Cell(0, 13, 'Section 4.1: Economic Reintegration Referrals', 0, 1, 'C');
 
 $devPdf->SetFont('Times', '', 12);
-
+$devPdf->Cell(0, 10, 'Date: ' . $economic_reintegration_referral_date, 0, 1, 'L');
+$devPdf->Cell(0, 0, 'Referrals done for Vocational Training: ' . ucfirst($case_info['is_vocational_training']), 0, 1, 'L');
+$devPdf->Cell(0, 10, 'Vocational Training Received (Referrals) (If Any): ' . $case_info['received_vocational'] . ' ' . $case_info['other_received_vocational'], 0, 1, 'L');
+$devPdf->Cell(0, 0, 'Start Date of Training: ' . $training_start_date, 0, 1, 'L');
+$devPdf->Cell(0, 10, 'End Date of Training: ' . $training_end_date, 0, 1, 'L');
+$devPdf->Cell(0, 0, 'Referrals done for economic services: ' . ucfirst($case_info['is_economic_services']), 0, 1, 'L');
+$devPdf->Cell(0, 10, 'Economic Support (If Any): ' . $case_info['economic_support'] . ' ' . $case_info['other_economic_support'], 0, 1, 'L');
+$devPdf->Cell(0, 0, 'Required Assistance Received: ' . ucfirst($case_info['is_assistance_received']), 0, 1, 'L');
+$devPdf->Cell(0, 10, 'Job Placement Date: ' . $job_placement_date, 0, 1, 'L');
+$devPdf->Cell(0, 0, 'Financial Services Date: ' . $financial_services_date, 0, 1, 'L');
+$devPdf->Cell(0, 10, 'Referred To: ' . $case_info['refferd_to'], 0, 1, 'L');
+$devPdf->Cell(0, 0, 'Referred Address: ' . $case_info['refferd_address'], 0, 1, 'L');
+$devPdf->Cell(0, 10, 'Date of Training: ' . $case_info['trianing_date'], 0, 1, 'L');
+$devPdf->Cell(0, 0, 'Place of Training: ' . $case_info['place_of_training'], 0, 1, 'L');
+$devPdf->Cell(0, 10, 'Duration of Training: ' . $case_info['duration_training'], 0, 1, 'L');
+$devPdf->Cell(0, 0, 'Status of the Training: ' . ucfirst($case_info['status_traning']), 0, 1, 'L');
+$devPdf->Cell(0, 10, 'How has the assistance been utilized?', 0, 1, 'L');
+$devPdf->Cell(0, 0, '- ' . $case_info['assistance_utilized'], 0, 1, 'L');
+$devPdf->Cell(0, 10, 'Any other Comments', 0, 1, 'L');
+$devPdf->Cell(0, 0, '- ' . $case_info['economic_referrals_other_comments'], 0, 1, 'L');
 $devPdf->Cell(0, 10, '', 0, 1, 'L');
 
+$devPdf->SetFont('Times', 'B', 14);
+$devPdf->Cell(0, 13, 'Section 5: Social Reintegration Support', 0, 1, 'C');
 
+$devPdf->SetFont('Times', '', 12);
+$devPdf->Cell(0, 10, 'Support Referred: ' . $case_info['support_referred'] . ' ' . $case_info['other_support_referred'], 0, 1, 'L');
+$devPdf->Cell(0, 0, 'Social Reintegration Support: ' . $case_info['reintegration_economic'] . ' ' . $case_info['other_reintegration_economic'], 0, 1, 'L');
+$devPdf->Cell(0, 10, 'Social Services Received: ' . $soical_date, 0, 1, 'L');
+$devPdf->Cell(0, 0, 'Medical Services Received: ' . $medical_date, 0, 1, 'L');
+$devPdf->Cell(0, 10, 'Education Services Received: ' . $date_education, 0, 1, 'L');
+$devPdf->Cell(0, 0, 'Housing Services Received: ' . $date_housing, 0, 1, 'L');
+$devPdf->Cell(0, 10, 'Legal & Others Services Received: ' . $date_legal, 0, 1, 'L');
 
+$devPdf->SetFont('Times', 'B', 14);
+$devPdf->Cell(0, 13, 'Section 6: Review and Follow-Up', 0, 1, 'C');
 
+$devPdf->SetFont('Times', '', 12);
+if ($reviews['data'] != NULL) {
+    foreach ($reviews['data'] as $i => $item) {
+        $devPdf->Cell(0, 10, 'Entry Date: ' . $item['entry_date'] ? date('d-m-Y', strtotime($item['entry_date'])) : 'N/A', 0, 1, 'L');
+        $devPdf->Cell(0, 0, 'Case dropped out from the project? ' . ucfirst($item['casedropped']), 0, 1, 'L');
+        $devPdf->Cell(0, 10, 'Reason for Dropping Out: ' . $item['reason_dropping'] . ' ' . $item['other_reason_dropping'], 0, 1, 'L');
+        $devPdf->Cell(0, 0, 'Confirmed Services Received after 3 Months: ' . $item['confirm_services'] . ' ' . $item['other_reason_dropping'], 0, 1, 'L');
+        $devPdf->Cell(0, 10, 'Financial Service: ' . $item['followup_financial_service'], 0, 1, 'L');
+        $devPdf->Cell(0, 0, 'Social Protection: ' . $item['social_protection'], 0, 1, 'L');
+        $devPdf->Cell(0, 10, 'Special Security Measures: ' . $item['special_security'], 0, 1, 'L');
+        $devPdf->SetFont('Times', 'B', 14);
+        $devPdf->Cell(0, 10, 'Status of Case after Receiving the Services: ', 0, 1, 'L');
+       
+        $devPdf->SetFont('Times', '', 12);
+        $devPdf->Cell(0, 10, 'Monthly income (BDT): ' . $item['monthly_income'], 0, 1, 'L');
+        $devPdf->Cell(0, 0, 'Challenges: ' . $item['challenges'], 0, 1, 'L');
+        $devPdf->Cell(0, 10, 'Actions taken: ' . $item['actions_taken'], 0, 1, 'L');
+        $devPdf->Cell(0, 0, 'Remark of the participant (If Any): ' . $item['remark_participant'], 0, 1, 'L');
+        $devPdf->Cell(0, 10, 'Comment of BRAC Officer responsible for participant: ', 0, 1, 'L');
+        $devPdf->Cell(0, 0, '- ' . $item['comment_brac'], 0, 1, 'L');
+        $devPdf->Cell(0, 10, 'Remark of District Manager', 0, 1, 'L');
+        $devPdf->Cell(0, 0, '- ' . $item['remark_district'], 0, 1, 'L');
 
+        $devPdf->Cell(0, 10, 'Psychosocial Reintegration Date: ' . $item['comment_psychosocial_date'] ? date('d-m-Y', strtotime($item['comment_psychosocial_date'])) : 'N/A', 0, 1, 'L');
+        $devPdf->Cell(0, 0, 'Economic Reintegration Date: ' . $item['comment_economic_date'] ? date('d-m-Y', strtotime($item['comment_economic_date'])) : 'N/A', 0, 1, 'L');
+        $devPdf->Cell(0, 10, 'Social Reintegration Date: ' . $item['comment_social_date'] ? date('d-m-Y', strtotime($item['comment_social_date'])) : 'N/A', 0, 1, 'L');
+        $devPdf->Cell(0, 0, 'Comment on social reintegration: ' . $item['comment_social'], 0, 1, 'L');
+        $devPdf->Cell(0, 10, 'Income Tracking Date: ' . $item['comment_income_date'] ? date('d-m-Y', strtotime($item['comment_income_date'])) : 'N/A', 0, 1, 'L');
+        $devPdf->Cell(0, 0, 'Complete income tracking information: ' . $item['comment_income'], 0, 1, 'L');
+    }
+}
 
 $devPdf->SetTitle($reportTitle, true);
 $devPdf->outputPdf($_GET['mode'], $reportTitle . '.pdf');

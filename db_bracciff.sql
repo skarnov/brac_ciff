@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 07, 2020 at 06:59 AM
+-- Generation Time: Dec 10, 2020 at 11:16 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.3
 
@@ -5387,8 +5387,8 @@ INSERT INTO `dev_branch_types` (`pk_item_id`, `fk_item_id`, `item_sort_order`, `
 CREATE TABLE `dev_complains` (
   `pk_complain_id` bigint(20) NOT NULL,
   `fk_branch_id` bigint(20) DEFAULT NULL,
+  `division` varchar(150) DEFAULT NULL,
   `branch_district` varchar(150) DEFAULT NULL,
-  `branch_sub_district` int(150) DEFAULT NULL,
   `upazila` varchar(150) DEFAULT NULL,
   `branch_union` varchar(150) DEFAULT NULL,
   `village` varchar(150) DEFAULT NULL,
@@ -5397,7 +5397,7 @@ CREATE TABLE `dev_complains` (
   `type_service` text DEFAULT NULL,
   `other_type_service` text DEFAULT NULL,
   `know_service` text DEFAULT NULL,
-  `other_know_service` int(11) DEFAULT NULL,
+  `other_know_service` text DEFAULT NULL,
   `complain_register_date` date DEFAULT NULL,
   `age` varchar(30) DEFAULT NULL,
   `gender` varchar(30) DEFAULT NULL,
@@ -5414,8 +5414,8 @@ CREATE TABLE `dev_complains` (
 -- Dumping data for table `dev_complains`
 --
 
-INSERT INTO `dev_complains` (`pk_complain_id`, `fk_branch_id`, `branch_district`, `branch_sub_district`, `upazila`, `branch_union`, `village`, `name`, `type_recipient`, `type_service`, `other_type_service`, `know_service`, `other_know_service`, `complain_register_date`, `age`, `gender`, `remark`, `create_time`, `create_date`, `created_by`, `update_time`, `update_date`, `updated_by`) VALUES
-(1, 1, 'Tangail', 0, 'Jashore Sadar', 'Union', 'Village', '', 'family', '', NULL, '', NULL, '2020-11-18', '43', 'male', '', '11:49:46', '2020-11-18', 1, '11:50:06', '2020-11-18', 1);
+INSERT INTO `dev_complains` (`pk_complain_id`, `fk_branch_id`, `division`, `branch_district`, `upazila`, `branch_union`, `village`, `name`, `type_recipient`, `type_service`, `other_type_service`, `know_service`, `other_know_service`, `complain_register_date`, `age`, `gender`, `remark`, `create_time`, `create_date`, `created_by`, `update_time`, `update_date`, `updated_by`) VALUES
+(1, 1, NULL, 'Tangail', 'Jashore Sadar', 'Union', 'Village', '', 'family', '', NULL, '', NULL, '2020-11-18', '43', 'male', '', '11:49:46', '2020-11-18', 1, '11:50:06', '2020-11-18', 1);
 
 -- --------------------------------------------------------
 
@@ -5955,6 +5955,7 @@ CREATE TABLE `dev_followups` (
   `reason_dropping` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `other_reason_dropping` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `confirm_services` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `followup_financial_service` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `social_protection` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `special_security` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `comment_psychosocial` text COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -5983,11 +5984,11 @@ CREATE TABLE `dev_followups` (
 -- Dumping data for table `dev_followups`
 --
 
-INSERT INTO `dev_followups` (`pk_followup_id`, `entry_date`, `fk_customer_id`, `casedropped`, `reason_dropping`, `other_reason_dropping`, `confirm_services`, `social_protection`, `special_security`, `comment_psychosocial`, `comment_psychosocial_date`, `comment_economic`, `comment_economic_date`, `comment_social`, `comment_social_date`, `comment_income`, `comment_income_date`, `monthly_income`, `challenges`, `actions_taken`, `remark_participant`, `comment_brac`, `remark_district`, `update_date`, `update_time`, `updated_by`, `create_date`, `create_time`, `created_by`) VALUES
-(1, NULL, 2, '', '', NULL, '', NULL, NULL, '', NULL, '', NULL, '', NULL, '', NULL, '', '', '', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL),
-(2, NULL, 3, 'yes', '', NULL, 'Child Care,Education,Admission', NULL, NULL, '', '1970-01-01', '', '1970-01-01', '', '1970-01-01', '', '1970-01-01', '', '', '', '', '', '', '2020-11-12', '16:34:03', 1, '2020-11-12', '16:04:22', 1),
-(3, NULL, 3, '', '', NULL, 'Financial Services,Loan', NULL, NULL, '', '1970-01-01', '', '1970-01-01', '', '1970-01-01', '', '1970-01-01', '', '', '', '', '', '', NULL, NULL, NULL, '2020-11-12', '16:39:22', 1),
-(4, '2020-11-12', 3, '', '', NULL, 'Child Care', NULL, NULL, '', '2020-11-11', '', '1970-01-01', '', '1970-01-01', '', '1970-01-01', '', '', '', '', '', '', NULL, NULL, NULL, '2020-11-12', '18:25:43', 1);
+INSERT INTO `dev_followups` (`pk_followup_id`, `entry_date`, `fk_customer_id`, `casedropped`, `reason_dropping`, `other_reason_dropping`, `confirm_services`, `followup_financial_service`, `social_protection`, `special_security`, `comment_psychosocial`, `comment_psychosocial_date`, `comment_economic`, `comment_economic_date`, `comment_social`, `comment_social_date`, `comment_income`, `comment_income_date`, `monthly_income`, `challenges`, `actions_taken`, `remark_participant`, `comment_brac`, `remark_district`, `update_date`, `update_time`, `updated_by`, `create_date`, `create_time`, `created_by`) VALUES
+(1, NULL, 2, '', '', NULL, '', NULL, NULL, NULL, '', NULL, '', NULL, '', NULL, '', NULL, '', '', '', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL),
+(2, NULL, 3, 'yes', '', NULL, 'Child Care,Education,Admission', NULL, NULL, NULL, '', '1970-01-01', '', '1970-01-01', '', '1970-01-01', '', '1970-01-01', '', '', '', '', '', '', '2020-11-12', '16:34:03', 1, '2020-11-12', '16:04:22', 1),
+(3, NULL, 3, '', '', NULL, 'Financial Services,Loan', NULL, NULL, NULL, '', '1970-01-01', '', '1970-01-01', '', '1970-01-01', '', '1970-01-01', '', '', '', '', '', '', NULL, NULL, NULL, '2020-11-12', '16:39:22', 1),
+(4, '2020-11-12', 3, '', '', NULL, 'Child Care', NULL, NULL, NULL, '', '2020-11-11', '', '1970-01-01', '', '1970-01-01', '', '1970-01-01', '', '', '', '', '', '', NULL, NULL, NULL, '2020-11-12', '18:25:43', 1);
 
 -- --------------------------------------------------------
 
@@ -6468,7 +6469,7 @@ CREATE TABLE `dev_returnees` (
 --
 
 INSERT INTO `dev_returnees` (`pk_returnee_id`, `fk_project_id`, `fk_branch_id`, `returnee_id`, `full_name`, `father_name`, `mother_name`, `marital_status`, `returnee_spouse`, `returnee_gender`, `educational_qualification`, `mobile_number`, `emergency_mobile`, `nid_number`, `birth_reg_number`, `passport_number`, `permanent_village`, `permanent_union`, `permanent_sub_district`, `permanent_district`, `permanent_division`, `brac_info_id`, `collection_date`, `person_type`, `return_date`, `destination_country`, `legal_document`, `other_legal_document`, `remigrate_intention`, `destination_country_profession`, `profile_selection`, `remarks`, `create_time`, `create_date`, `created_by`, `update_time`, `update_date`, `updated_by`) VALUES
-(1, 0, 2, '24214', 'Full Name', 'Father Name', 'Mother Name', NULL, 'REW', 'male', 'sign', '23432', '3423', '234', '2342', '23423', 'Village', 'Union/Pourashava', 'Jhikargacha', 'Bogura', 'Rajshahi', 'DSDS', '2020-10-09', 'trafficked_survivor', '2020-10-09', 'SDASD', 'Passport', NULL, 'yes', 'SDASD', 'yes', 'SADASDA', '20:53:06', '2020-10-09', 1, NULL, NULL, NULL);
+(1, 1, 2, '24214', 'Full Name', 'Father Name', 'Mother Name', '', 'REW', 'male', 'sign', '23432', '3423', '234', '2342', '23423', 'Village', 'fapore', 'bogra sadar', 'bogura', 'rajshahi', 'DSDS', '2020-10-09', 'trafficked_survivor', '2020-10-09', 'SDASD', 'Passport', NULL, 'yes', 'SDASD', 'yes', 'SADASDA', '20:53:06', '2020-10-09', 1, '14:08:54', '2020-12-09', 1);
 
 -- --------------------------------------------------------
 
@@ -6844,7 +6845,15 @@ INSERT INTO `dev_user_activities` (`pk_activity_log`, `activity_msg`, `activity_
 (137, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-12-06 15:31:24', 1),
 (138, 'Basic information of participant profile Shaik Obydullah (ID: ) has been updated.', '', 'update', 'success', '2020-12-06 17:02:45', 1),
 (139, 'Basic information of participant profile Shaik Obydullah (ID: ) has been updated.', '', 'update', 'success', '2020-12-06 17:03:21', 1),
-(140, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-12-06 18:23:45', 1);
+(140, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-12-06 18:23:45', 1),
+(141, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-12-07 13:54:30', 1),
+(142, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-12-08 10:56:22', 1),
+(143, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-12-09 12:24:49', 1),
+(144, 'Jack (ID: dev_report_management) has been turned on', '', 'update', 'success', '2020-12-09 12:25:42', 1),
+(145, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-12-09 13:41:57', 1),
+(146, 'Basic information of returnee profile  (ID: ) has been updated.', '', 'update', 'success', '2020-12-09 14:08:54', 1),
+(147, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-12-10 01:19:47', 1),
+(148, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-12-10 10:33:55', 1);
 
 -- --------------------------------------------------------
 
@@ -7439,7 +7448,7 @@ ALTER TABLE `dev_users_roles_relation`
 -- AUTO_INCREMENT for table `dev_user_activities`
 --
 ALTER TABLE `dev_user_activities`
-  MODIFY `pk_activity_log` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=141;
+  MODIFY `pk_activity_log` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=149;
 
 --
 -- AUTO_INCREMENT for table `dev_user_meta`
