@@ -402,11 +402,14 @@ if ($reviews['data'] != NULL) {
         $devPdf->Cell(0, 0, '- ' . $item['remark_district'], 0, 1, 'L');
 
         $devPdf->Cell(0, 10, 'Psychosocial Reintegration Date: ' . $item['comment_psychosocial_date'] ? date('d-m-Y', strtotime($item['comment_psychosocial_date'])) : 'N/A', 0, 1, 'L');
-        $devPdf->Cell(0, 0, 'Economic Reintegration Date: ' . $item['comment_economic_date'] ? date('d-m-Y', strtotime($item['comment_economic_date'])) : 'N/A', 0, 1, 'L');
+        $devPdf->Cell(0, 0, 'Psychosocial Comment: ' . $item['comment_psychosocial'], 0, 1, 'L');
+        $devPdf->Cell(0, 10, 'Economic Reintegration Date: ' . $item['comment_economic_date'] ? date('d-m-Y', strtotime($item['comment_economic_date'])) : 'N/A', 0, 1, 'L');
+        $devPdf->Cell(0, 0, 'Economic Comment: ' . $item['comment_economic'], 0, 1, 'L');
         $devPdf->Cell(0, 10, 'Social Reintegration Date: ' . $item['comment_social_date'] ? date('d-m-Y', strtotime($item['comment_social_date'])) : 'N/A', 0, 1, 'L');
-        $devPdf->Cell(0, 0, 'Comment on social reintegration: ' . $item['comment_social'], 0, 1, 'L');
-        $devPdf->Cell(0, 10, 'Income Tracking Date: ' . $item['comment_income_date'] ? date('d-m-Y', strtotime($item['comment_income_date'])) : 'N/A', 0, 1, 'L');
-        $devPdf->Cell(0, 0, 'Complete income tracking information: ' . $item['comment_income'], 0, 1, 'L');
+        $devPdf->Cell(0, 0, 'Social Comment: ' . $item['comment_social'], 0, 1, 'L');        
+        $devPdf->Cell(0, 10, 'Comment on social reintegration: ' . $item['comment_social'], 0, 1, 'L');
+        $devPdf->Cell(0, 0, 'Income Tracking Date: ' . $item['comment_income_date'] ? date('d-m-Y', strtotime($item['comment_income_date'])) : 'N/A', 0, 1, 'L');
+        $devPdf->Cell(0, 10, 'Complete income tracking information: ' . $item['comment_income'], 0, 1, 'L');
     }
 }
 
