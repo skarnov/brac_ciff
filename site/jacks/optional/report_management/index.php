@@ -86,7 +86,10 @@ class dev_report_management {
         global $devdb, $_config;
         $myUrl = jack_url($this->thsClass, 'case_report');
 
-        include('pages/case_report.php');
+        if ($_GET['action'] == 'download_pdf')
+            include('pages/case_download_pdf.php');
+        else
+            include('pages/case_report.php');
     }
 
     function case_statistics() {
@@ -115,6 +118,7 @@ class dev_report_management {
 
         include('pages/event_validation.php');
     }
+
 }
 
 new dev_report_management();

@@ -9,6 +9,7 @@ $filter_birth = $_GET['birth'] ? $_GET['birth'] : null;
 $filter_division = $_GET['division'] ? $_GET['division'] : null;
 $filter_district = $_GET['district'] ? $_GET['district'] : null;
 $filter_sub_district = $_GET['sub_district'] ? $_GET['sub_district'] : null;
+$filter_report = $_GET['report'] ? $_GET['report'] : null;
 $filter_entry_start_date = $_GET['entry_start_date'] ? $_GET['entry_start_date'] : null;
 $filter_entry_end_date = $_GET['entry_end_date'] ? $_GET['entry_end_date'] : null;
 $branch_id = $_config['user']['user_branch'] ? $_config['user']['user_branch'] : null;
@@ -44,7 +45,6 @@ $args = array(
 );
 
 $customers = jack_obj('dev_customer_management');
-
 $cases = $customers->get_cases($args);
 $pagination = pagination($cases['total'], $per_page_items, $start);
 
@@ -90,20 +90,6 @@ doAction('render_start');
 ?>
 <div class="page-header">
     <h1>Case Report -Customize PDF</h1>
-    <div class="oh">
-        <div class="btn-group btn-group-sm">
-            <?php
-            echo linkButtonGenerator(array(
-                'href' => '?download_csv=1&customer_id=' . $filter_customer_id . '&name=' . $filter_name . '&nid=' . $filter_nid . '&birth=' . $filter_birth . '&division=' . $filter_division . '&district=' . $filter_district . '&sub_district=' . $filter_sub_district . '&entry_start_date=' . $filter_entry_start_date . '&entry_end_date=' . $filter_entry_end_date,
-                'attributes' => array('target' => '_blank'),
-                'action' => 'download',
-                'icon' => 'icon_download',
-                'text' => 'Download Case',
-                'title' => 'Download Case',
-            ));
-            ?>
-        </div>
-    </div>
 </div>
 <?php
 ob_start();
@@ -180,24 +166,71 @@ echo formProcessor::form_elements('birth', 'birth', array(
     </script>
 </div>
 <div class="form-group col-sm-6">
+    <?php
+    $filter_report = $filter_report ? $filter_report : array($filter_report);
+    ?> 
     <label>Generate Report By Checking</label>
     <div class="form_element_holder radio_holder radio_holder_static_featured_show_link">
         <div class="options_holder radio">
-            <label><input class="px" type="checkbox" name="immediate_support[]" value="Meet and greet at port of entry"><span class="lbl">Immediate Support Services Received</span></label>
-            <label><input class="px" type="checkbox" name="immediate_support[]" value="Information provision"><span class="lbl">Preferred Services and Reintegration Plan</span></label>
-            <label><input class="px" type="checkbox" name="immediate_support[]" value="Pocket money"><span class="lbl">Psychosocial Reintegration Support Services</span></label>
-            <label><input class="px" type="checkbox" name="immediate_support[]" value="Shelter and accommodation"><span class="lbl">Family Counseling Session</span></label>
-            <label><input class="px" type="checkbox" name="immediate_support[]" value="Onward transportation"><span class="lbl">Psychosocial Reintegration Session Activities</span></label>
-            <label><input class="px" type="checkbox" name="immediate_support[]" value="Health assessment and health assistance"><span class="lbl">Session Completion Status</span></label>
-            <label><input class="px" type="checkbox" name="immediate_support[]" value="Food and nutrition"><span class="lbl">Psychosocial Reintegration (Follow-up)</span></label>
-            <label><input class="px" type="checkbox" name="immediate_support[]" value="Non-Food Items (hygiene kits, etc.)"><span class="lbl">Economic Reintegration Support</span></label>
-            <label><input class="px" type="checkbox" name="immediate_support[]" value="Psychosocial Conseling"><span class="lbl">Economic Reintegration Referrals</span></label>
-            <label><input class="px" type="checkbox" name="immediate_support[]" value="Psychosocial Conseling"><span class="lbl">Social Reintegration Support</span></label>
-            <label><input class="px" type="checkbox" name="immediate_support[]" value="Psychosocial Conseling"><span class="lbl">Review and Follow-Up</span></label>
-            <label><input class="px" type="checkbox" name="immediate_support[]" value="Psychosocial Conseling"><span class="lbl">Reintegration Assistance Satisfaction Scale</span></label>
+            <label><input class="px" type="checkbox" name="report[]" value="immediate_support" <?php
+                if (in_array('immediate_support', $filter_report)) {
+                    echo 'checked';
+                }
+                ?>><span class="lbl">Immediate Support Services Received</span></label>
+            <label><input class="px" type="checkbox" name="report[]" value="reintegration_plan" <?php
+                if (in_array('reintegration_plan', $filter_report)) {
+                    echo 'checked';
+                }
+                ?>><span class="lbl">Preferred Services and Reintegration Plan</span></label>
+            <label><input class="px" type="checkbox" name="report[]" value="psychosocial_support" <?php
+                if (in_array('psychosocial_support', $filter_report)) {
+                    echo 'checked';
+                }
+                ?>><span class="lbl">Psychosocial Reintegration Support Services</span></label>
+            <label><input class="px" type="checkbox" name="report[]" value="family_counseling" <?php
+                if (in_array('family_counseling', $filter_report)) {
+                    echo 'checked';
+                }
+                ?>><span class="lbl">Family Counseling Session</span></label>
+            <label><input class="px" type="checkbox" name="report[]" value="reintegration_session" <?php
+                if (in_array('reintegration_session', $filter_report)) {
+                    echo 'checked';
+                }
+                ?>><span class="lbl">Psychosocial Reintegration Session Activities</span></label>
+            <label><input class="px" type="checkbox" name="report[]" value="session_completion" <?php
+                if (in_array('session_completion', $filter_report)) {
+                    echo 'checked';
+                }
+                ?>><span class="lbl">Session Completion Status</span></label>
+            <label><input class="px" type="checkbox" name="report[]" value="follow_up" <?php
+                if (in_array('follow_up', $filter_report)) {
+                    echo 'checked';
+                }
+                ?>><span class="lbl">Psychosocial Reintegration (Follow-up)</span></label>
+            <label><input class="px" type="checkbox" name="report[]" value="economic_reintegration" <?php
+                if (in_array('economic_reintegration', $filter_report)) {
+                    echo 'checked';
+                }
+                ?>><span class="lbl">Economic Reintegration Support</span></label>
+            <label><input class="px" type="checkbox" name="report[]" value="economic_referrals" <?php
+                if (in_array('economic_referrals', $filter_report)) {
+                    echo 'checked';
+                }
+                ?>><span class="lbl">Economic Reintegration Referrals</span></label>
+            <label><input class="px" type="checkbox" name="report[]" value="social_reintegration" <?php
+                if (in_array('social_reintegration', $filter_report)) {
+                    echo 'checked';
+                }
+                ?>><span class="lbl">Social Reintegration Support</span></label>
+            <label><input class="px" type="checkbox" name="report[]" value="review" <?php
+                if (in_array('review', $filter_report)) {
+                    echo 'checked';
+                }
+                ?>><span class="lbl">Review and Follow-Up</span></label>
         </div>
     </div>
 </div>
+
 <?php
 $filterForm = ob_get_clean();
 filterForm($filterForm);
@@ -214,12 +247,13 @@ filterForm($filterForm);
     <table class="table table-bordered table-condensed">
         <thead>
             <tr>
-                <th>Perticipant ID</th>
+                <th>Participant ID</th>
                 <th>Name</th>
                 <th>Contact Number</th>
                 <th>Birth ID</th>
                 <th>Present Address</th>
                 <th>Status</th>
+                <th class="tar action_column">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -233,6 +267,21 @@ filterForm($filterForm);
                     <td><?php echo $case['birth_reg_number']; ?></td>
                     <td style="text-transform: capitalize"><?php echo '<b>Division - </b>' . $case['permanent_division'] . ',<br><b>District - </b>' . $case['permanent_district'] . ',<br><b>Upazila - </b>' . $case['permanent_sub_district'] ?></td>
                     <td style="text-transform: capitalize"><?php echo $case['customer_status']; ?></td>
+                    <td class="tar action_column">
+                        <?php if (has_permission('edit_case')): ?>
+                            <div class="btn-group btn-group-sm">
+                                <?php
+                                echo linkButtonGenerator(array(
+                                    'href' => build_url(array('action' => 'download_pdf', 'id' => $case['fk_customer_id'])),
+                                    'action' => 'download',
+                                    'icon' => 'icon_download',
+                                    'text' => 'Download',
+                                    'title' => 'Download Case',
+                                ));
+                                ?>
+                            </div>
+                        <?php endif; ?>
+                    </td>
                 </tr>
                 <?php
             }

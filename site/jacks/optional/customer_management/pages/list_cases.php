@@ -177,11 +177,11 @@ if ($_GET['download_excel']) {
 
     unset($args['listing']);
     unset($args['limit']);
-    
+
     $args['data_only'] = true;
     $data = $this->get_cases($args);
     $data = $data['data'];
-   
+
     // This will be here in our project
 
     $writer = WriterEntityFactory::createXLSXWriter();
@@ -300,16 +300,16 @@ doAction('render_start');
     <h1>All Cases</h1>
     <div class="oh">
         <div class="btn-group btn-group-sm">
-<?php
-echo linkButtonGenerator(array(
-    'href' => '?download_excel=1&customer_id=' . $filter_customer_id . '&name=' . $filter_name . '&nid=' . $filter_nid . '&birth=' . $filter_birth . '&division=' . $filter_division . '&district=' . $filter_district . '&sub_district=' . $filter_sub_district . '&entry_start_date=' . $filter_entry_start_date . '&entry_end_date=' . $filter_entry_end_date,
-    'attributes' => array('target' => '_blank'),
-    'action' => 'download',
-    'icon' => 'icon_download',
-    'text' => 'Download Case',
-    'title' => 'Download Case',
-));
-?>
+            <?php
+            echo linkButtonGenerator(array(
+                'href' => '?download_excel=1&customer_id=' . $filter_customer_id . '&name=' . $filter_name . '&nid=' . $filter_nid . '&birth=' . $filter_birth . '&division=' . $filter_division . '&district=' . $filter_district . '&sub_district=' . $filter_sub_district . '&entry_start_date=' . $filter_entry_start_date . '&entry_end_date=' . $filter_entry_end_date,
+                'attributes' => array('target' => '_blank'),
+                'action' => 'download',
+                'icon' => 'icon_download',
+                'text' => 'Download Case',
+                'title' => 'Download Case',
+            ));
+            ?>
         </div>
     </div>
 </div>
@@ -334,7 +334,7 @@ echo formProcessor::form_elements('birth', 'birth', array(
     <label>Division</label>
     <div class="select2-primary">
         <select class="form-control division" name="division" style="text-transform: capitalize">
-<?php if ($filter_division) : ?>
+            <?php if ($filter_division) : ?>
                 <option value="<?php echo $filter_division ?>"><?php echo $filter_division ?></option>
             <?php else: ?>
                 <option value="">Select One</option>
@@ -349,7 +349,7 @@ echo formProcessor::form_elements('birth', 'birth', array(
     <label>District</label>
     <div class="select2-primary">
         <select class="form-control district" name="district" id="districtList" style="text-transform: capitalize">
-<?php if ($filter_district) : ?>
+            <?php if ($filter_district) : ?>
                 <option value="<?php echo $filter_district ?>"><?php echo $filter_district ?></option>
             <?php endif ?>
         </select>
@@ -359,7 +359,7 @@ echo formProcessor::form_elements('birth', 'birth', array(
     <label>Upazila</label>
     <div class="select2-primary">
         <select class="form-control subdistrict" name="sub_district" id="subdistrictList" style="text-transform: capitalize">
-<?php if ($filter_sub_district) : ?>
+            <?php if ($filter_sub_district) : ?>
                 <option value="<?php echo $filter_sub_district ?>"><?php echo $filter_sub_district ?></option>
             <?php endif ?>
         </select>
@@ -392,18 +392,18 @@ $filterForm = ob_get_clean();
 filterForm($filterForm);
 ?>
 <div class="table-primary table-responsive">
-<?php if ($filterString): ?>
+    <?php if ($filterString): ?>
         <div class="table-header">
             Filtered With: <?php echo implode(', ', $filterString) ?>
         </div>
-<?php endif; ?>
+    <?php endif; ?>
     <div class="table-header">
-    <?php echo searchResultText($cases['total'], $start, $per_page_items, count($cases['data']), 'cases') ?>
+        <?php echo searchResultText($cases['total'], $start, $per_page_items, count($cases['data']), 'cases') ?>
     </div>
     <table class="table table-bordered table-condensed">
         <thead>
             <tr>
-                <th>Perticipant ID</th>
+                <th>Participant ID</th>
                 <th>Name</th>
                 <th>Contact Number</th>
                 <th>Birth ID</th>
@@ -413,9 +413,9 @@ filterForm($filterForm);
             </tr>
         </thead>
         <tbody>
-<?php
-foreach ($cases['data'] as $i => $case) {
-    ?>
+            <?php
+            foreach ($cases['data'] as $i => $case) {
+                ?>
                 <tr>
                     <td><?php echo $case['customer_id']; ?></td>
                     <td><?php echo $case['full_name']; ?></td>
@@ -424,17 +424,17 @@ foreach ($cases['data'] as $i => $case) {
                     <td style="text-transform: capitalize"><?php echo '<b>Division - </b>' . $case['permanent_division'] . ',<br><b>District - </b>' . $case['permanent_district'] . ',<br><b>Upazila - </b>' . $case['permanent_sub_district'] ?></td>
                     <td style="text-transform: capitalize"><?php echo $case['customer_status']; ?></td>
                     <td class="tar action_column">
-    <?php if (has_permission('edit_case')): ?>
+                        <?php if (has_permission('edit_case')): ?>
                             <div class="btn-group btn-group-sm">
-                            <?php
-                            echo linkButtonGenerator(array(
-                                'href' => build_url(array('action' => 'add_edit_case', 'edit' => $case['fk_customer_id'])),
-                                'action' => 'edit',
-                                'icon' => 'icon_edit',
-                                'text' => 'Edit',
-                                'title' => 'Edit Case',
-                            ));
-                            ?>
+                                <?php
+                                echo linkButtonGenerator(array(
+                                    'href' => build_url(array('action' => 'add_edit_case', 'edit' => $case['fk_customer_id'])),
+                                    'action' => 'edit',
+                                    'icon' => 'icon_edit',
+                                    'text' => 'Edit',
+                                    'title' => 'Edit Case',
+                                ));
+                                ?>
                             </div>
                             <div class="btn-group btn-group-sm">
                                 <?php
@@ -447,17 +447,17 @@ foreach ($cases['data'] as $i => $case) {
                                 ));
                                 ?>
                             </div>
-                            <?php endif; ?>
+                        <?php endif; ?>
                     </td>
                 </tr>
-                        <?php
-                    }
-                    ?>
+                <?php
+            }
+            ?>
         </tbody>
     </table>
     <div class="table-footer oh">
         <div class="pull-left">
-<?php echo $pagination ?>
+            <?php echo $pagination ?>
         </div>
     </div>
 </div>
