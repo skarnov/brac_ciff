@@ -134,6 +134,8 @@ class dev_event_management {
             include('pages/add_edit_event.php');
         elseif ($_GET['action'] == 'add_edit_event_validation')
             include('pages/add_edit_event_validation.php');
+        elseif ($_GET['action'] == 'download_pdf')
+            include('pages/event_download_pdf.php');
         elseif ($_GET['action'] == 'deleteEvent')
             include('pages/deleteEvent.php');
         else
@@ -176,6 +178,8 @@ class dev_event_management {
 
         if ($_GET['action'] == 'add_edit_complain')
             include('pages/add_edit_complain.php');
+        elseif ($_GET['action'] == 'download_pdf')
+            include('pages/complain_download_pdf.php');
         elseif ($_GET['action'] == 'deleteComplain')
             include('pages/deleteComplain.php');
         else
@@ -190,6 +194,8 @@ class dev_event_management {
 
         if ($_GET['action'] == 'add_edit_complain_filed')
             include('pages/add_edit_complain_filed.php');
+        elseif ($_GET['action'] == 'download_pdf')
+            include('pages/complain_filed_download_pdf.php');
         elseif ($_GET['action'] == 'deleteComplainInvestigation')
             include('pages/deleteComplainInvestigation.php');
         else
@@ -218,6 +224,8 @@ class dev_event_management {
 
         if ($_GET['action'] == 'add_edit_training')
             include('pages/add_edit_training.php');
+        elseif ($_GET['action'] == 'download_pdf')
+            include('pages/training_download_pdf.php');
         elseif ($_GET['action'] == 'deleteTraining')
             include('pages/deleteTraining.php');
         else
@@ -357,16 +365,10 @@ class dev_event_management {
 
         $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
 
-        if ($param['listing']) {
-            $from = "FROM dev_event_validations 
-
-            ";
-        } else {
-            $from = "FROM dev_event_validations 
-
-            ";
-        }
-
+        $from = "FROM dev_event_validations
+                    LEFT JOIN dev_activities ON (dev_activities.pk_activity_id = dev_event_validations.fk_event_id)
+                    LEFT JOIN dev_events ON (dev_events.pk_event_id = dev_event_validations.fk_event_id)
+                  ";
         $where = " WHERE 1";
         $conditions = " ";
         $sql = $select . $from . $where;
@@ -375,6 +377,13 @@ class dev_event_management {
         $loopCondition = array(
             'id' => 'dev_event_validations.pk_validation_id',
             'event_id' => 'dev_event_validations.fk_event_id',
+            'name' => 'dev_activities.activity_name',
+            'branch_id' => 'dev_events.fk_branch_id',
+            'division' => 'dev_events.event_division',
+            'district' => 'dev_events.event_district',
+            'sub_district' => 'dev_events.event_upazila',
+            'union' => 'dev_events.event_union',
+            'create_date' => 'dev_event_validations.create_date',
         );
 
         $conditions .= sql_condition_maker($loopCondition, $param);
@@ -617,10 +626,10 @@ class dev_event_management {
             $complains_data = array();
             $complains_data['complain_register_date'] = date('Y-m-d', strtotime($params['form_data']['complain_register_date']));
             $complains_data['fk_branch_id'] = $params['form_data']['branch_id'];
-            $complains_data['branch_district'] = $params['branch_district'];
-            $complains_data['branch_sub_district'] = $params['branch_sub_district'];
+            $complains_data['division'] = $params['form_data']['division'];
+            $complains_data['branch_district'] = $params['form_data']['branch_district'];
             $complains_data['upazila'] = $params['form_data']['upazila'];
-            $complains_data['branch_union'] = $params['form_data']['union'];
+            $complains_data['branch_union'] = $params['form_data']['branch_union'];
             $complains_data['village'] = $params['form_data']['village'];
 
             $complains_data['name'] = $params['form_data']['name'];
@@ -775,9 +784,7 @@ class dev_event_management {
 
         $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
 
-        $from = "FROM dev_complain_investigations 
-
-            ";
+        $from = "FROM dev_complain_investigations ";
 
         $where = " WHERE 1";
         $conditions = " ";
@@ -788,6 +795,8 @@ class dev_event_management {
             'id' => 'dev_complain_investigations.pk_complain_investigation_id',
             'gender' => 'dev_complain_investigations.gender',
             'type_case' => 'dev_complain_investigations.type_case',
+            'division' => 'dev_complain_investigations.division',
+            'district' => 'dev_complain_investigations.district',
             'upazila' => 'dev_complain_investigations.upazila',
             'entry_date' => 'dev_complain_investigations.complain_register_date'
         );

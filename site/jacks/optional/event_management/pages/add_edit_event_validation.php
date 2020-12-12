@@ -13,7 +13,6 @@ $pre_data = array();
 
 if ($edit) {
     $pre_data = $this->get_event_validations(array('id' => $edit, 'single' => true));
-
     $message = explode(',', $pre_data['message']);
 
     if (!$pre_data) {
@@ -156,11 +155,11 @@ ob_start();
             <div class="col-md-4">
                 <label class="control-label input-label">Participant Age</label>
                 <div class="form-group">
-                    <input class="form-control" type="text" name="age" value="<?php echo $pre_data['age']; ?>">
+                    <input class="form-control" type="number" name="age" value="<?php echo $pre_data['age']; ?>">
                 </div>
                 <label class="control-label input-label">Participant Mobile</label>
                 <div class="form-group">
-                    <input class="form-control" type="text" name="mobile" value="<?php echo $pre_data['mobile']; ?>">
+                    <input class="form-control" type="number" name="mobile" value="<?php echo $pre_data['mobile']; ?>">
                 </div>
                 <div class="form-group">
                     <label>Do you enjoy this Event?</label>

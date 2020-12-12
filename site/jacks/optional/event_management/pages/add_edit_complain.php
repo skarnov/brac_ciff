@@ -8,6 +8,31 @@ if (!checkPermission($edit, 'add_complain', 'edit_complain')) {
     exit();
 }
 
+$divisions = get_division();
+
+if (isset($_POST['division_id'])) {
+    $districts = get_district($_POST['division_id']);
+    echo "<option value=''>Select One</option>";
+    foreach ($districts as $district) :
+        echo "<option id='" . $district['id'] . "' value='" . strtolower($district['name']) . "' >" . $district['name'] . "</option>";
+    endforeach;
+    exit;
+} else if (isset($_POST['district_id'])) {
+    $subdistricts = get_subdistrict($_POST['district_id']);
+    echo "<option value=''>Select One</option>";
+    foreach ($subdistricts as $subdistrict) :
+        echo "<option id='" . $subdistrict['id'] . "' value='" . strtolower($subdistrict['name']) . "'>" . $subdistrict['name'] . "</option>";
+    endforeach;
+    exit;
+} else if (isset($_POST['subdistrict_id'])) {
+    $unions = get_union($_POST['subdistrict_id']);
+    echo "<option value=''>Select One</option>";
+    foreach ($unions as $union) :
+        echo "<option id='" . $union['id'] . "' value='" . strtolower($union['name']) . "'>" . $union['name'] . "</option>";
+    endforeach;
+    exit;
+}
+
 $branches = jack_obj('dev_branch_management');
 $all_branches = $branches->get_branches();
 
@@ -34,8 +59,6 @@ if ($_POST) {
         'required' => array(
         ),
     );
-    $data['branch_district'] = $branch_info['branch_district'];
-    $data['branch_sub_district'] = $branch_info['branch_sub_district'];
     $data['form_data'] = $_POST;
     $data['edit'] = $edit;
 
@@ -102,32 +125,91 @@ ob_start();
                                 </select>
                             </div>
                         </div>
-                        <input class="form-control" type="hidden" name="branch_division" value="khulna">
-                        <input class="form-control" type="hidden" name="branch_district" value="jashore">
-                        <label class="control-label input-label">Upazila</label>
                         <div class="form-group">
-                            <select class="form-control" name="upazila">
-                                <option value="">Select One</option>
-                                <option value="Jashore Sadar" <?php echo $pre_data && $pre_data['upazila'] == 'Jashore Sadar' ? 'selected' : '' ?>>Jashore Sadar</option>
-                                <option value="Jhikargacha" <?php echo $pre_data && $pre_data['upazila'] == 'Jhikargacha' ? 'selected' : '' ?>>Jhikargacha</option>
-                                <option value="Sharsha" <?php echo $pre_data && $pre_data['upazila'] == 'Sharsha' ? 'selected' : '' ?>>Sharsha</option>
-                                <option value="Chougachha" <?php echo $pre_data && $pre_data['upazila'] == 'Chougachha' ? 'selected' : '' ?>>Chougachha</option>
-                                <option value="Manirampur" <?php echo $pre_data && $pre_data['upazila'] == 'Manirampur' ? 'selected' : '' ?>>Manirampur</option>
-                                <option value="Bagherpara" <?php echo $pre_data && $pre_data['upazila'] == 'Bagherpara' ? 'selected' : '' ?>>Bagherpara</option>
-                                <option value="Keshabpur" <?php echo $pre_data && $pre_data['upazila'] == 'Keshabpur' ? 'selected' : '' ?>>Keshabpur</option>
-                                <option value="Abhaynagar" <?php echo $pre_data && $pre_data['upazila'] == 'Abhaynagar' ? 'selected' : '' ?>>Abhaynagar</option>
-                            </select>
+                            <label class="control-label input-label">Division</label>
+                            <div class="select2-primary">
+                                <select class="form-control division" name="division" style="text-transform: capitalize">
+                                    <?php if ($pre_data['division']) : ?>
+                                        <option value="<?php echo strtolower($pre_data['division']) ?>"><?php echo $pre_data['division'] ?></option>
+                                    <?php else: ?>
+                                        <option>Select One</option>
+                                    <?php endif ?>
+                                    <?php foreach ($divisions as $division) : ?>
+                                        <option id="<?php echo $division['id'] ?>" value="<?php echo strtolower($division['name']) ?>" <?php echo $pre_data && $pre_data['division'] == $division['name'] ? 'selected' : '' ?>><?php echo $division['name'] ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label input-label">District</label>
+                            <div class="select2-primary">
+                                <select class="form-control district" name="branch_district" style="text-transform: capitalize" id="districtList">
+                                    <?php if ($pre_data['branch_district']) : ?>
+                                        <option value="<?php echo $pre_data['branch_district'] ?>"><?php echo $pre_data['branch_district'] ?></option>
+                                    <?php endif ?>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="control-label input-label">Union</label>
                         <div class="form-group">
-                            <input class="form-control" type="text" name="union" value="<?php echo $pre_data['branch_union'] ? $pre_data['branch_union'] : ''; ?>">
+                            <label class="control-label input-label">Upazila</label>
+                            <div class="select2-primary">
+                                <select class="form-control subdistrict" name="upazila" style="text-transform: capitalize" id="subdistrictList">
+                                    <?php if ($pre_data['upazila']) : ?>
+                                        <option value="<?php echo $pre_data['upazila'] ?>"><?php echo $pre_data['upazila'] ?></option>
+                                    <?php endif ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label input-label">Union</label>
+                            <div class="select2-primary">
+                                <select class="form-control union" name="branch_union" style="text-transform: capitalize" id="unionList">
+                                    <?php if ($pre_data['branch_union']) : ?>
+                                        <option value="<?php echo $pre_data['branch_union'] ?>"><?php echo $pre_data['branch_union'] ?></option>
+                                    <?php endif ?>
+                                </select>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>Village</label>
                             <input class="form-control" type="text" name="village" value="<?php echo $pre_data['village'] ? $pre_data['village'] : ''; ?>">
                         </div>
+                        <script type="text/javascript">
+                            init.push(function () {
+                                $('.division').change(function () {
+                                    var divisionId = $(this).find('option:selected').attr('id');
+                                    $.ajax({
+                                        type: 'POST',
+                                        data: {division_id: divisionId},
+                                        success: function (result) {
+                                            $('#districtList').html(result);
+                                        }}
+                                    );
+                                });
+                                $('.district').change(function () {
+                                    var districtId = $(this).find('option:selected').attr('id');
+                                    $.ajax({
+                                        type: 'POST',
+                                        data: {district_id: districtId},
+                                        success: function (result) {
+                                            $('#subdistrictList').html(result);
+                                        }}
+                                    );
+                                });
+                                $('.subdistrict').change(function () {
+                                    var subdistrictId = $(this).find('option:selected').attr('id');
+                                    $.ajax({
+                                        type: 'POST',
+                                        data: {subdistrict_id: subdistrictId},
+                                        success: function (result) {
+                                            $('#unionList').html(result);
+                                        }}
+                                    );
+                                });
+                            });
+                        </script>
                     </div>
                 </fieldset>
             </div>

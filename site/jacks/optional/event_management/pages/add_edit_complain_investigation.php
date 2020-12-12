@@ -8,6 +8,31 @@ if (!checkPermission($edit, 'add_complain_investigation', 'edit_complain_investi
     exit();
 }
 
+$divisions = get_division();
+
+if (isset($_POST['division_id'])) {
+    $districts = get_district($_POST['division_id']);
+    echo "<option value=''>Select One</option>";
+    foreach ($districts as $district) :
+        echo "<option id='" . $district['id'] . "' value='" . strtolower($district['name']) . "' >" . $district['name'] . "</option>";
+    endforeach;
+    exit;
+} else if (isset($_POST['district_id'])) {
+    $subdistricts = get_subdistrict($_POST['district_id']);
+    echo "<option value=''>Select One</option>";
+    foreach ($subdistricts as $subdistrict) :
+        echo "<option id='" . $subdistrict['id'] . "' value='" . strtolower($subdistrict['name']) . "'>" . $subdistrict['name'] . "</option>";
+    endforeach;
+    exit;
+} else if (isset($_POST['subdistrict_id'])) {
+    $unions = get_union($_POST['subdistrict_id']);
+    echo "<option value=''>Select One</option>";
+    foreach ($unions as $union) :
+        echo "<option id='" . $union['id'] . "' value='" . strtolower($union['name']) . "'>" . $union['name'] . "</option>";
+    endforeach;
+    exit;
+}
+
 $pre_data = array();
 
 if ($edit) {
@@ -108,17 +133,18 @@ ob_start();
                 <div class="form-group">
                     <label for="inputBranch">Select Month</label>
                     <select class="form-control" name="month" >
-                        <option value="January">January</option>
-                        <option value="February">February</option>
-                        <option value="March ">March</option>
-                        <option value="May">May</option>
-                        <option value="June">June</option>
-                        <option value="July">July</option>
-                        <option value="August">August</option>
-                        <option value="September">September</option>
-                        <option value="October">October</option>
-                        <option value="November">November</option>
-                        <option value="December">December</option>
+                        <option value="January" <?php echo $pre_data && $pre_data['month'] == 'January' ? 'selected' : '' ?>>January</option>
+                        <option value="February" <?php echo $pre_data && $pre_data['month'] == 'February' ? 'selected' : '' ?>>February</option>
+                        <option value="March" <?php echo $pre_data && $pre_data['month'] == 'March' ? 'selected' : '' ?>>March</option>
+                        <option value="April" <?php echo $pre_data && $pre_data['month'] == 'April' ? 'selected' : '' ?>>April</option>
+                        <option value="May" <?php echo $pre_data && $pre_data['month'] == 'May' ? 'selected' : '' ?>>May</option>
+                        <option value="June" <?php echo $pre_data && $pre_data['month'] == 'June' ? 'selected' : '' ?>>June</option>
+                        <option value="July" <?php echo $pre_data && $pre_data['month'] == 'July' ? 'selected' : '' ?>>July</option>
+                        <option value="August" <?php echo $pre_data && $pre_data['month'] == 'August' ? 'selected' : '' ?>>August</option>
+                        <option value="September" <?php echo $pre_data && $pre_data['month'] == 'September' ? 'selected' : '' ?>>September</option>
+                        <option value="October" <?php echo $pre_data && $pre_data['month'] == 'October' ? 'selected' : '' ?>>October</option>
+                        <option value="November" <?php echo $pre_data && $pre_data['month'] == 'November' ? 'selected' : '' ?>>November</option>
+                        <option value="December" <?php echo $pre_data && $pre_data['month'] == 'December' ? 'selected' : '' ?>>December</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -165,30 +191,39 @@ ob_start();
                     <input class="form-control" placeholder="Please Specity" type="text" name="new_type_case" value="<?php echo $pre_data['type_case'] ? $pre_data['type_case'] : ''; ?>">
                 </div>
                 <div class="form-group">
-                    <label>Division (*)</label>
+                    <label class="control-label input-label">Division (*)</label>
                     <div class="select2-primary">
-                        <select class="form-control" id="permanent_division" name="division" data-selected="<?php echo $pre_data['division'] ? $pre_data['division'] : '' ?>"></select>
+                        <select class="form-control division" required name="division" style="text-transform: capitalize">
+                            <?php if ($pre_data['division']) : ?>
+                                <option value="<?php echo strtolower($pre_data['division']) ?>"><?php echo $pre_data['division'] ?></option>
+                            <?php else: ?>
+                                <option>Select One</option>
+                            <?php endif ?>
+                            <?php foreach ($divisions as $division) : ?>
+                                <option id="<?php echo $division['id'] ?>" value="<?php echo strtolower($division['name']) ?>" <?php echo $pre_data && $pre_data['division'] == $division['name'] ? 'selected' : '' ?>><?php echo $division['name'] ?></option>
+                            <?php endforeach ?>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>District (*)</label>
-                    <div class="select2-success">
-                        <select class="form-control" id="permanent_district" name="district" data-selected="<?php echo $pre_data['district'] ? $pre_data['district'] : ''; ?>"></select>
+                    <label class="control-label input-label">District (*)</label>
+                    <div class="select2-primary">
+                        <select class="form-control district" required name="district" style="text-transform: capitalize" id="districtList">
+                            <?php if ($pre_data['district']) : ?>
+                                <option value="<?php echo $pre_data['district'] ?>"><?php echo $pre_data['district'] ?></option>
+                            <?php endif ?>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label input-label">Select Municipality/Upazila</label>
-                    <select class="form-control" name="upazila">
-                        <option value="">Select One</option>
-                        <option value="Jashore Sadar" <?php echo $pre_data && $pre_data['upazila'] == 'Jashore Sadar' ? 'selected' : '' ?>>Jashore Sadar</option>
-                        <option value="Jhikargacha" <?php echo $pre_data && $pre_data['upazila'] == 'Jhikargacha' ? 'selected' : '' ?>>Jhikargacha</option>
-                        <option value="Sharsha" <?php echo $pre_data && $pre_data['upazila'] == 'Sharsha' ? 'selected' : '' ?>>Sharsha</option>
-                        <option value="Chougachha" <?php echo $pre_data && $pre_data['upazila'] == 'Chougachha' ? 'selected' : '' ?>>Chougachha</option>
-                        <option value="Manirampur" <?php echo $pre_data && $pre_data['upazila'] == 'Manirampur' ? 'selected' : '' ?>>Manirampur</option>
-                        <option value="Bagherpara" <?php echo $pre_data && $pre_data['upazila'] == 'Bagherpara' ? 'selected' : '' ?>>Bagherpara</option>
-                        <option value="Keshabpur" <?php echo $pre_data && $pre_data['upazila'] == 'Keshabpur' ? 'selected' : '' ?>>Keshabpur</option>
-                        <option value="Abhaynagar" <?php echo $pre_data && $pre_data['upazila'] == 'Abhaynagar' ? 'selected' : '' ?>>Abhaynagar</option>
-                    </select>
+                    <div class="select2-primary">
+                        <select class="form-control subdistrict" name="upazila" style="text-transform: capitalize" id="subdistrictList">
+                            <?php if ($pre_data['upazila']) : ?>
+                                <option value="<?php echo $pre_data['upazila'] ?>"><?php echo $pre_data['upazila'] ?></option>
+                            <?php endif ?>
+                        </select>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="police_station">Name of police station</label>
@@ -227,23 +262,36 @@ ob_start();
     </div>
 </form>
 <script type="text/javascript">
-    var BD_LOCATIONS = <?php echo getBDLocationJson(); ?>;
     init.push(function () {
-
-        new bd_new_location_selector({
-            'division': $('#permanent_division'),
-            'district': $('#permanent_district'),
-            'sub_district': $('#permanent_sub_district'),
-            'police_station': $('#permanent_police_station'),
-            'post_office': $('#permanent_post_office'),
+        $('.division').change(function () {
+            var divisionId = $(this).find('option:selected').attr('id');
+            $.ajax({
+                type: 'POST',
+                data: {division_id: divisionId},
+                success: function (result) {
+                    $('#districtList').html(result);
+                }}
+            );
         });
-
-        var theForm = $('#theForm');
-        theForm.data('serialized', theForm.serialize());
-
-        theForm.on('change input', function () {
-            theForm.find('input:submit, button:submit').prop('disabled', theForm.serialize() == theForm.data('serialized'));
+        $('.district').change(function () {
+            var districtId = $(this).find('option:selected').attr('id');
+            $.ajax({
+                type: 'POST',
+                data: {district_id: districtId},
+                success: function (result) {
+                    $('#subdistrictList').html(result);
+                }}
+            );
         });
-        theForm.find('input:submit, button:submit').prop('disabled', true);
+        $('.subdistrict').change(function () {
+            var subdistrictId = $(this).find('option:selected').attr('id');
+            $.ajax({
+                type: 'POST',
+                data: {subdistrict_id: subdistrictId},
+                success: function (result) {
+                    $('#unionList').html(result);
+                }}
+            );
+        });
     });
 </script>

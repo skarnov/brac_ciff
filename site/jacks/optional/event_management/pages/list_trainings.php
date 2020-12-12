@@ -148,26 +148,12 @@ filterForm($filterForm);
                     <td class="tar action_column">
                         <?php if (has_permission('edit_training')): ?>
                             <div class="btn-group btn-group-sm">
-                                <?php
-                                echo linkButtonGenerator(array(
-                                    'href' => url('admin/dev_event_management/manage_sharing_session?training_id=' . $training['pk_training_id']),
-                                    'action' => 'edit',
-                                    'icon' => 'icon_add',
-                                    'text' => 'Training/Workshop Validation',
-                                    'title' => 'Training/Workshop Validation',
-                                ));
-                                ?>
-                            </div>
-                            <div class="btn-group btn-group-sm">
-                                <?php
-                                echo linkButtonGenerator(array(
-                                    'href' => build_url(array('action' => 'add_edit_training', 'edit' => $training['pk_training_id'])),
-                                    'action' => 'edit',
-                                    'icon' => 'icon_edit',
-                                    'text' => 'Edit',
-                                    'title' => 'Edit Training',
-                                ));
-                                ?>
+                                <button type="button" class="btn btn-dark-gray dropdown-toggle" data-toggle="dropdown"><i class="btn-label fa fa-cogs"></i> Options&nbsp;<i class="fa fa-caret-down"></i></button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="<?php echo url('admin/dev_event_management/manage_trainings?action=add_edit_training&edit=' . $training['pk_training_id']) ?>">Edit</a></li>
+                                    <li><a href="<?php echo url('admin/dev_event_management/manage_sharing_session&training_id=' . $training['pk_training_id']) ?>" target="_blank">Training Validation</a></li>
+                                    <li><a href="<?php echo url('admin/dev_event_management/manage_trainings?action=download_pdf&id=' . $training['pk_training_id']) ?>">Download PDF</a></li>
+                                </ul>
                             </div>
                         <?php endif; ?>
                         <?php if (has_permission('delete_training')): ?>

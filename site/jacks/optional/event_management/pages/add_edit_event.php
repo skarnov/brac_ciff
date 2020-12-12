@@ -8,6 +8,31 @@ if (!checkPermission($edit, 'add_event', 'edit_event')) {
     exit();
 }
 
+$divisions = get_division();
+
+if (isset($_POST['division_id'])) {
+    $districts = get_district($_POST['division_id']);
+    echo "<option value=''>Select One</option>";
+    foreach ($districts as $district) :
+        echo "<option id='" . $district['id'] . "' value='" . strtolower($district['name']) . "' >" . $district['name'] . "</option>";
+    endforeach;
+    exit;
+} else if (isset($_POST['district_id'])) {
+    $subdistricts = get_subdistrict($_POST['district_id']);
+    echo "<option value=''>Select One</option>";
+    foreach ($subdistricts as $subdistrict) :
+        echo "<option id='" . $subdistrict['id'] . "' value='" . strtolower($subdistrict['name']) . "'>" . $subdistrict['name'] . "</option>";
+    endforeach;
+    exit;
+} else if (isset($_POST['subdistrict_id'])) {
+    $unions = get_union($_POST['subdistrict_id']);
+    echo "<option value=''>Select One</option>";
+    foreach ($unions as $union) :
+        echo "<option id='" . $union['id'] . "' value='" . strtolower($union['name']) . "'>" . $union['name'] . "</option>";
+    endforeach;
+    exit;
+}
+
 $activities = jack_obj('dev_misactivity_management');
 $all_activities = $activities->get_misactivities();
 
@@ -239,28 +264,85 @@ ob_start();
                     <legend class="scheduler-border">Section 1: Basic Geographical Information</legend>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Division</label>
+                            <label class="control-label input-label">Division</label>
                             <div class="select2-primary">
-                                <select class="form-control" id="filter_division" name="event_division" data-selected="<?php echo $pre_data['event_division'] ? $pre_data['event_division'] : '' ?>"></select>
+                                <select class="form-control division" name="event_division" style="text-transform: capitalize">
+                                    <?php if ($pre_data['event_division']) : ?>
+                                        <option value="<?php echo strtolower($pre_data['event_division']) ?>"><?php echo $pre_data['event_division'] ?></option>
+                                    <?php else: ?>
+                                        <option>Select One</option>
+                                    <?php endif ?>
+                                    <?php foreach ($divisions as $division) : ?>
+                                        <option id="<?php echo $division['id'] ?>" value="<?php echo strtolower($division['name']) ?>" <?php echo $pre_data && $pre_data['event_division'] == $division['name'] ? 'selected' : '' ?>><?php echo $division['name'] ?></option>
+                                    <?php endforeach ?>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>District</label>
-                            <div class="select2-success">
-                                <select class="form-control" id="filter_district" name="event_district" data-selected="<?php echo $pre_data['event_district'] ? $pre_data['event_district'] : ''; ?>"></select>
+                            <label class="control-label input-label">District</label>
+                            <div class="select2-primary">
+                                <select class="form-control district" name="event_district" style="text-transform: capitalize" id="districtList">
+                                    <?php if ($pre_data['event_district']) : ?>
+                                        <option value="<?php echo $pre_data['event_district'] ?>"><?php echo $pre_data['event_district'] ?></option>
+                                    <?php endif ?>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Sub-District</label>
-                            <div class="select2-success">
-                                <select class="form-control" id="filter_sub_district" name="event_upazila" data-selected="<?php echo $pre_data['event_upazila'] ? $pre_data['event_upazila'] : ''; ?>"></select>
+                            <label class="control-label input-label">Upazila</label>
+                            <div class="select2-primary">
+                                <select class="form-control subdistrict" name="event_upazila" style="text-transform: capitalize" id="subdistrictList">
+                                    <?php if ($pre_data['event_upazila']) : ?>
+                                        <option value="<?php echo $pre_data['event_upazila'] ?>"><?php echo $pre_data['event_upazila'] ?></option>
+                                    <?php endif ?>
+                                </select>
                             </div>
-                        </div>                        
-                        <label class="control-label input-label">Union</label>
+                        </div>
                         <div class="form-group">
-                            <input class="form-control" type="text" name="event_union" value="<?php echo $pre_data['event_union'] ? $pre_data['event_union'] : ''; ?>">
+                            <label class="control-label input-label">Union</label>
+                            <div class="select2-primary">
+                                <select class="form-control union" name="event_union" style="text-transform: capitalize" id="unionList">
+                                    <?php if ($pre_data['event_union']) : ?>
+                                        <option value="<?php echo $pre_data['event_union'] ?>"><?php echo $pre_data['event_union'] ?></option>
+                                    <?php endif ?>
+                                </select>
+                            </div>
                         </div>
                     </div>
+                    <script type="text/javascript">
+                        init.push(function () {
+                            $('.division').change(function () {
+                                var divisionId = $(this).find('option:selected').attr('id');
+                                $.ajax({
+                                    type: 'POST',
+                                    data: {division_id: divisionId},
+                                    success: function (result) {
+                                        $('#districtList').html(result);
+                                    }}
+                                );
+                            });
+                            $('.district').change(function () {
+                                var districtId = $(this).find('option:selected').attr('id');
+                                $.ajax({
+                                    type: 'POST',
+                                    data: {district_id: districtId},
+                                    success: function (result) {
+                                        $('#subdistrictList').html(result);
+                                    }}
+                                );
+                            });
+                            $('.subdistrict').change(function () {
+                                var subdistrictId = $(this).find('option:selected').attr('id');
+                                $.ajax({
+                                    type: 'POST',
+                                    data: {subdistrict_id: subdistrictId},
+                                    success: function (result) {
+                                        $('#unionList').html(result);
+                                    }}
+                                );
+                            });
+                        });
+                    </script>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Village</label>

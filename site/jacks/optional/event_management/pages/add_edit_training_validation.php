@@ -216,7 +216,7 @@ ob_start();
                         </div>
                     </div>
                     <div class="form-group">
-                        <textarea class="form-control" placeholder="Recommendation (If Any)" type="text" name="recommendation"><?php echo $pre_data['recommendation']; ?></textarea>
+                        <textarea class="form-control" placeholder="Recommendation (If Any)" name="recommendation"><?php echo $pre_data['recommendation']; ?></textarea>
                     </div>
                 </fieldset>
             </div>

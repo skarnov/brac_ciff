@@ -75,7 +75,6 @@ if (isset($_POST['division_id'])) {
     exit;
 }
 
-
 $filterString = array();
 if ($filter_name)
     $filterString[] = 'Name: ' . $filter_name;
@@ -298,7 +297,6 @@ doAction('render_start');
                     ));
                     ?>
                 </div>
-
                 <div class="btn-group btn-group-sm">
                     <?php
                     echo linkButtonGenerator(array(
@@ -340,7 +338,7 @@ echo formProcessor::form_elements('name', 'name', array(
         <select class="form-control" name="branch_id">
             <option value="">Select One</option>
             <?php foreach ($all_branches['data'] as $branch) : ?>
-                <option value="<?php echo $branch['pk_branch_id'] ?>" <?php if($branch['pk_branch_id'] == $filter_branch_id) echo 'selected' ?> ><?php echo $branch['branch_name'] ?></option>
+                <option value="<?php echo $branch['pk_branch_id'] ?>" <?php if ($branch['pk_branch_id'] == $filter_branch_id) echo 'selected' ?> ><?php echo $branch['branch_name'] ?></option>
             <?php endforeach ?>
         </select>
     </div>
@@ -457,26 +455,12 @@ filterForm($filterForm);
                     <td class="tar action_column">
                         <?php if (has_permission('edit_event')): ?>
                             <div class="btn-group btn-group-sm">
-                                <?php
-                                echo linkButtonGenerator(array(
-                                    'href' => url('admin/dev_event_management/manage_event_validations&event_id=' . $event['pk_event_id']),
-                                    'action' => 'edit',
-                                    'icon' => 'icon_add',
-                                    'text' => 'Event Validation',
-                                    'title' => 'Event Validation',
-                                ));
-                                ?>
-                            </div>
-                            <div class="btn-group btn-group-sm">
-                                <?php
-                                echo linkButtonGenerator(array(
-                                    'href' => build_url(array('action' => 'add_edit_event', 'edit' => $event['pk_event_id'])),
-                                    'action' => 'edit',
-                                    'icon' => 'icon_edit',
-                                    'text' => 'Edit',
-                                    'title' => 'Edit Event',
-                                ));
-                                ?>
+                                <button type="button" class="btn btn-dark-gray dropdown-toggle" data-toggle="dropdown"><i class="btn-label fa fa-cogs"></i> Options&nbsp;<i class="fa fa-caret-down"></i></button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="<?php echo url('admin/dev_event_management/manage_events?action=add_edit_event&edit=' . $event['pk_event_id']) ?>">Edit</a></li>
+                                    <li><a href="<?php echo url('admin/dev_event_management/manage_event_validations&event_id=' . $event['pk_event_id']) ?>" target="_blank">Event Validation</a></li>
+                                    <li><a href="<?php echo url('admin/dev_event_management/manage_events?action=download_pdf&id=' . $event['pk_event_id']) ?>">Download PDF</a></li>
+                                </ul>
                             </div>
                         <?php endif; ?>
                         <?php if (has_permission('delete_event')): ?>

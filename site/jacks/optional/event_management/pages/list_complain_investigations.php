@@ -4,14 +4,17 @@ $per_page_items = 10;
 
 $filter_gender = $_GET['gender'] ? $_GET['gender'] : null;
 $filter_case_type = $_GET['type_case'] ? $_GET['type_case'] : null;
+$filter_division = $_GET['division'] ? $_GET['division'] : null;
+$filter_district = $_GET['district'] ? $_GET['district'] : null;
 $filter_upazila = $_GET['upazila'] ? $_GET['upazila'] : null;
 $filter_entry_start_date = $_GET['entry_start_date'] ? $_GET['entry_start_date'] : null;
 $filter_entry_end_date = $_GET['entry_end_date'] ? $_GET['entry_end_date'] : null;
 
-
 $args = array(
     'gender' => $filter_gender,
     'type_case' => $filter_case_type,
+    'division' => $filter_division,
+    'district' => $filter_district,
     'upazila' => $filter_upazila,
     'limit' => array(
         'start' => $start * $per_page_items,
@@ -34,6 +37,31 @@ if ($filter_entry_start_date && $filter_entry_start_date) {
 
 $complain_investigations = $this->get_complain_investigations($args);
 $pagination = pagination($complain_investigations['total'], $per_page_items, $start);
+
+$divisions = get_division();
+
+if (isset($_POST['division_id'])) {
+    $districts = get_district($_POST['division_id']);
+    echo "<option value=''>Select One</option>";
+    foreach ($districts as $district) :
+        echo "<option id='" . $district['id'] . "' value='" . strtolower($district['name']) . "' >" . $district['name'] . "</option>";
+    endforeach;
+    exit;
+} else if (isset($_POST['district_id'])) {
+    $subdistricts = get_subdistrict($_POST['district_id']);
+    echo "<option value=''>Select One</option>";
+    foreach ($subdistricts as $subdistrict) :
+        echo "<option id='" . $subdistrict['id'] . "' value='" . strtolower($subdistrict['name']) . "'>" . $subdistrict['name'] . "</option>";
+    endforeach;
+    exit;
+} else if (isset($_POST['subdistrict_id'])) {
+    $unions = get_union($_POST['subdistrict_id']);
+    echo "<option value=''>Select One</option>";
+    foreach ($unions as $union) :
+        echo "<option id='" . $union['id'] . "' value='" . strtolower($union['name']) . "'>" . $union['name'] . "</option>";
+    endforeach;
+    exit;
+}
 
 doAction('render_start');
 ?>
@@ -73,7 +101,7 @@ doAction('render_start');
 <?php
 ob_start();
 ?>
-<div class="form-group col-sm-4">
+<div class="form-group col-sm-2">
     <label>Gender</label>
     <div class="select2-primary">
         <select class="form-control" name="gender">
@@ -83,7 +111,7 @@ ob_start();
         </select>
     </div>
 </div>
-<div class="form-group col-sm-4">
+<div class="form-group col-sm-3">
     <label>Case Type</label>
     <div class="select2-primary">
         <select class="form-control" name="type_case">
@@ -97,22 +125,39 @@ ob_start();
 <div class="form-group col-sm-2">
     <label>Division</label>
     <div class="select2-primary">
-        <select class="form-control" id="filter_division" name="division" data-selected="<?php echo $filter_division ?>"></select>
+        <select class="form-control division" name="division" style="text-transform: capitalize">
+            <?php if ($filter_division) : ?>
+                <option value="<?php echo $filter_division ?>"><?php echo $filter_division ?></option>
+            <?php else: ?>
+                <option value="">Select One</option>
+            <?php endif ?>
+            <?php foreach ($divisions as $division) : ?>
+                <option id="<?php echo $division['id'] ?>" value="<?php echo strtolower($division['name']) ?>"><?php echo $division['name'] ?></option>
+            <?php endforeach ?>
+        </select>
     </div>
 </div>
 <div class="form-group col-sm-2">
     <label>District</label>
-    <div class="select2-success">
-        <select class="form-control" id="filter_district" name="district" data-selected="<?php echo $filter_district; ?>"></select>
+    <div class="select2-primary">
+        <select class="form-control district" name="district" id="districtList" style="text-transform: capitalize">
+            <?php if ($filter_district) : ?>
+                <option value="<?php echo $filter_district ?>"><?php echo $filter_district ?></option>
+            <?php endif ?>
+        </select>
     </div>
 </div>
-<div class="form-group col-sm-2">
+<div class="form-group col-sm-3">
     <label>Upazila</label>
-    <div class="select2-success">
-        <select class="form-control" id="filter_sub_district" name="sub_district" data-selected="<?php echo $filter_sub_district; ?>"></select>
+    <div class="select2-primary">
+        <select class="form-control subdistrict" name="upazila" id="subdistrictList" style="text-transform: capitalize">
+            <?php if ($filter_upazila) : ?>
+                <option value="<?php echo $filter_upazila ?>"><?php echo $filter_upazila ?></option>
+            <?php endif ?>
+        </select>
     </div>
 </div>
-<div class="form-group col-sm-4">
+<div class="form-group col-sm-3">
     <label>Start Date</label>
     <div class="input-group">
         <input id="startDate" type="text" class="form-control" name="entry_start_date" value="<?php echo $filter_entry_start_date ?>">
@@ -123,7 +168,7 @@ ob_start();
         });
     </script>
 </div>
-<div class="form-group col-sm-4">
+<div class="form-group col-sm-3">
     <label>End Date</label>
     <div class="input-group">
         <input id="endDate" type="text" class="form-control" name="entry_end_date" value="<?php echo $filter_entry_end_date ?>">
@@ -222,6 +267,30 @@ filterForm($filterForm);
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    init.push(function () {
+        $('.division').change(function () {
+            var divisionId = $(this).find('option:selected').attr('id');
+            $.ajax({
+                type: 'POST',
+                data: {division_id: divisionId},
+                success: function (result) {
+                    $('#districtList').html(result);
+                }}
+            );
+        });
+        $('.district').change(function () {
+            var districtId = $(this).find('option:selected').attr('id');
+            $.ajax({
+                type: 'POST',
+                data: {district_id: districtId},
+                success: function (result) {
+                    $('#subdistrictList').html(result);
+                }}
+            );
+        });
+    });
+</script>
 <script type="text/javascript">
     init.push(function () {
         $(document).on('click', '.delete_single_record', function () {

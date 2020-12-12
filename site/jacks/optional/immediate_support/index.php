@@ -108,7 +108,7 @@ class immediate_support {
             'name' => 'full_name',
             'division' => 'division',
             'district' => 'district',
-            'sub_district' => 'sub_district',
+            'upazilla' => 'upazilla',
         );
 
         $conditions .= sql_condition_maker($loopCondition, $param);
@@ -141,7 +141,7 @@ class immediate_support {
             'name' => 'full_name',
             'division' => 'division',
             'district' => 'district',
-            'sub_district' => 'sub_district',
+            'upazilla' => 'upazilla',
         );
 
         $conditions .= sql_condition_maker($loopCondition, $param);

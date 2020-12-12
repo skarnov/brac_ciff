@@ -280,6 +280,17 @@ filterForm($filterForm);
                             <div class="btn-group btn-group-sm">
                                 <?php
                                 echo linkButtonGenerator(array(
+                                    'href' => build_url(array('action' => 'download_pdf', 'id' => $complain['pk_complain_id'])),
+                                    'action' => 'download',
+                                    'icon' => 'icon_download',
+                                    'text' => 'Download',
+                                    'title' => 'Download Complain',
+                                ));
+                                ?>
+                            </div>
+                            <div class="btn-group btn-group-sm">
+                                <?php
+                                echo linkButtonGenerator(array(
                                     'href' => build_url(array('action' => 'add_edit_complain', 'edit' => $complain['pk_complain_id'])),
                                     'action' => 'edit',
                                     'icon' => 'icon_edit',
