@@ -1,4 +1,10 @@
 <?php
+use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
+use Box\Spout\Common\Entity\Row;
+use Box\Spout\Writer\Common\Creator\Style\StyleBuilder;
+use Box\Spout\Common\Entity\Style\Color;
+use Box\Spout\Common\Entity\Style\CellAlignment;
+
 $start = $_GET['start'] ? $_GET['start'] : 0;
 $per_page_items = 10;
 
@@ -47,6 +53,108 @@ if ($filter_entry_start_date)
 if ($filter_entry_end_date)
     $filterString[] = 'End Date: ' . $filter_entry_end_date;
 
+if ($_GET['download_excel']) {
+    unset($args['limit']);
+    
+    $args['data_only'] = true;
+    $data = $this->get_trainings($args);
+    $data = $data['data'];
+    // This will be here in our project
+
+    $writer =WriterEntityFactory::createXLSXWriter();
+    $style = (new StyleBuilder())
+           ->setFontBold()
+           ->setFontSize(12)
+           //->setShouldWrapText()
+           ->build();
+
+    $fileName = 'trainings-' . time() . '.xlsx';
+    //$writer->openToFile('lemon1.xlsx'); // write data to a file or to a PHP stream
+    $writer->openToBrowser($fileName); // stream data directly to the browser
+
+    // Header text
+    $style2 = (new StyleBuilder())
+           ->setFontBold()
+           ->setFontSize(15)
+           //->setFontColor(Color::BLUE)
+           ->setShouldWrapText()
+           ->setCellAlignment(CellAlignment::LEFT)
+           ->build();
+
+    /** add a row at a time */
+    $report_head = ['Training/Workshop Report'];
+    $singleRow = WriterEntityFactory::createRowFromArray($report_head,$style2);
+    $writer->addRow($singleRow);
+
+    $report_date = ['Date: '.Date('d-m-Y H:i')];
+    $reportDateRow = WriterEntityFactory::createRowFromArray($report_date);
+    $writer->addRow($reportDateRow);
+
+    $filtered_with = ['Profession = '.$filter_profession.', Training Name = '.$filter_training_name.', Workshop Name = '.$filter_workshop_name.', Start Date = ' . $filter_entry_start_date. ', End Date = ' . $filter_entry_end_date];
+    $rowFromVal = WriterEntityFactory::createRowFromArray($filtered_with);
+    $writer->addRow($rowFromVal);
+
+    $empty_row = [''];
+    $rowFromVal = WriterEntityFactory::createRowFromArray($empty_row);
+    $writer->addRow($rowFromVal);
+
+    $header = [
+                "SL",
+                'Date', 
+                'Beneficiary ID', 
+                'Participant Name', 
+                'Age', 
+                "Profession", 
+                'Gender',
+                'Name of the training',
+                'Name of the workshop',
+                'Duration of Workshop',
+                'Duration of training',
+                'Mobile', 
+                'Address',
+    ];
+
+    $rowFromVal = WriterEntityFactory::createRowFromArray($header,$style);
+    $writer->addRow($rowFromVal);
+    $multipleRows = array();
+
+    if ($data) {
+        $count = 0;
+        foreach ($data as $trainings) {
+
+            $cells = [
+                WriterEntityFactory::createCell(++$count),
+                WriterEntityFactory::createCell($trainings['date'] ? date('d-m-Y', strtotime($trainings['date'])) : 'N/A'),
+                WriterEntityFactory::createCell($trainings['beneficiary_id']),
+                WriterEntityFactory::createCell($trainings['name']),
+                WriterEntityFactory::createCell($trainings['age']),
+                WriterEntityFactory::createCell($trainings['profession']),
+                WriterEntityFactory::createCell(ucfirst($trainings['gender'])),
+                WriterEntityFactory::createCell($trainings['training_name']),
+                WriterEntityFactory::createCell($trainings['workshop_name']),
+                WriterEntityFactory::createCell($trainings['workshop_duration']),
+                WriterEntityFactory::createCell($trainings['training_duration']),
+                WriterEntityFactory::createCell($trainings['mobile']),
+                WriterEntityFactory::createCell($trainings['address']),
+            ];
+
+            $multipleRows[] = WriterEntityFactory::createRow($cells);
+
+        }
+    }
+
+    
+    $writer->addRows($multipleRows); 
+
+    $currentSheet = $writer->getCurrentSheet();
+    $mergeRanges = ['A1:M1','A2:M2','A3:M3']; // you can list the cells you want to merge like this ['A1:A4','A1:E1']
+    $currentSheet->setMergeRanges($mergeRanges);
+
+    $writer->close();
+    exit;
+    // End this is to our project
+}
+
 doAction('render_start');
 ?>
 <div class="page-header">
@@ -60,6 +168,18 @@ doAction('render_start');
                 'icon' => 'icon_add',
                 'text' => 'New Training/Workshop',
                 'title' => 'New Training/Workshop',
+            ));
+            ?>
+        </div>
+        <div class="btn-group btn-group-sm">
+            <?php
+            echo linkButtonGenerator(array(
+                'href' => '?download_excel=1&profession=' . $filter_profession . '&training_name=' . $filter_training_name . '&workshop_name=' . $filter_workshop_name . '&entry_start_date=' . $filter_entry_start_date . '&entry_end_date=' . $filter_entry_end_date,
+                'attributes' => array('target' => '_blank'),
+                'action' => 'download',
+                'icon' => 'icon_download',
+                'text' => 'Download All Training/Workshop',
+                'title' => 'Download All Training/Workshop',
             ));
             ?>
         </div>
