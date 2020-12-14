@@ -210,7 +210,7 @@ if ($_GET['download_excel']) {
            //->setShouldWrapText()
            ->build();
 
-    $fileName = ' participant-' . time() . '.xlsx';
+    $fileName = ' participants-' . time() . '.xlsx';
     //$writer->openToFile('lemon1.xlsx'); // write data to a file or to a PHP stream
     $writer->openToBrowser($fileName); // stream data directly to the browser
 
@@ -224,7 +224,7 @@ if ($_GET['download_excel']) {
            ->build();
 
     /** add a row at a time */
-    $report_head = ['Participant Report'];
+    $report_head = ['Participants Report'];
     $singleRow = WriterEntityFactory::createRowFromArray($report_head,$style2);
     $writer->addRow($singleRow);
 
@@ -512,8 +512,8 @@ doAction('render_start');
                 'attributes' => array('target' => '_blank'),
                 'action' => 'download',
                 'icon' => 'icon_download',
-                'text' => 'Download Participants',
-                'title' => 'Download Participants',
+                'text' => 'Download Profiles',
+                'title' => 'Download Profiles',
             ));
             ?>
         </div>

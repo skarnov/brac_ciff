@@ -1,4 +1,10 @@
 <?php
+use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
+use Box\Spout\Common\Entity\Row;
+use Box\Spout\Writer\Common\Creator\Style\StyleBuilder;
+use Box\Spout\Common\Entity\Style\Color;
+use Box\Spout\Common\Entity\Style\CellAlignment;
+
 $start = $_GET['start'] ? $_GET['start'] : 0;
 $per_page_items = 10;
 
@@ -94,44 +100,42 @@ if ($filter_entry_end_date)
     $filterString[] = 'End Date: ' . $filter_entry_end_date;
 
 if ($_GET['download_excel']) {
-    $args = array(
-        'select_fields' => array(
-            'fk_branch_id' => 'dev_events.fk_branch_id',
-            'fk_project_id' => 'dev_events.fk_project_id',
-            'month' => 'dev_events.month',
-            'fk_activity_id' => 'dev_events.fk_activity_id',
-            'event_start_date' => 'dev_events.event_start_date',
-            'event_start_time' => 'dev_events.event_start_time',
-            'event_end_date' => 'dev_events.event_end_date',
-            'event_end_time' => 'dev_events.event_end_time',
-            'event_division' => 'dev_events.event_division',
-            'event_district' => 'dev_events.event_district',
-            'event_upazila' => 'dev_events.event_upazila',
-            'event_union' => 'dev_events.event_union',
-            'event_village' => 'dev_events.event_village',
-            'event_ward' => 'dev_events.event_ward',
-            'event_location' => 'dev_events.event_location',
-            'interview_date' => 'dev_event_validations.interview_date',
-            'interview_time' => 'dev_event_validations.interview_time',
-            'reviewed_by' => 'dev_event_validations.reviewed_by',
-            'beneficiary_id' => 'dev_event_validations.beneficiary_id',
-            'participant_name' => 'dev_event_validations.participant_name',
-            'gender' => 'dev_event_validations.gender',
-            'age' => 'dev_event_validations.age',
-            'mobile' => 'dev_event_validations.mobile',
-            'enjoyment' => 'dev_event_validations.enjoyment',
-            'victim' => 'dev_event_validations.victim',
-            'victim_family' => 'dev_event_validations.victim_family',
-            'message' => 'dev_event_validations.message',
-            'other_message' => 'dev_event_validations.other_message',
-            'use_message' => 'dev_event_validations.use_message',
-            'mentioned_event' => 'dev_event_validations.mentioned_event',
-            'additional_comments' => 'dev_event_validations.additional_comments',
-            'quote' => 'dev_event_validations.quote',
-        ),
+    $args['select_fields'] = array(
+        'fk_branch_id' => 'dev_events.fk_branch_id',
+        'fk_project_id' => 'dev_events.fk_project_id',
+        'month' => 'dev_events.month',
+        'fk_activity_id' => 'dev_events.fk_activity_id',
+        'event_start_date' => 'dev_events.event_start_date',
+        'event_start_time' => 'dev_events.event_start_time',
+        'event_end_date' => 'dev_events.event_end_date',
+        'event_end_time' => 'dev_events.event_end_time',
+        'event_division' => 'dev_events.event_division',
+        'event_district' => 'dev_events.event_district',
+        'event_upazila' => 'dev_events.event_upazila',
+        'event_union' => 'dev_events.event_union',
+        'event_village' => 'dev_events.event_village',
+        'event_ward' => 'dev_events.event_ward',
+        'event_location' => 'dev_events.event_location',
+        'interview_date' => 'dev_event_validations.interview_date',
+        'interview_time' => 'dev_event_validations.interview_time',
+        'reviewed_by' => 'dev_event_validations.reviewed_by',
+        'beneficiary_id' => 'dev_event_validations.beneficiary_id',
+        'participant_name' => 'dev_event_validations.participant_name',
+        'gender' => 'dev_event_validations.gender',
+        'age' => 'dev_event_validations.age',
+        'mobile' => 'dev_event_validations.mobile',
+        'enjoyment' => 'dev_event_validations.enjoyment',
+        'victim' => 'dev_event_validations.victim',
+        'victim_family' => 'dev_event_validations.victim_family',
+        'message' => 'dev_event_validations.message',
+        'other_message' => 'dev_event_validations.other_message',
+        'use_message' => 'dev_event_validations.use_message',
+        'mentioned_event' => 'dev_event_validations.mentioned_event',
+        'additional_comments' => 'dev_event_validations.additional_comments',
+        'quote' => 'dev_event_validations.quote',
     );
     unset($args['limit']);
-    $data = $eventManagement->get_events($args);
+    $data = $eventManagement->get_event_validations($args);
     $data = $data['data'];
 
     // This will be here in our project
@@ -143,7 +147,7 @@ if ($_GET['download_excel']) {
             //->setShouldWrapText()
             ->build();
 
-    $fileName = 'event-management-' . time() . '.xlsx';
+    $fileName = 'event-validation-' . time() . '.xlsx';
     $writer->openToBrowser($fileName); // stream data directly to the browser
     // Header text
     $style2 = (new StyleBuilder())
@@ -155,7 +159,7 @@ if ($_GET['download_excel']) {
             ->build();
 
     /** add a row at a time */
-    $report_head = ['Event Management Report '];
+    $report_head = ['Event Validation Report '];
     $singleRow = WriterEntityFactory::createRowFromArray($report_head, $style2);
     $writer->addRow($singleRow);
 
@@ -163,7 +167,7 @@ if ($_GET['download_excel']) {
     $reportDateRow = WriterEntityFactory::createRowFromArray($report_date);
     $writer->addRow($reportDateRow);
 
-    $filtered_with = ['Division = ' . $filter_division . ', District = ' . $filter_district];
+    $filtered_with = ['Activity Name = '.$filter_name.', Division = ' . $filter_division . ', District = ' . $filter_district . ', Sub-District = ' . $filter_sub_district . ', Union = '.$filter_union. ', Police Station = ' . $filter_ps. ', Start Date = ' . $filter_entry_start_date. ', End Date = ' . $filter_entry_end_date];
     $rowFromVal = WriterEntityFactory::createRowFromArray($filtered_with);
     $writer->addRow($rowFromVal);
 
@@ -173,7 +177,10 @@ if ($_GET['download_excel']) {
 
     $header = [
         "SL",
-        'Event Name',
+        'Branch Name',
+        'Project Name',
+        'Activity Name',
+        'Month',
         'Start Date',
         'Start Time',
         "End Date",
@@ -185,17 +192,23 @@ if ($_GET['download_excel']) {
         'Event Location',
         'Event Village',
         'Event Ward',
-        'Submitted By',
-        'Participant Number',
-        'Event Validation Count',
-        'Observation Score',
-        'Preparatory Work',
-        'Time management of the event was',
-        'Participants attention',
-        'Logistical arrangements',
-        'Relevancy of delivery of messages',
-        'Participants Feedback',
-        'Event Note',
+        'Interview Date',
+        'Interview Time',
+        'Reviewed By',
+        'Beneficiary Id',
+        'Participant Name',
+        'Gender',
+        'Age',
+        'Mobile',
+        'Enjoyment',
+        'Victim',
+        'Victim Family',
+        'Message',
+        'Other Message',
+        'User Message',
+        'Mentioned Event',
+        'Additional Comments',
+        'Quote',
     ];
 
     $rowFromVal = WriterEntityFactory::createRowFromArray($header, $style);
@@ -208,75 +221,13 @@ if ($_GET['download_excel']) {
             $nid_number = $case_info['nid_number'] ? $case_info['nid_number'] : 'N/A';
             $birth_reg_number = $case_info['birth_reg_number'] ? $case_info['birth_reg_number'] : 'N/A';
             $support_date = $case_info['entry_date'] ? date('d-m-Y', strtotime($case_info['entry_date'])) : 'N/A';
-            $itme_aanagement = null;
-            if ($event['time_management'] == 1):
-                $itme_aanagement = 'Not Observed';
-            elseif ($event['time_management'] == 2):
-                $itme_aanagement = 'Need To Improved';
-            elseif ($event['time_management'] == 3):
-                $itme_aanagement = 'Neutral';
-            elseif ($event['time_management'] == 4):
-                $itme_aanagement = 'Good';
-            elseif ($event['time_management'] == 5):
-                $itme_aanagement = 'Excellent';
-            endif;
-
-            $participants_attention = null;
-            if ($event['participants_attention'] == 1):
-                $participants_attention = 'Not Observed';
-            elseif ($event['participants_attention'] == 2):
-                $participants_attention = 'Need To Improved';
-            elseif ($event['participants_attention'] == 3):
-                $participants_attention = 'Neutral';
-            elseif ($event['participants_attention'] == 4):
-                $participants_attention = 'Good';
-            elseif ($event['participants_attention'] == 5):
-                $participants_attention = 'Excellent';
-            endif;
-
-            $logistical_arrangements = null;
-            if ($event['logistical_arrangements'] == 1):
-                $logistical_arrangements = 'Not Observed';
-            elseif ($event['logistical_arrangements'] == 2):
-                $logistical_arrangements = 'Need To Improved';
-            elseif ($event['logistical_arrangements'] == 3):
-                $logistical_arrangements = 'Neutral';
-            elseif ($event['logistical_arrangements'] == 4):
-                $logistical_arrangements = 'Good';
-            elseif ($event['participants_attention'] == 5):
-                $logistical_arrangements = 'Excellent';
-            endif;
-
-            $relevancy_delivery = null;
-            if ($event['relevancy_delivery'] == 1):
-                $relevancy_delivery = 'Not Observed';
-            elseif ($event['relevancy_delivery'] == 2):
-                $relevancy_delivery = 'Need To Improved';
-            elseif ($event['relevancy_delivery'] == 3):
-                $relevancy_delivery = 'Neutral';
-            elseif ($event['relevancy_delivery'] == 4):
-                $relevancy_delivery = 'Good';
-            elseif ($event['relevancy_delivery'] == 5):
-                $relevancy_delivery = 'Excellent';
-            endif;
-
-            $participants_feedback = null;
-            if ($event['participants_feedback'] == 1):
-                $participants_feedback = 'Not Observed';
-            elseif ($event['participants_feedback'] == 2):
-                $participants_feedback = 'Need To Improved';
-            elseif ($event['participants_feedback'] == 3):
-                $participants_feedback = 'Neutral';
-            elseif ($event['participants_feedback'] == 4):
-                $participants_feedback = 'Good';
-            elseif ($event['participants_feedback'] == 5):
-                $participants_feedback = 'Excellent';
-            endif;
-
 
             $cells = [
                 WriterEntityFactory::createCell(++$count),
-                WriterEntityFactory::createCell($event['activity_name']),
+                WriterEntityFactory::createCell($event['fk_branch_id']),
+                WriterEntityFactory::createCell($event['fk_project_id']),
+                WriterEntityFactory::createCell($event['fk_activity_id']),
+                WriterEntityFactory::createCell($event['month']),
                 WriterEntityFactory::createCell(date('d-m-Y', strtotime($event['event_start_date']))),
                 WriterEntityFactory::createCell(date('H:i', strtotime($event['event_start_time']))),
                 WriterEntityFactory::createCell(date('d-m-Y', strtotime($event['event_end_date']))),
@@ -288,17 +239,24 @@ if ($_GET['download_excel']) {
                 WriterEntityFactory::createCell($event['event_location']),
                 WriterEntityFactory::createCell($event['event_village']),
                 WriterEntityFactory::createCell($event['event_ward']),
-                WriterEntityFactory::createCell($event['user_fullname']),
-                WriterEntityFactory::createCell('Boy: ' . $event['participant_boy'] . '; Girl: ' . $event['participant_girl'] . '; Men: ' . $event['participant_male'] . '; Women: ' . $event['participant_female']),
-                WriterEntityFactory::createCell($event['validation_count']),
-                WriterEntityFactory::createCell($event['observation_score']),
-                WriterEntityFactory::createCell($event['preparatory_work']),
-                WriterEntityFactory::createCell($itme_aanagement),
-                WriterEntityFactory::createCell($participants_attention),
-                WriterEntityFactory::createCell($logistical_arrangements),
-                WriterEntityFactory::createCell($relevancy_delivery),
-                WriterEntityFactory::createCell($participants_feedback),
-                WriterEntityFactory::createCell($event_note),
+                WriterEntityFactory::createCell(date('d-m-Y', strtotime($event['interview_date']))),
+                WriterEntityFactory::createCell(date('H:i', strtotime($event['interview_time']))),
+                WriterEntityFactory::createCell($event['reviewed_by']),
+                WriterEntityFactory::createCell($event['beneficiary_id']),
+                WriterEntityFactory::createCell($event['participant_name']),
+                WriterEntityFactory::createCell(ucfirst($event['gender'])),
+                WriterEntityFactory::createCell($event['age']),
+                WriterEntityFactory::createCell($event['mobile']),
+                WriterEntityFactory::createCell(ucfirst($event['enjoyment'])),
+                WriterEntityFactory::createCell(ucfirst($event['victim'])),
+                WriterEntityFactory::createCell(ucfirst($event['victim_family'])),
+                WriterEntityFactory::createCell($event['message']),
+                WriterEntityFactory::createCell($event['other_message']),
+                WriterEntityFactory::createCell($event['use_message']),
+                WriterEntityFactory::createCell($event['mentioned_event']),
+                WriterEntityFactory::createCell($event['additional_comments']),
+                WriterEntityFactory::createCell($event['quote']),
+                
             ];
 
             $multipleRows[] = WriterEntityFactory::createRow($cells);
@@ -307,7 +265,7 @@ if ($_GET['download_excel']) {
     $writer->addRows($multipleRows);
 
     $currentSheet = $writer->getCurrentSheet();
-    $mergeRanges = ['A1:X1', 'A2:X2', 'A3:X3']; // you can list the cells you want to merge like this ['A1:A4','A1:E1']
+    $mergeRanges = ['A1:AG1', 'A2:AG2', 'A3:AG3']; // you can list the cells you want to merge like this ['A1:A4','A1:E1']
     $currentSheet->setMergeRanges($mergeRanges);
 
     $writer->close();
@@ -318,7 +276,25 @@ if ($_GET['download_excel']) {
 doAction('render_start');
 ?>
 <div class="page-header">
-    <h1>All Event Validation Report</h1>
+    <div class="row">
+        <div class="col-md-8">
+            <h1>All Event Validation Report</h1>
+            <div class="oh">
+                <div class="btn-group btn-group-sm">
+                    <?php
+                    echo linkButtonGenerator(array(
+                        'href' => '?download_excel=1&name=' . $filter_name . '&division=' . $filter_division . '&district=' . $filter_district . '&sub_district=' . $filter_sub_district . '&union=' . $filter_union . '&entry_start_date=' . $filter_entry_start_date . '&entry_end_date=' . $filter_entry_end_date,
+                        'attributes' => array('target' => '_blank'),
+                        'action' => 'download',
+                        'icon' => 'icon_download',
+                        'text' => 'Download Event Validation Report',
+                        'title' => 'Download Event Validation Report',
+                    ));
+                    ?>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <?php
 ob_start();

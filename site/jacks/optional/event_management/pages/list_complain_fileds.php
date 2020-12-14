@@ -212,8 +212,8 @@ doAction('render_start');
                         'attributes' => array('target' => '_blank'),
                         'action' => 'download',
                         'icon' => 'icon_download',
-                        'text' => 'Download All Complain Files',
-                        'title' => 'Download All Complain Files',
+                        'text' => 'Download Complain Files',
+                        'title' => 'Download Complain Files',
                     ));
                     ?>
                 </div>

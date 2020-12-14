@@ -118,7 +118,10 @@ if ($_GET['download_excel']) {
 
     $header = [
                 "SL",
-                'Event Name', 
+                "Branch Name",
+                "Project Name",
+                'Activity Name', 
+                'Month', 
                 'Start Date', 
                 'Start Time',
                 "End Date", 
@@ -130,17 +133,9 @@ if ($_GET['download_excel']) {
                 'Event Location', 
                 'Event Village',
                 'Event Ward',
-                'Submitted By', 
-                'Participant Number', 
-                'Event Validation Count',
-                'Observation Score', 
-                'Preparatory Work', 
-                'Time management of the event was', 
-                'Participants attention', 
-                'Logistical arrangements', 
-                'Relevancy of delivery of messages', 
-                'Participants Feedback', 
-                'Event Note', 
+                'Participant Number',
+                'Submitted by',
+                'Submitted Date',
 
     ];
 
@@ -155,74 +150,13 @@ if ($_GET['download_excel']) {
             $birth_reg_number = $case_info['birth_reg_number'] ? $case_info['birth_reg_number'] : 'N/A';
             $support_date = $case_info['entry_date'] ? date('d-m-Y', strtotime($case_info['entry_date'])) : 'N/A';
             $itme_aanagement = null;
-            if($event['time_management']==1):
-                $itme_aanagement = 'Not Observed';
-            elseif($event['time_management']==2):
-                $itme_aanagement = 'Need To Improved';
-            elseif($event['time_management']==3):
-                $itme_aanagement = 'Neutral';
-            elseif($event['time_management']==4):
-                $itme_aanagement = 'Good';
-            elseif($event['time_management']==5):
-                $itme_aanagement = 'Excellent';
-            endif;
-
-            $participants_attention = null;
-            if($event['participants_attention']==1):
-                $participants_attention = 'Not Observed';
-            elseif($event['participants_attention']==2):
-                $participants_attention = 'Need To Improved';
-            elseif($event['participants_attention']==3):
-                $participants_attention = 'Neutral';
-            elseif($event['participants_attention']==4):
-                $participants_attention = 'Good';
-            elseif($event['participants_attention']==5):
-                $participants_attention = 'Excellent';
-            endif;
-
-            $logistical_arrangements = null;
-            if($event['logistical_arrangements']==1):
-                $logistical_arrangements = 'Not Observed';
-            elseif($event['logistical_arrangements']==2):
-                $logistical_arrangements = 'Need To Improved';
-            elseif($event['logistical_arrangements']==3):
-                $logistical_arrangements = 'Neutral';
-            elseif($event['logistical_arrangements']==4):
-                $logistical_arrangements = 'Good';
-            elseif($event['participants_attention']==5):
-                $logistical_arrangements = 'Excellent';
-            endif;
-
-            $relevancy_delivery = null;
-            if($event['relevancy_delivery']==1):
-                $relevancy_delivery = 'Not Observed';
-            elseif($event['relevancy_delivery']==2):
-                $relevancy_delivery = 'Need To Improved';
-            elseif($event['relevancy_delivery']==3):
-                $relevancy_delivery = 'Neutral';
-            elseif($event['relevancy_delivery']==4):
-                $relevancy_delivery = 'Good';
-            elseif($event['relevancy_delivery']==5):
-                $relevancy_delivery = 'Excellent';
-            endif;
-
-            $participants_feedback = null;
-            if($event['participants_feedback']==1):
-                $participants_feedback = 'Not Observed';
-            elseif($event['participants_feedback']==2):
-                $participants_feedback = 'Need To Improved';
-            elseif($event['participants_feedback']==3):
-                $participants_feedback = 'Neutral';
-            elseif($event['participants_feedback']==4):
-                $participants_feedback = 'Good';
-            elseif($event['participants_feedback']==5):
-                $participants_feedback = 'Excellent';
-            endif;
-            
 
             $cells = [
                 WriterEntityFactory::createCell(++$count),
-                WriterEntityFactory::createCell($event['activity_name']),
+                WriterEntityFactory::createCell($event['fk_branch_id']),
+                WriterEntityFactory::createCell($event['fk_project_id']),
+                WriterEntityFactory::createCell($event['fk_activity_id']),
+                WriterEntityFactory::createCell($event['month']),
                 WriterEntityFactory::createCell(date('d-m-Y', strtotime($event['event_start_date']))),
                 WriterEntityFactory::createCell(date('H:i', strtotime($event['event_start_time']))),
                 WriterEntityFactory::createCell(date('d-m-Y', strtotime($event['event_end_date']))),
@@ -235,17 +169,9 @@ if ($_GET['download_excel']) {
                 WriterEntityFactory::createCell($event['event_village']),
                 WriterEntityFactory::createCell($event['event_ward']),
 
-                WriterEntityFactory::createCell($event['user_fullname']),
                 WriterEntityFactory::createCell('Boy: ' . $event['participant_boy'] . '; Girl: ' . $event['participant_girl'] . '; Men: ' . $event['participant_male'] . '; Women: ' . $event['participant_female']),
-                WriterEntityFactory::createCell($event['validation_count']),
-                WriterEntityFactory::createCell($event['observation_score']),
-                WriterEntityFactory::createCell($event['preparatory_work']),
-                WriterEntityFactory::createCell($itme_aanagement),
-                WriterEntityFactory::createCell($participants_attention),
-                WriterEntityFactory::createCell($logistical_arrangements),
-                WriterEntityFactory::createCell($relevancy_delivery),
-                WriterEntityFactory::createCell($participants_feedback),
-                WriterEntityFactory::createCell($event_note),
+                WriterEntityFactory::createCell($event['created_by']),
+                WriterEntityFactory::createCell(date('d-m-Y', strtotime($event['create_date']))),
             ];
 
             $multipleRows[] = WriterEntityFactory::createRow($cells);
@@ -255,7 +181,7 @@ if ($_GET['download_excel']) {
     $writer->addRows($multipleRows); 
 
     $currentSheet = $writer->getCurrentSheet();
-    $mergeRanges = ['A1:X1','A2:X2','A3:X3']; // you can list the cells you want to merge like this ['A1:A4','A1:E1']
+    $mergeRanges = ['A1:S1','A2:S2','A3:S3']; // you can list the cells you want to merge like this ['A1:A4','A1:E1']
     $currentSheet->setMergeRanges($mergeRanges);
 
     $writer->close();
@@ -289,8 +215,8 @@ doAction('render_start');
                         'attributes' => array('target' => '_blank'),
                         'action' => 'download',
                         'icon' => 'icon_download',
-                        'text' => 'Download Case',
-                        'title' => 'Download Case',
+                        'text' => 'Download Events',
+                        'title' => 'Download Events',
                     ));
                     ?>
                 </div>

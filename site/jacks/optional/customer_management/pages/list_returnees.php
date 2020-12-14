@@ -170,7 +170,7 @@ if ($_GET['download_excel']) {
                 'Mobile Number',
                 'Emergency Mobile Number',
                 'NID Number',
-                'Date of Birth', 
+                'Birth Registration Number', 
                 'Passport',
                 'Division',
                 'District',
@@ -228,9 +228,9 @@ if ($_GET['download_excel']) {
 
             $cells = [
                 WriterEntityFactory::createCell(++$count),
+                WriterEntityFactory::createCell($returnee['returnee_id']),
                 WriterEntityFactory::createCell($returnee['fk_branch_id']),
                 WriterEntityFactory::createCell($returnee['fk_project_id']),
-                WriterEntityFactory::createCell($returnee['returnee_id']),
                 WriterEntityFactory::createCell($returnee['full_name']),
                 WriterEntityFactory::createCell($returnee['father_name']),
                 WriterEntityFactory::createCell($returnee['mother_name']),
@@ -251,7 +251,7 @@ if ($_GET['download_excel']) {
                 WriterEntityFactory::createCell($returnee['person_type']),
                 WriterEntityFactory::createCell(date('d-m-Y', strtotime($returnee['return_date']))),
                 WriterEntityFactory::createCell($returnee['destination_country']),
-                WriterEntityFactory::createCell($returnee['legal_document']),
+                WriterEntityFactory::createCell($returnee['legal_document'].' '.$returnee['other_legal_document']),
                 WriterEntityFactory::createCell(ucfirst($returnee['remigrate_intention'])),
                 WriterEntityFactory::createCell($returnee['destination_country_profession']),
                 WriterEntityFactory::createCell(ucfirst($returnee['profile_selection'])),
@@ -268,7 +268,7 @@ if ($_GET['download_excel']) {
     $writer->addRows($multipleRows); 
 
     $currentSheet = $writer->getCurrentSheet();
-    $mergeRanges = ['A1:BQ1','A2:BQ2','A3:BQ3']; // you can list the cells you want to merge like this ['A1:A4','A1:E1']
+    $mergeRanges = ['A1:AC1','A2:AC2','A3:AC3']; // you can list the cells you want to merge like this ['A1:A4','A1:E1']
     $currentSheet->setMergeRanges($mergeRanges);
 
     $writer->close();
@@ -299,8 +299,8 @@ doAction('render_start');
                 'attributes' => array('target' => '_blank'),
                 'action' => 'download',
                 'icon' => 'icon_download',
-                'text' => 'Download Participants',
-                'title' => 'Download Participants',
+                'text' => 'Download Returnees',
+                'title' => 'Download Returnees',
             ));
             ?>
         </div>

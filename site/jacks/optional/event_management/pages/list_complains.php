@@ -228,8 +228,8 @@ doAction('render_start');
                         'attributes' => array('target' => '_blank'),
                         'action' => 'download',
                         'icon' => 'icon_download',
-                        'text' => 'Download All Community Services',
-                        'title' => 'Download All Community Services',
+                        'text' => 'Download Community Services',
+                        'title' => 'Download Community Services',
                     ));
                     ?>
                 </div>

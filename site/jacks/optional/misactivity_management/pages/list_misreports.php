@@ -1,4 +1,10 @@
 <?php
+use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
+use Box\Spout\Common\Entity\Row;
+use Box\Spout\Writer\Common\Creator\Style\StyleBuilder;
+use Box\Spout\Common\Entity\Style\Color;
+use Box\Spout\Common\Entity\Style\CellAlignment;
+
 $start = $_GET['start'] ? $_GET['start'] : 0;
 $per_page_items = 10;
 
@@ -91,6 +97,128 @@ $all_branches = $branches->get_branches();
 
 $all_months = $this->get_months();
 
+if ($_GET['download_excel']) {
+
+    $filter_project_name = null;
+    $filter_branch_name = null;
+    $filter_month_name = null;
+    if($filter_project_id)
+        $find_pro = array_search($filter_project_id, array_column($all_projects['data'], 'pk_project_id'));
+        $filter_project_name = $all_projects['data'][$find_pro]['project_short_name'];
+
+    if($filter_branch_id)
+        $find_bran = array_search($filter_branch_id, array_column($all_branches['data'], 'pk_branch_id'));
+        $filter_branch_name = $all_branches['data'][$find_bran]['branch_name'];
+
+    if($filter_month)
+        $filter_month_name = $all_months[$filter_month];
+
+    unset($args['limit']);
+    
+    $args['data_only'] = true;
+    $data = $this->get_targets($args);
+    $data = $data['data'];
+    // This will be here in our project
+
+    $writer =WriterEntityFactory::createXLSXWriter();
+    $style = (new StyleBuilder())
+           ->setFontBold()
+           ->setFontSize(12)
+           //->setShouldWrapText()
+           ->build();
+
+    $fileName = 'mis-report-' . time() . '.xlsx';
+    //$writer->openToFile('lemon1.xlsx'); // write data to a file or to a PHP stream
+    $writer->openToBrowser($fileName); // stream data directly to the browser
+
+    // Header text
+    $style2 = (new StyleBuilder())
+           ->setFontBold()
+           ->setFontSize(15)
+           //->setFontColor(Color::BLUE)
+           ->setShouldWrapText()
+           ->setCellAlignment(CellAlignment::LEFT)
+           ->build();
+
+    /** add a row at a time */
+    $report_head = ['MIS Reports'];
+    $singleRow = WriterEntityFactory::createRowFromArray($report_head,$style2);
+    $writer->addRow($singleRow);
+
+    $report_date = ['Date: '.Date('d-m-Y H:i')];
+    $reportDateRow = WriterEntityFactory::createRowFromArray($report_date);
+    $writer->addRow($reportDateRow);
+
+    $filtered_with = ['Project = '.$filter_project_name.', Branch = '.$filter_branch_name.', Division = '.$filter_division.', District = '.$filter_district.', Upazila = '.$filter_sub_district.', Month = ' . $filter_month_name];
+    $rowFromVal = WriterEntityFactory::createRowFromArray($filtered_with);
+    $writer->addRow($rowFromVal);
+
+    $empty_row = [''];
+    $rowFromVal = WriterEntityFactory::createRowFromArray($empty_row);
+    $writer->addRow($rowFromVal);
+
+    $header = [
+                "SL",
+                'Project Name',  
+                'District', 
+                'Upazila', 
+                'Branch Name',
+                'Month',
+                'Activity', 
+                'Target', 
+                'Achievement', 
+                'Variance', 
+                'Male', 
+                'Female', 
+                'Boy', 
+                'Girl', 
+                'Total', 
+    ];
+
+    $rowFromVal = WriterEntityFactory::createRowFromArray($header,$style);
+    $writer->addRow($rowFromVal);
+    $multipleRows = array();
+
+    if ($data) {
+        $count = 0;
+        foreach ($data as $value) {
+            $month_name = $all_months[$value['month']];
+
+            $cells = [
+                WriterEntityFactory::createCell(++$count),
+                WriterEntityFactory::createCell($value['project_short_name']),
+                WriterEntityFactory::createCell($value['branch_district']),
+                WriterEntityFactory::createCell($value['branch_sub_district']),
+                WriterEntityFactory::createCell($value['branch_name']),
+                WriterEntityFactory::createCell($month_name),
+                WriterEntityFactory::createCell($value['activity_name']),
+                WriterEntityFactory::createCell($value['activity_target']),
+                WriterEntityFactory::createCell($value['activity_achievement']),
+                WriterEntityFactory::createCell($value['activity_target'] - $value['activity_achievement']),
+                WriterEntityFactory::createCell($value['achievement_male']),
+                WriterEntityFactory::createCell($value['achievement_female']),
+                WriterEntityFactory::createCell($value['achievement_boy']),
+                WriterEntityFactory::createCell($value['achievement_girl']),
+                WriterEntityFactory::createCell($value['achievement_total']),
+            ];
+
+            $multipleRows[] = WriterEntityFactory::createRow($cells);
+
+        }
+    }
+
+    
+    $writer->addRows($multipleRows); 
+
+    $currentSheet = $writer->getCurrentSheet();
+    $mergeRanges = ['A1:O1','A2:O2','A3:O3']; // you can list the cells you want to merge like this ['A1:A4','A1:E1']
+    $currentSheet->setMergeRanges($mergeRanges);
+
+    $writer->close();
+    exit;
+    // End this is to our project
+}
+
 doAction('render_start');
 ?>
 <div class="page-header">
@@ -104,6 +232,18 @@ doAction('render_start');
                 'icon' => 'icon_download',
                 'text' => 'Download',
                 'title' => 'Download MIS',
+            ));
+            ?>
+        </div>
+        <div class="btn-group btn-group-sm">
+            <?php
+            echo linkButtonGenerator(array(
+                'href' => '?download_excel=1&project_id=' . $filter_project_id . '&division=' . $filter_division. '&district=' . $filter_district .'&sub_district=' . $filter_sub_district .'&branch_id=' . $filter_branch_id .'&month=' . $filter_month ,
+                'attributes' => array('target' => '_blank'),
+                'action' => 'download',
+                'icon' => 'icon_download',
+                'text' => 'Download MIS Reports',
+                'title' => 'Download MIS Reports',
             ));
             ?>
         </div>

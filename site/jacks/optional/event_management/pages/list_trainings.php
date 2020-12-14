@@ -107,9 +107,9 @@ if ($_GET['download_excel']) {
                 "Profession", 
                 'Gender',
                 'Name of the training',
+                'Duration of training',
                 'Name of the workshop',
                 'Duration of Workshop',
-                'Duration of training',
                 'Mobile', 
                 'Address',
     ];
@@ -131,9 +131,9 @@ if ($_GET['download_excel']) {
                 WriterEntityFactory::createCell($trainings['profession']),
                 WriterEntityFactory::createCell(ucfirst($trainings['gender'])),
                 WriterEntityFactory::createCell($trainings['training_name']),
+                WriterEntityFactory::createCell($trainings['training_duration']),
                 WriterEntityFactory::createCell($trainings['workshop_name']),
                 WriterEntityFactory::createCell($trainings['workshop_duration']),
-                WriterEntityFactory::createCell($trainings['training_duration']),
                 WriterEntityFactory::createCell($trainings['mobile']),
                 WriterEntityFactory::createCell($trainings['address']),
             ];
@@ -178,8 +178,8 @@ doAction('render_start');
                 'attributes' => array('target' => '_blank'),
                 'action' => 'download',
                 'icon' => 'icon_download',
-                'text' => 'Download All Training/Workshop',
-                'title' => 'Download All Training/Workshop',
+                'text' => 'Download Training/Workshop',
+                'title' => 'Download Training/Workshop',
             ));
             ?>
         </div>
