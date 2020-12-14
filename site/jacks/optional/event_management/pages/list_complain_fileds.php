@@ -1,4 +1,10 @@
 <?php
+use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
+use Box\Spout\Common\Entity\Row;
+use Box\Spout\Writer\Common\Creator\Style\StyleBuilder;
+use Box\Spout\Common\Entity\Style\Color;
+use Box\Spout\Common\Entity\Style\CellAlignment;
+
 $start = $_GET['start'] ? $_GET['start'] : 0;
 $per_page_items = 10;
 
@@ -79,6 +85,108 @@ if ($filter_entry_start_date)
 if ($filter_entry_end_date)
     $filterString[] = 'End Date: ' . $filter_entry_end_date;
 
+if ($_GET['download_excel']) {
+    unset($args['limit']);
+    
+    $args['data_only'] = true;
+    $data = $this->get_complain_fileds($args);
+    $data = $data['data'];
+    // This will be here in our project
+
+    $writer =WriterEntityFactory::createXLSXWriter();
+    $style = (new StyleBuilder())
+           ->setFontBold()
+           ->setFontSize(12)
+           //->setShouldWrapText()
+           ->build();
+
+    $fileName = 'complain-files-' . time() . '.xlsx';
+    //$writer->openToFile('lemon1.xlsx'); // write data to a file or to a PHP stream
+    $writer->openToBrowser($fileName); // stream data directly to the browser
+
+    // Header text
+    $style2 = (new StyleBuilder())
+           ->setFontBold()
+           ->setFontSize(15)
+           //->setFontColor(Color::BLUE)
+           ->setShouldWrapText()
+           ->setCellAlignment(CellAlignment::LEFT)
+           ->build();
+
+    /** add a row at a time */
+    $report_head = ['Complain Files Report'];
+    $singleRow = WriterEntityFactory::createRowFromArray($report_head,$style2);
+    $writer->addRow($singleRow);
+
+    $report_date = ['Date: '.Date('d-m-Y H:i')];
+    $reportDateRow = WriterEntityFactory::createRowFromArray($report_date);
+    $writer->addRow($reportDateRow);
+
+    $filtered_with = ['Gender = '.$filter_gender.', Cast Type = '.$filter_case_type.', Division = '.$filter_division.', District = '.$filter_district.', Upazila = '.$filter_sub_district.', Start Date = ' . $filter_entry_start_date. ', End Date = ' . $filter_entry_end_date];
+    $rowFromVal = WriterEntityFactory::createRowFromArray($filtered_with);
+    $writer->addRow($rowFromVal);
+
+    $empty_row = [''];
+    $rowFromVal = WriterEntityFactory::createRowFromArray($empty_row);
+    $writer->addRow($rowFromVal);
+
+    $header = [
+                "SL",
+                'Division', 
+                'District', 
+                'Upazila', 
+                'Police Station', 
+                "Register Date", 
+                'Name of service recipient',
+                'Age',
+                'Gender',
+                'Case Number',
+                'Month',
+                'Type of Case', 
+                'Comments',
+    ];
+
+    $rowFromVal = WriterEntityFactory::createRowFromArray($header,$style);
+    $writer->addRow($rowFromVal);
+    $multipleRows = array();
+
+    if ($data) {
+        $count = 0;
+        foreach ($data as $complains) {
+
+            $cells = [
+                WriterEntityFactory::createCell(++$count),
+                WriterEntityFactory::createCell($complains['division']),
+                WriterEntityFactory::createCell($complains['district']),
+                WriterEntityFactory::createCell($complains['upazila']),
+                WriterEntityFactory::createCell($complains['police_station']),
+                WriterEntityFactory::createCell($complains['complain_register_date'] ? date('d-m-Y', strtotime($complains['complain_register_date'])) : 'N/A'),
+                WriterEntityFactory::createCell($complains['full_name']),
+                WriterEntityFactory::createCell($complains['age']),
+                WriterEntityFactory::createCell(ucfirst($complains['gender'])),
+                WriterEntityFactory::createCell($complains['case_id']),
+                WriterEntityFactory::createCell($complains['month']),
+                WriterEntityFactory::createCell(ucfirst($complains['type_case'])),
+                WriterEntityFactory::createCell($complains['comments']),
+            ];
+
+            $multipleRows[] = WriterEntityFactory::createRow($cells);
+
+        }
+    }
+
+    
+    $writer->addRows($multipleRows); 
+
+    $currentSheet = $writer->getCurrentSheet();
+    $mergeRanges = ['A1:M1','A2:M2','A3:M3']; // you can list the cells you want to merge like this ['A1:A4','A1:E1']
+    $currentSheet->setMergeRanges($mergeRanges);
+
+    $writer->close();
+    exit;
+    // End this is to our project
+}
+
 doAction('render_start');
 ?>
 <div class="page-header">
@@ -94,6 +202,18 @@ doAction('render_start');
                         'icon' => 'icon_add',
                         'text' => 'New Complain File',
                         'title' => 'New Complain File',
+                    ));
+                    ?>
+                </div>
+                <div class="btn-group btn-group-sm">
+                    <?php
+                    echo linkButtonGenerator(array(
+                        'href' => '?download_excel=1&gender=' . $filter_gender . '&type_case=' . $filter_type_case . '&division=' . $filter_division. '&district=' . $filter_district .'&sub_district=' . $filter_sub_district . '&entry_start_date=' . $filter_entry_start_date . '&entry_end_date=' . $filter_entry_end_date,
+                        'attributes' => array('target' => '_blank'),
+                        'action' => 'download',
+                        'icon' => 'icon_download',
+                        'text' => 'Download All Complain Files',
+                        'title' => 'Download All Complain Files',
                     ));
                     ?>
                 </div>

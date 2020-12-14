@@ -1,4 +1,10 @@
 <?php
+use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
+use Box\Spout\Common\Entity\Row;
+use Box\Spout\Writer\Common\Creator\Style\StyleBuilder;
+use Box\Spout\Common\Entity\Style\Color;
+use Box\Spout\Common\Entity\Style\CellAlignment;
+
 $start = $_GET['start'] ? $_GET['start'] : 0;
 $per_page_items = 10;
 
@@ -88,6 +94,115 @@ if ($filter_entry_start_date)
 if ($filter_entry_end_date)
     $filterString[] = 'End Date: ' . $filter_entry_end_date;
 
+if ($_GET['download_excel']) {
+    unset($args['limit']);
+    
+    $args['data_only'] = true;
+    $data = $this->get_complains($args);
+    $data = $data['data'];
+    // This will be here in our project
+
+    $writer =WriterEntityFactory::createXLSXWriter();
+    $style = (new StyleBuilder())
+           ->setFontBold()
+           ->setFontSize(12)
+           //->setShouldWrapText()
+           ->build();
+
+    $fileName = 'community-services-' . time() . '.xlsx';
+    //$writer->openToFile('lemon1.xlsx'); // write data to a file or to a PHP stream
+    $writer->openToBrowser($fileName); // stream data directly to the browser
+
+    // Header text
+    $style2 = (new StyleBuilder())
+           ->setFontBold()
+           ->setFontSize(15)
+           //->setFontColor(Color::BLUE)
+           ->setShouldWrapText()
+           ->setCellAlignment(CellAlignment::LEFT)
+           ->build();
+
+    /** add a row at a time */
+    $report_head = ['Community Services Report'];
+    $singleRow = WriterEntityFactory::createRowFromArray($report_head,$style2);
+    $writer->addRow($singleRow);
+
+    $report_date = ['Date: '.Date('d-m-Y H:i')];
+    $reportDateRow = WriterEntityFactory::createRowFromArray($report_date);
+    $writer->addRow($reportDateRow);
+
+    $filtered_with = ['Gender = '.$filter_gender.', Cast Type = '.$filter_case_type.', Division = '.$filter_division.', District = '.$filter_district.', Upazila = '.$filter_sub_district.', Start Date = ' . $filter_entry_start_date. ', End Date = ' . $filter_entry_end_date];
+    $rowFromVal = WriterEntityFactory::createRowFromArray($filtered_with);
+    $writer->addRow($rowFromVal);
+
+    $empty_row = [''];
+    $rowFromVal = WriterEntityFactory::createRowFromArray($empty_row);
+    $writer->addRow($rowFromVal);
+
+    $header = [
+                "SL",
+                'Branch Name', 
+                'Division', 
+                'District', 
+                'Upazila', 
+                'Union', 
+                'Village', 
+                "Register Date", 
+                'Name of service recipient',
+                'Age',
+                'Type of service seeking',
+                'Service recipient',
+                'Gender',
+                'How to know about this service of the project',
+                'Remark',
+    ];
+
+    $rowFromVal = WriterEntityFactory::createRowFromArray($header,$style);
+    $writer->addRow($rowFromVal);
+    $multipleRows = array();
+
+    if ($data) {
+        $count = 0;
+        foreach ($data as $complains) {
+
+            $branch = "SELECT branch_name FROM dev_branches WHERE pk_branch_id = '" . $complains['fk_branch_id'] . "'";
+            $branch_name = $devdb->get_row($branch)['branch_name'];
+
+            $cells = [
+                WriterEntityFactory::createCell(++$count),
+                WriterEntityFactory::createCell($branch_name),
+                WriterEntityFactory::createCell($complains['division']),
+                WriterEntityFactory::createCell($complains['branch_district']),
+                WriterEntityFactory::createCell($complains['upazila']),
+                WriterEntityFactory::createCell($complains['branch_union']),
+                WriterEntityFactory::createCell($complains['village']),
+                WriterEntityFactory::createCell($complains['complain_register_date'] ? date('d-m-Y', strtotime($complains['complain_register_date'])) : 'N/A'),
+                WriterEntityFactory::createCell($complains['name']),
+                WriterEntityFactory::createCell($complains['age']),
+                WriterEntityFactory::createCell($complains['type_service'] . ' ' . $complains['other_type_service']),
+                WriterEntityFactory::createCell(ucfirst($complains['type_recipient'])),
+                WriterEntityFactory::createCell(ucfirst($complains['gender'])),
+                WriterEntityFactory::createCell($complains['know_service'] . ' ' . $complains['other_know_service']),
+                WriterEntityFactory::createCell($complains['remark']),
+            ];
+
+            $multipleRows[] = WriterEntityFactory::createRow($cells);
+
+        }
+    }
+
+    
+    $writer->addRows($multipleRows); 
+
+    $currentSheet = $writer->getCurrentSheet();
+    $mergeRanges = ['A1:O1','A2:O2','A3:O3']; // you can list the cells you want to merge like this ['A1:A4','A1:E1']
+    $currentSheet->setMergeRanges($mergeRanges);
+
+    $writer->close();
+    exit;
+    // End this is to our project
+}
+
 doAction('render_start');
 ?>
 <div class="page-header">
@@ -103,6 +218,18 @@ doAction('render_start');
                         'icon' => 'icon_add',
                         'text' => 'New Community Service',
                         'title' => 'New Community Service',
+                    ));
+                    ?>
+                </div>
+                <div class="btn-group btn-group-sm">
+                    <?php
+                    echo linkButtonGenerator(array(
+                        'href' => '?download_excel=1&gender=' . $filter_gender . '&division=' . $filter_division. '&district=' . $filter_district .'&sub_district=' . $filter_sub_district .'&union=' . $filter_union .'&service_recipient=' . $filter_service_recipient .'&service_seeking=' . $filter_service_seeking . '&entry_start_date=' . $filter_entry_start_date . '&entry_end_date=' . $filter_entry_end_date,
+                        'attributes' => array('target' => '_blank'),
+                        'action' => 'download',
+                        'icon' => 'icon_download',
+                        'text' => 'Download All Community Services',
+                        'title' => 'Download All Community Services',
                     ));
                     ?>
                 </div>

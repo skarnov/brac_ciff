@@ -92,8 +92,8 @@ if ($filter_entry_end_date)
     $filterString[] = 'End Date: ' . $filter_entry_end_date;
 
 if ($_GET['download_excel']) {
-    $args = array(
-        'select_fields' => array(
+    //$args[''] = array(
+        $args['select_fields'] = array(
             'pk_immediate_support_id' => 'dev_immediate_supports.pk_immediate_support_id',
             'fk_staff_id' => 'dev_immediate_supports.fk_staff_id',
             'fk_customer_id' => 'dev_immediate_supports.fk_customer_id',
@@ -172,7 +172,7 @@ if ($_GET['download_excel']) {
             'date_legal' => 'dev_social_supports.date_legal',
             'support_referred' => 'dev_social_supports.support_referred',
             'other_support_referred' => 'dev_social_supports.other_support_referred',
-        ),
+        //),
     );
 
     unset($args['listing']);
@@ -242,6 +242,95 @@ if ($_GET['download_excel']) {
         'Support Date',
         'Arrival Place',
         "Immediate support services received",
+
+        "Plan Date",
+        "Type of Services Requested",
+        "Social Protection Schemes",
+        "Special Security Measures",
+        "Note",
+        "Date of first meeting",
+        "Problems Identified",
+        "Problem Description",
+        "Initial Plan",
+        "Place of Session",
+        "Number of Sessions (Estimate)",
+        "Duration of Session",
+        "Other Requirements",
+        "Referred to",
+        "Referred Address of organization/Individual",
+        "Referred Phone Number",
+        "Reason for Referral",
+
+        "Economic Reintegration Support Date",
+        "In-kind Support from Project",
+        "Training Certificate Received",
+        "How has the training been used so far?",
+        "Any other Comments",
+        "Micro-business Established",
+        "Month Of Business Inauguration",
+        "Year of Business Inauguration",
+        "Family members received Financial Literacy Training",
+        "Date of Training",
+        "Place of Training",
+        "Duration of Training",
+        "Status Of Training",
+        "Financial Literacy Training Date",
+        "Business Development Training Date",
+        "Product Development Training Date",
+        "Entrepreneur Training Training Date",
+        "Other Training Name (If Any)",
+        "Other Training Start Date",
+
+        "conomic Reintegration Referrals Date",
+        "Referrals done for Vocational Training",
+        "Vocational Training Received (Referrals) (If Any)",
+        "Start Date of Training",
+        "End Date of Training",
+        "Referrals done for economic services",
+        "Economic Support (If Any)",
+        "Required Assistance Received",
+        "Job Placement Date",
+        "Financial Services Date",
+        "Referred To",
+        "Referred Address",
+        "Date of Training",
+        "Place of Training",
+        "Duration of Training",
+        "Status of the Training",
+        "How has the assistance been utilized?",
+        "Any other Comments",
+
+        "Support Referred",
+        "Social Reintegration Support",
+        "Social Services Received",
+        "Medical Services Received",
+        "Education Services Received",
+        "Housing Services Received",
+        "Legal & Others Services Received",
+
+        "Date",
+        "Case dropped out from the project?",
+        "Reason for Dropping Out",
+        "Confirmed Services Received after 3 Months",
+        "Financial Service",
+        "Social Protection",
+        "Special Security Measures",
+
+        "Monthly income (BDT)",
+        "Challenges",
+        "Actions taken",
+        "Remark of the participant (If Any)",
+        "Comment of BRAC Officer responsible for participant",
+        "Remark of District Manager",
+        "Psychosocial Reintegration Date",
+        "Psychosocial Comment",
+        "Economic Reintegration Date",
+        "Economic Comment",
+        "Social Reintegration Date",
+        "Social Comment",
+        "Comment on social reintegration",
+        "Income Tracking Date",
+        "Complete income tracking information",
     ];
 
     $rowFromVal = WriterEntityFactory::createRowFromArray($header, $style);
@@ -254,6 +343,26 @@ if ($_GET['download_excel']) {
             $nid_number = $case_info['nid_number'] ? $case_info['nid_number'] : 'N/A';
             $birth_reg_number = $case_info['birth_reg_number'] ? $case_info['birth_reg_number'] : 'N/A';
             $support_date = $case_info['entry_date'] ? date('d-m-Y', strtotime($case_info['entry_date'])) : 'N/A';
+            $soical_date = $case_info['soical_date'] ? date('d-m-Y', strtotime($case_info['soical_date'])) : 'N/A';
+            $medical_date = $case_info['medical_date'] ? date('d-m-Y', strtotime($case_info['medical_date'])) : 'N/A';
+            $date_education = $case_info['date_education'] ? date('d-m-Y', strtotime($case_info['date_education'])) : 'N/A';
+            $date_housing = $case_info['date_housing'] ? date('d-m-Y', strtotime($case_info['date_housing'])) : 'N/A';
+            $date_legal = $case_info['date_legal'] ? date('d-m-Y', strtotime($case_info['date_legal'])) : 'N/A';
+            $plan_date = $case_info['plan_date'] ? date('d-m-Y', strtotime($case_info['plan_date'])) : 'N/A';
+            $first_meeting = $case_info['first_meeting'] ? date('d-m-Y', strtotime($case_info['first_meeting'])) : 'N/A';
+            $traning_entry_date = $case_info['traning_entry_date'] ? date('d-m-Y', strtotime($case_info['traning_entry_date'])) : 'N/A';
+            $training_start_date = $case_info['training_start_date'] ? date('d-m-Y', strtotime($case_info['training_start_date'])) : 'N/A';
+            $training_end_date = $case_info['training_end_date'] ? date('d-m-Y', strtotime($case_info['training_end_date'])) : 'N/A';
+            $job_placement_date = $case_info['job_placement_date'] ? date('d-m-Y', strtotime($case_info['job_placement_date'])) : 'N/A';
+            $economic_reintegration_date = $case_info['economic_reintegration_date'] ? date('d-m-Y', strtotime($case_info['economic_reintegration_date'])) : 'N/A';
+            $economic_reintegration_referral_date = $case_info['economic_reintegration_referral_date'] ? date('d-m-Y', strtotime($case_info['economic_reintegration_referral_date'])) : 'N/A';
+            $financial_services_date = $case_info['financial_services_date'] ? date('d-m-Y', strtotime($case_info['financial_services_date'])) : 'N/A';
+            $financial_literacy_date = $case_info['financial_literacy_date'] ? date('d-m-Y', strtotime($case_info['financial_literacy_date'])) : 'N/A';
+            $business_development_date = $case_info['business_development_date'] ? date('d-m-Y', strtotime($case_info['business_development_date'])) : 'N/A';
+            $product_development_date = $case_info['product_development_date'] ? date('d-m-Y', strtotime($case_info['product_development_date'])) : 'N/A';
+            $entrepreneur_training_date = $case_info['entrepreneur_training_date'] ? date('d-m-Y', strtotime($case_info['entrepreneur_training_date'])) : 'N/A';
+            $other_financial_training_name = $case_info['other_financial_training_name'] ? $case_info['other_financial_training_name'] : 'N/A';
+            $other_financial_training_date = $case_info['other_financial_training_date'] ? date('d-m-Y', strtotime($case_info['other_financial_training_date'])) : 'N/A';
 
             $cells = [
                 WriterEntityFactory::createCell(++$count),
@@ -278,6 +387,72 @@ if ($_GET['download_excel']) {
                 WriterEntityFactory::createCell($support_date),
                 WriterEntityFactory::createCell($case_info['arrival_place']),
                 WriterEntityFactory::createCell($case_info['immediate_support']),
+
+                WriterEntityFactory::createCell($plan_date),
+                WriterEntityFactory::createCell($case_info['service_requested'] . ' ' . $case_info['other_service_requested']),
+                WriterEntityFactory::createCell($case_info['social_protection']),
+                WriterEntityFactory::createCell($case_info['security_measure']),
+                WriterEntityFactory::createCell($case_info['service_requested_note']),
+
+                WriterEntityFactory::createCell($first_meeting),
+                WriterEntityFactory::createCell($case_info['problem_identified']),
+                WriterEntityFactory::createCell($case_info['problem_description']),
+                WriterEntityFactory::createCell($case_info['initial_plan']),
+                WriterEntityFactory::createCell(ucfirst($case_info['session_place'])),
+                WriterEntityFactory::createCell($case_info['session_number']),
+                WriterEntityFactory::createCell($case_info['session_duration']),
+                WriterEntityFactory::createCell($case_info['other_requirements']),
+                WriterEntityFactory::createCell($case_info['reffer_to']),
+                WriterEntityFactory::createCell($case_info['referr_address']),
+                WriterEntityFactory::createCell($case_info['contact_number']),
+                WriterEntityFactory::createCell($case_info['reason_for_reffer'] . ' ' . $case_info['other_reason_for_reffer']),
+
+                WriterEntityFactory::createCell($economic_reintegration_date),
+                WriterEntityFactory::createCell($case_info['inkind_project'] . ' ' . $case_info['other_inkind_project']),
+                WriterEntityFactory::createCell(ucfirst($case_info['is_certification_received'])),
+                WriterEntityFactory::createCell($case_info['training_used']),
+                WriterEntityFactory::createCell($case_info['economic_other_comments']),
+                WriterEntityFactory::createCell(ucfirst($case_info['microbusiness_established'])),
+                WriterEntityFactory::createCell($case_info['month_inauguration']),
+                WriterEntityFactory::createCell($case_info['year_inauguration']),
+                WriterEntityFactory::createCell(ucfirst($case_info['family_training'])),
+                WriterEntityFactory::createCell($traning_entry_date),
+                WriterEntityFactory::createCell($case_info['place_traning']),
+                WriterEntityFactory::createCell($case_info['duration_traning']),
+                WriterEntityFactory::createCell(ucfirst($case_info['training_status'])),
+                WriterEntityFactory::createCell($financial_literacy_date),
+                WriterEntityFactory::createCell($business_development_date),
+                WriterEntityFactory::createCell($product_development_date),
+                WriterEntityFactory::createCell($entrepreneur_training_date),
+                WriterEntityFactory::createCell($other_financial_training_name),
+                WriterEntityFactory::createCell($other_financial_training_date),
+
+                WriterEntityFactory::createCell($economic_reintegration_referral_date),
+                WriterEntityFactory::createCell(ucfirst($case_info['is_vocational_training'])),
+                WriterEntityFactory::createCell($case_info['received_vocational'] . ' ' . $case_info['other_received_vocational']),
+                WriterEntityFactory::createCell($training_start_date),
+                WriterEntityFactory::createCell($training_end_date),
+                WriterEntityFactory::createCell(ucfirst($case_info['is_economic_services'])),
+                WriterEntityFactory::createCell($case_info['economic_support'] . ' ' . $case_info['other_economic_support']),
+                WriterEntityFactory::createCell(ucfirst($case_info['is_assistance_received'])),
+                WriterEntityFactory::createCell($job_placement_date),
+                WriterEntityFactory::createCell($financial_services_date),
+                WriterEntityFactory::createCell($case_info['refferd_to']),
+                WriterEntityFactory::createCell($case_info['refferd_address']),
+                WriterEntityFactory::createCell($case_info['trianing_date']),
+                WriterEntityFactory::createCell($case_info['place_of_training']),
+                WriterEntityFactory::createCell($case_info['duration_training']),
+                WriterEntityFactory::createCell(ucfirst($case_info['status_traning'])),
+                WriterEntityFactory::createCell($case_info['assistance_utilized']),
+                WriterEntityFactory::createCell($case_info['economic_referrals_other_comments']),
+
+                WriterEntityFactory::createCell($case_info['support_referred'] . ' ' . $case_info['other_support_referred']),
+                WriterEntityFactory::createCell($case_info['reintegration_economic'] . ' ' . $case_info['other_reintegration_economic']),
+                WriterEntityFactory::createCell($soical_date),
+                WriterEntityFactory::createCell($medical_date),
+                WriterEntityFactory::createCell($date_education),
+                WriterEntityFactory::createCell($date_housing),
+                WriterEntityFactory::createCell($date_legal),
             ];
 
             $multipleRows[] = WriterEntityFactory::createRow($cells);
@@ -286,7 +461,7 @@ if ($_GET['download_excel']) {
     $writer->addRows($multipleRows);
 
     $currentSheet = $writer->getCurrentSheet();
-    $mergeRanges = ['A1:V1', 'A2:V2', 'A3:V3']; // you can list the cells you want to merge like this ['A1:A4','A1:E1']
+    $mergeRanges = ['A1:DA1', 'A2:DA2', 'A3:DA3']; // you can list the cells you want to merge like this ['A1:A4','A1:E1']
     $currentSheet->setMergeRanges($mergeRanges);
 
     $writer->close();
