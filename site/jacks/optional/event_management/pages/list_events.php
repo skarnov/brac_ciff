@@ -94,10 +94,35 @@ if ($filter_entry_end_date)
     $filterString[] = 'End Date: ' . $filter_entry_end_date;
 
 if ($_GET['download_excel']) {
+    $args = array(
+        'select_fields' => array(
+            'fk_branch_id' => 'dev_events.fk_branch_id',
+            'fk_project_id' => 'dev_events.fk_project_id',
+            'month' => 'dev_events.month',
+            'fk_activity_id' => 'dev_events.fk_activity_id',
+            'event_start_date' => 'dev_events.event_start_date',
+            'event_start_time' => 'dev_events.event_start_time',
+            'event_end_date' => 'dev_events.event_end_date',
+            'event_end_time' => 'dev_events.event_end_time',
+            'event_division' => 'dev_events.event_division',
+            'event_district' => 'dev_events.event_district',
+            'event_upazila' => 'dev_events.event_upazila',
+            'event_union' => 'dev_events.event_union',
+            'event_village' => 'dev_events.event_village',
+            'event_ward' => 'dev_events.event_ward',
+            'event_location' => 'dev_events.event_location',
+            'participant_boy' => 'dev_events.participant_boy',
+            'participant_girl' => 'dev_events.participant_girl',
+            'participant_male' => 'dev_events.participant_male',
+            'participant_female' => 'dev_events.participant_female',
+            'create_date' => 'dev_events.create_date',
+            'created_by' => 'dev_events.created_by',
+        ),
+    );
     unset($args['limit']);
     $data = $this->get_events($args);
     $data = $data['data'];
-
+    
     // This will be here in our project
 
     $writer = WriterEntityFactory::createXLSXWriter();
