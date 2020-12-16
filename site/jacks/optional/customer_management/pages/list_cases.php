@@ -52,7 +52,7 @@ $args = array(
 
 if ($filter_entry_start_date && $filter_entry_start_date) {
     $args['BETWEEN_INCLUSIVE'] = array(
-        'update_date' => array(
+        'entry_date' => array(
             'left' => date_to_db($filter_entry_start_date),
             'right' => date_to_db($filter_entry_end_date),
         ),
