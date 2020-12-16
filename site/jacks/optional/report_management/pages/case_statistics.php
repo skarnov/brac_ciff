@@ -14,18 +14,6 @@ $filter_entry_end_date = $_GET['entry_end_date'] ? $_GET['entry_end_date'] : nul
 $branch_id = $_config['user']['user_branch'] ? $_config['user']['user_branch'] : null;
 
 $args = array(
-    'listing' => TRUE,
-    'select_fields' => array(
-        'id' => 'dev_immediate_supports.fk_customer_id',
-        'customer_id' => 'dev_customers.customer_id',
-        'full_name' => 'dev_customers.full_name',
-        'customer_mobile' => 'dev_customers.customer_mobile',
-        'birth_reg_number' => 'dev_customers.birth_reg_number',
-        'permanent_division' => 'dev_customers.permanent_division',
-        'permanent_district' => 'dev_customers.permanent_district',
-        'permanent_sub_district' => 'dev_customers.permanent_sub_district',
-        'customer_status' => 'dev_customers.customer_status',
-    ),
     'customer_id' => $filter_customer_id,
     'name' => $filter_name,
     'nid' => $filter_nid,
@@ -33,19 +21,31 @@ $args = array(
     'division' => $filter_division,
     'district' => $filter_district,
     'sub_district' => $filter_sub_district,
-    'limit' => array(
-        'start' => $start * $per_page_items,
-        'count' => $per_page_items
-    ),
-    'order_by' => array(
-        'col' => 'dev_immediate_supports.fk_customer_id',
-        'order' => 'DESC'
-    ),
 );
+
+if ($filter_entry_start_date && $filter_entry_start_date) {
+    $args['BETWEEN_INCLUSIVE'] = array(
+        'create_date' => array(
+            'left' => date_to_db($filter_entry_start_date),
+            'right' => date_to_db($filter_entry_end_date),
+        ),
+    );
+}
 
 $customers = jack_obj('dev_customer_management');
 
-$cases = $customers->get_cases($args);
+$immediate_supports = $customers->count_immediate_supports($args);
+$reintegration_plan = $customers->count_reintegration_plan($args);
+$psycho_supports = $customers->count_psycho_supports($args);
+$family_counselling = $customers->count_family_counselling($args);
+$psycho_sessions = $customers->count_psycho_sessions($args);
+$psycho_completions = $customers->count_psycho_completions($args);
+$psycho_followups = $customers->count_psycho_followups($args);
+$economic_supports = $customers->count_economic_supports($args);
+$economic_reintegration_referrals = $customers->count_economic_reintegration_referrals($args);
+$social_supports = $customers->count_social_supports($args);
+$followups = $customers->count_followups($args);
+
 $pagination = pagination($cases['total'], $per_page_items, $start);
 
 $divisions = get_division();
@@ -189,36 +189,53 @@ filterForm($filterForm);
             Filtered With: <?php echo implode(', ', $filterString) ?>
         </div>
     <?php endif; ?>
-    <div class="table-header">
-        <?php echo searchResultText($cases['total'], $start, $per_page_items, count($cases['data']), 'cases') ?>
-    </div>
-    <table class="table table-bordered table-condensed">
-        <thead>
+    <table class="table table-bordered table-condensed" style="font-size: 1.5rem;">
+        <thead>            
             <tr>
-                <th>Perticipant ID</th>
-                <th>Name</th>
-                <th>Contact Number</th>
-                <th>Birth ID</th>
-                <th>Present Address</th>
-                <th>Status</th>
+                <th>Immediate Support Services Received</th>
+                <th><?php echo $immediate_supports['immediate_supports'] ?></th>
+            </tr>
+            <tr>
+                <th>Preferred Services and Reintegration Plan</th>
+                <th><?php echo $reintegration_plan['reintegration_plan'] ?></th>
+            </tr>
+            <tr>
+                <th>Psychosocial Reintegration Support Services</th>
+                <th><?php echo $psycho_supports['psycho_supports'] ?></th>
+            </tr>
+            <tr>
+                <th>Family Counseling Session</th>
+                <th><?php echo $family_counselling['family_counselling'] ?></th>
+            </tr>
+            <tr>
+                <th>Psychosocial Reintegration Session Activities</th>
+                <th><?php echo $psycho_sessions['psycho_sessions'] ?></th>
+            </tr>
+            <tr>
+                <th>Session Completion Status</th>
+                <th><?php echo $psycho_completions['psycho_completions'] ?></th>
+            </tr>
+            <tr>
+                <th>Psychosocial Reintegration (Follow-up)</th>
+                <th><?php echo $psycho_followups['psycho_followups'] ?></th>
+            </tr>
+            <tr>
+                <th>Economic Reintegration Support</th>
+                <th><?php echo $economic_supports['economic_supports'] ?></th>
+            </tr>
+            <tr>
+                <th>Economic Reintegration Referrals</th>
+                <th><?php echo $economic_reintegration_referrals['economic_reintegration_referrals'] ?></th>
+            </tr>
+            <tr>
+                <th>Social Reintegration Support</th>
+                <th><?php echo $social_supports['social_supports'] ?></th>
+            </tr>
+            <tr>
+                <th>Review and Follow-Up</th>
+                <th><?php echo $followups['followups'] ?></th>
             </tr>
         </thead>
-        <tbody>
-            <?php
-            foreach ($cases['data'] as $i => $case) {
-                ?>
-                <tr>
-                    <td><?php echo $case['customer_id']; ?></td>
-                    <td><?php echo $case['full_name']; ?></td>
-                    <td><?php echo $case['customer_mobile']; ?></td>
-                    <td><?php echo $case['birth_reg_number']; ?></td>
-                    <td style="text-transform: capitalize"><?php echo '<b>Division - </b>' . $case['permanent_division'] . ',<br><b>District - </b>' . $case['permanent_district'] . ',<br><b>Upazila - </b>' . $case['permanent_sub_district'] ?></td>
-                    <td style="text-transform: capitalize"><?php echo $case['customer_status']; ?></td>
-                </tr>
-                <?php
-            }
-            ?>
-        </tbody>
     </table>
     <div class="table-footer oh">
         <div class="pull-left">

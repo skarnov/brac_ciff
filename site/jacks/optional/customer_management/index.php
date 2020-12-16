@@ -1592,7 +1592,7 @@ class dev_customer_management {
             if ($params['form_data']['followup_financial_service']) {
                 $dev_followups_data['followup_financial_service'] = $params['form_data']['followup_financial_service'];
             }
-            
+
             if ($params['form_data']['social_protection']) {
                 $dev_followups_data['social_protection'] = $params['form_data']['social_protection'];
             }
@@ -1768,6 +1768,435 @@ class dev_customer_management {
             }
         }
         return $ret;
+    }
+
+    function count_immediate_supports($param = null) {
+        $param['single'] = true;
+
+        $select = "SELECT COUNT(dev_immediate_supports.fk_customer_id) AS immediate_supports ";
+
+        $from = "FROM dev_immediate_supports
+                LEFT JOIN dev_customers ON (dev_customers.pk_customer_id = dev_immediate_supports.fk_customer_id)
+            ";
+
+        $where = " WHERE 1";
+        $conditions = " ";
+        $sql = $select . $from . $where;
+        $count_sql = "SELECT COUNT(dev_immediate_supports.fk_customer_id) AS TOTAL " . $from . $where;
+
+        $loopCondition = array(
+            'id' => 'dev_customers.pk_customer_id',
+            'customer_id' => 'dev_customers.customer_id',
+            'name' => 'dev_customers.full_name',
+            'nid' => 'dev_customers.nid_number',
+            'birth' => 'dev_customers.birth_reg_number',
+            'division' => 'dev_customers.permanent_division',
+            'district' => 'dev_customers.permanent_district',
+            'sub_district' => 'dev_customers.permanent_sub_district',
+            'create_date' => 'dev_customers.create_date',
+            'branch_id' => 'dev_customers.fk_branch_id',
+        );
+
+        $conditions .= sql_condition_maker($loopCondition, $param);
+
+        $orderBy = sql_order_by($param);
+        $limitBy = sql_limit_by($param);
+
+        $sql .= $conditions . $orderBy . $limitBy;
+        $count_sql .= $conditions;
+
+        $cases = sql_data_collector($sql, $count_sql, $param);
+        return $cases;
+    }
+
+    function count_reintegration_plan($param = null) {
+        $param['single'] = true;
+
+        $select = "SELECT COUNT(dev_reintegration_plan.fk_customer_id) AS reintegration_plan ";
+
+        $from = "FROM dev_customers
+                   LEFT JOIN dev_reintegration_plan ON (dev_reintegration_plan.fk_customer_id = dev_customers.pk_customer_id)
+            ";
+
+        $where = " WHERE 1";
+        $conditions = " ";
+        $sql = $select . $from . $where;
+        $count_sql = "SELECT COUNT(dev_reintegration_plan.fk_customer_id) AS TOTAL " . $from . $where;
+
+        $loopCondition = array(
+            'id' => 'dev_customers.pk_customer_id',
+            'customer_id' => 'dev_customers.customer_id',
+            'name' => 'dev_customers.full_name',
+            'nid' => 'dev_customers.nid_number',
+            'birth' => 'dev_customers.birth_reg_number',
+            'division' => 'dev_customers.permanent_division',
+            'district' => 'dev_customers.permanent_district',
+            'sub_district' => 'dev_customers.permanent_sub_district',
+            'create_date' => 'dev_customers.create_date',
+            'branch_id' => 'dev_customers.fk_branch_id',
+        );
+
+        $conditions .= sql_condition_maker($loopCondition, $param);
+
+        $orderBy = sql_order_by($param);
+        $limitBy = sql_limit_by($param);
+
+        $sql .= $conditions . $orderBy . $limitBy;
+        $count_sql .= $conditions;
+
+        $cases = sql_data_collector($sql, $count_sql, $param);
+        return $cases;
+    }
+
+    function count_psycho_supports($param = null) {
+        $param['single'] = true;
+
+        $select = "SELECT COUNT(dev_psycho_supports.fk_customer_id) AS psycho_supports ";
+
+        $from = "FROM dev_customers
+                   LEFT JOIN dev_psycho_supports ON (dev_psycho_supports.fk_customer_id = dev_customers.pk_customer_id)
+            ";
+
+        $where = " WHERE 1";
+        $conditions = " ";
+        $sql = $select . $from . $where;
+        $count_sql = "SELECT COUNT(dev_psycho_supports.fk_customer_id) AS TOTAL " . $from . $where;
+
+        $loopCondition = array(
+            'id' => 'dev_customers.pk_customer_id',
+            'customer_id' => 'dev_customers.customer_id',
+            'name' => 'dev_customers.full_name',
+            'nid' => 'dev_customers.nid_number',
+            'birth' => 'dev_customers.birth_reg_number',
+            'division' => 'dev_customers.permanent_division',
+            'district' => 'dev_customers.permanent_district',
+            'sub_district' => 'dev_customers.permanent_sub_district',
+            'create_date' => 'dev_customers.create_date',
+            'branch_id' => 'dev_customers.fk_branch_id',
+        );
+
+        $conditions .= sql_condition_maker($loopCondition, $param);
+
+        $orderBy = sql_order_by($param);
+        $limitBy = sql_limit_by($param);
+
+        $sql .= $conditions . $orderBy . $limitBy;
+        $count_sql .= $conditions;
+
+        $cases = sql_data_collector($sql, $count_sql, $param);
+        return $cases;
+    }
+
+    function count_family_counselling($param = null) {
+        $param['single'] = true;
+
+        $select = "SELECT COUNT(dev_psycho_family_counselling.fk_customer_id) AS family_counselling ";
+
+        $from = "FROM dev_customers
+                   LEFT JOIN dev_psycho_family_counselling ON (dev_psycho_family_counselling.fk_customer_id = dev_customers.pk_customer_id)
+            ";
+
+        $where = " WHERE 1";
+        $conditions = " ";
+        $sql = $select . $from . $where;
+        $count_sql = "SELECT COUNT(dev_psycho_family_counselling.fk_customer_id) AS TOTAL " . $from . $where;
+
+        $loopCondition = array(
+            'id' => 'dev_customers.pk_customer_id',
+            'customer_id' => 'dev_customers.customer_id',
+            'name' => 'dev_customers.full_name',
+            'nid' => 'dev_customers.nid_number',
+            'birth' => 'dev_customers.birth_reg_number',
+            'division' => 'dev_customers.permanent_division',
+            'district' => 'dev_customers.permanent_district',
+            'sub_district' => 'dev_customers.permanent_sub_district',
+            'create_date' => 'dev_customers.create_date',
+            'branch_id' => 'dev_customers.fk_branch_id',
+        );
+
+        $conditions .= sql_condition_maker($loopCondition, $param);
+
+        $orderBy = sql_order_by($param);
+        $limitBy = sql_limit_by($param);
+
+        $sql .= $conditions . $orderBy . $limitBy;
+        $count_sql .= $conditions;
+
+        $cases = sql_data_collector($sql, $count_sql, $param);
+        return $cases;
+    }
+    
+    function count_psycho_sessions($param = null) {
+        $param['single'] = true;
+
+        $select = "SELECT COUNT(dev_psycho_sessions.fk_customer_id) AS psycho_sessions ";
+
+        $from = "FROM dev_customers
+                   LEFT JOIN dev_psycho_sessions ON (dev_psycho_sessions.fk_customer_id = dev_customers.pk_customer_id)
+            ";
+
+        $where = " WHERE 1";
+        $conditions = " ";
+        $sql = $select . $from . $where;
+        $count_sql = "SELECT COUNT(dev_psycho_sessions.fk_customer_id) AS TOTAL " . $from . $where;
+
+        $loopCondition = array(
+            'id' => 'dev_customers.pk_customer_id',
+            'customer_id' => 'dev_customers.customer_id',
+            'name' => 'dev_customers.full_name',
+            'nid' => 'dev_customers.nid_number',
+            'birth' => 'dev_customers.birth_reg_number',
+            'division' => 'dev_customers.permanent_division',
+            'district' => 'dev_customers.permanent_district',
+            'sub_district' => 'dev_customers.permanent_sub_district',
+            'create_date' => 'dev_customers.create_date',
+            'branch_id' => 'dev_customers.fk_branch_id',
+        );
+
+        $conditions .= sql_condition_maker($loopCondition, $param);
+
+        $orderBy = sql_order_by($param);
+        $limitBy = sql_limit_by($param);
+
+        $sql .= $conditions . $orderBy . $limitBy;
+        $count_sql .= $conditions;
+
+        $cases = sql_data_collector($sql, $count_sql, $param);
+        return $cases;
+    }
+    
+    function count_psycho_completions($param = null) {
+        $param['single'] = true;
+
+        $select = "SELECT COUNT(dev_psycho_completions.fk_customer_id) AS psycho_completions ";
+
+        $from = "FROM dev_customers
+                   LEFT JOIN dev_psycho_completions ON (dev_psycho_completions.fk_customer_id = dev_customers.pk_customer_id)
+            ";
+
+        $where = " WHERE 1";
+        $conditions = " ";
+        $sql = $select . $from . $where;
+        $count_sql = "SELECT COUNT(dev_psycho_completions.fk_customer_id) AS TOTAL " . $from . $where;
+
+        $loopCondition = array(
+            'id' => 'dev_customers.pk_customer_id',
+            'customer_id' => 'dev_customers.customer_id',
+            'name' => 'dev_customers.full_name',
+            'nid' => 'dev_customers.nid_number',
+            'birth' => 'dev_customers.birth_reg_number',
+            'division' => 'dev_customers.permanent_division',
+            'district' => 'dev_customers.permanent_district',
+            'sub_district' => 'dev_customers.permanent_sub_district',
+            'create_date' => 'dev_customers.create_date',
+            'branch_id' => 'dev_customers.fk_branch_id',
+        );
+
+        $conditions .= sql_condition_maker($loopCondition, $param);
+
+        $orderBy = sql_order_by($param);
+        $limitBy = sql_limit_by($param);
+
+        $sql .= $conditions . $orderBy . $limitBy;
+        $count_sql .= $conditions;
+
+        $cases = sql_data_collector($sql, $count_sql, $param);
+        return $cases;
+    }
+    
+    function count_psycho_followups($param = null) {
+        $param['single'] = true;
+
+        $select = "SELECT COUNT(dev_psycho_followups.fk_customer_id) AS psycho_followups ";
+
+        $from = "FROM dev_customers
+                   LEFT JOIN dev_psycho_followups ON (dev_psycho_followups.fk_customer_id = dev_customers.pk_customer_id)
+            ";
+
+        $where = " WHERE 1";
+        $conditions = " ";
+        $sql = $select . $from . $where;
+        $count_sql = "SELECT COUNT(dev_psycho_followups.fk_customer_id) AS TOTAL " . $from . $where;
+
+        $loopCondition = array(
+            'id' => 'dev_customers.pk_customer_id',
+            'customer_id' => 'dev_customers.customer_id',
+            'name' => 'dev_customers.full_name',
+            'nid' => 'dev_customers.nid_number',
+            'birth' => 'dev_customers.birth_reg_number',
+            'division' => 'dev_customers.permanent_division',
+            'district' => 'dev_customers.permanent_district',
+            'sub_district' => 'dev_customers.permanent_sub_district',
+            'create_date' => 'dev_customers.create_date',
+            'branch_id' => 'dev_customers.fk_branch_id',
+        );
+
+        $conditions .= sql_condition_maker($loopCondition, $param);
+
+        $orderBy = sql_order_by($param);
+        $limitBy = sql_limit_by($param);
+
+        $sql .= $conditions . $orderBy . $limitBy;
+        $count_sql .= $conditions;
+
+        $cases = sql_data_collector($sql, $count_sql, $param);
+        return $cases;
+    }
+    
+    function count_economic_supports($param = null) {
+        $param['single'] = true;
+
+        $select = "SELECT COUNT(dev_economic_supports.fk_customer_id) AS economic_supports ";
+
+        $from = "FROM dev_customers
+                   LEFT JOIN dev_economic_supports ON (dev_economic_supports.fk_customer_id = dev_customers.pk_customer_id)
+            ";
+
+        $where = " WHERE 1";
+        $conditions = " ";
+        $sql = $select . $from . $where;
+        $count_sql = "SELECT COUNT(dev_economic_supports.fk_customer_id) AS TOTAL " . $from . $where;
+
+        $loopCondition = array(
+            'id' => 'dev_customers.pk_customer_id',
+            'customer_id' => 'dev_customers.customer_id',
+            'name' => 'dev_customers.full_name',
+            'nid' => 'dev_customers.nid_number',
+            'birth' => 'dev_customers.birth_reg_number',
+            'division' => 'dev_customers.permanent_division',
+            'district' => 'dev_customers.permanent_district',
+            'sub_district' => 'dev_customers.permanent_sub_district',
+            'create_date' => 'dev_customers.create_date',
+            'branch_id' => 'dev_customers.fk_branch_id',
+        );
+
+        $conditions .= sql_condition_maker($loopCondition, $param);
+
+        $orderBy = sql_order_by($param);
+        $limitBy = sql_limit_by($param);
+
+        $sql .= $conditions . $orderBy . $limitBy;
+        $count_sql .= $conditions;
+
+        $cases = sql_data_collector($sql, $count_sql, $param);
+        return $cases;
+    }
+
+    function count_economic_reintegration_referrals($param = null) {
+        $param['single'] = true;
+
+        $select = "SELECT COUNT(dev_economic_reintegration_referrals.fk_customer_id) AS economic_reintegration_referrals ";
+
+        $from = "FROM dev_economic_reintegration_referrals
+                LEFT JOIN dev_customers ON (dev_customers.pk_customer_id = dev_economic_reintegration_referrals.fk_customer_id)
+            ";
+
+        $where = " WHERE 1";
+        $conditions = " ";
+        $sql = $select . $from . $where;
+        $count_sql = "SELECT COUNT(dev_economic_reintegration_referrals.fk_customer_id) AS TOTAL " . $from . $where;
+
+        $loopCondition = array(
+            'id' => 'dev_customers.pk_customer_id',
+            'customer_id' => 'dev_customers.customer_id',
+            'name' => 'dev_customers.full_name',
+            'nid' => 'dev_customers.nid_number',
+            'birth' => 'dev_customers.birth_reg_number',
+            'division' => 'dev_customers.permanent_division',
+            'district' => 'dev_customers.permanent_district',
+            'sub_district' => 'dev_customers.permanent_sub_district',
+            'create_date' => 'dev_customers.create_date',
+            'branch_id' => 'dev_customers.fk_branch_id',
+        );
+
+        $conditions .= sql_condition_maker($loopCondition, $param);
+
+        $orderBy = sql_order_by($param);
+        $limitBy = sql_limit_by($param);
+
+        $sql .= $conditions . $orderBy . $limitBy;
+        $count_sql .= $conditions;
+
+        $cases = sql_data_collector($sql, $count_sql, $param);
+        return $cases;
+    }
+    
+    function count_social_supports($param = null) {
+        $param['single'] = true;
+
+        $select = "SELECT COUNT(dev_social_supports.fk_customer_id) AS social_supports ";
+
+        $from = "FROM dev_social_supports
+                LEFT JOIN dev_customers ON (dev_customers.pk_customer_id = dev_social_supports.fk_customer_id)
+            ";
+
+        $where = " WHERE 1";
+        $conditions = " ";
+        $sql = $select . $from . $where;
+        $count_sql = "SELECT COUNT(dev_social_supports.fk_customer_id) AS TOTAL " . $from . $where;
+
+        $loopCondition = array(
+            'id' => 'dev_customers.pk_customer_id',
+            'customer_id' => 'dev_customers.customer_id',
+            'name' => 'dev_customers.full_name',
+            'nid' => 'dev_customers.nid_number',
+            'birth' => 'dev_customers.birth_reg_number',
+            'division' => 'dev_customers.permanent_division',
+            'district' => 'dev_customers.permanent_district',
+            'sub_district' => 'dev_customers.permanent_sub_district',
+            'create_date' => 'dev_customers.create_date',
+            'branch_id' => 'dev_customers.fk_branch_id',
+        );
+
+        $conditions .= sql_condition_maker($loopCondition, $param);
+
+        $orderBy = sql_order_by($param);
+        $limitBy = sql_limit_by($param);
+
+        $sql .= $conditions . $orderBy . $limitBy;
+        $count_sql .= $conditions;
+
+        $cases = sql_data_collector($sql, $count_sql, $param);
+        return $cases;
+    }
+    
+    function count_followups($param = null) {
+        $param['single'] = true;
+
+        $select = "SELECT COUNT(dev_followups.fk_customer_id) AS followups ";
+
+        $from = "FROM dev_followups
+                LEFT JOIN dev_customers ON (dev_customers.pk_customer_id = dev_followups.fk_customer_id)
+            ";
+
+        $where = " WHERE 1";
+        $conditions = " ";
+        $sql = $select . $from . $where;
+        $count_sql = "SELECT COUNT(dev_followups.fk_customer_id) AS TOTAL " . $from . $where;
+
+        $loopCondition = array(
+            'id' => 'dev_customers.pk_customer_id',
+            'customer_id' => 'dev_customers.customer_id',
+            'name' => 'dev_customers.full_name',
+            'nid' => 'dev_customers.nid_number',
+            'birth' => 'dev_customers.birth_reg_number',
+            'division' => 'dev_customers.permanent_division',
+            'district' => 'dev_customers.permanent_district',
+            'sub_district' => 'dev_customers.permanent_sub_district',
+            'create_date' => 'dev_customers.create_date',
+            'branch_id' => 'dev_customers.fk_branch_id',
+        );
+
+        $conditions .= sql_condition_maker($loopCondition, $param);
+
+        $orderBy = sql_order_by($param);
+        $limitBy = sql_limit_by($param);
+
+        $sql .= $conditions . $orderBy . $limitBy;
+        $count_sql .= $conditions;
+
+        $cases = sql_data_collector($sql, $count_sql, $param);
+        return $cases;
     }
 
 }
