@@ -7,24 +7,24 @@ $filter_name = $_GET['name'] ? $_GET['name'] : null;
 
 $args = array(
     'select_fields' => array(
-        'id' => 'dev_activities.pk_activity_id',
-        'project_id' => 'dev_activities.fk_project_id',
+        'id' => 'dev_meetings.pk_meeting_id',
+        'project_id' => 'dev_meetings.fk_project_id',
         'project_name' => 'dev_projects.project_short_name',
-        'activity_name' => 'dev_activities.activity_name',
+        'meeting_name' => 'dev_meetings.meeting_name',
     ),
     'project_id' => $filter_project_id,
-    'activity_name' => $filter_name,
+    'meeting_name' => $filter_name,
     'limit' => array(
         'start' => $start * $per_page_items,
         'count' => $per_page_items
     ),
     'order_by' => array(
-        'col' => 'pk_activity_id',
+        'col' => 'pk_meeting_id',
         'order' => 'DESC'
     ),
 );
 
-$results = $this->get_misactivities($args);
+$results = $this->get_meetings($args);
 $pagination = pagination($results['total'], $per_page_items, $start);
 
 $filterString = array();
@@ -39,16 +39,16 @@ $all_projects = $projects->get_projects();
 doAction('render_start');
 ?>
 <div class="page-header">
-    <h1>All Activities</h1>
+    <h1>All Meetings</h1>
     <div class="oh">
         <div class="btn-group btn-group-sm">
             <?php
             echo linkButtonGenerator(array(
-                'href' => $myUrl . '?action=add_edit_misactivity',
+                'href' => $myUrl . '?action=add_edit_meeting',
                 'action' => 'add',
                 'icon' => 'icon_add',
-                'text' => 'New Activity',
-                'title' => 'Add New Activity',
+                'text' => 'New Meeting',
+                'title' => 'Add New Meeting',
             ));
             ?>
         </div>
@@ -82,7 +82,7 @@ filterForm($filterForm);
         </div>
     <?php endif; ?>
     <div class="table-header">
-        <?php echo searchResultText($results['total'], $start, $per_page_items, count($results['data']), 'activities') ?>
+        <?php echo searchResultText($results['total'], $start, $per_page_items, count($results['data']), 'meetings') ?>
     </div>
     <table class="table table-bordered table-condensed">
         <thead>
@@ -98,11 +98,11 @@ filterForm($filterForm);
                 ?>
                 <tr>
                     <td><?php echo $value['project_short_name']; ?></td>
-                    <td><?php echo $value['activity_name']; ?></td>
+                    <td><?php echo $value['meeting_name']; ?></td>
                     <td>
-                        <?php if (has_permission('edit_misactivity')): ?>
+                        <?php if (has_permission('edit_meeting')): ?>
                             <div class="btn-group">
-                                <a href="<?php echo url('admin/dev_misactivity_management/manage_misactivities?action=add_edit_misactivity&edit=' . $value['pk_activity_id']) ?>" class="btn btn-primary btn btn-sm"><i class="fa fa-pencil-square-o"></i> Edit</a>
+                                <a href="<?php echo url('admin/dev_meeting_management/manage_meetings?action=add_edit_meeting&edit=' . $value['pk_meeting_id']) ?>" class="btn btn-primary btn btn-sm"><i class="fa fa-pencil-square-o"></i> Edit</a>
                             </div>                                
                         <?php endif ?>
                     </td>
