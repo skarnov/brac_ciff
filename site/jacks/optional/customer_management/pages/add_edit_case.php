@@ -262,13 +262,13 @@ doAction('render_start');
                         <a href="#FamilyCounseling" data-toggle="tab">Section 3.1: Family Counseling Session</a>
                     </li>
                     <li class="">
-                        <a href="#ReintegrationSession" data-toggle="tab">Section 3.3: Psychosocial Reintegration Session Activities</a>
+                        <a href="#ReintegrationSession" data-toggle="tab">Section 3.2: Psychosocial Reintegration Session Activities</a>
                     </li>
                     <li class="">
-                        <a href="#SessionCompletion" data-toggle="tab">Section 3.4: Session Completion Status</a>
+                        <a href="#SessionCompletion" data-toggle="tab">Section 3.3: Session Completion Status</a>
                     </li>
                     <li class="">
-                        <a href="#ReintegrationFollowup" data-toggle="tab">Section 3.5: Psychosocial Reintegration (Followup)</a>
+                        <a href="#ReintegrationFollowup" data-toggle="tab">Section 3.4: Psychosocial Reintegration (Followup)</a>
                     </li>
                     <li class="">
                         <a href="#EconomicReintegration" data-toggle="tab">Section 4: Economic Reintegration Support</a>

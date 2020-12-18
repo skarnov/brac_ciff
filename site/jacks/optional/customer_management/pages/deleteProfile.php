@@ -33,7 +33,7 @@ if (!$id) {
     $ret['followups'] = $devdb->query("DELETE FROM dev_followups WHERE fk_customer_id = '" . $id . "'");
     
     if ($ret) {
-        add_notification('Success', 'warning');
+        add_notification('Record Deleted.', 'warning');
         header('location: ' . url('admin/dev_customer_management/manage_customers'));
         exit();
     } else {

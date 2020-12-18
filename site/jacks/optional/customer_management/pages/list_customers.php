@@ -112,87 +112,6 @@ if ($filter_entry_start_date)
 if ($filter_entry_end_date)
     $filterString[] = 'End Date: ' . $filter_entry_end_date;
 
-if ($_GET['download_csv']) {
-    unset($args['limit']);
-    $args['data_only'] = true;
-    $data = $this->get_customers($args);
-    $data = $data['data'];
-
-    $target_dir = _path('uploads', 'absolute') . "/";
-    if (!file_exists($target_dir))
-        mkdir($target_dir);
-
-    $csvFolder = $target_dir;
-    $csvFile = $csvFolder . ' participant-' . time() . '.csv';
-
-    $fh = fopen($csvFile, 'w');
-
-    $report_title = array('', 'Participant Report', '');
-    fputcsv($fh, $report_title);
-
-    $filtered_with = array('', ' Division = ' . $filter_division . ', District = ' . $filter_district . ', Sub-District = ' . $filter_sub_district . ', Police Station = ' . $filter_ps, '');
-    fputcsv($fh, $filtered_with);
-
-    $blank_row = array('');
-    fputcsv($fh, $blank_row);
-
-    $headers = array('#', 'ID', 'Name', 'Contact Number', 'Passport Number', 'Division', 'District', 'Sub-District', 'Police Station', 'Present Post Office');
-    fputcsv($fh, $headers);
-
-    if ($data) {
-        $count = 0;
-        foreach ($data as $user) {
-            $dataToSheet = array(
-                ++$count
-                , $user['customer_id']
-                , $user['full_name']
-                , $user['customer_mobile'] . "\r"
-                , $user['passport_number'] . "\r"
-                , $user['permanent_division']
-                , $user['permanent_district']
-                , $user['permanent_sub_district']
-                , $user['permanent_police_station']
-                , $user['permanent_post_office']);
-            fputcsv($fh, $dataToSheet);
-        }
-    }
-
-    fclose($fh);
-
-    $now = time();
-    foreach (glob($csvFolder . "*.csv") as $file) {
-        if (is_file($file)) {
-            if ($now - filemtime($file) >= 60 * 60 * 24 * 2) { // 2 days
-                unlink($file);
-            }
-        }
-    }
-
-    if (function_exists('apache_setenv'))
-        @apache_setenv('no-gzip', 1);
-    @ini_set('zlib.output_compression', 'Off');
-
-    //Get file type and set it as Content Type
-    header('Content-Type: text/csv');
-    //Use Content-Disposition: attachment to specify the filename
-    header('Content-Disposition: attachment; filename=' . basename($csvFile));
-    //No cache
-    header('Expires: 0');
-    header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-    header('Pragma: public');
-    //Define file size
-    header('Content-Length: ' . filesize($csvFile));
-    set_time_limit(0);
-    $file = @fopen($csvFile, "rb");
-    while (!feof($file)) {
-        print(@fread($file, 1024 * 8));
-        ob_flush();
-        flush();
-    }
-    @fclose($file);
-    exit;
-}
-
 if ($_GET['download_excel']) {
     unset($args['select_fields']);
     unset($args['limit']);
@@ -491,18 +410,6 @@ doAction('render_start');
                 'text' => 'New Participant Profile',
                 'title' => 'New Participant Profile',
             ));
-            ?>
-        </div>  
-        <div class="btn-group btn-group-sm">
-            <?php
-            // echo linkButtonGenerator(array(
-            //     'href' => '?download_csv=1&id=' . $filter_id . '&name=' . $filter_name . '&nid=' . $filter_nid . '&passport=' . $filter_passport . '&division=' . $filter_division . '&district=' . $filter_district . '&sub_district=' . $filter_sub_district . '&union=' . $filter_union . '&entry_start_date=' . $filter_entry_start_date . '&entry_end_date=' . $filter_entry_end_date,
-            //     'attributes' => array('target' => '_blank'),
-            //     'action' => 'download',
-            //     'icon' => 'icon_download',
-            //     'text' => 'Download Participants',
-            //     'title' => 'Download Participants',
-            // ));
             ?>
         </div>
         <div class="btn-group btn-group-sm">
