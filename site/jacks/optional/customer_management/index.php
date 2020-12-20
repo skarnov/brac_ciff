@@ -282,7 +282,6 @@ class dev_customer_management {
             $customer_data['permanent_district'] = $params['form_data']['permanent_district'];
             $customer_data['permanent_house'] = $params['form_data']['permanent_house'];
             $customer_data['customer_status'] = 'active';
-            $customer_data['customer_type'] = 'ciff';
             if ($is_update) {
                 $customer_data['update_date'] = date('Y-m-d');
                 $customer_data['update_time'] = date('H:i:s');
@@ -1925,7 +1924,7 @@ class dev_customer_management {
         $cases = sql_data_collector($sql, $count_sql, $param);
         return $cases;
     }
-    
+
     function count_psycho_sessions($param = null) {
         $param['single'] = true;
 
@@ -1964,7 +1963,7 @@ class dev_customer_management {
         $cases = sql_data_collector($sql, $count_sql, $param);
         return $cases;
     }
-    
+
     function count_psycho_completions($param = null) {
         $param['single'] = true;
 
@@ -2003,7 +2002,7 @@ class dev_customer_management {
         $cases = sql_data_collector($sql, $count_sql, $param);
         return $cases;
     }
-    
+
     function count_psycho_followups($param = null) {
         $param['single'] = true;
 
@@ -2042,7 +2041,7 @@ class dev_customer_management {
         $cases = sql_data_collector($sql, $count_sql, $param);
         return $cases;
     }
-    
+
     function count_economic_supports($param = null) {
         $param['single'] = true;
 
@@ -2120,7 +2119,7 @@ class dev_customer_management {
         $cases = sql_data_collector($sql, $count_sql, $param);
         return $cases;
     }
-    
+
     function count_social_supports($param = null) {
         $param['single'] = true;
 
@@ -2159,7 +2158,7 @@ class dev_customer_management {
         $cases = sql_data_collector($sql, $count_sql, $param);
         return $cases;
     }
-    
+
     function count_followups($param = null) {
         $param['single'] = true;
 

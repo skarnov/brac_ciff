@@ -115,43 +115,42 @@ if ($filter_entry_end_date)
 if ($_GET['download_excel']) {
     unset($args['select_fields']);
     unset($args['limit']);
-    
+
     $args['data_only'] = true;
     $data = $this->get_customers($args);
     $data = $data['data'];
 
     // This will be here in our project
 
-    $writer =WriterEntityFactory::createXLSXWriter();
+    $writer = WriterEntityFactory::createXLSXWriter();
     $style = (new StyleBuilder())
-           ->setFontBold()
-           ->setFontSize(12)
-           //->setShouldWrapText()
-           ->build();
+            ->setFontBold()
+            ->setFontSize(12)
+            //->setShouldWrapText()
+            ->build();
 
     $fileName = ' participants-' . time() . '.xlsx';
     //$writer->openToFile('lemon1.xlsx'); // write data to a file or to a PHP stream
     $writer->openToBrowser($fileName); // stream data directly to the browser
-
     // Header text
     $style2 = (new StyleBuilder())
-           ->setFontBold()
-           ->setFontSize(15)
-           //->setFontColor(Color::BLUE)
-           ->setShouldWrapText()
-           ->setCellAlignment(CellAlignment::LEFT)
-           ->build();
+            ->setFontBold()
+            ->setFontSize(15)
+            //->setFontColor(Color::BLUE)
+            ->setShouldWrapText()
+            ->setCellAlignment(CellAlignment::LEFT)
+            ->build();
 
     /** add a row at a time */
     $report_head = ['Participants Report'];
-    $singleRow = WriterEntityFactory::createRowFromArray($report_head,$style2);
+    $singleRow = WriterEntityFactory::createRowFromArray($report_head, $style2);
     $writer->addRow($singleRow);
 
-    $report_date = ['Date: '.Date('d-m-Y H:i')];
+    $report_date = ['Date: ' . Date('d-m-Y H:i')];
     $reportDateRow = WriterEntityFactory::createRowFromArray($report_date);
     $writer->addRow($reportDateRow);
 
-    $filtered_with = ['Participant ID = '.$filter_id.', Name = '.$filter_name.', NID = '.$filter_nid.', Passport = '.$filter_passport.', Division = ' . $filter_division . ', District = ' . $filter_district . ', Sub-District = ' . $filter_sub_district . ', Union = '.$filter_union. ', Police Station = ' . $filter_ps. ', Start Date = ' . $filter_entry_start_date. ', End Date = ' . $filter_entry_end_date];
+    $filtered_with = ['Participant ID = ' . $filter_id . ', Name = ' . $filter_name . ', NID = ' . $filter_nid . ', Passport = ' . $filter_passport . ', Division = ' . $filter_division . ', District = ' . $filter_district . ', Sub-District = ' . $filter_sub_district . ', Union = ' . $filter_union . ', Police Station = ' . $filter_ps . ', Start Date = ' . $filter_entry_start_date . ', End Date = ' . $filter_entry_end_date];
     $rowFromVal = WriterEntityFactory::createRowFromArray($filtered_with);
     $writer->addRow($rowFromVal);
 
@@ -160,83 +159,76 @@ if ($_GET['download_excel']) {
     $writer->addRow($rowFromVal);
 
     $header = [
-                "SL",
-                'Beneficiary ID/Reference number', 
-                'Full Name', 'NID Number','Birth Registration Number', 
-                "Father's Name", 
-                "Mother's Name",
-                'Date of Birth', 
-                'Gender', 
-                'Marital Status',
-                "Spouse Name", 
-                'Mobile No', 
-                'Emergency Mobile No',
-                'Name of that Person', 
-                "Relation with Participant", 
-                "Village",
-                'Ward No', 
-                'Union',
-                'Upazilla',
-                "District", 
-                'Present Address of Beneficiary', 
-                'Educational Qualification',
-                'Boy (<18)', 
-                "Girl (<18)",
-                "Men (>=18)",
-                'Women (>=18)', 
-                'Number of Accompany/ Number of Family Member',
-
-                'Transit/ Route of Migration/ Trafficking',
-                "Desired destination", 
-                'Final destination', 
-                'Type of Channels',
-                'Type of Visa',
-                 "Name of Media Departure", 
-                 "Relation of Media Departure",
-                'Address of Media Departure', 
-                'Passport No', 
-                'Date of Departure from Bangladesh',
-                "Date of Return to Bangladesh", 
-                'Age (When come back in Bangladesh)', 
-                'Duration of Stay Abroad (Months)',
-                'Occupation in overseas country',
-                "Income: (If applicable)", 
-                "Reasons for Migration",
-                'Reasons for returning to Bangladesh', 
-                'False promises about a job prior to arrival at workplace abroad', 
-
-                'Forced to perform work or other activities against your will, after the departure from Bangladesh?',
-                "Experienced excessive working hours (more than 40 hours a week)", 
-                'Deductions from salary for recruitment fees at workplace', 
-                'Denied freedom of movement during or between work shifts after your departure from Bangladesh?',
-                'Threatened by employer or someone acting on their behalf, or the broker with violence or action by law enforcement/deportation?', 
-                "Have you ever had identity or travel documents (passport) withheld by an employer or broker after your departure from Bangladesh?", 
-
-                'Any Property/wealth', 
-                'Any Property/wealth Value',
-                'Main occupation (Before trafficking)',
-                'Main occupation (after return)',
-                'Monthly income of Survivor after return(in BDT)',
-                'Source of income (Last month in BDT)',
-                'Source of income',
-                'Total Family income(last month)',
-                'Savings (BDT)',
-                'Loan Amount (BDT)',
-                'Ownership of House', 
-                'Type of house',
-
-                'Any IGA Skills?',
-                'IGA Skills',
-
-                'Do you have any disability?',
-                'Type of disability',
-                "Any Chronic Disease?", 
-                "Type of Disease", 
-
-
+        "SL",
+        'Beneficiary ID/Reference number',
+        'Full Name', 'NID Number', 'Birth Registration Number',
+        "Father's Name",
+        "Mother's Name",
+        'Date of Birth',
+        'Gender',
+        'Marital Status',
+        "Spouse Name",
+        'Mobile No',
+        'Emergency Mobile No',
+        'Name of that Person',
+        "Relation with Participant",
+        "Village",
+        'Ward No',
+        'Union',
+        'Upazilla',
+        "District",
+        'Present Address of Beneficiary',
+        'Educational Qualification',
+        'Boy (<18)',
+        "Girl (<18)",
+        "Men (>=18)",
+        'Women (>=18)',
+        'Number of Accompany/ Number of Family Member',
+        'Transit/ Route of Migration/ Trafficking',
+        "Desired destination",
+        'Final destination',
+        'Type of Channels',
+        'Type of Visa',
+        "Name of Media Departure",
+        "Relation of Media Departure",
+        'Address of Media Departure',
+        'Passport No',
+        'Date of Departure from Bangladesh',
+        "Date of Return to Bangladesh",
+        'Age (When come back in Bangladesh)',
+        'Duration of Stay Abroad (Months)',
+        'Occupation in overseas country',
+        "Income: (If applicable)",
+        "Reasons for Migration",
+        'Reasons for returning to Bangladesh',
+        'False promises about a job prior to arrival at workplace abroad',
+        'Forced to perform work or other activities against your will, after the departure from Bangladesh?',
+        "Experienced excessive working hours (more than 40 hours a week)",
+        'Deductions from salary for recruitment fees at workplace',
+        'Denied freedom of movement during or between work shifts after your departure from Bangladesh?',
+        'Threatened by employer or someone acting on their behalf, or the broker with violence or action by law enforcement/deportation?',
+        "Have you ever had identity or travel documents (passport) withheld by an employer or broker after your departure from Bangladesh?",
+        'Any Property/wealth',
+        'Any Property/wealth Value',
+        'Main occupation (Before trafficking)',
+        'Main occupation (after return)',
+        'Monthly income of Survivor after return(in BDT)',
+        'Source of income (Last month in BDT)',
+        'Source of income',
+        'Total Family income(last month)',
+        'Savings (BDT)',
+        'Loan Amount (BDT)',
+        'Ownership of House',
+        'Type of house',
+        'Any IGA Skills?',
+        'IGA Skills',
+        'Do you have any disability?',
+        'Type of disability',
+        "Any Chronic Disease?",
+        "Type of Disease",
     ];
 
-    $rowFromVal = WriterEntityFactory::createRowFromArray($header,$style);
+    $rowFromVal = WriterEntityFactory::createRowFromArray($header, $style);
     $writer->addRow($rowFromVal);
     $multipleRows = array();
 
@@ -330,7 +322,6 @@ if ($_GET['download_excel']) {
                 WriterEntityFactory::createCell($profile['male_household_member']),
                 WriterEntityFactory::createCell($profile['female_household_member']),
                 WriterEntityFactory::createCell($family_members),
-
                 WriterEntityFactory::createCell($profile['left_port']),
                 WriterEntityFactory::createCell($profile['preferred_country']),
                 WriterEntityFactory::createCell($profile['final_destination']),
@@ -355,7 +346,6 @@ if ($_GET['download_excel']) {
                 WriterEntityFactory::createCell(ucfirst($profile['is_movement_limitation'])),
                 WriterEntityFactory::createCell(ucfirst($profile['employer_threatened'])),
                 WriterEntityFactory::createCell(ucfirst($profile['is_kept_document'])),
-
                 WriterEntityFactory::createCell($profile['property_name']),
                 WriterEntityFactory::createCell($profile['property_value']),
                 WriterEntityFactory::createCell($profile['pre_occupation']),
@@ -368,27 +358,23 @@ if ($_GET['download_excel']) {
                 WriterEntityFactory::createCell($profile['personal_debt']),
                 WriterEntityFactory::createCell($current_residence_ownership),
                 WriterEntityFactory::createCell($current_residence_type),
-
                 WriterEntityFactory::createCell($profile['have_earner_skill']),
-                WriterEntityFactory::createCell($have_skills . ' ' . $profile['other_have_skills']. ' ' . $profile['vocational_skill']. ' ' . $profile['handicraft_skill']),
-                
+                WriterEntityFactory::createCell($have_skills . ' ' . $profile['other_have_skills'] . ' ' . $profile['vocational_skill'] . ' ' . $profile['handicraft_skill']),
                 WriterEntityFactory::createCell(ucfirst($profile['is_physically_challenged'])),
                 WriterEntityFactory::createCell($disability_type),
                 WriterEntityFactory::createCell(ucfirst($profile['having_chronic_disease'])),
                 WriterEntityFactory::createCell($disease_type . ' ' . $profile['other_disease_type']),
-
             ];
 
             $multipleRows[] = WriterEntityFactory::createRow($cells);
-
         }
     }
 
-    
-    $writer->addRows($multipleRows); 
+
+    $writer->addRows($multipleRows);
 
     $currentSheet = $writer->getCurrentSheet();
-    $mergeRanges = ['A1:BQ1','A2:BQ2','A3:BQ3']; // you can list the cells you want to merge like this ['A1:A4','A1:E1']
+    $mergeRanges = ['A1:BQ1', 'A2:BQ2', 'A3:BQ3']; // you can list the cells you want to merge like this ['A1:A4','A1:E1']
     $currentSheet->setMergeRanges($mergeRanges);
 
     $writer->close();
@@ -553,9 +539,9 @@ filterForm($filterForm);
                                 <ul class="dropdown-menu">
                                     <li><a href="<?php echo url('admin/dev_customer_management/manage_customers?action=add_edit_customer&edit=' . $customer['pk_customer_id']) ?>">Edit</a></li>
                                     <li><a href="<?php echo url('admin/dev_customer_management/manage_customers?action=add_edit_evaluate&edit=' . $customer['pk_customer_id']) ?>">Evaluate</a></li>
+                                    <li><a href="<?php echo url('admin/dev_customer_management/manage_customers?action=download_pdf&id=' . $customer['pk_customer_id']) ?>">Download PDF</a></li>
                                     <li><a href="<?php echo url('admin/dev_customer_management/manage_cases?action=add_edit_case&edit=' . $customer['pk_customer_id']) ?>">Case Management</a></li>
                                     <li><a href="<?php echo url('admin/dev_customer_management/manage_customers?action=list_satisfaction_scale&id=' . $customer['pk_customer_id']) ?>">Reintegration Assistance<br/> Satisfaction Scale</a></li>
-                                    <li><a href="<?php echo url('admin/dev_customer_management/manage_customers?action=download_pdf&id=' . $customer['pk_customer_id']) ?>">Download PDF</a></li>
                                 </ul>
                             </div>                         
                         <?php endif ?>

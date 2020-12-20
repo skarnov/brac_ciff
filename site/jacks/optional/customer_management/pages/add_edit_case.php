@@ -84,7 +84,7 @@ if ($edit) {
             'fk_staff_id' => 'dev_immediate_supports.fk_staff_id',
             'fk_customer_id' => 'dev_immediate_supports.fk_customer_id',
             'immediate_support' => 'dev_immediate_supports.immediate_support',
-            'entry_date' => 'dev_immediate_supports.entry_date AS entry_date',
+            'entry_date' => 'dev_immediate_supports.entry_date AS support_date',
             'arrival_place' => 'dev_immediate_supports.arrival_place',
             'plan_date' => 'dev_reintegration_plan.plan_date',
             'reintegration_financial_service' => 'dev_reintegration_plan.reintegration_financial_service',
@@ -164,6 +164,9 @@ if ($edit) {
     );
 
     $pre_data = $this->get_cases($args);
+    
+    d($pre_data);
+    
 
     $immediate_support = explode(',', $pre_data['immediate_support']);
     $service_requested = explode(',', $pre_data['service_requested']);
