@@ -23,6 +23,7 @@ abstract class Color
     const BLUE = '0070C0';
     const DARK_BLUE = '002060';
     const PURPLE = '7030A0';
+    const ALICEBLUE = 'F0F8FF';
 
     /**
      * Returns an RGB color from R, G and B values

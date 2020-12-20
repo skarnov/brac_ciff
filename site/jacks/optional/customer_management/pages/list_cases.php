@@ -207,13 +207,16 @@ if ($_GET['download_excel']) {
     $data = $data['data'];
 
     // This will be here in our project
-
     $writer = WriterEntityFactory::createXLSXWriter();
     $style = (new StyleBuilder())
             ->setFontBold()
             ->setFontSize(12)
             //->setShouldWrapText()
             ->build();
+
+    $style10 = (new StyleBuilder())
+        ->setBackgroundColor(Color::ALICEBLUE)
+        ->build();
 
     $fileName = 'case-management-' . time() . '.xlsx';
     $writer->openToBrowser($fileName); // stream data directly to the browser
@@ -360,8 +363,11 @@ if ($_GET['download_excel']) {
     $rowFromVal = WriterEntityFactory::createRowFromArray($header, $style);
     $writer->addRow($rowFromVal);
     $multipleRows = array();
+    $merg_col = "";
+    $mergeRanges = ['A1:CE1', 'A2:CE2', 'A3:CE3'];
 
     if ($data) {
+        $count_for_mrg = 6;
         $count = 0;
         foreach ($data as $case_info) {
             $nid_number = $case_info['nid_number'] ? $case_info['nid_number'] : 'N/A';
@@ -479,13 +485,22 @@ if ($_GET['download_excel']) {
                 WriterEntityFactory::createCell($date_legal),
             ];
 
-            $multipleRows[] = WriterEntityFactory::createRow($cells);
+            //$multipleRows[] = WriterEntityFactory::createRow($cells);
+            $get_rows = WriterEntityFactory::createRow($cells, $style10);
+            $writer->addRow($get_rows);
+            $count_for_mrg++;
+
+            // Newly added
+            include('case_excel_multiple.php');
+            // End newly added
+
+            
         }
     }
-    $writer->addRows($multipleRows);
+    //$writer->addRows($multipleRows);
 
     $currentSheet = $writer->getCurrentSheet();
-    $mergeRanges = ['A1:CE1', 'A2:CE2', 'A3:CE3']; // you can list the cells you want to merge like this ['A1:A4','A1:E1']
+     // you can list the cells you want to merge like this ['A1:A4','A1:E1']
     $currentSheet->setMergeRanges($mergeRanges);
 
     $writer->close();
