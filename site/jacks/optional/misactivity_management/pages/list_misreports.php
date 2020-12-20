@@ -227,17 +227,6 @@ doAction('render_start');
         <div class="btn-group btn-group-sm">
             <?php
             echo linkButtonGenerator(array(
-//                'href' => $myUrl . '?action=add_edit_target',
-                'action' => 'download',
-                'icon' => 'icon_download',
-                'text' => 'Download',
-                'title' => 'Download MIS',
-            ));
-            ?>
-        </div>
-        <div class="btn-group btn-group-sm">
-            <?php
-            echo linkButtonGenerator(array(
                 'href' => '?download_excel=1&project_id=' . $filter_project_id . '&division=' . $filter_division. '&district=' . $filter_district .'&sub_district=' . $filter_sub_district .'&branch_id=' . $filter_branch_id .'&month=' . $filter_month ,
                 'attributes' => array('target' => '_blank'),
                 'action' => 'download',

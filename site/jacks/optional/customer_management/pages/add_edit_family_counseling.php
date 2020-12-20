@@ -113,19 +113,19 @@ doAction('render_start');
                         <div class="col-sm-4">   
                             <label class="control-label input-label">Men</label>
                             <div class="form-group">
-                                <input type="number" class="filter form-control" id="maleMember" name="male_household_member" value="<?php echo $pre_data['male_household_member'] ? $pre_data['male_household_member'] : ''; ?>" />
+                                <input type="number" class="filter form-control" id="maleMember" name="male_counseled" value="<?php echo $pre_data['male_counseled'] ? $pre_data['male_counseled'] : '0'; ?>" />
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <label class="control-label input-label">Women</label>
                             <div class="form-group">
-                                <input class="filter form-control" id="femaleMember" type="number" name="female_household_member" value="<?php echo $pre_data['female_household_member'] ? $pre_data['female_household_member'] : ''; ?>">
+                                <input class="filter form-control" id="femaleMember" type="number" name="female_counseled" value="<?php echo $pre_data['female_counseled'] ? $pre_data['female_counseled'] : '0'; ?>">
                             </div>
                         </div>
                         <div class="col-sm-4">   
                             <label class="control-label input-label">Total</label>
                             <div class="form-group">
-                                <input class="form-control" id="totalMember" type="number" value="<?php echo $pre_data['male_household_member'] + $pre_data['female_household_member'] ?>">
+                                <input class="form-control" id="totalMember" type="number" value="<?php echo $pre_data['male_counseled'] + $pre_data['female_counseled'] ?>">
                             </div>
                         </div>
                     </fieldset>

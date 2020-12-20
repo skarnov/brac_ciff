@@ -1636,7 +1636,14 @@ class dev_customer_management {
 
         $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
 
-        $from = "FROM dev_returnees ";
+        if ($param['report']) :
+            $from = "FROM dev_returnees 
+                LEFT JOIN dev_branches ON (dev_branches.pk_branch_id = dev_returnees.fk_branch_id)
+                LEFT JOIN dev_projects ON (dev_projects.pk_project_id = dev_returnees.fk_project_id)
+            ";
+        else :
+            $from = "FROM dev_returnees ";
+        endif;
 
         $where = " WHERE 1";
         $conditions = " ";

@@ -188,7 +188,7 @@
                     $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['remark_district']);
                     $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_psychosocial_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_psychosocial_date'])) : 'N/A');
                     $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_psychosocial']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_economic_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_economic_date'])) : 'N/A',);
+                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_economic_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_economic_date'])) : 'N/A');
                     $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_economic']);
                     $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_social_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_social_date'])) : 'N/A');
                     $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_social']);
@@ -319,7 +319,7 @@
                     $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['remark_district']);
                     $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_psychosocial_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_psychosocial_date'])) : 'N/A');
                     $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_psychosocial']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_economic_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_economic_date'])) : 'N/A',);
+                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_economic_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_economic_date'])) : 'N/A');
                     $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_economic']);
                     $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_social_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_social_date'])) : 'N/A');
                     $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_social']);
@@ -447,7 +447,7 @@
                     $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['remark_district']);
                     $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_psychosocial_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_psychosocial_date'])) : 'N/A');
                     $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_psychosocial']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_economic_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_economic_date'])) : 'N/A',);
+                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_economic_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_economic_date'])) : 'N/A');
                     $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_economic']);
                     $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_social_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_social_date'])) : 'N/A');
                     $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_social']);
@@ -579,7 +579,7 @@
                     $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['remark_district']);
                     $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_psychosocial_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_psychosocial_date'])) : 'N/A');
                     $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_psychosocial']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_economic_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_economic_date'])) : 'N/A',);
+                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_economic_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_economic_date'])) : 'N/A');
                     $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_economic']);
                     $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_social_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_social_date'])) : 'N/A');
                     $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_social']);
@@ -719,7 +719,7 @@
             $cellss[] = WriterEntityFactory::createCell($item['remark_district']);
             $cellss[] = WriterEntityFactory::createCell($item['comment_psychosocial_date'] ? date('d-m-Y', strtotime($item['comment_psychosocial_date'])) : 'N/A');
             $cellss[] = WriterEntityFactory::createCell($item['comment_psychosocial']);
-            $cellss[] = WriterEntityFactory::createCell($item['comment_economic_date'] ? date('d-m-Y', strtotime($item['comment_economic_date'])) : 'N/A',);
+            $cellss[] = WriterEntityFactory::createCell($item['comment_economic_date'] ? date('d-m-Y', strtotime($item['comment_economic_date'])) : 'N/A');
             $cellss[] = WriterEntityFactory::createCell($item['comment_economic']);
             $cellss[] = WriterEntityFactory::createCell($item['comment_social_date'] ? date('d-m-Y', strtotime($item['comment_social_date'])) : 'N/A');
             $cellss[] = WriterEntityFactory::createCell($item['comment_social']);

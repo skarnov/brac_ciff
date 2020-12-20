@@ -115,8 +115,10 @@ if ($_GET['download_excel']) {
     unset($args['limit']);
     
     $args['data_only'] = true;
+    $args['report'] = true;
     $data = $this->get_returnees($args);
     $data = $data['data'];
+    
     // This will be here in our project
 
     $writer =WriterEntityFactory::createXLSXWriter();
@@ -229,8 +231,8 @@ if ($_GET['download_excel']) {
             $cells = [
                 WriterEntityFactory::createCell(++$count),
                 WriterEntityFactory::createCell($returnee['returnee_id']),
-                WriterEntityFactory::createCell($returnee['fk_branch_id']),
-                WriterEntityFactory::createCell($returnee['fk_project_id']),
+                WriterEntityFactory::createCell($returnee['branch_name']),
+                WriterEntityFactory::createCell($returnee['project_name']),
                 WriterEntityFactory::createCell($returnee['full_name']),
                 WriterEntityFactory::createCell($returnee['father_name']),
                 WriterEntityFactory::createCell($returnee['mother_name']),

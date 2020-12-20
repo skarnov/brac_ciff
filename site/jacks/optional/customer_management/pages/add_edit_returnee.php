@@ -210,9 +210,9 @@ if ($_POST) {
         $activityType = $edit ? 'update' : 'create';
         user_activity::add_activity($msg, 'success', $activityType);
         if ($edit) {
-            header('location: ' . url('admin/dev_returnee_management/manage_returnees?action=add_edit_returnee&edit=' . $edit));
+            header('location: ' . url('admin/dev_customer_management/manage_returnees?action=add_edit_returnee&edit=' . $edit));
         } else {
-            header('location: ' . url('admin/dev_returnee_management/manage_returnees'));
+            header('location: ' . url('admin/dev_customer_management/manage_returnees'));
         }
         exit();
     } else {

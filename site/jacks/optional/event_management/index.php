@@ -46,6 +46,7 @@ class dev_event_management {
                     'add_training' => 'Add Training',
                     'edit_training' => 'Edit Training',
                     'delete_training' => 'Delete Training',
+                    'edit_training_validation' => 'Training Validation',
                 ),
             ),
         );
@@ -237,10 +238,19 @@ class dev_event_management {
 
         $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
 
-        $from = "FROM dev_events 
+        if ($param['report']) :
+            $from = "FROM dev_events 
+                LEFT JOIN dev_activities ON (dev_activities.pk_activity_id = dev_events.fk_activity_id)
+                LEFT JOIN dev_users ON (dev_users.pk_user_id = dev_events.created_by)
+                LEFT JOIN dev_branches ON (dev_branches.pk_branch_id = dev_events.fk_branch_id)
+                LEFT JOIN dev_projects ON (dev_projects.pk_project_id = dev_events.fk_project_id)                
+            ";
+        else :
+            $from = "FROM dev_events 
                 LEFT JOIN dev_activities ON (dev_activities.pk_activity_id = dev_events.fk_activity_id)
                 LEFT JOIN dev_users ON (dev_users.pk_user_id = dev_events.created_by)
             ";
+        endif;
 
         $where = " WHERE 1";
         $conditions = " ";
@@ -255,7 +265,7 @@ class dev_event_management {
             'district' => 'dev_events.event_district',
             'sub_district' => 'dev_events.event_upazila',
             'union' => 'dev_events.event_union',
-            'create_date' => 'dev_events.create_date',
+            'event_start_date' => 'dev_events.event_start_date',
         );
 
         $conditions .= sql_condition_maker($loopCondition, $param);
@@ -339,6 +349,7 @@ class dev_event_management {
                 $sql = "UPDATE dev_targets SET achievement_male = '$achievement_male', achievement_female = '$achievement_female', achievement_boy = '$achievement_boy', achievement_girl = '$achievement_girl', achievement_total = '$achievement_total', update_date = '$update_date', update_time = '$update_time', updated_by = '$updated_by' WHERE fk_activity_id = '" . $events_data['fk_activity_id'] . "' AND fk_branch_id = '" . $events_data['fk_branch_id'] . "' AND fk_project_id = '" . $events_data['fk_project_id'] . "' AND month = '" . $events_data['month'] . "'";
                 $ret['misactivity_update'] = $devdb->query($sql);
             } else {
+                $events_data['validation_count'] = 0;
                 $events_data['create_date'] = date('Y-m-d');
                 $events_data['create_time'] = date('H:i:s');
                 $events_data['created_by'] = $_config['user']['pk_user_id'];

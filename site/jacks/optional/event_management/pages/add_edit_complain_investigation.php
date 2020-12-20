@@ -149,7 +149,7 @@ ob_start();
                 </div>
                 <div class="form-group">
                     <label for="inputAge">Age</label>
-                    <input type="text" class="form-control" id="Age" name="age" value="<?php echo $pre_data['age']; ?>">
+                    <input type="number" class="form-control" id="Age" name="age" value="<?php echo $pre_data['age']; ?>">
                 </div>
                 <div class="form-group">
                     <label>Gender</label>

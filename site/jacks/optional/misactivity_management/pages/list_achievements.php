@@ -182,7 +182,7 @@ filterForm($filterForm);
                 <th>Project</th>
                 <th>Branch</th>
                 <th>District</th>
-                <th>Sub-District</th>
+                <th>Upazila</th>
                 <th>Month</th>
                 <th>Activity Name</th>
                 <th>Target</th>

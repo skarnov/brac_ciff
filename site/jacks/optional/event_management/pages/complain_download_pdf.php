@@ -23,10 +23,10 @@ $devPdf->Cell(0, 13, 'Geographical Information', 0, 1, 'C');
 
 $devPdf->SetFont('Times', '', 12);
 $devPdf->Cell(0, 10, 'Branch Name: ' . $branch_name, 0, 1, 'L');
-$devPdf->Cell(0, 0, 'Division: ' . $complains['division'], 0, 1, 'L');
-$devPdf->Cell(0, 10, 'District: ' . $complains['branch_district'], 0, 1, 'L');
-$devPdf->Cell(0, 0, 'Upazila: ' . $complains['upazila'], 0, 1, 'L');
-$devPdf->Cell(0, 10, 'Union: ' . $complains['branch_union'], 0, 1, 'L');
+$devPdf->Cell(0, 0, 'Division: ' . ucfirst($complains['division']), 0, 1, 'L');
+$devPdf->Cell(0, 10, 'District: ' . ucfirst($complains['branch_district']), 0, 1, 'L');
+$devPdf->Cell(0, 0, 'Upazila: ' . ucfirst($complains['upazila']), 0, 1, 'L');
+$devPdf->Cell(0, 10, 'Union: ' . ucfirst($complains['branch_union']), 0, 1, 'L');
 $devPdf->Cell(0, 0, 'Village: ' . $complains['village'], 0, 1, 'L');
 $devPdf->Cell(0, 10, '', 0, 1, 'L');
 
@@ -35,7 +35,7 @@ $devPdf->SetFont('Times', 'B', 14);
 $devPdf->Cell(0, 13, 'Community Service Information', 0, 1, 'C');
 
 $devPdf->SetFont('Times', '', 12);
-$devPdf->Cell(0, 10, 'Register Date: ' . $complains['complain_register_date'] ? date('d-m-Y', strtotime($complains['complain_register_date'])) : 'N/A', 0, 1, 'L');
+$devPdf->Cell(0, 10, $complains['complain_register_date'] ? 'Register Date: ' . date('d-m-Y', strtotime($complains['complain_register_date'])) : 'N/A', 0, 1, 'L');
 $devPdf->Cell(0, 0, 'Name of service recipient: ' . $complains['name'], 0, 1, 'L');
 $devPdf->Cell(0, 10, 'Age: ' . $complains['age'], 0, 1, 'L');
 $devPdf->Cell(0, 0, 'Type of service seeking: ' . $complains['type_service'] . ' ' . $complains['other_type_service'], 0, 1, 'L');

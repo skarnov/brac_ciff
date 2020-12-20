@@ -84,7 +84,7 @@ if ($edit) {
             'fk_staff_id' => 'dev_immediate_supports.fk_staff_id',
             'fk_customer_id' => 'dev_immediate_supports.fk_customer_id',
             'immediate_support' => 'dev_immediate_supports.immediate_support',
-            'entry_date' => 'dev_immediate_supports.entry_date AS support_date',
+            'support_date' => 'dev_immediate_supports.entry_date AS support_date',
             'arrival_place' => 'dev_immediate_supports.arrival_place',
             'plan_date' => 'dev_reintegration_plan.plan_date',
             'reintegration_financial_service' => 'dev_reintegration_plan.reintegration_financial_service',
@@ -110,7 +110,7 @@ if ($edit) {
             'full_name' => 'dev_customers.full_name',
             'inkind_project' => 'dev_economic_supports.inkind_project',
             'other_inkind_project' => 'dev_economic_supports.other_inkind_project',
-            'entry_date' => 'dev_economic_supports.entry_date AS economic_reintegration_date',
+            'economic_reintegration_date' => 'dev_economic_supports.entry_date AS economic_reintegration_date',
             'is_certification_received' => 'dev_economic_supports.is_certification_received',
             'training_used' => 'dev_economic_supports.training_used',
             'economic_other_comments' => 'dev_economic_supports.other_comments AS economic_other_comments',
@@ -128,7 +128,7 @@ if ($edit) {
             'entrepreneur_training_date' => 'dev_economic_supports.entrepreneur_training_date',
             'other_financial_training_name' => 'dev_economic_supports.other_financial_training_name',
             'other_financial_training_date' => 'dev_economic_supports.other_financial_training_date',
-            'entry_date' => 'dev_economic_reintegration_referrals.entry_date AS economic_reintegration_referral_date',
+            'economic_reintegration_referral_date' => 'dev_economic_reintegration_referrals.entry_date AS economic_reintegration_referral_date',
             'is_vocational_training' => 'dev_economic_reintegration_referrals.is_vocational_training',
             'received_vocational_training' => 'dev_economic_reintegration_referrals.received_vocational_training',
             'other_received_vocational_training' => 'dev_economic_reintegration_referrals.other_received_vocational_training',
@@ -165,9 +165,6 @@ if ($edit) {
 
     $pre_data = $this->get_cases($args);
     
-    d($pre_data);
-    
-
     $immediate_support = explode(',', $pre_data['immediate_support']);
     $service_requested = explode(',', $pre_data['service_requested']);
     $problem_identified = explode(',', $pre_data['problem_identified']);
@@ -420,7 +417,7 @@ doAction('render_start');
                                                                     echo 'checked';
                                                                 }
                                                                 ?>><span class="lbl">Education</span></label>
-                                                            <div id="educationAttr" class="form-group col-sm-8">
+                                                            <div id="educationAttr" style="display: none;" class="form-group col-sm-8">
                                                                 <div class="options_holder radio">
                                                                     <label><input class="px" type="checkbox" name="service_requested[]" value="Admission" <?php
                                                                         if (in_array('Admission', $service_requested)) {
@@ -436,7 +433,11 @@ doAction('render_start');
                                                             </div>
                                                             <script>
                                                                 init.push(function () {
-                                                                    $('#educationAttr').hide();
+                                                                    var isChecked = $('#education').is(':checked');
+
+                                                                    if (isChecked == true) {
+                                                                        $('#educationAttr').show();
+                                                                    }
 
                                                                     $("#education").on("click", function () {
                                                                         $('#educationAttr').toggle();
@@ -448,7 +449,7 @@ doAction('render_start');
                                                                     echo 'checked';
                                                                 }
                                                                 ?>><span class="lbl">Financial Services</span></label>
-                                                            <div id="financialServiceAttr" class="form-group col-sm-12">
+                                                            <div id="financialServiceAttr" style="display: none;" class="form-group col-sm-12">
                                                                 <div class="options_holder radio">
                                                                     <label><input class="px" type="checkbox" name="service_requested[]" value="Loan" <?php
                                                                         if (in_array('Loan', $service_requested)) {
@@ -463,7 +464,11 @@ doAction('render_start');
                                                             </div>
                                                             <script>
                                                                 init.push(function () {
-                                                                    $('#financialServiceAttr').hide();
+                                                                    var isChecked = $('#financialService').is(':checked');
+
+                                                                    if (isChecked == true) {
+                                                                        $('#financialServiceAttr').show();
+                                                                    }
 
                                                                     $("#financialService").on("click", function () {
                                                                         $('#financialServiceAttr').toggle();
@@ -475,7 +480,7 @@ doAction('render_start');
                                                                     echo 'checked';
                                                                 }
                                                                 ?>><span class="lbl">Housing</span></label>
-                                                            <div id="housingAttr" class="form-group col-sm-12">
+                                                            <div id="housingAttr" style="display: none;" class="form-group col-sm-12">
                                                                 <div class="options_holder radio">
                                                                     <label><input class="px" type="checkbox" name="service_requested[]" value="Allocation for khas land" <?php
                                                                         if (in_array('Allocation for khas land', $service_requested)) {
@@ -491,7 +496,11 @@ doAction('render_start');
                                                             </div>
                                                             <script>
                                                                 init.push(function () {
-                                                                    $('#housingAttr').hide();
+                                                                    var isChecked = $('#housing').is(':checked');
+
+                                                                    if (isChecked == true) {
+                                                                        $('#housingAttr').show();
+                                                                    }
 
                                                                     $("#housing").on("click", function () {
                                                                         $('#housingAttr').toggle();
@@ -508,7 +517,7 @@ doAction('render_start');
                                                                     echo 'checked';
                                                                 }
                                                                 ?>><span class="lbl">Legal Services</span></label>
-                                                            <div id="legalServicesAttr" class="form-group col-sm-12">
+                                                            <div id="legalServicesAttr" style="display: none;" class="form-group col-sm-12">
                                                                 <div class="options_holder radio">
                                                                     <label><input class="px" type="checkbox" name="service_requested[]" value="Legal Aid" <?php
                                                                         if (in_array('Legal Aid"', $service_requested)) {
@@ -529,7 +538,11 @@ doAction('render_start');
                                                             </div>
                                                             <script>
                                                                 init.push(function () {
-                                                                    $('#legalServicesAttr').hide();
+                                                                    var isChecked = $('#legalServices').is(':checked');
+
+                                                                    if (isChecked == true) {
+                                                                        $('#legalServicesAttr').show();
+                                                                    }
 
                                                                     $("#legalServices").on("click", function () {
                                                                         $('#legalServicesAttr').toggle();
@@ -541,7 +554,7 @@ doAction('render_start');
                                                                     echo 'checked';
                                                                 }
                                                                 ?>><span class="lbl">Training</span></label>
-                                                            <div id="trainingAttr" class="form-group col-sm-12">
+                                                            <div id="trainingAttr" style="display: none;" class="form-group col-sm-12">
                                                                 <div class="options_holder radio">
                                                                     <label><input class="px" type="checkbox" name="service_requested[]" value="Financial Literacy Training" <?php
                                                                         if (in_array('Financial Literacy Training', $service_requested)) {
@@ -562,7 +575,11 @@ doAction('render_start');
                                                             </div>
                                                             <script>
                                                                 init.push(function () {
-                                                                    $('#trainingAttr').hide();
+                                                                    var isChecked = $('#training').is(':checked');
+
+                                                                    if (isChecked == true) {
+                                                                        $('#trainingAttr').show();
+                                                                    }
 
                                                                     $("#training").on("click", function () {
                                                                         $('#trainingAttr').toggle();
@@ -574,7 +591,7 @@ doAction('render_start');
                                                                     echo 'checked';
                                                                 }
                                                                 ?>><span class="lbl">Material Assistance</span></label>
-                                                            <div id="materialAssistanceAttr" class="form-group col-sm-12">
+                                                            <div id="materialAssistanceAttr" style="display: none;" class="form-group col-sm-12">
                                                                 <div class="options_holder radio">
                                                                     <label><input class="px" type="checkbox" name="service_requested[]" value="Business equipment/tools" <?php
                                                                         if (in_array('Business equipment/tools', $service_requested)) {
@@ -590,7 +607,11 @@ doAction('render_start');
                                                             </div>
                                                             <script>
                                                                 init.push(function () {
-                                                                    $('#materialAssistanceAttr').hide();
+                                                                    var isChecked = $('#materialAssistance').is(':checked');
+
+                                                                    if (isChecked == true) {
+                                                                        $('#materialAssistanceAttr').show();
+                                                                    }
 
                                                                     $("#materialAssistance").on("click", function () {
                                                                         $('#materialAssistanceAttr').toggle();
@@ -602,7 +623,7 @@ doAction('render_start');
                                                                     echo 'checked';
                                                                 }
                                                                 ?>><span class="lbl">Medical Support</span></label>
-                                                            <div id="medicalSupportAttr" class="form-group col-sm-12">
+                                                            <div id="medicalSupportAttr" style="display: none;" class="form-group col-sm-12">
                                                                 <div class="options_holder radio">
                                                                     <label><input class="px" type="checkbox" name="service_requested[]" value=">Medical treatment" <?php
                                                                         if (in_array('Medical treatment', $service_requested)) {
@@ -618,7 +639,11 @@ doAction('render_start');
                                                             </div>
                                                             <script>
                                                                 init.push(function () {
-                                                                    $('#medicalSupportAttr').hide();
+                                                                    var isChecked = $('#medicalSupport').is(':checked');
+
+                                                                    if (isChecked == true) {
+                                                                        $('#medicalSupportAttr').show();
+                                                                    }
 
                                                                     $("#medicalSupport").on("click", function () {
                                                                         $('#medicalSupportAttr').toggle();
@@ -630,7 +655,7 @@ doAction('render_start');
                                                                     echo 'checked';
                                                                 }
                                                                 ?>><span class="lbl">Microbusiness</span></label>
-                                                            <div id="microbusinessAttr" class="form-group col-sm-12">
+                                                            <div id="microbusinessAttr" style="display: none;" class="form-group col-sm-12">
                                                                 <div class="options_holder radio">
                                                                     <label><input class="px" type="checkbox" name="service_requested[]" value="Business grant" <?php
                                                                         if (in_array('Business grant', $service_requested)) {
@@ -641,7 +666,11 @@ doAction('render_start');
                                                             </div>
                                                             <script>
                                                                 init.push(function () {
-                                                                    $('#microbusinessAttr').hide();
+                                                                    var isChecked = $('#microbusiness').is(':checked');
+
+                                                                    if (isChecked == true) {
+                                                                        $('#microbusinessAttr').show();
+                                                                    }
 
                                                                     $("#microbusiness").on("click", function () {
                                                                         $('#microbusinessAttr').toggle();
@@ -653,7 +682,7 @@ doAction('render_start');
                                                                     echo 'checked';
                                                                 }
                                                                 ?>><span class="lbl">Psychosocial Support</span></label>
-                                                            <div id="psychosocialSupportAttr" class="form-group col-sm-12">
+                                                            <div id="psychosocialSupportAttr" style="display: none;" class="form-group col-sm-12">
                                                                 <div class="options_holder radio">
                                                                     <label><input class="px" type="checkbox" name="service_requested[]" value="Individual Counselling" <?php
                                                                         if (in_array('Individual Counselling', $service_requested)) {
@@ -674,7 +703,11 @@ doAction('render_start');
                                                             </div>
                                                             <script>
                                                                 init.push(function () {
-                                                                    $('#psychosocialSupportAttr').hide();
+                                                                    var isChecked = $('#psychosocialSupport').is(':checked');
+
+                                                                    if (isChecked == true) {
+                                                                        $('#psychosocialSupportAttr').show();
+                                                                    }
 
                                                                     $("#psychosocialSupport").on("click", function () {
                                                                         $('#psychosocialSupportAttr').toggle();
@@ -686,12 +719,16 @@ doAction('render_start');
                                                             <div class="form-group">
                                                                 <label><input class="px" id="socialProtection" type="checkbox" value="Social Protection Schemes" <?php echo $pre_data && $pre_data['social_protection'] != NULL ? 'checked' : '' ?>><span class="lbl">Social Protection Schemes</span></label>
                                                             </div>
-                                                            <div id="socialProtectionAttr" class="form-group">
+                                                            <div id="socialProtectionAttr" style="display: none;" class="form-group">
                                                                 <input class="form-control" placeholder="Specify Social Protection Schemes" type="text" name="new_social_protection" value="<?php echo $pre_data['social_protection'] ? $pre_data['social_protection'] : ''; ?>">
                                                             </div>
                                                             <script>
                                                                 init.push(function () {
-                                                                    $('#socialProtectionAttr').hide();
+                                                                    var isChecked = $('#socialProtection').is(':checked');
+
+                                                                    if (isChecked == true) {
+                                                                        $('#socialProtectionAttr').show();
+                                                                    }
 
                                                                     $("#socialProtection").on("click", function () {
                                                                         $('#socialProtectionAttr').toggle();
@@ -701,12 +738,16 @@ doAction('render_start');
                                                             <div class="form-group">
                                                                 <label><input class="px" id="securityMeasures" type="checkbox" value="Special Security Measures" <?php echo $pre_data && $pre_data['security_measure'] != NULL ? 'checked' : '' ?>><span class="lbl">Special Security Measures</span></label>
                                                             </div>
-                                                            <div id="securityMeasuresAttr" class="form-group">
+                                                            <div id="securityMeasuresAttr" style="display: none;" class="form-group">
                                                                 <input class="form-control" placeholder="Specify Security Measures" type="text" name="new_security_measures" value="<?php echo $pre_data['security_measure'] ? $pre_data['security_measure'] : ''; ?>">
                                                             </div>
                                                             <script>
                                                                 init.push(function () {
-                                                                    $('#securityMeasuresAttr').hide();
+                                                                    var isChecked = $('#securityMeasures').is(':checked');
+
+                                                                    if (isChecked == true) {
+                                                                        $('#securityMeasuresAttr').show();
+                                                                    }
 
                                                                     $("#securityMeasures").on("click", function () {
                                                                         $('#securityMeasuresAttr').toggle();
@@ -716,12 +757,16 @@ doAction('render_start');
                                                             <div class="form-group">
                                                                 <label><input class="px" id="servicesRequested" type="checkbox" value="Other Services Requested" <?php echo $pre_data && $pre_data['other_service_requested'] != NULL ? 'checked' : '' ?>><span class="lbl">Other Services Requested</span></label>
                                                             </div>
-                                                            <div id="servicesRequestedAttr" class="form-group">
+                                                            <div id="servicesRequestedAttr" style="display: none;" class="form-group">
                                                                 <input class="form-control" placeholder="Specify Services Requested" type="text" name="new_service_requested" value="<?php echo $pre_data['other_service_requested'] ? $pre_data['other_service_requested'] : ''; ?>">
                                                             </div>
                                                             <script>
                                                                 init.push(function () {
-                                                                    $('#servicesRequestedAttr').hide();
+                                                                    var isChecked = $('#servicesRequested').is(':checked');
+
+                                                                    if (isChecked == true) {
+                                                                        $('#servicesRequestedAttr').show();
+                                                                    }
 
                                                                     $("#servicesRequested").on("click", function () {
                                                                         $('#servicesRequestedAttr').toggle();
@@ -895,7 +940,7 @@ doAction('render_start');
                                         <input class="form-control" placeholder="Address of organization/individual" type="text" name="referr_address" value="<?php echo $pre_data['referr_address'] ? $pre_data['referr_address'] : ''; ?>">
                                     </div>
                                     <div class="form-group">
-                                        <input class="form-control" placeholder="Phone Number" type="text" name="contact_number" value="<?php echo $pre_data['contact_number'] ? $pre_data['contact_number'] : ''; ?>">
+                                        <input class="form-control" placeholder="Phone Number" type="number" name="contact_number" value="<?php echo $pre_data['contact_number'] ? $pre_data['contact_number'] : ''; ?>">
                                     </div>
                                     <?php
                                     $reason_for_reffer = $reason_for_reffer ? $reason_for_reffer : array($reason_for_reffer);
@@ -1088,7 +1133,7 @@ doAction('render_start');
                                                             echo 'checked';
                                                         }
                                                         ?>><span class="lbl">Microbusiness</span></label>
-                                                    <div id="inkindMicroAttr" class="form-group col-sm-12">
+                                                    <div id="inkindMicroAttr" style="display: none;" class="form-group col-sm-12">
                                                         <div class="options_holder radio">
                                                             <label><input class="px" type="checkbox" name="inkind_project[]" value="Business grant from project" <?php
                                                                 if (in_array('Business grant from project', $inkind_project)) {
@@ -1104,8 +1149,6 @@ doAction('render_start');
                                                     </div>
                                                     <script>
                                                         init.push(function () {
-                                                            $('#inkindMicroAttr').hide();
-
                                                             var isChecked = $('#inkindMicro').is(':checked');
 
                                                             if (isChecked == true) {
@@ -1118,11 +1161,11 @@ doAction('render_start');
                                                         });
                                                     </script>
                                                     <label class="col-sm-12"><input class="px" id="inkindMaterial" type="checkbox" name="inkind_project[]" value="Material Assistance" <?php
-                                                        if (in_array('Want to leave home', $inkind_project)) {
+                                                        if (in_array('Material Assistance', $inkind_project)) {
                                                             echo 'checked';
                                                         }
                                                         ?>><span class="lbl">Material Assistance</span></label>
-                                                    <div id="inkindMaterialAttr" class="form-group col-sm-12">
+                                                    <div id="inkindMaterialAttr" style="display: none;" class="form-group col-sm-12">
                                                         <div class="options_holder radio">
                                                             <label><input class="px" type="checkbox" name="inkind_project[]" value="Business equipment/tools"
                                                                 <?php
@@ -1140,8 +1183,6 @@ doAction('render_start');
                                                     </div>
                                                     <script>
                                                         init.push(function () {
-                                                            $('#inkindMaterialAttr').hide();
-
                                                             var isChecked = $('#inkindMaterial').is(':checked');
 
                                                             if (isChecked == true) {
