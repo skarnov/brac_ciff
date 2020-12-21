@@ -95,8 +95,6 @@ if ($_POST) {
             'permanent_sub_district' => 'Upazila',
             'permanent_district' => 'District',
             'permanent_house' => 'Address',
-            'male_household_member' => 'Number of Accompany/ Number of Family Member (Male)',
-            'female_household_member' => 'Number of Accompany/ Number of Family Member (Female)',
             'left_port' => 'Transit/ route of Migration/ Trafficking',
             'preferred_country' => 'Desired destination',
             'final_destination' => 'Final destination',

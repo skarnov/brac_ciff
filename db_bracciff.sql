@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 20, 2020 at 02:44 AM
+-- Generation Time: Dec 20, 2020 at 01:17 PM
 -- Server version: 5.6.41-84.1
 -- PHP Version: 7.3.6
 
@@ -5249,6 +5249,13 @@ CREATE TABLE `dev_access_to_pp` (
   `updated_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `dev_access_to_pp`
+--
+
+INSERT INTO `dev_access_to_pp` (`pk_access_id`, `fk_project_id`, `brac_info_id`, `full_name`, `gender`, `disability`, `mobile`, `division`, `district`, `upazilla`, `user_union`, `village`, `service_type`, `other_service_type`, `rescue_reason`, `destination_country`, `support_date`, `complain_to`, `other_complain_to`, `service_result`, `return_date`, `comment`, `create_time`, `create_date`, `created_by`, `modify_time`, `modify_date`, `updated_by`) VALUES
+(1, 1, 'A', 'Full Name', 'male', 'no', '01719874524', 'chattagram', 'coxsbazar', 'coxsbazar sadar', 'islampur', 'Village', 'Death body,Compensation', NULL, 'physical_torture', 'Span', '2020-12-21', 'NID', NULL, 'received', '2020-12-21', 'Comment', '01:12:45', '2020-12-21', 2, NULL, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -5266,6 +5273,13 @@ CREATE TABLE `dev_activities` (
   `update_date` date DEFAULT NULL,
   `updated_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `dev_activities`
+--
+
+INSERT INTO `dev_activities` (`pk_activity_id`, `fk_project_id`, `activity_name`, `create_time`, `create_date`, `created_by`, `update_time`, `update_date`, `updated_by`) VALUES
+(1, 2, 'IPT Show', '22:07:14', '2020-12-20', 2, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -5302,6 +5316,13 @@ CREATE TABLE `dev_airport_land_supports` (
   `modify_date` date DEFAULT NULL,
   `updated_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `dev_airport_land_supports`
+--
+
+INSERT INTO `dev_airport_land_supports` (`pk_support_id`, `fk_project_id`, `brac_info_id`, `return_route`, `arrival_date`, `person_type`, `full_name`, `gender`, `is_disable`, `passport_number`, `travel_pass`, `mobile_number`, `emergency_mobile`, `division`, `district`, `upazilla`, `user_union`, `village`, `destination_country`, `service_received`, `other_service_received`, `create_time`, `create_date`, `created_by`, `modify_time`, `modify_date`, `updated_by`) VALUES
+(1, 1, 'A', 'land', '2020-12-21', 'trafficked_survivor', 'Full Name', 'male', 'no', '172323GT73', 'DASDSA', '01749874526', '01718848590', 'chattagram', 'comilla', 'barura', 'bhabanipur', 'Village', 'Span', 'Food', NULL, '01:11:19', '2020-12-21', 2, '01:11:41', '2020-12-21', 2);
 
 -- --------------------------------------------------------
 
@@ -5398,6 +5419,13 @@ CREATE TABLE `dev_complains` (
   `updated_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `dev_complains`
+--
+
+INSERT INTO `dev_complains` (`pk_complain_id`, `fk_branch_id`, `division`, `branch_district`, `upazila`, `branch_union`, `village`, `name`, `type_recipient`, `type_service`, `other_type_service`, `know_service`, `other_know_service`, `complain_register_date`, `age`, `gender`, `remark`, `create_time`, `create_date`, `created_by`, `update_time`, `update_date`, `updated_by`) VALUES
+(1, 1, 'chattagram', 'comilla', 'debidwar', 'subil', '', 'Obydullah', 'victim', 'Trafficking information', NULL, 'IPT show', NULL, '2020-12-20', '20', 'male', '', '22:25:38', '2020-12-20', 2, NULL, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -5425,6 +5453,13 @@ CREATE TABLE `dev_complain_fileds` (
   `update_date` date DEFAULT NULL,
   `updated_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `dev_complain_fileds`
+--
+
+INSERT INTO `dev_complain_fileds` (`pk_complain_filed_id`, `full_name`, `complain_register_date`, `month`, `division`, `district`, `upazila`, `police_station`, `case_id`, `age`, `gender`, `type_case`, `comments`, `create_time`, `create_date`, `created_by`, `update_time`, `update_date`, `updated_by`) VALUES
+(1, 'New Complain', '2020-12-21', 'February', 'rajshahi', 'sirajganj', 'belkuchi', 'Debidar', 'Case ID', '3', 'male', 'Missing', 'Flood', '00:53:12', '2020-12-21', 2, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -5454,6 +5489,13 @@ CREATE TABLE `dev_complain_investigations` (
   `update_date` date DEFAULT NULL,
   `updated_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `dev_complain_investigations`
+--
+
+INSERT INTO `dev_complain_investigations` (`pk_complain_investigation_id`, `running_investigation`, `full_name`, `complain_register_date`, `month`, `division`, `district`, `upazila`, `police_station`, `case_id`, `age`, `gender`, `type_case`, `comments`, `create_time`, `create_date`, `created_by`, `update_time`, `update_date`, `updated_by`) VALUES
+(1, 'no', 'Sk Obi', '2020-12-21', 'January', 'rajshahi', 'pabna', 'bhangura', 'REY', '3423', '3', 'male', 'Missing', '', '00:55:26', '2020-12-21', 2, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -5593,6 +5635,13 @@ CREATE TABLE `dev_customers` (
   `fk_branch_id` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `dev_customers`
+--
+
+INSERT INTO `dev_customers` (`pk_customer_id`, `customer_id`, `full_name`, `father_name`, `mother_name`, `customer_photo`, `marital_status`, `customer_spouse`, `customer_birthdate`, `customer_gender`, `customer_religion`, `nid_number`, `passport_number`, `birth_reg_number`, `educational_qualification`, `customer_mobile`, `emergency_mobile`, `emergency_name`, `emergency_relation`, `permanent_house`, `permanent_village`, `permanent_ward`, `permanent_union`, `permanent_sub_district`, `permanent_district`, `permanent_division`, `customer_status`, `create_date`, `create_time`, `created_by`, `update_date`, `update_time`, `updated_by`, `fk_staff_id`, `fk_branch_id`) VALUES
+(1, 'RT659821', 'Sheikh Obydullah', 'Abba', 'Amma', NULL, 'single', '', '1920-12-20', 'male', NULL, '1992564489560025', 'BR45454335', 'BR4393856', 'master', '01719020274', '01718848590', 'Sheikh Modhu', 'Friend', 'H4543/8', 'Goal Batahn', '7', 'gopalgram', 'magura sadar', 'magura', 'khulna', 'active', '2020-12-20', '14:57:31', 2, NULL, NULL, NULL, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -5615,6 +5664,13 @@ CREATE TABLE `dev_customer_health` (
   `created_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `dev_customer_health`
+--
+
+INSERT INTO `dev_customer_health` (`pk_customer_health_id`, `fk_customer_id`, `is_physically_challenged`, `disability_type`, `having_chronic_disease`, `disease_type`, `other_disease_type`, `update_date`, `update_time`, `updated_by`, `create_date`, `create_time`, `created_by`) VALUES
+(1, 1, 'no', '', 'no', '', NULL, NULL, NULL, NULL, '2020-12-20', '14:57:31', 2);
+
 -- --------------------------------------------------------
 
 --
@@ -5636,6 +5692,13 @@ CREATE TABLE `dev_customer_skills` (
   `create_time` time DEFAULT NULL,
   `created_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `dev_customer_skills`
+--
+
+INSERT INTO `dev_customer_skills` (`pk_customer_skills_id`, `fk_customer_id`, `have_earner_skill`, `have_skills`, `other_have_skills`, `vocational_skill`, `handicraft_skill`, `update_date`, `update_time`, `updated_by`, `create_date`, `create_time`, `created_by`) VALUES
+(1, 1, 'yes', 'Livestock Rearing', NULL, NULL, NULL, NULL, NULL, NULL, '2020-12-20', '14:57:31', 2);
 
 -- --------------------------------------------------------
 
@@ -5684,6 +5747,13 @@ CREATE TABLE `dev_economic_profile` (
   `created_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `dev_economic_profile`
+--
+
+INSERT INTO `dev_economic_profile` (`pk_economic_profile_id`, `fk_customer_id`, `property_name`, `property_value`, `returnee_income_source`, `income_source`, `family_income`, `pre_occupation`, `present_occupation`, `present_income`, `total_member`, `male_household_member`, `female_household_member`, `boy_household_member`, `girl_household_member`, `personal_savings`, `personal_debt`, `current_residence_ownership`, `current_residence_type`, `update_date`, `update_time`, `updated_by`, `create_date`, `create_time`, `created_by`) VALUES
+(1, 1, 'Land', '60000', '50000', 'Enginner', 60000, 'Enginner', 'Enginner', 6000, 17, 2, 2, 6, 7, 0, 6000, 'own', 'raw_house', NULL, NULL, NULL, '2020-12-20', '14:57:31', 2);
+
 -- --------------------------------------------------------
 
 --
@@ -5724,6 +5794,13 @@ CREATE TABLE `dev_economic_reintegration_referrals` (
   `created_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `dev_economic_reintegration_referrals`
+--
+
+INSERT INTO `dev_economic_reintegration_referrals` (`pk_economic_referral_id`, `fk_customer_id`, `entry_date`, `received_vocational_training`, `other_received_vocational_training`, `training_start_date`, `training_end_date`, `is_vocational_training`, `received_vocational`, `other_received_vocational`, `other_comments`, `is_economic_services`, `economic_support`, `economic_financial_service`, `other_economic_support`, `is_assistance_received`, `refferd_to`, `trianing_date`, `place_of_training`, `duration_training`, `refferd_address`, `status_traning`, `assistance_utilized`, `job_placement_date`, `financial_services_date`, `update_date`, `update_time`, `updated_by`, `create_date`, `create_time`, `created_by`) VALUES
+(1, 1, '2010-12-20', 'Mining and quarrying', NULL, '1970-01-01', '1970-01-01', 'yes', 'Mining and quarrying', NULL, '', 'yes', 'Microbusiness,Business grant from project,Financial Services,Loan', '', NULL, 'yes', '', '2005-12-12', '', '', '', 'yes', '', '2005-12-12', '2005-12-12', '2020-12-20', '22:31:25', 2, '2020-12-20', '15:47:19', 2);
+
 -- --------------------------------------------------------
 
 --
@@ -5760,6 +5837,13 @@ CREATE TABLE `dev_economic_supports` (
   `create_time` time DEFAULT NULL,
   `created_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `dev_economic_supports`
+--
+
+INSERT INTO `dev_economic_supports` (`pk_economic_support_id`, `fk_customer_id`, `entry_date`, `inkind_project`, `other_inkind_project`, `is_certification_received`, `training_used`, `other_comments`, `training_status`, `microbusiness_established`, `family_training`, `traning_entry_date`, `place_traning`, `duration_traning`, `financial_literacy_date`, `business_development_date`, `product_development_date`, `entrepreneur_training_date`, `other_financial_training_name`, `other_financial_training_date`, `month_inauguration`, `year_inauguration`, `update_date`, `update_time`, `updated_by`, `create_date`, `create_time`, `created_by`) VALUES
+(1, 1, '2020-12-20', 'Microbusiness,Business grant from project,Material Assistance,Business equipment/tools', NULL, 'yes', 'Good', '', 'completed', 'no', 'no', '1970-01-01', '', '', '2020-12-20', '2020-12-20', '2020-12-20', '2020-12-20', '', '1970-01-01', '', '', '2020-12-20', '22:31:25', 2, '2020-12-20', '15:47:19', 2);
 
 -- --------------------------------------------------------
 
@@ -5805,6 +5889,13 @@ CREATE TABLE `dev_events` (
   `updated_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `dev_events`
+--
+
+INSERT INTO `dev_events` (`pk_event_id`, `fk_branch_id`, `month`, `fk_project_id`, `fk_activity_id`, `event_division`, `event_district`, `event_upazila`, `event_union`, `event_location`, `event_village`, `event_ward`, `event_start_date`, `event_start_time`, `event_end_date`, `event_end_time`, `participant_boy`, `participant_girl`, `participant_male`, `participant_female`, `validation_count`, `preparatory_work`, `time_management`, `participants_attention`, `logistical_arrangements`, `relevancy_delivery`, `participants_feedback`, `observation_score`, `event_note`, `create_time`, `create_date`, `created_by`, `update_time`, `update_date`, `updated_by`) VALUES
+(1, 1, 12, 2, 1, 'khulna', 'jashore', 'jessore sadar', 'lebutala', 'Location', 'Village', 'Ward', '2020-12-20', '22:09:25', '2020-12-20', '22:09:25', 3, 3, 3, 3, 2, 5, 4, 3, 4, 3, 4, 23, 'Note', '22:10:41', '2020-12-20', 2, '00:33:54', '2020-12-21', 2);
+
 -- --------------------------------------------------------
 
 --
@@ -5838,6 +5929,14 @@ CREATE TABLE `dev_event_validations` (
   `update_date` date DEFAULT NULL,
   `updated_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `dev_event_validations`
+--
+
+INSERT INTO `dev_event_validations` (`pk_validation_id`, `fk_event_id`, `interview_date`, `interview_time`, `reviewed_by`, `beneficiary_id`, `participant_name`, `gender`, `age`, `mobile`, `enjoyment`, `victim`, `victim_family`, `message`, `other_message`, `use_message`, `mentioned_event`, `additional_comments`, `quote`, `create_time`, `create_date`, `created_by`, `update_time`, `update_date`, `updated_by`) VALUES
+(1, 1, '2020-12-20', '22:14:48', 'internal', 'RT9483473', 'Sk Obi', 'male', '25', '01977698719', 'yes', 'no', 'yes', 'Trafficking in persons', NULL, 'Good', 'Good', 'Good', 'Good', '22:17:13', '2020-12-20', 2, NULL, NULL, NULL),
+(2, 1, '2020-12-20', '22:23:47', 'external', '', '', '', '', '', '', '', '', 'Trafficking in persons', NULL, '', '', '', '', '22:24:08', '2020-12-20', 2, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -5878,6 +5977,13 @@ CREATE TABLE `dev_followups` (
   `created_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Dumping data for table `dev_followups`
+--
+
+INSERT INTO `dev_followups` (`pk_followup_id`, `entry_date`, `fk_customer_id`, `casedropped`, `reason_dropping`, `other_reason_dropping`, `confirm_services`, `followup_financial_service`, `social_protection`, `special_security`, `comment_psychosocial`, `comment_psychosocial_date`, `comment_economic`, `comment_economic_date`, `comment_social`, `comment_social_date`, `comment_income`, `comment_income_date`, `monthly_income`, `challenges`, `actions_taken`, `remark_participant`, `comment_brac`, `remark_district`, `update_date`, `update_time`, `updated_by`, `create_date`, `create_time`, `created_by`) VALUES
+(1, '2020-12-18', 1, 'yes', 'Lack of interest', NULL, 'Education,Admission', NULL, NULL, NULL, 'Good', '2020-12-01', 'Good', '2020-12-03', 'Good', '2020-12-22', 'Good', '2020-12-16', '2000', 'Challenge ', 'Action', 'Remark', 'Comment', 'District ', NULL, NULL, NULL, '2020-12-20', '21:56:51', 2);
+
 -- --------------------------------------------------------
 
 --
@@ -5900,6 +6006,13 @@ CREATE TABLE `dev_immediate_supports` (
   `updated_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `dev_immediate_supports`
+--
+
+INSERT INTO `dev_immediate_supports` (`pk_immediate_support_id`, `entry_date`, `fk_branch_id`, `fk_staff_id`, `fk_customer_id`, `arrival_place`, `immediate_support`, `create_date`, `create_time`, `created_by`, `update_date`, `update_time`, `updated_by`) VALUES
+(1, '2020-12-02', 1, 3, 1, 'Dhaka', 'Meet and greet at port of entry', '2020-12-20', '14:57:31', 2, '2020-12-20', '22:31:25', 2);
+
 -- --------------------------------------------------------
 
 --
@@ -5919,6 +6032,13 @@ CREATE TABLE `dev_initial_evaluation` (
   `update_date` date DEFAULT NULL,
   `updated_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `dev_initial_evaluation`
+--
+
+INSERT INTO `dev_initial_evaluation` (`pk_evaluation_id`, `fk_customer_id`, `entry_date`, `is_participant`, `justification_project`, `create_time`, `create_date`, `created_by`, `update_time`, `update_date`, `updated_by`) VALUES
+(1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -5958,7 +6078,8 @@ CREATE TABLE `dev_lookups` (
 --
 
 INSERT INTO `dev_lookups` (`pk_lookup_id`, `fk_content_id`, `lookup_group`, `lookup_value`) VALUES
-(1, 0, 'staff_designation', 'Branch Manager');
+(1, 0, 'staff_designation', 'Branch Manager'),
+(2, 0, 'staff_designation', 'Staff');
 
 -- --------------------------------------------------------
 
@@ -6090,6 +6211,13 @@ CREATE TABLE `dev_migrations` (
   `created_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `dev_migrations`
+--
+
+INSERT INTO `dev_migrations` (`pk_migration_id`, `fk_customer_id`, `is_cheated`, `is_money_deducted`, `is_movement_limitation`, `is_kept_document`, `left_port`, `preferred_country`, `departure_date`, `migration_type`, `visa_type`, `return_date`, `returned_age`, `migration_duration`, `migration_medias`, `migration_occupation`, `destination_country_leave_reason`, `other_destination_country_leave_reason`, `earned_money`, `forced_work`, `excessive_work`, `employer_threatened`, `final_destination`, `migration_reasons`, `other_migration_reason`, `update_date`, `update_time`, `updated_by`, `create_date`, `create_time`, `created_by`) VALUES
+(1, 1, 'yes', 'yes', 'yes', 'yes', 'Jashore Airport', 'New York', '1995-12-20', 'regular', 'student', '2018-12-20', 'Age: 98, Month: 0, Days: 24', 'Year: 23, Month: 0, Days: 6', '{\"departure_media\":\"Bhai Bhai\",\"media_relation\":\"Nothing\",\"media_address\":\"Dhaka\"}', 'Carpentar', 'no_legal', NULL, 5000, 'yes', 'no', 'yes', 'Iceland', 'underemployed', NULL, '2020-12-20', '14:57:31', 2, NULL, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -6169,6 +6297,14 @@ CREATE TABLE `dev_psycho_completions` (
   `created_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Dumping data for table `dev_psycho_completions`
+--
+
+INSERT INTO `dev_psycho_completions` (`pk_psycho_completion_id`, `fk_customer_id`, `entry_date`, `is_completed`, `dropout_reason`, `review_session`, `final_evaluation`, `client_comments`, `counsellor_comments`, `required_session`, `update_date`, `update_time`, `updated_by`, `create_date`, `create_time`, `created_by`) VALUES
+(1, 1, '2020-12-20', 'yes', '', 'Good', 'Good', 'Good', 'Good', 'yes', '2020-12-20', '22:41:13', 2, '2020-12-20', '15:46:36', 2),
+(2, 1, '2020-12-31', 'no', 'Dropout Reason', 'Good', 'Good', 'Good', 'Good', 'no', NULL, NULL, NULL, '2020-12-20', '22:42:21', 2);
+
 -- --------------------------------------------------------
 
 --
@@ -6194,6 +6330,15 @@ CREATE TABLE `dev_psycho_family_counselling` (
   `created_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Dumping data for table `dev_psycho_family_counselling`
+--
+
+INSERT INTO `dev_psycho_family_counselling` (`pk_psycho_family_counselling_id`, `fk_psycho_support_id`, `fk_customer_id`, `entry_date`, `entry_time`, `session_place`, `session_comments`, `male_counseled`, `female_counseled`, `members_counseled`, `update_date`, `update_time`, `updated_by`, `create_date`, `create_time`, `created_by`) VALUES
+(1, NULL, 1, '2020-12-20', '15:44:17', 'Home', 'Good Condition', 3, 3, 6, NULL, NULL, NULL, NULL, NULL, NULL),
+(2, NULL, 1, '2020-12-01', '21:02:07', 'Home', '', 1, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(3, NULL, 1, '2020-12-20', '21:04:08', '', '', 2, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -6213,6 +6358,13 @@ CREATE TABLE `dev_psycho_followups` (
   `create_time` time DEFAULT NULL,
   `created_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `dev_psycho_followups`
+--
+
+INSERT INTO `dev_psycho_followups` (`pk_psycho_followup_id`, `fk_customer_id`, `entry_date`, `entry_time`, `followup_comments`, `update_date`, `update_time`, `updated_by`, `create_date`, `create_time`, `created_by`) VALUES
+(1, 1, '2020-12-20', '15:46:44', 'Good', NULL, NULL, NULL, '2020-12-20', '15:46:50', 2);
 
 -- --------------------------------------------------------
 
@@ -6235,6 +6387,13 @@ CREATE TABLE `dev_psycho_sessions` (
   `create_time` time DEFAULT NULL,
   `created_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `dev_psycho_sessions`
+--
+
+INSERT INTO `dev_psycho_sessions` (`pk_psycho_session_id`, `fk_customer_id`, `entry_date`, `entry_time`, `session_comments`, `activities_description`, `next_date`, `update_date`, `update_time`, `updated_by`, `create_date`, `create_time`, `created_by`) VALUES
+(1, 1, '2020-12-20', '15:44:59', 'Serious Condition', 'Proper Treatment', '2020-12-20', NULL, NULL, NULL, '2020-12-20', '15:46:01', 2);
 
 -- --------------------------------------------------------
 
@@ -6267,6 +6426,13 @@ CREATE TABLE `dev_psycho_supports` (
   `created_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Dumping data for table `dev_psycho_supports`
+--
+
+INSERT INTO `dev_psycho_supports` (`pk_psycho_support_id`, `fk_customer_id`, `first_meeting`, `problem_identified`, `problem_description`, `initial_plan`, `family_counseling`, `session_number`, `session_duration`, `session_place`, `other_requirements`, `reffer_to`, `referr_address`, `contact_number`, `reason_for_reffer`, `other_reason_for_reffer`, `update_date`, `update_time`, `updated_by`, `create_date`, `create_time`, `created_by`) VALUES
+(1, 1, '2020-12-02', 'Anxiety', 'Problem Description', 'Initial Plan', 0, '5', 5, 'home', 'Req', 'Ref To', 'Address', '01478565458', 'Trauma Counselling', NULL, '2020-12-20', '22:31:25', 2, '2020-12-20', '15:47:19', 2);
+
 -- --------------------------------------------------------
 
 --
@@ -6290,6 +6456,13 @@ CREATE TABLE `dev_reintegration_plan` (
   `create_time` time DEFAULT NULL,
   `created_by` bigint(20) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `dev_reintegration_plan`
+--
+
+INSERT INTO `dev_reintegration_plan` (`pk_reintegration_plan_id`, `fk_customer_id`, `plan_date`, `reintegration_financial_service`, `service_requested`, `other_service_requested`, `social_protection`, `security_measure`, `service_requested_note`, `update_date`, `update_time`, `updated_by`, `create_date`, `create_time`, `created_by`) VALUES
+(1, 1, '2020-12-02', '', 'Child Care,Education,Admission,Financial Service,Loan', NULL, 'NHF', NULL, 'Note', '2020-12-20', '22:31:25', 2, '2020-12-20', '15:47:19', 2);
 
 -- --------------------------------------------------------
 
@@ -6321,6 +6494,13 @@ CREATE TABLE `dev_reintegration_satisfaction_scale` (
   `update_date` date DEFAULT NULL,
   `updated_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `dev_reintegration_satisfaction_scale`
+--
+
+INSERT INTO `dev_reintegration_satisfaction_scale` (`pk_satisfaction_scale`, `fk_customer_id`, `entry_date`, `satisfied_assistance`, `satisfied_assistance_date`, `satisfied_counseling`, `satisfied_counseling_date`, `satisfied_economic`, `satisfied_economic_date`, `satisfied_social`, `satisfied_social_date`, `satisfied_community`, `satisfied_community_date`, `satisfied_reintegration`, `satisfied_reintegration_date`, `total_score`, `create_time`, `create_date`, `created_by`, `update_time`, `update_date`, `updated_by`) VALUES
+(1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -6369,6 +6549,13 @@ CREATE TABLE `dev_returnees` (
   `updated_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `dev_returnees`
+--
+
+INSERT INTO `dev_returnees` (`pk_returnee_id`, `fk_project_id`, `fk_branch_id`, `returnee_id`, `full_name`, `father_name`, `mother_name`, `marital_status`, `returnee_spouse`, `returnee_gender`, `educational_qualification`, `mobile_number`, `emergency_mobile`, `nid_number`, `birth_reg_number`, `passport_number`, `permanent_village`, `permanent_union`, `permanent_sub_district`, `permanent_district`, `permanent_division`, `brac_info_id`, `collection_date`, `person_type`, `return_date`, `destination_country`, `legal_document`, `other_legal_document`, `remigrate_intention`, `destination_country_profession`, `profile_selection`, `remarks`, `create_time`, `create_date`, `created_by`, `update_time`, `update_date`, `updated_by`) VALUES
+(1, 2, 1, 'FHY8849-98', 'Sk Obi', 'Abba', 'Amma', 'single', 'Ana', 'male', 'master', '01719874526', '01719874527', '1998745456654', 'BR4393856', 'BG43838', 'Goal Batahn', 'gopalgram', 'magura sadar', 'magura', 'khulna', 'FGT543E', '2020-12-20', 'trafficked_survivor', '2020-12-20', 'Span', 'Travel document', NULL, 'yes', 'Engineer', 'no', 'Good', '22:02:38', '2020-12-20', 2, '22:05:30', '2020-12-20', 2);
+
 -- --------------------------------------------------------
 
 --
@@ -6396,6 +6583,13 @@ CREATE TABLE `dev_sharing_sessions` (
   `updated_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `dev_sharing_sessions`
+--
+
+INSERT INTO `dev_sharing_sessions` (`pk_sharing_session_id`, `fk_training_id`, `traning_date`, `evaluator_profession`, `satisfied_training`, `satisfied_supports`, `satisfied_facilitation`, `outcome_training`, `trafficking_law`, `policy_process`, `all_contents`, `recommendation`, `create_time`, `create_date`, `created_by`, `update_time`, `update_date`, `updated_by`) VALUES
+(1, 1, '2020-12-21', 'Judicial govt. employee', 5, 4, 4, 5, 4, 5, 5, 'Rec', '00:59:16', '2020-12-21', 2, NULL, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -6421,6 +6615,13 @@ CREATE TABLE `dev_social_supports` (
   `create_time` time DEFAULT NULL,
   `created_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `dev_social_supports`
+--
+
+INSERT INTO `dev_social_supports` (`pk_social_support_id`, `fk_customer_id`, `reintegration_economic`, `other_reintegration_economic`, `soical_date`, `medical_date`, `date_housing`, `date_legal`, `date_education`, `support_referred`, `other_support_referred`, `update_date`, `update_time`, `updated_by`, `create_date`, `create_time`, `created_by`) VALUES
+(1, 1, 'Social Protection Schemes(Place to access to public services & Social Protection),Medical Support', NULL, '2005-12-12', '2005-12-12', '2005-12-12', '2005-12-12', '2005-12-12', 'Medical Support,Project', NULL, '2020-12-20', '22:31:25', 2, '2020-12-20', '15:47:19', 2);
 
 -- --------------------------------------------------------
 
@@ -6451,6 +6652,13 @@ CREATE TABLE `dev_targets` (
   `updated_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `dev_targets`
+--
+
+INSERT INTO `dev_targets` (`pk_target_id`, `fk_project_id`, `fk_branch_id`, `branch_district`, `branch_sub_district`, `month`, `fk_activity_id`, `activity_target`, `achievement_male`, `achievement_female`, `achievement_boy`, `achievement_girl`, `achievement_total`, `activity_achievement`, `create_time`, `create_date`, `created_by`, `update_time`, `update_date`, `updated_by`) VALUES
+(1, 2, 1, 'Jashore', '', '12', 1, 20, 3, 3, 3, 3, 12, 1, '22:07:38', '2020-12-20', 2, '00:33:54', '2020-12-21', 2);
+
 -- --------------------------------------------------------
 
 --
@@ -6478,6 +6686,13 @@ CREATE TABLE `dev_trainings` (
   `update_date` date DEFAULT NULL,
   `updated_by` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `dev_trainings`
+--
+
+INSERT INTO `dev_trainings` (`pk_training_id`, `date`, `beneficiary_id`, `name`, `gender`, `profession`, `training_name`, `workshop_name`, `workshop_duration`, `training_duration`, `address`, `mobile`, `age`, `create_time`, `create_date`, `created_by`, `update_time`, `update_date`, `updated_by`) VALUES
+(1, '2020-12-21', 'Beneficiary ID', 'Shaik Obydullah', 'female', 'Profession', 'Training Name', 'Day Long', '4', '4 Hours', 'Dhaka', '01977878715', '22', '00:56:13', '2020-12-21', 2, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -6527,8 +6742,9 @@ CREATE TABLE `dev_users` (
 
 INSERT INTO `dev_users` (`pk_user_id`, `user_fb_id`, `user_fullname`, `user_headline`, `user_name`, `user_description`, `user_picture`, `user_email`, `user_email_verified`, `user_password`, `user_password_updated`, `user_birthdate`, `user_gender`, `user_country`, `user_mobile`, `user_mobile_verified`, `user_profession`, `user_type`, `user_status`, `user_is_visible`, `user_meta_type`, `user_roles`, `user_permissions`, `user_password_reset_link`, `user_email_verification_code`, `user_private_token`, `user_branch`, `user_designation`, `created_at`, `created_by`, `modified_at`, `modified_by`, `fk_project_id`) VALUES
 (1, '', '3DEVs IT LTD', NULL, 'sadmin', NULL, NULL, 'sadmin@bracbpl.com', 0, '$2y$10$kYigu3gSbeQIqgx83OaPWun.zxRwyPzYO/aOxqSiL7D0o24kORF66', 1, '1980-06-08', 'male', '', '', 0, NULL, 'admin', 'active', 1, 'user', '-1', NULL, '%242y%2410%24NgmTZ9491Shuk4iPwQlaGuNp26i6GSJzQgJAd28K31neYHK2oDYKC', NULL, NULL, NULL, NULL, '2017-12-01 00:00:00', 1, '0000-00-00 00:00:00', 68, NULL),
-(2, '', 'Demo User', NULL, 'demo', '', '', 'demo@brac.com', 0, '$2y$10$VYDvkyqcczI/lNi3skAVMOtlXoLpf1fJVNmA8GEm3p9mc92yEelii', 1, '0000-00-00', 'male', '', '', 0, NULL, 'admin', 'active', 1, 'user', '1', NULL, NULL, NULL, NULL, 0, 0, '2020-09-23 17:29:34', 1, '2020-09-23 17:29:34', 1, 0),
-(3, '', 'Sheikh Arnov', NULL, 'sk_arnov', '', '', 'arnov@brac.com', 0, '$2y$10$B/zYSyRHK6O2iWPLiZ5.IuX/QtLhNGumKMQz35nwz6RJ29wnBg.Hm', 1, '0000-00-00', 'male', '', '', 0, NULL, 'admin', 'active', 1, 'user', NULL, NULL, NULL, NULL, NULL, 50, 1, '2020-09-23 21:02:39', 2, '2020-09-23 21:02:39', 2, 1);
+(2, '', 'Demo User', NULL, 'demo', '', '', 'demo@brac.com', 0, '$2y$10$VYDvkyqcczI/lNi3skAVMOtlXoLpf1fJVNmA8GEm3p9mc92yEelii', 1, '0000-00-00', 'male', '', '', 0, NULL, 'admin', 'active', 1, 'user', '1', NULL, NULL, NULL, NULL, 1, 0, '2020-09-23 17:29:34', 1, '2020-09-23 17:29:34', 1, 0),
+(3, '', 'Sheikh Arnov', NULL, 'sk_arnov', '', '', 'arnov@brac.com', 0, '$2y$10$B/zYSyRHK6O2iWPLiZ5.IuX/QtLhNGumKMQz35nwz6RJ29wnBg.Hm', 1, '0000-00-00', 'male', '', '', 0, NULL, 'admin', 'active', 1, 'user', NULL, NULL, NULL, NULL, NULL, 1, 1, '2020-09-23 21:02:39', 2, '2020-12-20 15:37:32', 2, 1),
+(4, '', 'Sheikh Obi', NULL, 'obi', '', '', 'admin@js.com', 0, '$2y$10$wmgmrWd24ffSPjDnlPmdd.Fz3xmN5Bnyik5pGK4BwGqkNDP.dedA2', 1, '0000-00-00', 'male', '', '', 0, NULL, 'admin', 'active', 1, 'user', NULL, NULL, NULL, NULL, NULL, 1, 2, '2020-12-20 15:42:15', 2, '2020-12-20 15:42:15', 2, 1);
 
 -- --------------------------------------------------------
 
@@ -6574,7 +6790,63 @@ INSERT INTO `dev_user_activities` (`pk_activity_log`, `activity_msg`, `activity_
 (2, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-12-20 14:40:34', 1),
 (3, 'Permissions for the role (ID: ) has been updated.', '', 'update', 'success', '2020-12-20 14:43:21', 1),
 (4, '3DEVs IT LTD has logged out.', '', 'logout', 'success', '2020-12-20 14:44:20', 1),
-(5, 'Demo User has logged in.', '', 'login', 'success', '2020-12-20 14:44:29', 2);
+(5, 'Demo User has logged in.', '', 'login', 'success', '2020-12-20 14:44:29', 2),
+(6, 'The staff (ID: 3) has been updated.', '', 'update', 'success', '2020-12-20 15:37:32', 2),
+(7, 'The staff (ID: 4) has been created.', '', 'create', 'success', '2020-12-20 15:42:15', 2),
+(8, 'Family Counselling Data has been saved.', '', 'create', 'success', '2020-12-20 15:44:44', 2),
+(9, 'Psychosocial Data has been saved.', '', 'create', 'success', '2020-12-20 15:46:01', 2),
+(10, 'Psychosocial Session Completion Data has been saved.', '', 'create', 'success', '2020-12-20 15:46:36', 2),
+(11, 'Psychosocial Followup Data has been saved.', '', 'create', 'success', '2020-12-20 15:46:50', 2),
+(12, 'Information of case has been updated.', '', 'update', 'success', '2020-12-20 15:47:19', 2),
+(13, 'Information of case has been updated.', '', 'update', 'success', '2020-12-20 15:47:38', 2),
+(14, 'Demo User has logged in.', '', 'login', 'success', '2020-12-20 18:51:13', 2),
+(15, 'Information of case has been updated.', '', 'update', 'success', '2020-12-20 19:31:35', 2),
+(16, 'Information of case has been updated.', '', 'update', 'success', '2020-12-20 19:31:53', 2),
+(17, 'Information of case has been updated.', '', 'update', 'success', '2020-12-20 19:32:37', 2),
+(18, 'Family Counselling Data has been updated.', '', 'update', 'success', '2020-12-20 19:33:16', 2),
+(19, 'Information of case has been updated.', '', 'update', 'success', '2020-12-20 19:36:06', 2),
+(20, 'Information of case has been updated.', '', 'update', 'success', '2020-12-20 20:35:03', 2),
+(21, 'Information of case has been updated.', '', 'update', 'success', '2020-12-20 20:55:42', 2),
+(22, 'Family Counselling Data has been updated.', '', 'update', 'success', '2020-12-20 21:01:32', 2),
+(23, 'Family Counselling Data has been saved.', '', 'create', 'success', '2020-12-20 21:02:26', 2),
+(24, 'Family Counselling Data has been saved.', '', 'create', 'success', '2020-12-20 21:04:21', 2),
+(25, 'Psychosocial Session Completion Data has been updated.', '', 'update', 'success', '2020-12-20 21:06:47', 2),
+(26, 'Information of case has been updated.', '', 'update', 'success', '2020-12-20 21:10:59', 2),
+(27, 'Information of case has been updated.', '', 'update', 'success', '2020-12-20 21:22:39', 2),
+(28, 'Information of case has been updated.', '', 'update', 'success', '2020-12-20 21:23:09', 2),
+(29, 'Information of case has been updated.', '', 'update', 'success', '2020-12-20 21:25:11', 2),
+(30, 'Information of case has been updated.', '', 'update', 'success', '2020-12-20 21:47:00', 2),
+(31, 'Information of case has been updated.', '', 'update', 'success', '2020-12-20 21:51:46', 2),
+(32, 'Information of case has been updated.', '', 'update', 'success', '2020-12-20 21:52:41', 2),
+(33, 'Information of case has been updated.', '', 'update', 'success', '2020-12-20 21:53:52', 2),
+(34, 'Case Review Data has been saved.', '', 'create', 'success', '2020-12-20 21:56:51', 2),
+(35, 'Basic information of returnee profile  (ID: ) has been saved.', '', 'create', 'success', '2020-12-20 22:02:38', 2),
+(36, 'Basic information of returnee profile  (ID: ) has been updated.', '', 'update', 'success', '2020-12-20 22:04:44', 2),
+(37, 'Basic information of returnee profile  (ID: ) has been updated.', '', 'update', 'success', '2020-12-20 22:05:30', 2),
+(38, 'Demo User has logged in.', '', 'login', 'success', '2020-12-20 22:07:12', 2),
+(39, 'Information of activity has been saved.', '', 'create', 'success', '2020-12-20 22:07:14', 2),
+(40, 'Information of target has been saved.', '', 'create', 'success', '2020-12-20 22:07:38', 2),
+(41, 'Event has been saved.', '', 'create', 'success', '2020-12-20 22:10:41', 2),
+(42, 'Event Validation has been saved.', '', 'create', 'success', '2020-12-20 22:17:13', 2),
+(43, 'Event Validation has been saved.', '', 'create', 'success', '2020-12-20 22:24:08', 2),
+(44, 'Complain has been saved.', '', 'create', 'success', '2020-12-20 22:25:38', 2),
+(45, 'Information of case has been updated.', '', 'update', 'success', '2020-12-20 22:28:59', 2),
+(46, 'Information of case has been updated.', '', 'update', 'success', '2020-12-20 22:31:25', 2),
+(47, 'Psychosocial Session Completion Data has been updated.', '', 'update', 'success', '2020-12-20 22:41:13', 2),
+(48, 'Psychosocial Session Completion Data has been saved.', '', 'create', 'success', '2020-12-20 22:42:21', 2),
+(49, 'Event has been updated.', '', 'update', 'success', '2020-12-21 00:33:54', 2),
+(50, 'Complain Filed has been saved.', '', 'create', 'success', '2020-12-21 00:53:12', 2),
+(51, 'Complain Investigation has been saved.', '', 'create', 'success', '2020-12-21 00:55:26', 2),
+(52, 'Training has been saved.', '', 'create', 'success', '2020-12-21 00:56:13', 2),
+(53, 'Training/Workshop Validation has been saved.', '', 'create', 'success', '2020-12-21 00:59:16', 2),
+(54, 'Demo User has logged out.', '', 'logout', 'success', '2020-12-21 01:07:21', 2),
+(55, '3DEVs IT LTD has logged in.', '', 'login', 'success', '2020-12-21 01:07:56', 1),
+(56, 'Permissions for the role (ID: ) has been updated.', '', 'update', 'success', '2020-12-21 01:08:44', 1),
+(57, '3DEVs IT LTD has logged out.', '', 'logout', 'success', '2020-12-21 01:08:47', 1),
+(58, 'Demo User has logged in.', '', 'login', 'success', '2020-12-21 01:08:57', 2),
+(59, 'Immediate assistance after arrival information has been saved.', '', 'create', 'success', '2020-12-21 01:11:19', 2),
+(60, 'Immediate assistance after arrival information has been updated.', '', 'update', 'success', '2020-12-21 01:11:41', 2),
+(61, 'Access To Public And Private Support information has been saved.', '', 'create', 'success', '2020-12-21 01:12:45', 2);
 
 -- --------------------------------------------------------
 
@@ -6608,7 +6880,7 @@ CREATE TABLE `dev_user_roles` (
 --
 
 INSERT INTO `dev_user_roles` (`pk_role_id`, `role_slug`, `role_name`, `role_description`, `role_permissions`) VALUES
-(1, 'admin', 'Admin', 'Head Office Administration', 'a:116:{s:22:\"manage_user_activities\";s:3:\"yes\";s:21:\"flush_user_activities\";s:3:\"yes\";s:19:\"access_to_dashboard\";s:3:\"yes\";s:15:\"manage_branches\";s:3:\"yes\";s:10:\"add_branch\";s:3:\"yes\";s:11:\"edit_branch\";s:3:\"yes\";s:22:\"configure_branch_types\";s:3:\"yes\";s:16:\"manage_customers\";s:3:\"yes\";s:12:\"add_customer\";s:3:\"yes\";s:13:\"edit_customer\";s:3:\"yes\";s:15:\"delete_customer\";s:3:\"yes\";s:12:\"manage_cases\";s:3:\"yes\";s:8:\"add_case\";s:3:\"yes\";s:9:\"edit_case\";s:3:\"yes\";s:11:\"delete_case\";s:3:\"yes\";s:16:\"manage_returnees\";s:3:\"yes\";s:12:\"add_returnee\";s:3:\"yes\";s:13:\"edit_returnee\";s:3:\"yes\";s:15:\"delete_returnee\";s:3:\"yes\";s:13:\"manage_events\";s:3:\"yes\";s:9:\"add_event\";s:3:\"yes\";s:10:\"edit_event\";s:3:\"yes\";s:12:\"delete_event\";s:3:\"yes\";s:22:\"manage_sharing_session\";s:3:\"yes\";s:19:\"add_sharing_session\";s:3:\"yes\";s:20:\"edit_sharing_session\";s:3:\"yes\";s:22:\"delete_sharing_session\";s:3:\"yes\";s:24:\"manage_event_validations\";s:3:\"yes\";s:20:\"add_event_validation\";s:3:\"yes\";s:21:\"edit_event_validation\";s:3:\"yes\";s:23:\"delete_event_validation\";s:3:\"yes\";s:16:\"manage_complains\";s:3:\"yes\";s:12:\"add_complain\";s:3:\"yes\";s:13:\"edit_complain\";s:3:\"yes\";s:15:\"delete_complain\";s:3:\"yes\";s:22:\"manage_complain_fileds\";s:3:\"yes\";s:18:\"add_complain_filed\";s:3:\"yes\";s:19:\"edit_complain_filed\";s:3:\"yes\";s:21:\"delete_complain_filed\";s:3:\"yes\";s:30:\"manage_complain_investigations\";s:3:\"yes\";s:26:\"add_complain_investigation\";s:3:\"yes\";s:27:\"edit_complain_investigation\";s:3:\"yes\";s:29:\"delete_complain_investigation\";s:3:\"yes\";s:16:\"manage_trainings\";s:3:\"yes\";s:12:\"add_training\";s:3:\"yes\";s:13:\"edit_training\";s:3:\"yes\";s:15:\"delete_training\";s:3:\"yes\";s:27:\"manage_airport_land_support\";s:3:\"yes\";s:24:\"add_airport_land_support\";s:3:\"yes\";s:25:\"edit_airport_land_support\";s:3:\"yes\";s:27:\"delete_airport_land_support\";s:3:\"yes\";s:19:\"manage_access_to_pp\";s:3:\"yes\";s:16:\"add_access_to_pp\";s:3:\"yes\";s:17:\"edit_access_to_pp\";s:3:\"yes\";s:19:\"delete_access_to_pp\";s:3:\"yes\";s:14:\"manage_stories\";s:3:\"yes\";s:9:\"add_story\";s:3:\"yes\";s:10:\"edit_story\";s:3:\"yes\";s:12:\"delete_story\";s:3:\"yes\";s:20:\"manage_study_reports\";s:3:\"yes\";s:16:\"add_study_report\";s:3:\"yes\";s:17:\"edit_study_report\";s:3:\"yes\";s:19:\"delete_study_report\";s:3:\"yes\";s:23:\"manage_research_reports\";s:3:\"yes\";s:19:\"add_research_report\";s:3:\"yes\";s:20:\"edit_research_report\";s:3:\"yes\";s:22:\"delete_research_report\";s:3:\"yes\";s:25:\"manage_assessment_reports\";s:3:\"yes\";s:21:\"add_assessment_report\";s:3:\"yes\";s:22:\"edit_assessment_report\";s:3:\"yes\";s:24:\"delete_assessment_report\";s:3:\"yes\";s:18:\"manage_organograms\";s:3:\"yes\";s:14:\"add_organogram\";s:3:\"yes\";s:15:\"edit_organogram\";s:3:\"yes\";s:17:\"delete_organogram\";s:3:\"yes\";s:22:\"manage_meeting_entries\";s:3:\"yes\";s:17:\"add_meeting_entry\";s:3:\"yes\";s:18:\"edit_meeting_entry\";s:3:\"yes\";s:20:\"delete_meeting_entry\";s:3:\"yes\";s:15:\"manage_meetings\";s:3:\"yes\";s:11:\"add_meeting\";s:3:\"yes\";s:12:\"edit_meeting\";s:3:\"yes\";s:14:\"delete_meeting\";s:3:\"yes\";s:22:\"manage_meeting_targets\";s:3:\"yes\";s:18:\"add_meeting_target\";s:3:\"yes\";s:19:\"edit_meeting_target\";s:3:\"yes\";s:21:\"delete_meeting_target\";s:3:\"yes\";s:27:\"manage_meeting_achievements\";s:3:\"yes\";s:23:\"add_meeting_achievement\";s:3:\"yes\";s:24:\"edit_meeting_achievement\";s:3:\"yes\";s:26:\"delete_meeting_achievement\";s:3:\"yes\";s:22:\"manage_meeting_reports\";s:3:\"yes\";s:19:\"view_meeting_report\";s:3:\"yes\";s:20:\"manage_misactivities\";s:3:\"yes\";s:15:\"add_misactivity\";s:3:\"yes\";s:16:\"edit_misactivity\";s:3:\"yes\";s:18:\"delete_misactivity\";s:3:\"yes\";s:14:\"manage_targets\";s:3:\"yes\";s:10:\"add_target\";s:3:\"yes\";s:11:\"edit_target\";s:3:\"yes\";s:13:\"delete_target\";s:3:\"yes\";s:19:\"manage_achievements\";s:3:\"yes\";s:15:\"add_achievement\";s:3:\"yes\";s:16:\"edit_achievement\";s:3:\"yes\";s:18:\"delete_achievement\";s:3:\"yes\";s:17:\"manage_misreports\";s:3:\"yes\";s:14:\"view_misreport\";s:3:\"yes\";s:15:\"manage_projects\";s:3:\"yes\";s:11:\"add_project\";s:3:\"yes\";s:12:\"edit_project\";s:3:\"yes\";s:14:\"manage_reports\";s:3:\"yes\";s:11:\"view_report\";s:3:\"yes\";s:15:\"download_report\";s:3:\"yes\";s:13:\"manage_staffs\";s:3:\"yes\";s:9:\"add_staff\";s:3:\"yes\";s:10:\"edit_staff\";s:3:\"yes\";}');
+(1, 'admin', 'Admin', 'Head Office Administration', 'a:117:{s:22:\"manage_user_activities\";s:3:\"yes\";s:21:\"flush_user_activities\";s:3:\"yes\";s:19:\"access_to_dashboard\";s:3:\"yes\";s:15:\"manage_branches\";s:3:\"yes\";s:10:\"add_branch\";s:3:\"yes\";s:11:\"edit_branch\";s:3:\"yes\";s:22:\"configure_branch_types\";s:3:\"yes\";s:16:\"manage_customers\";s:3:\"yes\";s:12:\"add_customer\";s:3:\"yes\";s:13:\"edit_customer\";s:3:\"yes\";s:15:\"delete_customer\";s:3:\"yes\";s:12:\"manage_cases\";s:3:\"yes\";s:8:\"add_case\";s:3:\"yes\";s:9:\"edit_case\";s:3:\"yes\";s:11:\"delete_case\";s:3:\"yes\";s:16:\"manage_returnees\";s:3:\"yes\";s:12:\"add_returnee\";s:3:\"yes\";s:13:\"edit_returnee\";s:3:\"yes\";s:15:\"delete_returnee\";s:3:\"yes\";s:13:\"manage_events\";s:3:\"yes\";s:9:\"add_event\";s:3:\"yes\";s:10:\"edit_event\";s:3:\"yes\";s:12:\"delete_event\";s:3:\"yes\";s:22:\"manage_sharing_session\";s:3:\"yes\";s:19:\"add_sharing_session\";s:3:\"yes\";s:20:\"edit_sharing_session\";s:3:\"yes\";s:22:\"delete_sharing_session\";s:3:\"yes\";s:24:\"manage_event_validations\";s:3:\"yes\";s:20:\"add_event_validation\";s:3:\"yes\";s:21:\"edit_event_validation\";s:3:\"yes\";s:23:\"delete_event_validation\";s:3:\"yes\";s:16:\"manage_complains\";s:3:\"yes\";s:12:\"add_complain\";s:3:\"yes\";s:13:\"edit_complain\";s:3:\"yes\";s:15:\"delete_complain\";s:3:\"yes\";s:22:\"manage_complain_fileds\";s:3:\"yes\";s:18:\"add_complain_filed\";s:3:\"yes\";s:19:\"edit_complain_filed\";s:3:\"yes\";s:21:\"delete_complain_filed\";s:3:\"yes\";s:30:\"manage_complain_investigations\";s:3:\"yes\";s:26:\"add_complain_investigation\";s:3:\"yes\";s:27:\"edit_complain_investigation\";s:3:\"yes\";s:29:\"delete_complain_investigation\";s:3:\"yes\";s:16:\"manage_trainings\";s:3:\"yes\";s:12:\"add_training\";s:3:\"yes\";s:13:\"edit_training\";s:3:\"yes\";s:15:\"delete_training\";s:3:\"yes\";s:24:\"edit_training_validation\";s:3:\"yes\";s:27:\"manage_airport_land_support\";s:3:\"yes\";s:24:\"add_airport_land_support\";s:3:\"yes\";s:25:\"edit_airport_land_support\";s:3:\"yes\";s:27:\"delete_airport_land_support\";s:3:\"yes\";s:19:\"manage_access_to_pp\";s:3:\"yes\";s:16:\"add_access_to_pp\";s:3:\"yes\";s:17:\"edit_access_to_pp\";s:3:\"yes\";s:19:\"delete_access_to_pp\";s:3:\"yes\";s:14:\"manage_stories\";s:3:\"yes\";s:9:\"add_story\";s:3:\"yes\";s:10:\"edit_story\";s:3:\"yes\";s:12:\"delete_story\";s:3:\"yes\";s:20:\"manage_study_reports\";s:3:\"yes\";s:16:\"add_study_report\";s:3:\"yes\";s:17:\"edit_study_report\";s:3:\"yes\";s:19:\"delete_study_report\";s:3:\"yes\";s:23:\"manage_research_reports\";s:3:\"yes\";s:19:\"add_research_report\";s:3:\"yes\";s:20:\"edit_research_report\";s:3:\"yes\";s:22:\"delete_research_report\";s:3:\"yes\";s:25:\"manage_assessment_reports\";s:3:\"yes\";s:21:\"add_assessment_report\";s:3:\"yes\";s:22:\"edit_assessment_report\";s:3:\"yes\";s:24:\"delete_assessment_report\";s:3:\"yes\";s:18:\"manage_organograms\";s:3:\"yes\";s:14:\"add_organogram\";s:3:\"yes\";s:15:\"edit_organogram\";s:3:\"yes\";s:17:\"delete_organogram\";s:3:\"yes\";s:22:\"manage_meeting_entries\";s:3:\"yes\";s:17:\"add_meeting_entry\";s:3:\"yes\";s:18:\"edit_meeting_entry\";s:3:\"yes\";s:20:\"delete_meeting_entry\";s:3:\"yes\";s:15:\"manage_meetings\";s:3:\"yes\";s:11:\"add_meeting\";s:3:\"yes\";s:12:\"edit_meeting\";s:3:\"yes\";s:14:\"delete_meeting\";s:3:\"yes\";s:22:\"manage_meeting_targets\";s:3:\"yes\";s:18:\"add_meeting_target\";s:3:\"yes\";s:19:\"edit_meeting_target\";s:3:\"yes\";s:21:\"delete_meeting_target\";s:3:\"yes\";s:27:\"manage_meeting_achievements\";s:3:\"yes\";s:23:\"add_meeting_achievement\";s:3:\"yes\";s:24:\"edit_meeting_achievement\";s:3:\"yes\";s:26:\"delete_meeting_achievement\";s:3:\"yes\";s:22:\"manage_meeting_reports\";s:3:\"yes\";s:19:\"view_meeting_report\";s:3:\"yes\";s:20:\"manage_misactivities\";s:3:\"yes\";s:15:\"add_misactivity\";s:3:\"yes\";s:16:\"edit_misactivity\";s:3:\"yes\";s:18:\"delete_misactivity\";s:3:\"yes\";s:14:\"manage_targets\";s:3:\"yes\";s:10:\"add_target\";s:3:\"yes\";s:11:\"edit_target\";s:3:\"yes\";s:13:\"delete_target\";s:3:\"yes\";s:19:\"manage_achievements\";s:3:\"yes\";s:15:\"add_achievement\";s:3:\"yes\";s:16:\"edit_achievement\";s:3:\"yes\";s:18:\"delete_achievement\";s:3:\"yes\";s:17:\"manage_misreports\";s:3:\"yes\";s:14:\"view_misreport\";s:3:\"yes\";s:15:\"manage_projects\";s:3:\"yes\";s:11:\"add_project\";s:3:\"yes\";s:12:\"edit_project\";s:3:\"yes\";s:14:\"manage_reports\";s:3:\"yes\";s:11:\"view_report\";s:3:\"yes\";s:15:\"download_report\";s:3:\"yes\";s:13:\"manage_staffs\";s:3:\"yes\";s:9:\"add_staff\";s:3:\"yes\";s:10:\"edit_staff\";s:3:\"yes\";}');
 
 --
 -- Indexes for dumped tables
@@ -6953,19 +7225,19 @@ ALTER TABLE `bd_upazilas`
 -- AUTO_INCREMENT for table `dev_access_to_pp`
 --
 ALTER TABLE `dev_access_to_pp`
-  MODIFY `pk_access_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_access_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_activities`
 --
 ALTER TABLE `dev_activities`
-  MODIFY `pk_activity_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_activity_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_airport_land_supports`
 --
 ALTER TABLE `dev_airport_land_supports`
-  MODIFY `pk_support_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_support_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_branches`
@@ -6983,19 +7255,19 @@ ALTER TABLE `dev_branch_types`
 -- AUTO_INCREMENT for table `dev_complains`
 --
 ALTER TABLE `dev_complains`
-  MODIFY `pk_complain_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_complain_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_complain_fileds`
 --
 ALTER TABLE `dev_complain_fileds`
-  MODIFY `pk_complain_filed_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_complain_filed_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_complain_investigations`
 --
 ALTER TABLE `dev_complain_investigations`
-  MODIFY `pk_complain_investigation_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_complain_investigation_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_config`
@@ -7007,67 +7279,67 @@ ALTER TABLE `dev_config`
 -- AUTO_INCREMENT for table `dev_customers`
 --
 ALTER TABLE `dev_customers`
-  MODIFY `pk_customer_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_customer_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_customer_health`
 --
 ALTER TABLE `dev_customer_health`
-  MODIFY `pk_customer_health_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_customer_health_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_customer_skills`
 --
 ALTER TABLE `dev_customer_skills`
-  MODIFY `pk_customer_skills_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_customer_skills_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_economic_profile`
 --
 ALTER TABLE `dev_economic_profile`
-  MODIFY `pk_economic_profile_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_economic_profile_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_economic_reintegration_referrals`
 --
 ALTER TABLE `dev_economic_reintegration_referrals`
-  MODIFY `pk_economic_referral_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_economic_referral_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_economic_supports`
 --
 ALTER TABLE `dev_economic_supports`
-  MODIFY `pk_economic_support_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_economic_support_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_events`
 --
 ALTER TABLE `dev_events`
-  MODIFY `pk_event_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_event_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_event_validations`
 --
 ALTER TABLE `dev_event_validations`
-  MODIFY `pk_validation_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_validation_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `dev_followups`
 --
 ALTER TABLE `dev_followups`
-  MODIFY `pk_followup_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_followup_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_immediate_supports`
 --
 ALTER TABLE `dev_immediate_supports`
-  MODIFY `pk_immediate_support_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_immediate_support_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_initial_evaluation`
 --
 ALTER TABLE `dev_initial_evaluation`
-  MODIFY `pk_evaluation_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_evaluation_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_knowledge`
@@ -7079,7 +7351,7 @@ ALTER TABLE `dev_knowledge`
 -- AUTO_INCREMENT for table `dev_lookups`
 --
 ALTER TABLE `dev_lookups`
-  MODIFY `pk_lookup_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `pk_lookup_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `dev_meetings`
@@ -7103,7 +7375,7 @@ ALTER TABLE `dev_meeting_targets`
 -- AUTO_INCREMENT for table `dev_migrations`
 --
 ALTER TABLE `dev_migrations`
-  MODIFY `pk_migration_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_migration_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_migration_documents`
@@ -7121,79 +7393,79 @@ ALTER TABLE `dev_projects`
 -- AUTO_INCREMENT for table `dev_psycho_completions`
 --
 ALTER TABLE `dev_psycho_completions`
-  MODIFY `pk_psycho_completion_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_psycho_completion_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `dev_psycho_family_counselling`
 --
 ALTER TABLE `dev_psycho_family_counselling`
-  MODIFY `pk_psycho_family_counselling_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_psycho_family_counselling_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `dev_psycho_followups`
 --
 ALTER TABLE `dev_psycho_followups`
-  MODIFY `pk_psycho_followup_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_psycho_followup_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_psycho_sessions`
 --
 ALTER TABLE `dev_psycho_sessions`
-  MODIFY `pk_psycho_session_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_psycho_session_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_psycho_supports`
 --
 ALTER TABLE `dev_psycho_supports`
-  MODIFY `pk_psycho_support_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_psycho_support_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_reintegration_plan`
 --
 ALTER TABLE `dev_reintegration_plan`
-  MODIFY `pk_reintegration_plan_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_reintegration_plan_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_reintegration_satisfaction_scale`
 --
 ALTER TABLE `dev_reintegration_satisfaction_scale`
-  MODIFY `pk_satisfaction_scale` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_satisfaction_scale` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_returnees`
 --
 ALTER TABLE `dev_returnees`
-  MODIFY `pk_returnee_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_returnee_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_sharing_sessions`
 --
 ALTER TABLE `dev_sharing_sessions`
-  MODIFY `pk_sharing_session_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_sharing_session_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_social_supports`
 --
 ALTER TABLE `dev_social_supports`
-  MODIFY `pk_social_support_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_social_support_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_targets`
 --
 ALTER TABLE `dev_targets`
-  MODIFY `pk_target_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_target_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_trainings`
 --
 ALTER TABLE `dev_trainings`
-  MODIFY `pk_training_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `pk_training_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `dev_users`
 --
 ALTER TABLE `dev_users`
-  MODIFY `pk_user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `pk_user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `dev_users_roles_relation`
@@ -7205,7 +7477,7 @@ ALTER TABLE `dev_users_roles_relation`
 -- AUTO_INCREMENT for table `dev_user_activities`
 --
 ALTER TABLE `dev_user_activities`
-  MODIFY `pk_activity_log` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `pk_activity_log` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `dev_user_meta`

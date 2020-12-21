@@ -303,7 +303,7 @@ class dev_knowledge_management {
                 $knowledge_data['create_date'] = date('Y-m-d');
                 $knowledge_data['create_time'] = date('H:i:s');
                 $knowledge_data['created_by'] = $_config['user']['pk_user_id'];
-                $ret['knowledge_insert'] = $devdb->insert_update('dev_knowledge', $knowledge_data);
+                $ret['knowledge_insert'] = $devdb->insert_update('dev_knowledge', $knowledge_data);        
             }
 
             if ($params['form_data']['new_tag']) {
