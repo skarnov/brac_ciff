@@ -98,7 +98,6 @@ $all_branches = $branches->get_branches();
 $all_months = $this->get_months();
 
 if ($_GET['download_excel']) {
-
     $filter_project_name = null;
     $filter_branch_name = null;
     $filter_month_name = null;
@@ -116,7 +115,7 @@ if ($_GET['download_excel']) {
     unset($args['limit']);
     
     $args['data_only'] = true;
-    $data = $this->get_targets($args);
+    $data = $this->get_meeting_targets($args);
     $data = $data['data'];
     // This will be here in our project
 
@@ -127,7 +126,7 @@ if ($_GET['download_excel']) {
            //->setShouldWrapText()
            ->build();
 
-    $fileName = 'mis-report-' . time() . '.xlsx';
+    $fileName = 'meeting-report-' . time() . '.xlsx';
     //$writer->openToFile('lemon1.xlsx'); // write data to a file or to a PHP stream
     $writer->openToBrowser($fileName); // stream data directly to the browser
 
