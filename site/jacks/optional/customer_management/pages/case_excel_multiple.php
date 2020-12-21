@@ -5,14 +5,24 @@
 	use Box\Spout\Common\Entity\Style\Color;
 	use Box\Spout\Common\Entity\Style\CellAlignment;
 
-	// Array would be here
-    $family_counsellings = $this->get_family_counselling(array('customer_id' => $case_info['fk_customer_id']));
-    $psychosocial_sessions = $this->get_psychosocial_session(array('customer_id' => $case_info['fk_customer_id']));
-    $psychosocial_completions = $this->get_psychosocial_completion(array('customer_id' => $case_info['fk_customer_id']));
-    $psychosocial_followups = $this->get_psychosocial_followup(array('customer_id' => $case_info['fk_customer_id']));
-    $reviews = $this->get_case_review(array('customer_id' => $case_info['fk_customer_id']));
+    $count_fc = 0;
+    $count_ps = 0;
+    $count_pc = 0;
+    $count_pf = 0;
+    $count_rv = 0;
 
-    if(count($family_counsellings['data']) > 0 || count($psychosocial_sessions['data']) > 0 || count($psychosocial_completions['data']) > 0 || count($psychosocial_followups['data']) > 0 || count($reviews['data']) > 0){
+    if(isset($family_counsellings_array[$case_info['fk_customer_id']]))
+    	$count_fc = count($family_counsellings_array[$case_info['fk_customer_id']]);
+    if(isset($psychosocial_sessions_array[$case_info['fk_customer_id']]))
+    	$count_ps = count($psychosocial_sessions_array[$case_info['fk_customer_id']]);
+    if(isset($psychosocial_completions_array[$case_info['fk_customer_id']]))
+    	$count_pc = count($psychosocial_completions_array[$case_info['fk_customer_id']]);
+    if(isset($psychosocial_followups_array[$case_info['fk_customer_id']]))
+    	$count_pf = count($psychosocial_followups_array[$case_info['fk_customer_id']]);
+    if(isset($reviews_array[$case_info['fk_customer_id']]))
+    	$count_rv = count($reviews_array[$case_info['fk_customer_id']]);
+
+    if($count_fc > 0 || $count_ps > 0 ||  $count_pc > 0 || $count_pf > 0 ||  $count_rv > 0){
         // $empty_row2 = WriterEntityFactory::createRowFromArray($empty_row);
         // $writer->addRow($empty_row2);
         // $count_for_mrg++;
@@ -105,29 +115,35 @@
         $count_for_mrg++;
     }
 
-    if(!empty($family_counsellings['data']) && count($family_counsellings['data']) >= count($psychosocial_sessions['data']) && count($family_counsellings['data']) >= count($psychosocial_completions['data']) && count($family_counsellings['data']) >= count($psychosocial_followups['data']) && count($family_counsellings['data']) >= count($reviews['data'])){
+    if($count_fc > 0 && $count_fc >= $count_ps && $count_fc >= $count_pc && $count_fc >= $count_pf && $count_fc >= $count_rv){
 
         $multipler = array();
-        foreach ($family_counsellings['data'] as $i => $item) {
+        foreach ($family_counsellings_array[$case_info['fk_customer_id']] as $i => $item) {
             $cellss = array();
 
             $cellss[] = WriterEntityFactory::createCell('');
             $cellss[] = WriterEntityFactory::createCell($item['entry_date'] ? date('d-m-Y', strtotime($item['entry_date'])) : 'N/A');
             $cellss[] = WriterEntityFactory::createCell($item['entry_time']);
             $cellss[] = WriterEntityFactory::createCell($item['session_place']);
-            $cellss[] = WriterEntityFactory::createCell($item['male_household_member']);
-            $cellss[] = WriterEntityFactory::createCell($item['female_household_member']);
-            $cellss[] = WriterEntityFactory::createCell($item['male_household_member'] + $item['female_household_member']);
+            $cellss[] = WriterEntityFactory::createCell($item['male_counseled']);
+            $cellss[] = WriterEntityFactory::createCell($item['female_counseled']);
+            $cellss[] = WriterEntityFactory::createCell($item['members_counseled']);
             $cellss[] = WriterEntityFactory::createCell($item['session_comments']);
 
-            if ($psychosocial_sessions['data'] != NULL) {
-                if(isset($psychosocial_sessions['data'][$i])){
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions['data'][$i]['entry_date'] ? date('d-m-Y', strtotime($psychosocial_sessions['data'][$i]['entry_date'])) : 'N/A');
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions['data'][$i]['entry_time']);
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions['data'][$i]['next_date'] ? date('d-m-Y', strtotime($psychosocial_sessions['data'][$i]['next_date'])) : 'N/A');
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions['data'][$i]['activities_description']);
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions['data'][$i]['session_comments']);
-                }
+            if ($psychosocial_sessions_array[$case_info['fk_customer_id']] != NULL) {
+                if(isset($psychosocial_sessions_array[$case_info['fk_customer_id']][$i])){
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['entry_date'] ? date('d-m-Y', strtotime($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['entry_date'])) : 'N/A');
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['entry_time']);
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['next_date'] ? date('d-m-Y', strtotime($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['next_date'])) : 'N/A');
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['activities_description']);
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['session_comments']);
+                }else{
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	            }
             }else{
                 $cellss[] = WriterEntityFactory::createCell('');
                 $cellss[] = WriterEntityFactory::createCell('');
@@ -136,17 +152,26 @@
                 $cellss[] = WriterEntityFactory::createCell('');
             }
 
-            if ($psychosocial_completions['data'] != NULL) {
-                if(isset($psychosocial_completions['data'][$i])){
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['entry_date'] ? date('d-m-Y', strtotime($psychosocial_completions['data'][$i]['entry_date'])) : 'N/A');
-                    $cellss[] = WriterEntityFactory::createCell(ucfirst($psychosocial_completions['data'][$i]['is_completed']));
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['dropout_reason']);
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['review_session']);
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['client_comments']);
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['counsellor_comments']);
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['final_evaluation']);
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['required_session']);
-                }
+            if ($psychosocial_completions_array[$case_info['fk_customer_id']] != NULL) {
+                if(isset($psychosocial_completions_array[$case_info['fk_customer_id']][$i])){
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['entry_date'] ? date('d-m-Y', strtotime($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['entry_date'])) : 'N/A');
+                    $cellss[] = WriterEntityFactory::createCell(ucfirst($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['is_completed']));
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['dropout_reason']);
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['review_session']);
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['client_comments']);
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['counsellor_comments']);
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['final_evaluation']);
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['required_session']);
+                }else{
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	            }
                 
             }else{
                 $cellss[] = WriterEntityFactory::createCell('');
@@ -159,44 +184,71 @@
                 $cellss[] = WriterEntityFactory::createCell('');
             }
 
-            if ($psychosocial_followups['data'] != NULL) {
-                if(isset($psychosocial_followups['data'][$i])){
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_followups['data'][$i]['entry_date'] ? date('d-m-Y', strtotime($psychosocial_followups['data'][$i]['entry_date'])) : 'N/A');
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_followups['data'][$i]['entry_time']);
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_followups['data'][$i]['followup_comments']);
-                }
+            if ($psychosocial_followups_array[$case_info['fk_customer_id']] != NULL) {
+                if(isset($psychosocial_followups_array[$case_info['fk_customer_id']][$i])){
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_followups_array[$case_info['fk_customer_id']][$i]['entry_date'] ? date('d-m-Y', strtotime($psychosocial_followups_array[$case_info['fk_customer_id']][$i]['entry_date'])) : 'N/A');
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_followups_array[$case_info['fk_customer_id']][$i]['entry_time']);
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_followups_array[$case_info['fk_customer_id']][$i]['followup_comments']);
+                }else{
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	            }
             }else{
                 $cellss[] = WriterEntityFactory::createCell('');
                 $cellss[] = WriterEntityFactory::createCell('');
                 $cellss[] = WriterEntityFactory::createCell('');
             }
 
-            if ($reviews['data'] != NULL) {
-                if(isset($reviews['data'][$i])){
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['entry_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['entry_date'])) : 'N/A');
-                    $cellss[] = WriterEntityFactory::createCell(ucfirst($reviews['data'][$i]['casedropped']));
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['reason_dropping'] . ' ' . $reviews['data'][$i]['other_reason_dropping']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['confirm_services'] . ' ' . $reviews['data'][$i]['other_reason_dropping']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['followup_financial_service']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['social_protection']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['special_security']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['monthly_income']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['challenges']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['actions_taken']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['remark_participant']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_brac']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['remark_district']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_psychosocial_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_psychosocial_date'])) : 'N/A');
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_psychosocial']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_economic_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_economic_date'])) : 'N/A');
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_economic']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_social_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_social_date'])) : 'N/A');
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_social']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_social']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_income_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_income_date'])) : 'N/A');
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_income']);
+            if ($reviews_array[$case_info['fk_customer_id']] != NULL) {
+                if(isset($reviews_array[$case_info['fk_customer_id']][$i])){
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['entry_date'] ? date('d-m-Y', strtotime($reviews_array[$case_info['fk_customer_id']][$i]['entry_date'])) : 'N/A');
+                    $cellss[] = WriterEntityFactory::createCell(ucfirst($reviews_array[$case_info['fk_customer_id']][$i]['casedropped']));
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['reason_dropping'] . ' ' . $reviews_array[$case_info['fk_customer_id']][$i]['other_reason_dropping']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['confirm_services'] . ' ' . $reviews_array[$case_info['fk_customer_id']][$i]['other_reason_dropping']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['followup_financial_service']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['social_protection']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['special_security']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['monthly_income']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['challenges']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['actions_taken']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['remark_participant']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_brac']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['remark_district']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_psychosocial_date'] ? date('d-m-Y', strtotime($reviews_array[$case_info['fk_customer_id']][$i]['comment_psychosocial_date'])) : 'N/A');
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_psychosocial']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_economic_date'] ? date('d-m-Y', strtotime($reviews_array[$case_info['fk_customer_id']][$i]['comment_economic_date'])) : 'N/A');
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_economic']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_social_date'] ? date('d-m-Y', strtotime($reviews_array[$case_info['fk_customer_id']][$i]['comment_social_date'])) : 'N/A');
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_social']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_social']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_income_date'] ? date('d-m-Y', strtotime($reviews_array[$case_info['fk_customer_id']][$i]['comment_income_date'])) : 'N/A');
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_income']);
                     
-                }
+                }else{
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	            }
                 
             }else{
                 $cellss[] = WriterEntityFactory::createCell('');
@@ -234,23 +286,31 @@
         $count_for_mrg++;
 
     }
-    else if(!empty($psychosocial_sessions['data']) && count($psychosocial_sessions['data']) > count($family_counsellings['data']) && count($psychosocial_sessions['data']) > count($psychosocial_completions['data']) && count($psychosocial_sessions['data']) > count($psychosocial_followups['data']) && count($psychosocial_sessions['data']) > count($reviews['data'])){
+    else if($count_ps > 0 && $count_ps > $count_fc && $count_ps >= $count_pc && $count_ps >= $count_pf && $count_ps >= $count_rv){
         
         $multipler = array();
-        foreach ($psychosocial_sessions['data'] as $i => $item) {
+        foreach ($psychosocial_sessions_array[$case_info['fk_customer_id']] as $i => $item) {
             $cellss = array();
 
             $cellss[] = WriterEntityFactory::createCell('');
-            if ($family_counsellings['data'] != NULL) {
-                if(isset($family_counsellings['data'][$i])){
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['entry_date'] ? date('d-m-Y', strtotime($family_counsellings['data'][$i]['entry_date'])) : 'N/A');
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['entry_time']);
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['session_place']);
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['male_household_member']);
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['female_household_member']);
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['male_household_member'] + $family_counsellings['data'][$i]['female_household_member']);
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['session_comments']);
-                }
+            if ($family_counsellings_array[$case_info['fk_customer_id']] != NULL) {
+                if(isset($family_counsellings_array[$case_info['fk_customer_id']][$i])){
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['entry_date'] ? date('d-m-Y', strtotime($family_counsellings_array[$case_info['fk_customer_id']][$i]['entry_date'])) : 'N/A');
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['entry_time']);
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['session_place']);
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['male_counseled']);
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['female_counseled']);
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['members_counseled']);
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['session_comments']);
+                }else{
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	            }
             }else{
                 $cellss[] = WriterEntityFactory::createCell('');
                 $cellss[] = WriterEntityFactory::createCell('');
@@ -267,17 +327,26 @@
             $cellss[] = WriterEntityFactory::createCell($item['activities_description']);
             $cellss[] = WriterEntityFactory::createCell($item['session_comments']);
 
-            if ($psychosocial_completions['data'] != NULL) {
-                if(isset($psychosocial_completions['data'][$i])){
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['entry_date'] ? date('d-m-Y', strtotime($psychosocial_completions['data'][$i]['entry_date'])) : 'N/A');
-                    $cellss[] = WriterEntityFactory::createCell(ucfirst($psychosocial_completions['data'][$i]['is_completed']));
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['dropout_reason']);
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['review_session']);
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['client_comments']);
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['counsellor_comments']);
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['final_evaluation']);
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['required_session']);
-                }
+            if ($psychosocial_completions_array[$case_info['fk_customer_id']] != NULL) {
+                if(isset($psychosocial_completions_array[$case_info['fk_customer_id']][$i])){
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['entry_date'] ? date('d-m-Y', strtotime($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['entry_date'])) : 'N/A');
+                    $cellss[] = WriterEntityFactory::createCell(ucfirst($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['is_completed']));
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['dropout_reason']);
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['review_session']);
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['client_comments']);
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['counsellor_comments']);
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['final_evaluation']);
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['required_session']);
+                }else{
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	            }
                 
             }else{
                 $cellss[] = WriterEntityFactory::createCell('');
@@ -290,44 +359,71 @@
                 $cellss[] = WriterEntityFactory::createCell('');
             }
 
-            if ($psychosocial_followups['data'] != NULL) {
-                if(isset($psychosocial_followups['data'][$i])){
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_followups['data'][$i]['entry_date'] ? date('d-m-Y', strtotime($psychosocial_followups['data'][$i]['entry_date'])) : 'N/A');
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_followups['data'][$i]['entry_time']);
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_followups['data'][$i]['followup_comments']);
-                }
+            if ($psychosocial_followups_array[$case_info['fk_customer_id']] != NULL) {
+                if(isset($psychosocial_followups_array[$case_info['fk_customer_id']][$i])){
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_followups_array[$case_info['fk_customer_id']][$i]['entry_date'] ? date('d-m-Y', strtotime($psychosocial_followups_array[$case_info['fk_customer_id']][$i]['entry_date'])) : 'N/A');
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_followups_array[$case_info['fk_customer_id']][$i]['entry_time']);
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_followups_array[$case_info['fk_customer_id']][$i]['followup_comments']);
+                }else{
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	            }
             }else{
                 $cellss[] = WriterEntityFactory::createCell('');
                 $cellss[] = WriterEntityFactory::createCell('');
                 $cellss[] = WriterEntityFactory::createCell('');
             }
 
-            if ($reviews['data'] != NULL) {
-                if(isset($reviews['data'][$i])){
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['entry_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['entry_date'])) : 'N/A');
-                    $cellss[] = WriterEntityFactory::createCell(ucfirst($reviews['data'][$i]['casedropped']));
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['reason_dropping'] . ' ' . $reviews['data'][$i]['other_reason_dropping']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['confirm_services'] . ' ' . $reviews['data'][$i]['other_reason_dropping']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['followup_financial_service']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['social_protection']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['special_security']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['monthly_income']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['challenges']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['actions_taken']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['remark_participant']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_brac']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['remark_district']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_psychosocial_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_psychosocial_date'])) : 'N/A');
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_psychosocial']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_economic_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_economic_date'])) : 'N/A');
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_economic']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_social_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_social_date'])) : 'N/A');
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_social']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_social']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_income_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_income_date'])) : 'N/A');
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_income']);
+            if ($reviews_array[$case_info['fk_customer_id']] != NULL) {
+                if(isset($reviews_array[$case_info['fk_customer_id']][$i])){
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['entry_date'] ? date('d-m-Y', strtotime($reviews_array[$case_info['fk_customer_id']][$i]['entry_date'])) : 'N/A');
+                    $cellss[] = WriterEntityFactory::createCell(ucfirst($reviews_array[$case_info['fk_customer_id']][$i]['casedropped']));
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['reason_dropping'] . ' ' . $reviews_array[$case_info['fk_customer_id']][$i]['other_reason_dropping']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['confirm_services'] . ' ' . $reviews_array[$case_info['fk_customer_id']][$i]['other_reason_dropping']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['followup_financial_service']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['social_protection']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['special_security']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['monthly_income']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['challenges']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['actions_taken']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['remark_participant']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_brac']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['remark_district']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_psychosocial_date'] ? date('d-m-Y', strtotime($reviews_array[$case_info['fk_customer_id']][$i]['comment_psychosocial_date'])) : 'N/A');
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_psychosocial']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_economic_date'] ? date('d-m-Y', strtotime($reviews_array[$case_info['fk_customer_id']][$i]['comment_economic_date'])) : 'N/A');
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_economic']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_social_date'] ? date('d-m-Y', strtotime($reviews_array[$case_info['fk_customer_id']][$i]['comment_social_date'])) : 'N/A');
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_social']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_social']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_income_date'] ? date('d-m-Y', strtotime($reviews_array[$case_info['fk_customer_id']][$i]['comment_income_date'])) : 'N/A');
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_income']);
                     
-                }
+                }else{
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	            }
                 
             }else{
                 $cellss[] = WriterEntityFactory::createCell('');
@@ -365,23 +461,31 @@
         $count_for_mrg++;
 
     }
-    else if(!empty($psychosocial_completions['data']) && count($psychosocial_completions['data']) > count($family_counsellings['data']) && count($psychosocial_completions['data']) > count($psychosocial_sessions['data']) && count($psychosocial_completions['data']) > count($psychosocial_followups['data']) && count($psychosocial_completions['data']) > count($reviews['data'])){
+    else if($count_pc > 0 && $count_pc > $count_fc && $count_pc > $count_ps && $count_pc > $count_pf && $count_pc > $count_rv){
         
         $multipler = array();
-        foreach ($psychosocial_completions['data'] as $i => $item) {
+        foreach ($psychosocial_completions_array[$case_info['fk_customer_id']] as $i => $item) {
             $cellss = array();
 
             $cellss[] = WriterEntityFactory::createCell('');
-            if ($family_counsellings['data'] != NULL) {
-                if(isset($family_counsellings['data'][$i])){
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['entry_date'] ? date('d-m-Y', strtotime($family_counsellings['data'][$i]['entry_date'])) : 'N/A');
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['entry_time']);
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['session_place']);
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['male_household_member']);
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['female_household_member']);
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['male_household_member'] + $family_counsellings['data'][$i]['female_household_member']);
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['session_comments']);
-                }
+            if ($family_counsellings_array[$case_info['fk_customer_id']] != NULL) {
+                if(isset($family_counsellings_array[$case_info['fk_customer_id']][$i])){
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['entry_date'] ? date('d-m-Y', strtotime($family_counsellings_array[$case_info['fk_customer_id']][$i]['entry_date'])) : 'N/A');
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['entry_time']);
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['session_place']);
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['male_counseled']);
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['female_counseled']);
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['members_counseled']);
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['session_comments']);
+                }else{
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	            }
             }else{
                 $cellss[] = WriterEntityFactory::createCell('');
                 $cellss[] = WriterEntityFactory::createCell('');
@@ -392,14 +496,20 @@
                 $cellss[] = WriterEntityFactory::createCell('');
             }
 
-            if ($psychosocial_sessions['data'] != NULL) {
-                if(isset($psychosocial_sessions['data'][$i])){
-                	$cellss[] = WriterEntityFactory::createCell($psychosocial_sessions['data'][$i]['entry_date'] ? date('d-m-Y', strtotime($psychosocial_sessions['data'][$i]['entry_date'])) : 'N/A');
-		            $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions['data'][$i]['entry_time']);
-		            $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions['data'][$i]['next_date'] ? date('d-m-Y', strtotime($psychosocial_sessions['data'][$i]['next_date'])) : 'N/A');
-		            $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions['data'][$i]['activities_description']);
-		            $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions['data'][$i]['session_comments']);
-                }
+            if ($psychosocial_sessions_array[$case_info['fk_customer_id']] != NULL) {
+                if(isset($psychosocial_sessions_array[$case_info['fk_customer_id']][$i])){
+                	$cellss[] = WriterEntityFactory::createCell($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['entry_date'] ? date('d-m-Y', strtotime($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['entry_date'])) : 'N/A');
+		            $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['entry_time']);
+		            $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['next_date'] ? date('d-m-Y', strtotime($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['next_date'])) : 'N/A');
+		            $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['activities_description']);
+		            $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['session_comments']);
+                }else{
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	            }
                 
             }else{
                 $cellss[] = WriterEntityFactory::createCell('');
@@ -418,44 +528,71 @@
             $cellss[] = WriterEntityFactory::createCell($item['final_evaluation']);
             $cellss[] = WriterEntityFactory::createCell($item['required_session']);
 
-            if ($psychosocial_followups['data'] != NULL) {
-                if(isset($psychosocial_followups['data'][$i])){
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_followups['data'][$i]['entry_date'] ? date('d-m-Y', strtotime($psychosocial_followups['data'][$i]['entry_date'])) : 'N/A');
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_followups['data'][$i]['entry_time']);
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_followups['data'][$i]['followup_comments']);
-                }
+            if ($psychosocial_followups_array[$case_info['fk_customer_id']] != NULL) {
+                if(isset($psychosocial_followups_array[$case_info['fk_customer_id']][$i])){
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_followups_array[$case_info['fk_customer_id']][$i]['entry_date'] ? date('d-m-Y', strtotime($psychosocial_followups_array[$case_info['fk_customer_id']][$i]['entry_date'])) : 'N/A');
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_followups_array[$case_info['fk_customer_id']][$i]['entry_time']);
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_followups[$case_info['fk_customer_id']][$i]['followup_comments']);
+                }else{
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	            }
             }else{
                 $cellss[] = WriterEntityFactory::createCell('');
                 $cellss[] = WriterEntityFactory::createCell('');
                 $cellss[] = WriterEntityFactory::createCell('');
             }
 
-            if ($reviews['data'] != NULL) {
-                if(isset($reviews['data'][$i])){
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['entry_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['entry_date'])) : 'N/A');
-                    $cellss[] = WriterEntityFactory::createCell(ucfirst($reviews['data'][$i]['casedropped']));
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['reason_dropping'] . ' ' . $reviews['data'][$i]['other_reason_dropping']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['confirm_services'] . ' ' . $reviews['data'][$i]['other_reason_dropping']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['followup_financial_service']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['social_protection']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['special_security']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['monthly_income']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['challenges']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['actions_taken']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['remark_participant']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_brac']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['remark_district']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_psychosocial_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_psychosocial_date'])) : 'N/A');
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_psychosocial']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_economic_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_economic_date'])) : 'N/A');
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_economic']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_social_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_social_date'])) : 'N/A');
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_social']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_social']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_income_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_income_date'])) : 'N/A');
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_income']);
+            if ($reviews_array[$case_info['fk_customer_id']] != NULL) {
+                if(isset($reviews_array[$case_info['fk_customer_id']][$i])){
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['entry_date'] ? date('d-m-Y', strtotime($reviews_array[$case_info['fk_customer_id']][$i]['entry_date'])) : 'N/A');
+                    $cellss[] = WriterEntityFactory::createCell(ucfirst($reviews_array[$case_info['fk_customer_id']][$i]['casedropped']));
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['reason_dropping'] . ' ' . $reviews_array[$case_info['fk_customer_id']][$i]['other_reason_dropping']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['confirm_services'] . ' ' . $reviews_array[$case_info['fk_customer_id']][$i]['other_reason_dropping']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['followup_financial_service']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['social_protection']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['special_security']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['monthly_income']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['challenges']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['actions_taken']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['remark_participant']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_brac']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['remark_district']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_psychosocial_date'] ? date('d-m-Y', strtotime($reviews_array[$case_info['fk_customer_id']][$i]['comment_psychosocial_date'])) : 'N/A');
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_psychosocial']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_economic_date'] ? date('d-m-Y', strtotime($reviews_array[$case_info['fk_customer_id']][$i]['comment_economic_date'])) : 'N/A');
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_economic']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_social_date'] ? date('d-m-Y', strtotime($reviews_array[$case_info['fk_customer_id']][$i]['comment_social_date'])) : 'N/A');
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_social']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_social']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_income_date'] ? date('d-m-Y', strtotime($reviews_array[$case_info['fk_customer_id']][$i]['comment_income_date'])) : 'N/A');
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_income']);
                     
-                }
+                }else{
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	            }
                 
             }else{
                 $cellss[] = WriterEntityFactory::createCell('');
@@ -492,23 +629,31 @@
         $count_for_mrg++;
 
     }
-    else if(!empty($psychosocial_followups['data']) && count($psychosocial_followups['data']) > count($family_counsellings['data']) && count($psychosocial_followups['data']) > count($psychosocial_sessions['data']) && count($psychosocial_followups['data']) > count($psychosocial_completions['data']) && count($psychosocial_followups['data']) > count($reviews['data'])){
+    else if($count_pf > 0 && $count_pf >= $count_fc  && $count_pf >= $count_ps && $count_pf >= $count_pc && $count_pf >= $count_rv){
         
         $multipler = array();
-        foreach ($psychosocial_followups['data'] as $i => $item) {
+        foreach ($psychosocial_followups_array[$case_info['fk_customer_id']] as $i => $item) {
             $cellss = array();
 
             $cellss[] = WriterEntityFactory::createCell('');
-            if ($family_counsellings['data'] != NULL) {
-                if(isset($family_counsellings['data'][$i])){
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['entry_date'] ? date('d-m-Y', strtotime($family_counsellings['data'][$i]['entry_date'])) : 'N/A');
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['entry_time']);
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['session_place']);
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['male_household_member']);
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['female_household_member']);
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['male_household_member'] + $family_counsellings['data'][$i]['female_household_member']);
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['session_comments']);
-                }
+            if ($family_counsellings_array[$case_info['fk_customer_id']] != NULL) {
+                if(isset($family_counsellings_array[$case_info['fk_customer_id']][$i])){
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['entry_date'] ? date('d-m-Y', strtotime($family_counsellings_array[$case_info['fk_customer_id']][$i]['entry_date'])) : 'N/A');
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['entry_time']);
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['session_place']);
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['male_counseled']);
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['female_counseled']);
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['members_counseled']);
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['session_comments']);
+                }else{
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	            }
             }else{
                 $cellss[] = WriterEntityFactory::createCell('');
                 $cellss[] = WriterEntityFactory::createCell('');
@@ -519,14 +664,20 @@
                 $cellss[] = WriterEntityFactory::createCell('');
             }
 
-            if ($psychosocial_sessions['data'] != NULL) {
-                if(isset($psychosocial_sessions['data'][$i])){
-                	$cellss[] = WriterEntityFactory::createCell($psychosocial_sessions['data'][$i]['entry_date'] ? date('d-m-Y', strtotime($psychosocial_sessions['data'][$i]['entry_date'])) : 'N/A');
-		            $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions['data'][$i]['entry_time']);
-		            $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions['data'][$i]['next_date'] ? date('d-m-Y', strtotime($psychosocial_sessions['data'][$i]['next_date'])) : 'N/A');
-		            $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions['data'][$i]['activities_description']);
-		            $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions['data'][$i]['session_comments']);
-                }
+            if ($psychosocial_sessions_array[$case_info['fk_customer_id']] != NULL) {
+                if(isset($psychosocial_sessions_array[$case_info['fk_customer_id']][$i])){
+                	$cellss[] = WriterEntityFactory::createCell($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['entry_date'] ? date('d-m-Y', strtotime($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['entry_date'])) : 'N/A');
+		            $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['entry_time']);
+		            $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['next_date'] ? date('d-m-Y', strtotime($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['next_date'])) : 'N/A');
+		            $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['activities_description']);
+		            $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['session_comments']);
+                }else{
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	            }
                 
             }else{
                 $cellss[] = WriterEntityFactory::createCell('');
@@ -536,17 +687,26 @@
                 $cellss[] = WriterEntityFactory::createCell('');
             }
 
-            if ($psychosocial_completions['data'] != NULL) {
-                if(isset($psychosocial_completions['data'][$i])){
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['entry_date'] ? date('d-m-Y', strtotime($psychosocial_completions['data'][$i]['entry_date'])) : 'N/A');
-		            $cellss[] = WriterEntityFactory::createCell(ucfirst($psychosocial_completions['data'][$i]['is_completed']));
-		            $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['dropout_reason']);
-		            $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['review_session']);
-		            $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['client_comments']);
-		            $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['counsellor_comments']);
-		            $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['final_evaluation']);
-		            $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['required_session']);
-                }
+            if ($psychosocial_completions_array[$case_info['fk_customer_id']] != NULL) {
+                if(isset($psychosocial_completions_array[$case_info['fk_customer_id']][$i])){
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['entry_date'] ? date('d-m-Y', strtotime($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['entry_date'])) : 'N/A');
+		            $cellss[] = WriterEntityFactory::createCell(ucfirst($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['is_completed']));
+		            $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['dropout_reason']);
+		            $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['review_session']);
+		            $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['client_comments']);
+		            $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['counsellor_comments']);
+		            $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['final_evaluation']);
+		            $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['required_session']);
+                }else{
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	            }
             }else{
                 $cellss[] = WriterEntityFactory::createCell('');
                 $cellss[] = WriterEntityFactory::createCell('');
@@ -562,32 +722,55 @@
             $cellss[] = WriterEntityFactory::createCell($item['entry_time']);
             $cellss[] = WriterEntityFactory::createCell($item['followup_comments']);
 
-            if ($reviews['data'] != NULL) {
-                if(isset($reviews['data'][$i])){
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['entry_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['entry_date'])) : 'N/A');
-                    $cellss[] = WriterEntityFactory::createCell(ucfirst($reviews['data'][$i]['casedropped']));
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['reason_dropping'] . ' ' . $reviews['data'][$i]['other_reason_dropping']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['confirm_services'] . ' ' . $reviews['data'][$i]['other_reason_dropping']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['followup_financial_service']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['social_protection']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['special_security']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['monthly_income']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['challenges']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['actions_taken']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['remark_participant']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_brac']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['remark_district']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_psychosocial_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_psychosocial_date'])) : 'N/A');
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_psychosocial']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_economic_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_economic_date'])) : 'N/A');
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_economic']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_social_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_social_date'])) : 'N/A');
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_social']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_social']);
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_income_date'] ? date('d-m-Y', strtotime($reviews['data'][$i]['comment_income_date'])) : 'N/A');
-                    $cellss[] = WriterEntityFactory::createCell($reviews['data'][$i]['comment_income']);
+            if ($reviews[$case_info['fk_customer_id']] != NULL) {
+                if(isset($reviews_array[$case_info['fk_customer_id']][$i])){
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['entry_date'] ? date('d-m-Y', strtotime($reviews_array[$case_info['fk_customer_id']][$i]['entry_date'])) : 'N/A');
+                    $cellss[] = WriterEntityFactory::createCell(ucfirst($reviews_array[$case_info['fk_customer_id']][$i]['casedropped']));
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['reason_dropping'] . ' ' . $reviews_array[$case_info['fk_customer_id']][$i]['other_reason_dropping']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['confirm_services'] . ' ' . $reviews_array[$case_info['fk_customer_id']][$i]['other_reason_dropping']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['followup_financial_service']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['social_protection']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['special_security']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['monthly_income']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['challenges']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['actions_taken']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['remark_participant']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_brac']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['remark_district']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_psychosocial_date'] ? date('d-m-Y', strtotime($reviews_array[$case_info['fk_customer_id']][$i]['comment_psychosocial_date'])) : 'N/A');
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_psychosocial']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_economic_date'] ? date('d-m-Y', strtotime($reviews_array[$case_info['fk_customer_id']][$i]['comment_economic_date'])) : 'N/A');
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_economic']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_social_date'] ? date('d-m-Y', strtotime($reviews_array[$case_info['fk_customer_id']][$i]['comment_social_date'])) : 'N/A');
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_social']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_social']);
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_income_date'] ? date('d-m-Y', strtotime($reviews_array[$case_info['fk_customer_id']][$i]['comment_income_date'])) : 'N/A');
+                    $cellss[] = WriterEntityFactory::createCell($reviews_array[$case_info['fk_customer_id']][$i]['comment_income']);
                     
-                }
+                }else{
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	            }
                 
             }else{
                 $cellss[] = WriterEntityFactory::createCell('');
@@ -625,23 +808,31 @@
         $count_for_mrg++;
 
     }
-    else if(!empty($reviews['data']) && count($reviews['data']) > count($family_counsellings['data']) && count($reviews['data']) > count($psychosocial_sessions['data']) && count($reviews['data']) > count($psychosocial_completions['data']) && count($reviews['data']) > count($psychosocial_followups['data'])){
-        
+    else if($count_rv > 0 && $count_rv >= $count_fc && $count_rv >= $count_ps && $count_rv >= $count_pc && $count_rv >= $count_pf){
+
         $multipler = array();
-        foreach ($reviews['data'] as $i => $item) {
+        foreach ($reviews_array[$case_info['fk_customer_id']] as $i => $item) {
             $cellss = array();
 
             $cellss[] = WriterEntityFactory::createCell('');
-            if ($family_counsellings['data'] != NULL) {
-                if(isset($family_counsellings['data'][$i])){
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['entry_date'] ? date('d-m-Y', strtotime($family_counsellings['data'][$i]['entry_date'])) : 'N/A');
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['entry_time']);
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['session_place']);
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['male_household_member']);
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['female_household_member']);
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['male_household_member'] + $family_counsellings['data'][$i]['female_household_member']);
-		            $cellss[] = WriterEntityFactory::createCell($family_counsellings['data'][$i]['session_comments']);
-                }
+            if (isset($family_counsellings_array[$case_info['fk_customer_id']])) {
+                if(isset($family_counsellings_array[$case_info['fk_customer_id']][$i])){
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['entry_date'] ? date('d-m-Y', strtotime($family_counsellings_array[$case_info['fk_customer_id']][$i]['entry_date'])) : 'N/A');
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['entry_time']);
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['session_place']);
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['male_counseled']);
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['female_counseled']);
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['members_counseled']);
+		            $cellss[] = WriterEntityFactory::createCell($family_counsellings_array[$case_info['fk_customer_id']][$i]['session_comments']);
+                }else{
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	            }
             }else{
                 $cellss[] = WriterEntityFactory::createCell('');
                 $cellss[] = WriterEntityFactory::createCell('');
@@ -652,14 +843,20 @@
                 $cellss[] = WriterEntityFactory::createCell('');
             }
 
-            if ($psychosocial_sessions['data'] != NULL) {
-                if(isset($psychosocial_sessions['data'][$i])){
-                	$cellss[] = WriterEntityFactory::createCell($psychosocial_sessions['data'][$i]['entry_date'] ? date('d-m-Y', strtotime($psychosocial_sessions['data'][$i]['entry_date'])) : 'N/A');
-		            $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions['data'][$i]['entry_time']);
-		            $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions['data'][$i]['next_date'] ? date('d-m-Y', strtotime($psychosocial_sessions['data'][$i]['next_date'])) : 'N/A');
-		            $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions['data'][$i]['activities_description']);
-		            $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions['data'][$i]['session_comments']);
-                }
+            if (isset($psychosocial_sessions_array[$case_info['fk_customer_id']])) {
+                if(isset($psychosocial_sessions_array[$case_info['fk_customer_id']][$i])){
+                	$cellss[] = WriterEntityFactory::createCell($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['entry_date'] ? date('d-m-Y', strtotime($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['entry_date'])) : 'N/A');
+		            $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['entry_time']);
+		            $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['next_date'] ? date('d-m-Y', strtotime($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['next_date'])) : 'N/A');
+		            $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['activities_description']);
+		            $cellss[] = WriterEntityFactory::createCell($psychosocial_sessions_array[$case_info['fk_customer_id']][$i]['session_comments']);
+                }else{
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	            }
                 
             }else{
                 $cellss[] = WriterEntityFactory::createCell('');
@@ -669,17 +866,26 @@
                 $cellss[] = WriterEntityFactory::createCell('');
             }
 
-            if ($psychosocial_completions['data'] != NULL) {
-                if(isset($psychosocial_completions['data'][$i])){
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['entry_date'] ? date('d-m-Y', strtotime($psychosocial_completions['data'][$i]['entry_date'])) : 'N/A');
-		            $cellss[] = WriterEntityFactory::createCell(ucfirst($psychosocial_completions['data'][$i]['is_completed']));
-		            $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['dropout_reason']);
-		            $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['review_session']);
-		            $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['client_comments']);
-		            $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['counsellor_comments']);
-		            $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['final_evaluation']);
-		            $cellss[] = WriterEntityFactory::createCell($psychosocial_completions['data'][$i]['required_session']);
-                }
+            if (isset($psychosocial_completions_array[$case_info['fk_customer_id']])) {
+                if(isset($psychosocial_completions_array[$case_info['fk_customer_id']][$i])){
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['entry_date'] ? date('d-m-Y', strtotime($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['entry_date'])) : 'N/A');
+		            $cellss[] = WriterEntityFactory::createCell(ucfirst($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['is_completed']));
+		            $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['dropout_reason']);
+		            $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['review_session']);
+		            $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['client_comments']);
+		            $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['counsellor_comments']);
+		            $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['final_evaluation']);
+		            $cellss[] = WriterEntityFactory::createCell($psychosocial_completions_array[$case_info['fk_customer_id']][$i]['required_session']);
+                }else{
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	            }
             }else{
                 $cellss[] = WriterEntityFactory::createCell('');
                 $cellss[] = WriterEntityFactory::createCell('');
@@ -691,12 +897,16 @@
                 $cellss[] = WriterEntityFactory::createCell('');
             }
 
-            if ($psychosocial_followups['data'] != NULL) {
-                if(isset($psychosocial_followups['data'][$i])){
-                    $cellss[] = WriterEntityFactory::createCell($psychosocial_followups['data'][$i]['entry_date'] ? date('d-m-Y', strtotime($psychosocial_followups['data'][$i]['entry_date'])) : 'N/A');
-		            $cellss[] = WriterEntityFactory::createCell($psychosocial_followups['data'][$i]['entry_time']);
-		            $cellss[] = WriterEntityFactory::createCell($psychosocial_followups['data'][$i]['followup_comments']);
-                }
+            if (isset($psychosocial_followups_array[$case_info['fk_customer_id']])) {
+                if(isset($psychosocial_followups_array[$case_info['fk_customer_id']][$i])){
+                    $cellss[] = WriterEntityFactory::createCell($psychosocial_followups_array[$case_info['fk_customer_id']][$i]['entry_date'] ? date('d-m-Y', strtotime($psychosocial_followups_array[$case_info['fk_customer_id']][$i]['entry_date'])) : 'N/A');
+		            $cellss[] = WriterEntityFactory::createCell($psychosocial_followups_array[$case_info['fk_customer_id']][$i]['entry_time']);
+		            $cellss[] = WriterEntityFactory::createCell($psychosocial_followups_array[$case_info['fk_customer_id']][$i]['followup_comments']);
+                }else{
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	                $cellss[] = WriterEntityFactory::createCell('');
+	            }
                 
             }else{
                 $cellss[] = WriterEntityFactory::createCell('');

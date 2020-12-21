@@ -203,8 +203,47 @@ if ($_GET['download_excel']) {
     unset($args['limit']);
 
     $args['data_only'] = true;
-    $data = $this->get_cases($args);
+    $data = $this->get_cases_for_excel($args);
     $data = $data['data'];
+
+    $family_counsellings = $this->get_family_counselling();
+    $psychosocial_sessions = $this->get_psychosocial_session();
+    $psychosocial_completions = $this->get_psychosocial_completion();
+    $psychosocial_followups = $this->get_psychosocial_followup();
+    $reviews = $this->get_case_review();
+
+    $family_counsellings_array = array();
+    $psychosocial_sessions_array = array();
+    $psychosocial_completions_array = array();
+    $psychosocial_followups_array = array();
+    $reviews_array = array();
+
+    foreach ($family_counsellings['data'] as $fck => $fcv) {
+        $family_counsellings_array[$fcv['fk_customer_id']][] = $fcv;
+    }
+
+    foreach ($psychosocial_sessions['data'] as $psk => $psv) {
+        $psychosocial_sessions_array[$psv['fk_customer_id']][] = $psv;
+    }
+
+    foreach ($psychosocial_completions['data'] as $pck => $pcv) {
+        $psychosocial_completions_array[$pcv['fk_customer_id']][] = $pcv;
+    }
+
+    foreach ($psychosocial_followups['data'] as $pfk => $pfv) {
+        $psychosocial_followups_array[$pfv['fk_customer_id']][] = $pfv;
+    }
+
+    foreach ($reviews['data'] as $rk => $rv) {
+        $reviews_array[$rv['fk_customer_id']][] = $rv;
+    }
+
+    // Make empty these arrays
+    $family_counsellings = [];
+    $psychosocial_sessions = [];
+    $psychosocial_completions = [];
+    $psychosocial_followups = [];
+    $reviews = [];
 
     // This will be here in our project
     $writer = WriterEntityFactory::createXLSXWriter();

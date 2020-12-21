@@ -847,6 +847,57 @@ class dev_customer_management {
         return $cases;
     }
 
+    function get_cases_for_excel($param = null) {
+        $param['single'] = $param['single'] ? $param['single'] : false;
+
+        $select = "SELECT " . ($param['select_fields'] ? implode(", ", $param['select_fields']) . " " : '* ');
+
+        if ($param['listing']) {
+            $from = "FROM dev_immediate_supports 
+                        LEFT JOIN dev_customers ON (dev_customers.pk_customer_id = dev_immediate_supports.fk_customer_id)
+                        LEFT JOIN dev_reintegration_plan ON (dev_reintegration_plan.fk_customer_id = dev_immediate_supports.fk_customer_id)
+            ";
+        } else {
+            $from = "FROM dev_immediate_supports
+                LEFT JOIN dev_customers ON (dev_customers.pk_customer_id = dev_immediate_supports.fk_customer_id)
+                        LEFT JOIN dev_reintegration_plan ON (dev_reintegration_plan.fk_customer_id = dev_immediate_supports.fk_customer_id)
+                        LEFT JOIN dev_psycho_supports ON (dev_psycho_supports.fk_customer_id = dev_immediate_supports.fk_customer_id)
+                        LEFT JOIN dev_economic_supports ON (dev_economic_supports.fk_customer_id = dev_immediate_supports.fk_customer_id)
+                        LEFT JOIN dev_economic_reintegration_referrals ON (dev_economic_reintegration_referrals.fk_customer_id = dev_immediate_supports.fk_customer_id)
+                        LEFT JOIN dev_social_supports ON (dev_social_supports.fk_customer_id = dev_immediate_supports.fk_customer_id)
+            ";
+        }
+
+        $where = " WHERE 1";
+        $conditions = " ";
+        $sql = $select . $from . $where;
+        $count_sql = "SELECT COUNT(dev_immediate_supports.fk_customer_id) AS TOTAL " . $from . $where;
+
+        $loopCondition = array(
+            'id' => 'dev_immediate_supports.fk_customer_id',
+            'customer_id' => 'dev_customers.customer_id',
+            'name' => 'dev_customers.full_name',
+            'nid' => 'dev_customers.nid_number',
+            'birth' => 'dev_customers.birth_reg_number',
+            'division' => 'dev_customers.permanent_division',
+            'district' => 'dev_customers.permanent_district',
+            'sub_district' => 'dev_customers.permanent_sub_district',
+            'entry_date' => 'dev_customers.create_date',
+            'branch_id' => 'dev_customers.fk_branch_id',
+        );
+
+        $conditions .= sql_condition_maker($loopCondition, $param);
+
+        $orderBy = sql_order_by($param);
+        $limitBy = sql_limit_by($param);
+
+        $sql .= $conditions . $orderBy . $limitBy;
+        $count_sql .= $conditions;
+
+        $cases = sql_data_collector($sql, $count_sql, $param);
+        return $cases;
+    }
+
     function add_edit_case($params = array()) {
         global $devdb, $_config;
 
