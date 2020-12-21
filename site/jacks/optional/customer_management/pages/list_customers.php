@@ -115,11 +115,11 @@ if ($filter_entry_end_date)
 if ($_GET['download_excel']) {
     unset($args['select_fields']);
     unset($args['limit']);
+    unset($args['listing']);
 
     $args['data_only'] = true;
     $data = $this->get_customers($args);
     $data = $data['data'];
-
     // This will be here in our project
 
     $writer = WriterEntityFactory::createXLSXWriter();
@@ -161,7 +161,9 @@ if ($_GET['download_excel']) {
     $header = [
         "SL",
         'Beneficiary ID/Reference number',
-        'Full Name', 'NID Number', 'Birth Registration Number',
+        'Full Name', 
+        'NID Number', 
+        'Birth Registration Number',
         "Father's Name",
         "Mother's Name",
         'Date of Birth',
@@ -184,6 +186,7 @@ if ($_GET['download_excel']) {
         "Men (>=18)",
         'Women (>=18)',
         'Number of Accompany/ Number of Family Member',
+
         'Transit/ Route of Migration/ Trafficking',
         "Desired destination",
         'Final destination',
@@ -208,6 +211,7 @@ if ($_GET['download_excel']) {
         'Denied freedom of movement during or between work shifts after your departure from Bangladesh?',
         'Threatened by employer or someone acting on their behalf, or the broker with violence or action by law enforcement/deportation?',
         "Have you ever had identity or travel documents (passport) withheld by an employer or broker after your departure from Bangladesh?",
+
         'Any Property/wealth',
         'Any Property/wealth Value',
         'Main occupation (Before trafficking)',
@@ -220,10 +224,13 @@ if ($_GET['download_excel']) {
         'Loan Amount (BDT)',
         'Ownership of House',
         'Type of house',
+
         'Any IGA Skills?',
         'IGA Skills',
+
         'Do you have any disability?',
         'Type of disability',
+
         "Any Chronic Disease?",
         "Type of Disease",
     ];
@@ -312,9 +319,9 @@ if ($_GET['download_excel']) {
                 WriterEntityFactory::createCell($profile['emergency_relation']),
                 WriterEntityFactory::createCell($profile['permanent_village']),
                 WriterEntityFactory::createCell($profile['permanent_ward']),
-                WriterEntityFactory::createCell($profile['permanent_union']),
-                WriterEntityFactory::createCell($profile['permanent_sub_district']),
-                WriterEntityFactory::createCell($profile['permanent_district']),
+                WriterEntityFactory::createCell(ucfirst($profile['permanent_union'])),
+                WriterEntityFactory::createCell(ucfirst($profile['permanent_sub_district'])),
+                WriterEntityFactory::createCell(ucfirst($profile['permanent_district'])),
                 WriterEntityFactory::createCell($profile['permanent_house']),
                 WriterEntityFactory::createCell($educational_qualification),
                 WriterEntityFactory::createCell($profile['boy_household_member']),
@@ -322,14 +329,15 @@ if ($_GET['download_excel']) {
                 WriterEntityFactory::createCell($profile['male_household_member']),
                 WriterEntityFactory::createCell($profile['female_household_member']),
                 WriterEntityFactory::createCell($family_members),
+
                 WriterEntityFactory::createCell($profile['left_port']),
                 WriterEntityFactory::createCell($profile['preferred_country']),
                 WriterEntityFactory::createCell($profile['final_destination']),
-                WriterEntityFactory::createCell($profile['migration_type']),
-                WriterEntityFactory::createCell($profile['visa_type']),
-                WriterEntityFactory::createCell($profile['departure_media']),
-                WriterEntityFactory::createCell($profile['media_relation']),
-                WriterEntityFactory::createCell($profile['media_address']),
+                WriterEntityFactory::createCell(ucfirst($profile['migration_type'])),
+                WriterEntityFactory::createCell(ucfirst($profile['visa_type'])),
+                WriterEntityFactory::createCell(ucfirst($profile['departure_media'])),
+                WriterEntityFactory::createCell(ucfirst($profile['media_relation'])),
+                WriterEntityFactory::createCell(ucfirst($profile['media_address'])),
                 WriterEntityFactory::createCell($profile['passport_number']),
                 WriterEntityFactory::createCell(date('d-m-Y', strtotime($profile['departure_date']))),
                 WriterEntityFactory::createCell(date('d-m-Y', strtotime($profile['return_date']))),
@@ -346,6 +354,7 @@ if ($_GET['download_excel']) {
                 WriterEntityFactory::createCell(ucfirst($profile['is_movement_limitation'])),
                 WriterEntityFactory::createCell(ucfirst($profile['employer_threatened'])),
                 WriterEntityFactory::createCell(ucfirst($profile['is_kept_document'])),
+
                 WriterEntityFactory::createCell($profile['property_name']),
                 WriterEntityFactory::createCell($profile['property_value']),
                 WriterEntityFactory::createCell($profile['pre_occupation']),
@@ -358,10 +367,13 @@ if ($_GET['download_excel']) {
                 WriterEntityFactory::createCell($profile['personal_debt']),
                 WriterEntityFactory::createCell($current_residence_ownership),
                 WriterEntityFactory::createCell($current_residence_type),
+
                 WriterEntityFactory::createCell($profile['have_earner_skill']),
                 WriterEntityFactory::createCell($have_skills . ' ' . $profile['other_have_skills'] . ' ' . $profile['vocational_skill'] . ' ' . $profile['handicraft_skill']),
+
                 WriterEntityFactory::createCell(ucfirst($profile['is_physically_challenged'])),
                 WriterEntityFactory::createCell($disability_type),
+
                 WriterEntityFactory::createCell(ucfirst($profile['having_chronic_disease'])),
                 WriterEntityFactory::createCell($disease_type . ' ' . $profile['other_disease_type']),
             ];
