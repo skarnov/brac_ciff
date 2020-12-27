@@ -69,3 +69,6 @@
 .ui-dialog .ui-button {
     border-radius: 0
 }
+#main-wrapper {
+    min-height: 100vh;
+}

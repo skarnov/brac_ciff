@@ -44,7 +44,7 @@
         <link rel="stylesheet" href="<?php echo common_files() ?>/css/jquery-ui.structure.min.css">
         <link rel="stylesheet" href="<?php echo common_files() ?>/css/jquery-ui.theme.min.css">
         <link rel="stylesheet" href="<?php echo theme_path(); ?>/assets/stylesheets/calendar.css">
-        <link rel="stylesheet" href="<?php echo theme_path(); ?>/assets/stylesheets/ui_styles_override.css?v=5">
+        <link rel="stylesheet" href="<?php echo theme_path(); ?>/assets/stylesheets/ui_styles_override.css?v=6">
         <?php echo get_header('admin'); ?>
         <script>
             var init = [];
