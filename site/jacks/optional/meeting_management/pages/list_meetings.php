@@ -89,7 +89,7 @@ filterForm($filterForm);
             <tr>
                 <th>Project Name</th>
                 <th>Name</th>
-                <th>Actions</th>
+<!--                <th>Actions</th>-->
             </tr>
         </thead>
         <tbody>
@@ -101,9 +101,9 @@ filterForm($filterForm);
                     <td><?php echo $value['meeting_name']; ?></td>
                     <td>
                         <?php if (has_permission('edit_meeting')): ?>
-                            <div class="btn-group">
+<!--                            <div class="btn-group">
                                 <a href="<?php echo url('admin/dev_meeting_management/manage_meetings?action=add_edit_meeting&edit=' . $value['pk_meeting_id']) ?>" class="btn btn-primary btn btn-sm"><i class="fa fa-pencil-square-o"></i> Edit</a>
-                            </div>                                
+                            </div>                                -->
                         <?php endif ?>
                     </td>
                 </tr>

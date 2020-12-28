@@ -520,31 +520,31 @@ ob_start();
                             <div class="col-sm-4">   
                                 <label class="control-label input-label">Men (>=18) (*)</label>
                                 <div class="form-group">
-                                    <input type="number" class="form-control" onkeyup="calc()" id="maleMember" name="male_household_member" value="<?php echo $pre_data['male_household_member'] ? $pre_data['male_household_member'] : ''; ?>" />
+                                    <input type="number" class="form-control" onchange="calc()" id="maleMember" name="male_household_member" value="<?php echo $pre_data['male_household_member'] ? $pre_data['male_household_member'] : 0 ?>" />
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <label class="control-label input-label">Women (>=18) (*)</label>
                                 <div class="form-group">
-                                    <input class="filter form-control" onkeyup="calc()" id="femaleMember" type="number" name="female_household_member" value="<?php echo $pre_data['female_household_member'] ? $pre_data['female_household_member'] : ''; ?>">
+                                    <input class="filter form-control" onchange="calc()" id="femaleMember" type="number" name="female_household_member" value="<?php echo $pre_data['female_household_member'] ? $pre_data['female_household_member'] : 0 ?>">
                                 </div>
                             </div>
                             <div class="col-sm-4">   
                                 <label class="control-label input-label">Boy (<18) (*)</label>
                                 <div class="form-group">
-                                    <input class="filter form-control" onkeyup="calc()" id="boyMember" type="number" name="boy_household_member" value="<?php echo $pre_data['boy_household_member'] ? $pre_data['boy_household_member'] : ''; ?>">
+                                    <input class="filter form-control" onchange="calc()" id="boyMember" type="number" name="boy_household_member" value="<?php echo $pre_data['boy_household_member'] ? $pre_data['boy_household_member'] : 0 ?>">
                                 </div>
                             </div>
                             <div class="col-sm-4">   
                                 <label class="control-label input-label">Girl (<18) (*)</label>
                                 <div class="form-group">
-                                    <input class="filter form-control" onkeyup="calc()" id="girlMember" type="number" name="girl_household_member" value="<?php echo $pre_data['girl_household_member'] ? $pre_data['girl_household_member'] : ''; ?>">
+                                    <input class="filter form-control" onchange="calc()" id="girlMember" type="number" name="girl_household_member" value="<?php echo $pre_data['girl_household_member'] ? $pre_data['girl_household_member'] : 0 ?>">
                                 </div>
                             </div>
                             <div class="col-sm-4">   
                                 <label class="control-label input-label">Total</label>
                                 <div class="form-group">
-                                    <input class="form-control" onkeyup="calc()" id="totalMember" type="number" value="<?php echo $pre_data['male_household_member'] + $pre_data['female_household_member'] + $pre_data['boy_household_member'] + $pre_data['girl_household_member'] ?>">
+                                    <input class="form-control" id="totalMember" type="number" value="<?php echo $pre_data['male_household_member'] + $pre_data['female_household_member'] + $pre_data['boy_household_member'] + $pre_data['girl_household_member'] ?>">
                                 </div>
                             </div>
                         </fieldset>

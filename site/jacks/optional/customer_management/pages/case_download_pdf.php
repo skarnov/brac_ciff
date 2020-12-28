@@ -183,7 +183,8 @@ $devPdf->Cell(0, 10, 'Plan Date: ' . $plan_date, 0, 1, 'L');
 $devPdf->Cell(0, 0, 'Type of Services Requested: ' . $case_info['service_requested'] . ' ' . $case_info['other_service_requested'], 0, 1, 'L');
 $devPdf->Cell(0, 10, 'Social Protection Schemes: ' . $case_info['social_protection'], 0, 1, 'L');
 $devPdf->Cell(0, 0, 'Special Security Measures: ' . $case_info['security_measure'], 0, 1, 'L');
-$devPdf->Cell(0, 10, 'Note: ' . $case_info['service_requested_note'], 0, 1, 'L');
+$devPdf->Cell(0, 3, '', 0, 1, 'L');
+$devPdf->MultiCell(0, 5, 'Note: ' . $case_info['service_requested_note']);
 $devPdf->Cell(0, 10, '', 0, 1, 'L');
 
 $devPdf->SetFont('Times', 'B', 14);
