@@ -17,7 +17,7 @@ if (!$id) {
     $ret = $devdb->query("DELETE FROM dev_returnees WHERE pk_returnee_id = '" . $id . "'");
     
     if ($ret) {
-        add_notification('Success', 'warning');
+        add_notification('Record Deleted', 'warning');
         header('location: ' . url('admin/dev_customer_management/manage_returnees'));
         exit();
     } else {

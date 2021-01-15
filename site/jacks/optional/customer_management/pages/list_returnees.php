@@ -513,7 +513,7 @@ filterForm($filterForm);
                     }],
                 callback: function (result) {
                     if (result == 'deleteProfile') {
-                        window.location.href = '?action=deleteProfile&id=' + logId;
+                        window.location.href = '?action=deleteReturnee&id=' + logId;
                     }
                     hide_button_overlay_working(thisCell);
                 }

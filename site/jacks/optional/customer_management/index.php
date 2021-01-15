@@ -925,7 +925,9 @@ class dev_customer_management {
             $immediate_support = array();
             $immediate_support['fk_branch_id'] = $_config['user']['user_branch'];
             $immediate_support['fk_staff_id'] = $params['form_data']['fk_staff_id'];
-            $immediate_support['entry_date'] = date('Y-m-d', strtotime($params['form_data']['support_date']));
+            if ($params['form_data']['support_date']):
+                $immediate_support['entry_date'] = date('Y-m-d', strtotime($params['form_data']['support_date']));
+            endif;
             $immediate_support['arrival_place'] = $params['form_data']['arrival_place'];
 
             $data_type = $params['form_data']['immediate_support'];
@@ -946,7 +948,10 @@ class dev_customer_management {
              */
 
             $reintegration_plan = array();
-            $reintegration_plan['plan_date'] = date('Y-m-d', strtotime($params['form_data']['plan_date']));
+
+            if ($params['form_data']['plan_date']):
+                $reintegration_plan['plan_date'] = date('Y-m-d', strtotime($params['form_data']['plan_date']));
+            endif;
 
             if ($params['form_data']['new_service_requested'] == NULL) {
                 $data_type = $params['form_data']['service_requested'];
@@ -996,8 +1001,9 @@ class dev_customer_management {
              */
 
             $psycho_supports = array();
-            $psycho_supports['first_meeting'] = date('Y-m-d', strtotime($params['form_data']['first_meeting']));
-
+            if ($params['form_data']['first_meeting']):
+                $psycho_supports['first_meeting'] = date('Y-m-d', strtotime($params['form_data']['first_meeting']));
+            endif;
             if ($params['form_data']['new_problem_identified'] == NULL) {
                 $data_type = $params['form_data']['problem_identified'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
@@ -1066,8 +1072,9 @@ class dev_customer_management {
              */
 
             $economic_supports_data = array();
-            $economic_supports_data['entry_date'] = date('Y-m-d', strtotime($params['form_data']['economic_reintegration_date']));
-
+            if ($params['form_data']['economic_reintegration_date']):
+                $economic_supports_data['entry_date'] = date('Y-m-d', strtotime($params['form_data']['economic_reintegration_date']));
+            endif;
             if ($params['form_data']['new_inkind_project'] == NULL) {
                 $data_type = $params['form_data']['inkind_project'];
                 $data_types = is_array($data_type) ? implode(',', $data_type) : '';
@@ -1089,18 +1096,30 @@ class dev_customer_management {
             $economic_supports_data['year_inauguration'] = $params['form_data']['year_inauguration'];
             $economic_supports_data['family_training'] = $params['form_data']['family_training'];
 
-            $economic_supports_data['traning_entry_date'] = date('Y-m-d', strtotime($params['form_data']['traning_entry_date']));
+            if ($params['form_data']['traning_entry_date']):
+                $economic_supports_data['traning_entry_date'] = date('Y-m-d', strtotime($params['form_data']['traning_entry_date']));
+            endif;
+
             $economic_supports_data['place_traning'] = $params['form_data']['place_traning'];
             $economic_supports_data['duration_traning'] = $params['form_data']['duration_traning'];
             $economic_supports_data['training_status'] = $params['form_data']['training_status'];
 
-            $economic_supports_data['financial_literacy_date'] = date('Y-m-d', strtotime($params['form_data']['financial_literacy_date']));
-            $economic_supports_data['business_development_date'] = date('Y-m-d', strtotime($params['form_data']['business_development_date']));
-            $economic_supports_data['product_development_date'] = date('Y-m-d', strtotime($params['form_data']['product_development_date']));
-            $economic_supports_data['entrepreneur_training_date'] = date('Y-m-d', strtotime($params['form_data']['entrepreneur_training_date']));
+            if ($params['form_data']['financial_literacy_date']):
+                $economic_supports_data['financial_literacy_date'] = date('Y-m-d', strtotime($params['form_data']['financial_literacy_date']));
+            endif;
+            if ($params['form_data']['business_development_date']):
+                $economic_supports_data['business_development_date'] = date('Y-m-d', strtotime($params['form_data']['business_development_date']));
+            endif;
+            if ($params['form_data']['product_development_date']):
+                $economic_supports_data['product_development_date'] = date('Y-m-d', strtotime($params['form_data']['product_development_date']));
+            endif;
+            if ($params['form_data']['entrepreneur_training_date']):
+                $economic_supports_data['entrepreneur_training_date'] = date('Y-m-d', strtotime($params['form_data']['entrepreneur_training_date']));
+            endif;
             $economic_supports_data['other_financial_training_name'] = $params['form_data']['other_financial_training_name'];
-            $economic_supports_data['other_financial_training_date'] = date('Y-m-d', strtotime($params['form_data']['other_financial_training_date']));
-
+            if ($params['form_data']['other_financial_training_date']):
+                $economic_supports_data['other_financial_training_date'] = date('Y-m-d', strtotime($params['form_data']['other_financial_training_date']));
+            endif;
             if ($is_update) {
                 $sql = "SELECT fk_customer_id FROM dev_economic_supports WHERE fk_customer_id = '$is_update'";
                 $pre_customer_id = $devdb->get_row($sql);
@@ -1126,7 +1145,9 @@ class dev_customer_management {
              */
 
             $economic_reintegration_data = array();
-            $economic_reintegration_data['entry_date'] = date('Y-m-d', strtotime($params['form_data']['economic_reintegration_referral_date']));
+            if ($params['form_data']['economic_reintegration_referral_date']):
+                $economic_reintegration_data['entry_date'] = date('Y-m-d', strtotime($params['form_data']['economic_reintegration_referral_date']));
+            endif;
             $economic_reintegration_data['is_vocational_training'] = $params['form_data']['is_vocational_training'];
 
             if ($params['form_data']['new_received_vocational_training'] == NULL) {
@@ -1142,8 +1163,13 @@ class dev_customer_management {
                 $economic_reintegration_data['other_received_vocational_training'] = $params['form_data']['new_received_vocational_training'];
             }
 
-            $economic_reintegration_data['training_start_date'] = date('Y-m-d', strtotime($params['form_data']['training_start_date']));
-            $economic_reintegration_data['training_end_date'] = date('Y-m-d', strtotime($params['form_data']['training_end_date']));
+            if ($params['form_data']['training_start_date']):
+                $economic_reintegration_data['training_start_date'] = date('Y-m-d', strtotime($params['form_data']['training_start_date']));
+            endif;
+
+            if ($params['form_data']['training_end_date']):
+                $economic_reintegration_data['training_end_date'] = date('Y-m-d', strtotime($params['form_data']['training_end_date']));
+            endif;
 
             if ($params['form_data']['new_received_vocational'] == NULL) {
                 $data_type = $params['form_data']['received_vocational'];
@@ -1178,15 +1204,20 @@ class dev_customer_management {
             $economic_reintegration_data['is_assistance_received'] = $params['form_data']['is_assistance_received'];
             $economic_reintegration_data['refferd_to'] = $params['form_data']['refferd_to'];
             $economic_reintegration_data['refferd_address'] = $params['form_data']['refferd_address'];
-            $economic_reintegration_data['trianing_date'] = date('Y-m-d', strtotime($params['form_data']['trianing_date']));
+            if ($params['form_data']['trianing_date']):
+                $economic_reintegration_data['trianing_date'] = date('Y-m-d', strtotime($params['form_data']['trianing_date']));
+            endif;
             $economic_reintegration_data['place_of_training'] = $params['form_data']['place_of_training'];
             $economic_reintegration_data['duration_training'] = $params['form_data']['duration_training'];
             $economic_reintegration_data['status_traning'] = $params['form_data']['status_traning'];
             $economic_reintegration_data['assistance_utilized'] = $params['form_data']['assistance_utilized'];
 
-            $economic_reintegration_data['job_placement_date'] = date('Y-m-d', strtotime($params['form_data']['job_placement_date']));
-            $economic_reintegration_data['financial_services_date'] = date('Y-m-d', strtotime($params['form_data']['financial_services_date']));
-
+            if ($params['form_data']['job_placement_date']):
+                $economic_reintegration_data['job_placement_date'] = date('Y-m-d', strtotime($params['form_data']['job_placement_date']));
+            endif;
+            if ($params['form_data']['financial_services_date']):
+                $economic_reintegration_data['financial_services_date'] = date('Y-m-d', strtotime($params['form_data']['financial_services_date']));
+            endif;
             if ($is_update) {
                 $sql = "SELECT fk_customer_id FROM dev_economic_reintegration_referrals WHERE fk_customer_id = '$is_update'";
                 $pre_customer_id = $devdb->get_row($sql);
@@ -1226,11 +1257,21 @@ class dev_customer_management {
                 $dev_social_supports_data['other_reintegration_economic'] = $params['form_data']['new_reintegration_economic'];
             }
 
-            $dev_social_supports_data['soical_date'] = date('Y-m-d', strtotime($params['form_data']['soical_date']));
-            $dev_social_supports_data['medical_date'] = date('Y-m-d', strtotime($params['form_data']['medical_date']));
-            $dev_social_supports_data['date_education'] = date('Y-m-d', strtotime($params['form_data']['date_education']));
-            $dev_social_supports_data['date_housing'] = date('Y-m-d', strtotime($params['form_data']['date_housing']));
-            $dev_social_supports_data['date_legal'] = date('Y-m-d', strtotime($params['form_data']['date_legal']));
+            if ($params['form_data']['soical_date']):
+                $dev_social_supports_data['soical_date'] = date('Y-m-d', strtotime($params['form_data']['soical_date']));
+            endif;
+            if ($params['form_data']['medical_date']):
+                $dev_social_supports_data['medical_date'] = date('Y-m-d', strtotime($params['form_data']['medical_date']));
+            endif;
+            if ($params['form_data']['date_education']):
+                $dev_social_supports_data['date_education'] = date('Y-m-d', strtotime($params['form_data']['date_education']));
+            endif;
+            if ($params['form_data']['date_housing']):
+                $dev_social_supports_data['date_housing'] = date('Y-m-d', strtotime($params['form_data']['date_housing']));
+            endif;
+            if ($params['form_data']['date_legal']):
+                $dev_social_supports_data['date_legal'] = date('Y-m-d', strtotime($params['form_data']['date_legal']));
+            endif;
 
             if ($params['form_data']['new_supportreferred'] == NULL) {
                 $data_type = $params['form_data']['support_referred'];
@@ -1607,7 +1648,11 @@ class dev_customer_management {
 
         if (!$ret['error']) {
             $dev_followups_data = array();
-            $dev_followups_data['entry_date'] = date('Y-m-d', strtotime($params['form_data']['entry_date']));
+
+            if ($params['form_data']['entry_date']):
+                $dev_followups_data['entry_date'] = date('Y-m-d', strtotime($params['form_data']['entry_date']));
+            endif;
+
             $dev_followups_data['casedropped'] = $params['form_data']['casedropped'];
 
             if ($params['form_data']['new_reason_dropping'] == NULL) {
@@ -1648,13 +1693,25 @@ class dev_customer_management {
             }
 
             $dev_followups_data['comment_psychosocial'] = $params['form_data']['comment_psychosocial'];
-            $dev_followups_data['comment_psychosocial_date'] = date('Y-m-d', strtotime($params['form_data']['comment_psychosocial_date']));
+
+            if ($params['form_data']['comment_psychosocial_date']):
+                $dev_followups_data['comment_psychosocial_date'] = date('Y-m-d', strtotime($params['form_data']['comment_psychosocial_date']));
+            endif;
+
             $dev_followups_data['comment_economic'] = $params['form_data']['comment_economic'];
-            $dev_followups_data['comment_economic_date'] = date('Y-m-d', strtotime($params['form_data']['comment_economic_date']));
+
+            if ($params['form_data']['comment_economic_date']):
+                $dev_followups_data['comment_economic_date'] = date('Y-m-d', strtotime($params['form_data']['comment_economic_date']));
+            endif;
+
             $dev_followups_data['comment_social'] = $params['form_data']['comment_social'];
-            $dev_followups_data['comment_social_date'] = date('Y-m-d', strtotime($params['form_data']['comment_social_date']));
+            if ($params['form_data']['comment_social_date']):
+                $dev_followups_data['comment_social_date'] = date('Y-m-d', strtotime($params['form_data']['comment_social_date']));
+            endif;
             $dev_followups_data['comment_income'] = $params['form_data']['comment_income'];
-            $dev_followups_data['comment_income_date'] = date('Y-m-d', strtotime($params['form_data']['comment_income_date']));
+            if ($params['form_data']['comment_income_date']):
+                $dev_followups_data['comment_income_date'] = date('Y-m-d', strtotime($params['form_data']['comment_income_date']));
+            endif;
             $dev_followups_data['monthly_income'] = $params['form_data']['monthly_income'];
             $dev_followups_data['challenges'] = $params['form_data']['challenges'];
             $dev_followups_data['actions_taken'] = $params['form_data']['actions_taken'];
