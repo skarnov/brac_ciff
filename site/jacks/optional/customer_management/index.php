@@ -331,10 +331,6 @@ class dev_customer_management {
                 $evaluate_data = array();
                 $evaluate_data['fk_customer_id'] = $ret['customer_insert']['success'];
                 $ret['evaluate_insert'] = $devdb->insert_update('dev_initial_evaluation', $evaluate_data);
-
-                $satisfaction_data = array();
-                $satisfaction_data['fk_customer_id'] = $ret['customer_insert']['success'];
-                $ret['satisfaction_insert'] = $devdb->insert_update('dev_reintegration_satisfaction_scale', $satisfaction_data);
             }
 
             $migration_data = array();

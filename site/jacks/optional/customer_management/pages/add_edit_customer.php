@@ -250,7 +250,7 @@ ob_start();
 <div class="panel" id="fullForm" style="">
     <div class="panel-body">
         <!-- One "Tab" For Each Step In The Form: -->
-        <form id="myForm" action="" method="POST">
+        <form id="myForm" action="" method="POST" enctype="multipart/form-data">
             <h3><?php echo $edit ? 'Update ' : 'New ' ?> Participant Profile Registration</h3>
             <div class="tab">
                 <fieldset>
