@@ -16,7 +16,7 @@ if (!$id) {
     $ret = $devdb->query("DELETE FROM dev_airport_land_supports WHERE pk_support_id  = '" . $id . "'");
     
     if ($ret) {
-        add_notification('Success', 'warning');
+        add_notification('Record Deleted', 'warning');
         header('location: ' . url('admin/immediate_support/manage_airport_land_support'));
         exit();
     } else {

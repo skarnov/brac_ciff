@@ -18,7 +18,7 @@ if (!$id) {
     $ret['event'] = $devdb->query("DELETE FROM dev_event_validations WHERE pk_validation_id = '" . $id . "'");
     
     if ($ret) {
-        add_notification('Record Success', 'danger');
+        add_notification('Record Deleted', 'danger');
         header('location: ' . url('admin/dev_event_management/manage_event_validations?event_id='.$event_id));
         exit();
     } else {

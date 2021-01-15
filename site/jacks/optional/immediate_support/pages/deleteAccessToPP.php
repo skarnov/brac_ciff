@@ -16,7 +16,7 @@ if (!$id) {
     $ret = $devdb->query("DELETE FROM dev_access_to_pp WHERE pk_access_id = '" . $id . "'");
     
     if ($ret) {
-        add_notification('Success', 'warning');
+        add_notification('Record Deleted', 'warning');
         header('location: ' . url('admin/immediate_support/manage_access_to_pp'));
         exit();
     } else {

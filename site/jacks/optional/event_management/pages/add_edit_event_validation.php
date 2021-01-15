@@ -124,7 +124,7 @@ ob_start();
                 </div>
                 <label class="control-label input-label">Participant Name (*)</label>
                 <div class="form-group">
-                    <input class="form-control" type="text" name="participant_name" value="<?php echo $pre_data['participant_name']; ?>">
+                    <input class="form-control" type="text" name="participant_name" required value="<?php echo $pre_data['participant_name']; ?>">
                 </div>
                 <div class="form-group">
                     <label>Gender</label>
