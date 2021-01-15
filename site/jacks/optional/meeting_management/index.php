@@ -18,9 +18,9 @@ class dev_meeting_management {
                     'delete_meeting_entry' => 'Delete Meeting Entry',
                 ),
                 'manage_meetings' => array(
-                    'add_meeting' => 'Add Meeting',
-                    'edit_meeting' => 'Edit Meeting',
-                    'delete_meeting' => 'Delete Meeting',
+                    'add_meeting' => 'Add Staff Meeting',
+                    'edit_meeting' => 'Edit Staff Meeting',
+                    'delete_meeting' => 'Delete Staff Meeting',
                 ),
                 'manage_meeting_targets' => array(
                     'add_meeting_target' => 'Add Meeting Target',
@@ -63,8 +63,8 @@ class dev_meeting_management {
             admenu_register($params);
 
         $params = array(
-            'label' => 'Meeting Management',
-            'description' => 'Manage Meeting Management',
+            'label' => 'Staff Meeting Management',
+            'description' => 'Manage Staff Meeting',
             'menu_group' => 'Meeting Management',
             'position' => 'default',
             'action' => 'manage_meetings',

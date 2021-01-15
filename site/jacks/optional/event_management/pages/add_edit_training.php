@@ -94,7 +94,7 @@ ob_start();
                 </div>
                 <div class="form-group">
                     <label for="inputId">Participant Name</label>
-                    <input type="text" class="form-control" id="Name" name="name" value="<?php echo $pre_data['name']; ?>">
+                    <input type="text" class="form-control" required name="name" value="<?php echo $pre_data['name']; ?>">
                 </div>
                 <div class="form-group">
                     <label for="inputId">Age</label>

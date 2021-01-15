@@ -111,7 +111,7 @@ ob_start();
             <div class="col-md-6">  
                 <div class="form-group">
                     <label for="inputName">Name</label>
-                    <input type="text" class="form-control" id="Name" name="name" value="<?php echo $pre_data['name']; ?>">
+                    <input type="text" class="form-control" required name="name" value="<?php echo $pre_data['name']; ?>">
                 </div>
                 <div class="form-group">
                     <label>File</label>

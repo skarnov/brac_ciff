@@ -39,7 +39,7 @@ $all_projects = $projects->get_projects();
 doAction('render_start');
 ?>
 <div class="page-header">
-    <h1>All Meetings</h1>
+    <h1>All Staff Meetings</h1>
     <div class="oh">
         <div class="btn-group btn-group-sm">
             <?php
@@ -47,8 +47,8 @@ doAction('render_start');
                 'href' => $myUrl . '?action=add_edit_meeting',
                 'action' => 'add',
                 'icon' => 'icon_add',
-                'text' => 'New Meeting',
-                'title' => 'Add New Meeting',
+                'text' => 'New Staff Meeting',
+                'title' => 'Add New Staff Meeting',
             ));
             ?>
         </div>
@@ -82,7 +82,7 @@ filterForm($filterForm);
         </div>
     <?php endif; ?>
     <div class="table-header">
-        <?php echo searchResultText($results['total'], $start, $per_page_items, count($results['data']), 'meetings') ?>
+        <?php echo searchResultText($results['total'], $start, $per_page_items, count($results['data']), 'staff meetings') ?>
     </div>
     <table class="table table-bordered table-condensed">
         <thead>
@@ -99,13 +99,13 @@ filterForm($filterForm);
                 <tr>
                     <td><?php echo $value['project_short_name']; ?></td>
                     <td><?php echo $value['meeting_name']; ?></td>
-                    <td>
+<!--                    <td>-->
                         <?php if (has_permission('edit_meeting')): ?>
 <!--                            <div class="btn-group">
                                 <a href="<?php echo url('admin/dev_meeting_management/manage_meetings?action=add_edit_meeting&edit=' . $value['pk_meeting_id']) ?>" class="btn btn-primary btn btn-sm"><i class="fa fa-pencil-square-o"></i> Edit</a>
                             </div>                                -->
                         <?php endif ?>
-                    </td>
+<!--                    </td>-->
                 </tr>
                 <?php
             }

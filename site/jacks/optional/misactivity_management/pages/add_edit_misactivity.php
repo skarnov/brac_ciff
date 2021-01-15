@@ -95,7 +95,7 @@ ob_start();
             <div class="col-md-6">
                 <div class="form-group">
                     <label>Project</label>
-                    <select class="form-control" name="project_id">
+                    <select class="form-control" required name="project_id">
                         <option value="">Select One</option>
                         <?php foreach ($all_projects['data'] as $project) : ?>
                             <option value="<?php echo $project['pk_project_id'] ?>" <?php echo ($project['pk_project_id'] == $pre_data['fk_project_id']) ? 'selected' : '' ?>><?php echo $project['project_short_name'] ?></option>
@@ -104,7 +104,7 @@ ob_start();
                 </div>
                 <div class="form-group">
                     <label>Activity Name</label>
-                    <input type="text" class="form-control" name="activity_name" value="<?php echo $pre_data['activity_name']; ?>">
+                    <input type="text" required class="form-control" name="activity_name" value="<?php echo $pre_data['activity_name']; ?>">
                 </div>
             </div>
         </div>

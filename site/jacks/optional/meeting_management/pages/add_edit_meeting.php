@@ -25,7 +25,7 @@ if ($edit) {
     $pre_data = $this->get_meetings($args);
 
     if (!$pre_data) {
-        add_notification('Invalid meeting, no data found.', 'error');
+        add_notification('Invalid staff meeting, no data found.', 'error');
         header('Location:' . build_url(NULL, array('action', 'edit')));
         exit();
     }
@@ -44,7 +44,7 @@ if ($_POST) {
     $ret = $this->add_edit_meeting($data);
 
     if ($ret) {
-        $msg = "Information of meeting has been " . ($edit ? 'updated.' : 'saved.');
+        $msg = "Information of staff meeting has been " . ($edit ? 'updated.' : 'saved.');
         add_notification($msg);
         $meetingType = $edit ? 'update' : 'create';
         user_activity::add_activity($msg, 'success', $meetingType);
@@ -73,15 +73,15 @@ ob_start();
     }
 </style>
 <div class="page-header">
-    <h1><?php echo $edit ? 'Update ' : 'New ' ?> Meeting</h1>
+    <h1><?php echo $edit ? 'Update ' : 'New ' ?> Staff Meeting</h1>
     <div class="oh">
         <div class="btn-group btn-group-sm">
             <?php
             echo linkButtonGenerator(array(
                 'href' => $myUrl,
                 'action' => 'list',
-                'text' => 'All Meetings',
-                'title' => 'Manage Meetings ',
+                'text' => 'All Staff Meetings',
+                'title' => 'Manage Staff Meetings ',
                 'icon' => 'icon_list',
                 'size' => 'sm'
             ));
@@ -95,7 +95,7 @@ ob_start();
             <div class="col-md-6">
                 <div class="form-group">
                     <label>Project</label>
-                    <select class="form-control" name="project_id">
+                    <select class="form-control" required name="project_id">
                         <option value="">Select One</option>
                         <?php foreach ($all_projects['data'] as $project) : ?>
                             <option value="<?php echo $project['pk_project_id'] ?>" <?php echo ($project['pk_project_id'] == $pre_data['fk_project_id']) ? 'selected' : '' ?>><?php echo $project['project_short_name'] ?></option>
@@ -104,7 +104,7 @@ ob_start();
                 </div>
                 <div class="form-group">
                     <label>Meeting Name</label>
-                    <input type="text" class="form-control" name="meeting_name" value="<?php echo $pre_data['meeting_name']; ?>">
+                    <input type="text" required class="form-control" name="meeting_name" value="<?php echo $pre_data['meeting_name']; ?>">
                 </div>
             </div>
         </div>
