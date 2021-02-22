@@ -1,11 +1,12 @@
 <?php
+$rolePermissionManager = jack_obj('dev_role_permission_management');
 
 $edit = $_GET['edit'] ? $_GET['edit'] : NULL;
 $user = array();
 
 if (!checkPermission($edit, 'add_staff', 'edit_staff')) {
     add_notification('You don\'t have enough permission.', 'error');
-    header('Location:' . build_url(NULL, array('edit','action')));
+    header('Location:' . build_url(NULL, array('edit', 'action')));
     exit();
 }
 
@@ -16,8 +17,8 @@ if ($edit) {
     );
     $user = $this->get_staffs($args);
 
-    $staff_role = explode(',', $user['user_roles']);
-        
+    $user['roles_list'] = strlen($user['user_roles']) ? explode(',', $user['user_roles']) : array();
+
     if (!$user) {
         add_notification('Staff not found for editing.', 'error');
         header('location:' . $myUrl);
@@ -78,6 +79,7 @@ if ($_POST) {
         $data['user_type'] = 'admin';
         $data['user_religion'] = '';
         $data['user_country'] = '';
+        $data['roles_list'] = $data['roles_list'];
         $data['edit'] = $edit ? $edit : NULL;
 
         $ret = $profileManager->add_edit_user($data);
@@ -119,6 +121,8 @@ if ($_designation['data']) {
 
 $projects = jack_obj('dev_project_management');
 $all_projects = $projects->get_projects(array('single' => false));
+
+$roles = $rolePermissionManager->get_roles(array('data_only' => true));
 
 doAction('render_start');
 ?>
@@ -213,6 +217,20 @@ doAction('render_start');
                     <div class="form-group">
                         <label>Email</label>
                         <input class="form-control char_limit" data-max-char="390" type="email" name="user_email" id="user_email" value="<?php echo $user ? $user['user_email'] : '' ?>" required/>
+                    </div>
+                    <div class="form-group">
+                        <label class="db">Roles</label>
+                        <?php
+                        foreach ($roles['data'] as $i => $v) {
+                            $selected = $user && in_array($v['pk_role_id'], $user['roles_list']) !== false ? 'checked' : '';
+                            ?>
+                            <label class="checkbox-inline">
+                                <input type="radio" class="px" name="roles_list" value="<?php echo $v['pk_role_id']; ?>" <?php echo $selected; ?> />
+                                <span class="lbl"><?php echo $v['role_name']; ?></span>
+                            </label>
+                            <?php
+                        }
+                        ?>
                     </div>
                 </div>
                 <div class="col-md-6">
